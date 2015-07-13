@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-07-13T13:09:06 -->
+<!-- 2015-07-13T13:59:10 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="typewriter_book_cover" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c50b24eb-eb33-413f-8e75-e7e20a5341fd">
     <property name="com.jaspersoft.studio.unit." value="pixel"/>
     <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -60,11 +60,12 @@
                 </textElement>
                 <textFieldExpression><![CDATA[$F{cover.subtitle}]]></textFieldExpression>
             </textField>
-            <image scaleImage="FillFrame" hAlign="Center" vAlign="Middle">
+            <image scaleImage="FillFrame" hAlign="Center" vAlign="Middle" onErrorType="Blank">
                 <reportElement positionType="Float" mode="Transparent" x="198" y="400" width="200" height="176" backcolor="#FAF3D4" uuid="f61e2056-40db-47ad-b15b-deb819f2cd66">
                     <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
                     <property name="com.jaspersoft.studio.unit.width" value="pixel"/>
                     <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+                    <printWhenExpression><![CDATA[$F{cover.primaryImage} != null]]></printWhenExpression>
                 </reportElement>
                 <box padding="0">
                     <topPen lineWidth="4.0" lineStyle="Solid" lineColor="#FFFFFF"/>
@@ -75,9 +76,9 @@
                 <graphicElement fill="Solid"/>
                 <imageExpression><![CDATA[$F{cover.primaryImage}]]></imageExpression>
             </image>
-            <image scaleImage="Clip">
+            <image scaleImage="Clip" isUsingCache="false">
                 <reportElement x="0" y="761" width="595" height="81" uuid="5b682748-4547-4f70-8432-cc83c30100e8"/>
-                <imageExpression><![CDATA[$F{cover.primaryImage}]]></imageExpression>
+                <imageExpression><![CDATA[$F{cover.banner}]]></imageExpression>
             </image>
         </band>
     </title>
