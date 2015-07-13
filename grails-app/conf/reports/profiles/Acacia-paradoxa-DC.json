@@ -1,7 +1,10 @@
 {
    "cover": {
       "title": "NSW flora",
-      "subtitle": "Acacia paradoxa"
+      "subtitle": "Acacia paradoxa",
+      "logo": "http://root.ala.org.au/bdrs-core/files/download.htm?className=au.com.gaiaresources.bdrs.model.theme.Theme&id=217&fileName=processed/images/bdrs/atlasoflivingaust.png",
+      "banner":"http://images.ala.org.au/store/7/4/4/e/a08a52f2-7bbe-40d9-8f1a-fe8acb28e447/original",
+      "primaryImage":"http://images.ala.org.au/store/7/4/4/e/a08a52f2-7bbe-40d9-8f1a-fe8acb28e447/original"
    },
    "profiles": [{"profile": {
       "hasConservationStatus": true,
@@ -3705,19 +3708,19 @@
             "infoSourceName": "Office of Environment and Heritage",
             "regionId": "aus_states/New South Wales"
          },
-       {
-          "region": "New South Wales",
-          "colour": "yellow",
-          "regionAbbrev": "NSW",
-          "rawStatus": "Endangered",
-          "system": "Threatened Species Conservation Act 1995",
-          "status": "Endangered",
-          "rawCode": "E1",
-          "infoSourceId": "506",
-          "infoSourceURL": "http://www.environment.nsw.gov.au",
-          "infoSourceName": "Office of Environment and Heritage",
-          "regionId": "aus_states/New South Wales"
-       }],
+            {
+               "region": "New South Wales",
+               "colour": "yellow",
+               "regionAbbrev": "NSW",
+               "rawStatus": "Endangered",
+               "system": "Threatened Species Conservation Act 1995",
+               "status": "Endangered",
+               "rawCode": "E1",
+               "infoSourceId": "506",
+               "infoSourceURL": "http://www.environment.nsw.gov.au",
+               "infoSourceName": "Office of Environment and Heritage",
+               "regionId": "aus_states/New South Wales"
+            }],
          "isAustralian": true,
          "identifiers": [
             "urn:lsid:biodiversity.org.au:apni.taxon:246943",
