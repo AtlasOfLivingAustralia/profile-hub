@@ -440,7 +440,7 @@ class AccessControlFiltersSpec extends Specification {
         log.info("Controller - profile; Action - ${action}; User - ${type};")
         params.opusId = "allusers"
         params.profileId = "test"
-        params.url = 'https://www.ala.org.au/wp-content/themes/ala-wordpress-theme/img/ala-logo-2016-inline.png'
+        params.url = 'https://www.ala.org.au/app/uploads/2019/01/cropped-favicon-32x32.png'
         params.imageId = 'imageId'
         params.dataResourceId = 'dataResourceId'
         params.title = 'title'
