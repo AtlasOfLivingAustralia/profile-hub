@@ -54,8 +54,11 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
+        build "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
+        build "org.apache.httpcomponents:httpcore:${httpmimeVersion}"
+        build "org.apache.httpcomponents:httpclient:${httpmimeVersion}"
+
         compile 'net.sf.ehcache:ehcache:2.8.4'
-        compile "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
         runtime "org.springframework:spring-test:4.1.2.RELEASE" // required by the rendering plugin
         runtime 'au.org.ala:image-utils:1.8.2'
         runtime 'org.jsoup:jsoup:1.7.2'
@@ -72,6 +75,7 @@ grails.project.dependency.resolution = {
         compile 'com.squareup.retrofit2:retrofit:2.2.0'
         compile "org.apache.httpcomponents:httpcore:${httpmimeVersion}"
         compile "org.apache.httpcomponents:httpclient:${httpmimeVersion}"
+        compile "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
     }
 
     plugins {

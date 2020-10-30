@@ -140,6 +140,7 @@ environments {
 
 jasper.dir.reports = 'classpath:reports'
 googleAnalyticsId = 'UA-4355440-1'
+doi.resolver.prefix = 'http://dx.doi.org/'
 
 grails.cache.config = {
     provider {

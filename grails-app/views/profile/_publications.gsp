@@ -19,7 +19,7 @@
     </g:if>
     <div class="row section-no-para">
             <div class="col-sm-12" ng-repeat="pub in pubCtrl.publications">
-                <publication data="pub" opus-id="pubCtrl.opusId" profile-id="pubCtrl.profileId">
+                <publication data="pub" opus-id="pubCtrl.opusId" profile-id="pubCtrl.profileId"  prefix="${grailsApplication.config.doi.resolver.prefix}">
                 </publication>
                 <hr ng-if="!$last"/>
             </div>

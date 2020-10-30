@@ -8,7 +8,8 @@ profileEditor.directive('publication', function ($browser) {
         scope: {
             publication: '=data',
             opusId: '=',
-            profileId: '='
+            profileId: '=',
+            prefix: '@'
         },
         templateUrl: '/profileEditor/publication.htm',
         controller: ['$scope', 'config', function ($scope, config) {
