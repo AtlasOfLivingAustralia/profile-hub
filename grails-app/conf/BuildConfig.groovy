@@ -1,12 +1,12 @@
 import grails.util.Environment
 
-grails.servlet.version = "3.0" // Change depending on target container compliance (2.5 or 3.0)
+grails.servlet.version = "2.5" // Change depending on target container compliance (2.5 or 3.0)
 grails.project.class.dir = "target/classes"
 grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.work.dir = "target/work"
-grails.project.target.level = 1.7
-grails.project.source.level = 1.7
+grails.project.target.level = 1.8
+grails.project.source.level = 1.8
 grails.reload.enabled = true
 
 grails.project.fork = [
@@ -33,14 +33,14 @@ grails.project.dependency.resolution = {
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
-    legacyResolve false
+    legacyResolve true
     // whether to do a secondary resolve on plugin installation, not advised and here for backwards compatibility
 
     def httpmimeVersion = "4.4.1"
 
     repositories {
         mavenLocal()
-        mavenRepo("http://nexus.ala.org.au/content/groups/public/") {
+        mavenRepo("https://nexus.ala.org.au/content/groups/public/") {
             updatePolicy 'always'
         }
     }
@@ -80,7 +80,7 @@ grails.project.dependency.resolution = {
 
     plugins {
         build(":release:3.1.2")
-        build ":tomcat:7.0.70"
+        build ":tomcat:7.0.55"
 
         compile ":mail:1.0.7"
         compile ":cache:1.1.8"
