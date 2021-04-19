@@ -9,19 +9,19 @@ module.exports = function (config) {
 
         plugins: [
             'karma-chrome-launcher',
-            'karma-jquery',
+            // 'karma-jquery',
             'karma-jasmine',
-            'karma-jasmine-jquery',
+            // 'karma-jasmine-jquery',
             'karma-ng-html2js-preprocessor',
             'karma-coverage',
-            'karma-firefox-launcher',
+            // 'karma-firefox-launcher',
             'karma-phantomjs-launcher'
         ],
 
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jasmine-jquery','jasmine'],
+        frameworks: ['jasmine'],
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -58,7 +58,7 @@ module.exports = function (config) {
             'grails-app/assets/thirdparty/angular/angular-1.3.20.js',
             'grails-app/assets/thirdparty/angular/angular-sanitize-1.3.20.js',
             'grails-app/assets/thirdparty/angular/angular-animate-1.3.20.js',
-            'test/js/thirdparty/angular-mocks-1.3.20.js',
+            'src/test/js/thirdparty/angular-mocks-1.3.20.js',
             'grails-app/assets/thirdparty/angular/ui-bootstrap-tpls-0.14.3.js',
             'grails-app/assets/thirdparty/angular-bootstrap-colorpicker-3.0.11/js/bootstrap-colorpicker-module.min.js',
             'grails-app/assets/thirdparty/angular-bootstrap-show-errors/showErrors.js',
@@ -82,8 +82,8 @@ module.exports = function (config) {
             'grails-app/assets/javascripts/profileEditor/controllers/*.js',
             'grails-app/assets/javascripts/profileEditor/templates/*.tpl.htm',
             'grails-app/assets/javascripts/profileEditor/directives/*.js',
-            'test/js/specs/MockConfigModule.js',
-            'test/js/specs/**/*.js'
+            'src/test/js/specs/MockConfigModule.js',
+            'src/test/js/specs/**/*.js'
         ],
         crossOriginAttribute: true,
 
@@ -119,7 +119,7 @@ module.exports = function (config) {
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
             'Chrome',
-            'Firefox',
+            // 'Firefox',
             'PhantomJS'
         ],
 

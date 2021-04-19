@@ -2,8 +2,8 @@ package au.org.ala.profile.hub
 
 import com.google.common.base.Charsets
 import grails.converters.JSON
-import org.codehaus.groovy.grails.web.json.JSONObject
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import org.grails.web.json.JSONObject
+import grails.web.mapping.LinkGenerator
 
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest

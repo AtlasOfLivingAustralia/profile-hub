@@ -102,7 +102,7 @@
                 </tab>
                 <tab managed-tab heading="Documents" class="font-xxsmall"
                      ng-show="!profileCtrl.readonly() || profileCtrl.profile.attachments.length > 0">
-                    <g:render template="../common/attachments" model="[hideHeading: true]"/>
+                    <g:render template="/common/attachments" model="[hideHeading: true]"/>
                 </tab>
             </tabset>
         </div>

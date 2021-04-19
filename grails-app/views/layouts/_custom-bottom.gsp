@@ -73,7 +73,7 @@
                         <g:if test="${opus?.brandingConfig?.issn}">
                             <div class="row margin-bottom-1">
                                 <div class="col-xs-12">
-                                    <g:render template="../opus/issn" model="${[issn: opus.brandingConfig.issn]}"></g:render>
+                                    <g:render template="/opus/issn" model="${[issn: opus.brandingConfig.issn]}"></g:render>
                                 </div>
                             </div>
                         </g:if>

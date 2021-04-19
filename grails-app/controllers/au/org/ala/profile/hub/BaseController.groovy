@@ -1,7 +1,6 @@
 package au.org.ala.profile.hub
 
-import au.org.ala.ws.controller.BasicWSController
-import static au.org.ala.profile.hub.Utils.enc
+
 import static au.org.ala.profile.hub.Utils.encFragment
 import static au.org.ala.profile.hub.Utils.encPath
 import static au.org.ala.profile.hub.util.HubConstants.*
@@ -115,13 +114,13 @@ class BaseController extends BasicWSController {
 
     protected getOpusUrl(opus) {
         if(opus){
-            createLink(uri: "/opus/${encPath(opus.shortName ?: opus.uuid)}", absolute: true)
+            g.createLink(uri: "/opus/${encPath(opus.shortName ?: opus.uuid)}", absolute: true)
         }
     }
 
     protected getProfileUrl(opus, profile) {
         if(opus && profile){
-            createLink(uri: "/opus/${encPath(opus.shortName ?: opus.uuid)}/profile/${encPath(profile.scientificName)}", absolute: true)
+            g.createLink(uri: "/opus/${encPath(opus.shortName ?: opus.uuid)}/profile/${encPath(profile.scientificName)}", absolute: true)
         }
     }
 }

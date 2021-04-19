@@ -5,7 +5,7 @@
 // You're free to add application-wide JavaScript to this file, but it's generally better 
 // to create separate JavaScript files as needed.
 //
-//= require jquery
+//= require jquery/jquery-1.11.1.js
 // TODO Refactor dropdowns (and others?) to angular-ui-bootstrap to remove dependency on bootstrap JS (will require changes to map plugin?)
 //= require bootstrap/js/bootstrap.min.js
 //= require angular

@@ -3,7 +3,6 @@ package au.org.ala.profile.hub
 import au.org.ala.profile.security.Role
 import au.org.ala.profile.security.Secured
 import au.org.ala.ws.service.WebService
-
 /**
  * When a collection is configured to use private data, all requests to the biocache are changed to [contextRoot/...],
  * which are configured to hit this controller. This controller then proxies all requests to the Profiles Sandbox
@@ -12,7 +11,6 @@ import au.org.ala.ws.service.WebService
 @Secured(role = Role.ROLE_USER, opusSpecific = true)
 class SandboxBiocacheProxyController {
 
-    def grailsApplication
     WebService webService
 
     def proxy() {

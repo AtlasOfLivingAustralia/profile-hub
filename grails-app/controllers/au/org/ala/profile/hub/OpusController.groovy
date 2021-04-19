@@ -7,7 +7,7 @@ import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest
+import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
 
 import static au.org.ala.profile.hub.util.HubConstants.*
 import static au.org.ala.profile.security.Role.ROLE_ADMIN
@@ -357,7 +357,7 @@ class OpusController extends OpusBaseController {
     def saveAttachment() {
         if (!params.opusId || !(request instanceof MultipartHttpServletRequest) || !request.getParameter("data")) {
             badRequest "opusId is a required parameter, a JSON data paramaeter must be provided, and the request must be a multipart request"
-        } else if (request instanceof DefaultMultipartHttpServletRequest) {
+        } else if (request instanceof AbstractMultipartHttpServletRequest) {
             if (request.fileNames && request.getFile(request.fileNames[0]).contentType != "application/pdf") {
                 badRequest "Invalid file type - must be one of [PDF]"
             } else {
@@ -458,8 +458,8 @@ class OpusController extends OpusBaseController {
     def uploadImage() {
         if (!params.opusId || !params.purpose) {
             badRequest "opusId and purpose are mandatory fields"
-        } else if (request instanceof DefaultMultipartHttpServletRequest) {
-            MultipartFile file = ((DefaultMultipartHttpServletRequest) request).getFile("file")
+        } else if (request instanceof AbstractMultipartHttpServletRequest) {
+            MultipartFile file = ((AbstractMultipartHttpServletRequest) request).getFile("file")
             uploadTransferrable(new MultipartFileTransferrableAdapter(multipartFile: file))
         } else if (params.url) {
             final url = new UrlTransferrableAdapter(url: params.url.toURL())

@@ -16,7 +16,7 @@
         <g:include controller="opus" action="opusSummaryPanel" params="[opusId: params.opusId]"/>
 
         <p:help help-id="opus.documents" float="false" show="${params.isOpusEditor}"/>
-        <g:render template="../common/attachments" model="[hideHeading: true]"/>
+        <g:render template="/common/attachments" model="[hideHeading: true]"/>
     </div>
 </div>
 </body>

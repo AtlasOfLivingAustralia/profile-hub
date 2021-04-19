@@ -6,11 +6,11 @@ import au.org.ala.profile.security.Secured
 import au.org.ala.web.AuthService
 import grails.converters.JSON
 import groovy.json.JsonSlurper
-import org.codehaus.groovy.grails.web.json.JSONArray
-import org.codehaus.groovy.grails.web.json.JSONObject
+import org.grails.web.json.JSONArray
+import org.grails.web.json.JSONObject
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest
+import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
 
 import javax.validation.constraints.NotNull
 
@@ -360,8 +360,8 @@ class ProfileController extends BaseController {
     def uploadImage() {
         if (!params.opusId || !params.profileId || !params.dataResourceId || !params.title) {
             badRequest "opusId, dataResourceId, title and profileId are mandatory fields"
-        } else if (request instanceof DefaultMultipartHttpServletRequest) {
-            MultipartFile file = ((DefaultMultipartHttpServletRequest) request).getFile("file")
+        } else if (request instanceof AbstractMultipartHttpServletRequest) {
+            MultipartFile file = ((AbstractMultipartHttpServletRequest) request).getFile("file")
             doUpload(new MultipartFileTransferrableAdapter(multipartFile: file))
         } else if (params.url) {
             final ut = new UrlTransferrableAdapter(url: params.url.toURL())
@@ -662,7 +662,7 @@ class ProfileController extends BaseController {
     def saveAttachment() {
         if (!params.opusId || !params.profileId || !(request instanceof MultipartHttpServletRequest) || !request.getParameter("data")) {
             badRequest "opusId and profile are required parameters, a JSON data paramaeter must be provided, and the request must be a multipart request"
-        } else if (request instanceof DefaultMultipartHttpServletRequest) {
+        } else if (request instanceof AbstractMultipartHttpServletRequest) {
             if (request.fileNames && request.getFile(request.fileNames[0]).contentType != "application/pdf") {
                 badRequest "Invalid file type - must be one of [PDF]"
             } else {

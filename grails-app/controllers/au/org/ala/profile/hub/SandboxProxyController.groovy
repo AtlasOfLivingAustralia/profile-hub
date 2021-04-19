@@ -10,8 +10,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.springframework.web.multipart.commons.CommonsMultipartFile
-import tikaParser.TikaService
-
 import static au.org.ala.profile.hub.Utils.enc
 import au.org.ala.web.AuthService
 import au.org.ala.ws.service.WebService

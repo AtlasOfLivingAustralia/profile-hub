@@ -5,14 +5,12 @@ import au.org.ala.web.AuthService
 import au.org.ala.ws.service.WebService
 import org.apache.commons.lang.BooleanUtils
 import org.apache.http.entity.ContentType
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest
+import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
 
 import javax.servlet.http.HttpServletResponse
 import java.text.SimpleDateFormat
 
-import static au.org.ala.profile.hub.Utils.enc
-import static au.org.ala.profile.hub.Utils.encPath
-import static au.org.ala.profile.hub.Utils.parseISODateToObject
+import static au.org.ala.profile.hub.Utils.*
 import static au.org.ala.profile.hub.util.HubConstants.*
 
 class ProfileService {
@@ -185,7 +183,7 @@ class ProfileService {
         webService.post("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/restore/${encPath(profileId)}", [newName: newName])
     }
 
-    def saveAttachment(String opusId, String profileId, Map metadata, DefaultMultipartHttpServletRequest request) {
+    def saveAttachment(String opusId, String profileId, Map metadata, AbstractMultipartHttpServletRequest request) {
         List files = request.getFileNames().collect { request.getFile(it) }
 
         if (profileId) {
