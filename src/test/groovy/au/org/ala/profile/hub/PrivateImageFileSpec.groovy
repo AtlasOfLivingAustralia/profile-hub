@@ -15,6 +15,8 @@ import spock.lang.Stepwise
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.text.SimpleDateFormat
+
 /**
  * Created by shi131 on 24/03/2016.
  *
@@ -234,7 +236,7 @@ class PrivateImageFileSpec extends Specification implements ControllerUnitTest<P
         privateImage.setDescription('description')
         privateImage.setRightsHolder('FindPuffins')
         privateImage.setCreator('maker')
-        privateImage.setCreated(new Date().format('yyyy-MM-dd'))
+        privateImage.setCreated(new SimpleDateFormat('yyyy-MM-dd').format(new Date()))
         privateImage.setLicence('Creative Commons Attribution')
 
         privateImage

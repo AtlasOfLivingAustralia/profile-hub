@@ -9,7 +9,7 @@ import au.org.ala.profile.hub.reports.JasperReportDef
 import au.org.ala.profile.hub.util.HubConstants
 import au.org.ala.ws.service.WebService
 import grails.converters.JSON
-import grails.transaction.NotTransactional
+import grails.gorm.transactions.NotTransactional
 import net.glxn.qrgen.QRCode
 import net.glxn.qrgen.image.ImageType
 import net.sf.jasperreports.engine.JRParameter

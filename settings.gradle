@@ -1,7 +1,0 @@
-rootProject.name = 'profile-hub'
-boolean inplace = false
-
-if (inplace) {
-    include ':ala-ws-plugin'
-    project(':ala-ws-plugin').projectDir = new File(settingsDir, '../../ala-ws-plugin')
-}

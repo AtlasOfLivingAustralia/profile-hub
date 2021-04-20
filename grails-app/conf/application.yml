@@ -8,29 +8,32 @@ grails:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
-    config:
-        locations:
-            - file:/data/profile-hub/config/profile-hub-config.properties
-            - file:/data/profile-hub/config/profile-hub-config.yml
-            - file:/data/profile-hub/config/profile-hub-config.groovy
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
 spring:
+    jmx:
+        unique-names: true
     main:
         banner-mode: "off"
     groovy:
         template:
             check-template-location: false
+    devtools:
+        restart:
+            additional-exclude:
+                - '*.gsp'
+                - '**/*.gsp'
+                - '*.gson'
+                - '**/*.gson'
+                - 'logback.groovy'
+                - '*.properties'
+management:
+    endpoints:
+        enabled-by-default: false
 
-# Spring Actuator Endpoints are Disabled by Default
-endpoints:
-    enabled: false
-    jmx:
-        enabled: true
-    
 ---
 grails:
     mime:
@@ -48,7 +51,9 @@ grails:
               - application/json
               - text/json
             multipartForm: multipart/form-data
-            pdf: application/pdf
+            pdf:
+              - application/pdf
+              - application/x-pdf
             rss: application/rss+xml
             text: text/plain
             hal:
@@ -75,15 +80,36 @@ grails:
             htmlcodec: xml
             codecs:
                 expression: html
-                scriptlets: html
+                scriptlet: html
                 taglib: none
                 staticparts: none
-endpoints:
-    jmx:
-        unique-names: true
+management:
+    endpoints:
+        jmx:
+            unique-names: true
 
 server:
     tomcat:
         port-header: 'X-Forwarded-Port'
         protocol-header: 'X-Forwarded-Proto'
         remote-ip-header: 'X-Forwarded-For'
+---
+
+grails:
+    config:
+        locations:
+            - file:/data/profile-hub/config/profile-hub-config.properties
+            - file:/data/profile-hub/config/profile-hub-config.yml
+            - file:/data/profile-hub/config/profile-hub-config.groovy
+
+---
+security:
+    cas:
+        casServerName: 'https://auth.ala.org.au'
+        casServerUrlPrefix: 'https://auth.ala.org.au/cas'
+        loginUrl: 'https://auth.ala.org.au/cas/login'
+        logoutUrl: 'https://auth.ala.org.au/cas/logout'
+        adminRole: 'ROLE_ADMIN'
+        uriExclusionFilterPattern: '/images.*,/css.*,/js.*,/less.*,/assets/.*'
+        uriFilterPattern:
+        authenticateOnlyIfCookieFilterPattern: '*'

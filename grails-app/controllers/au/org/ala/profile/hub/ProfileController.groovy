@@ -325,7 +325,7 @@ class ProfileController extends BaseController {
             Map profile = model.profile
             Map opus = model.opus
 
-            def imageMetadata = imageService.getPrimaryImageMetaData(opus, profile)
+            def imageMetadata = imageService.getPrimaryImageMetaData(opus, profile) ?: [:]
 
             render imageMetadata as JSON
         }

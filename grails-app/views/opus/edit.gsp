@@ -103,15 +103,15 @@
 
                 <g:include controller="opus" action="editMapConfigPanel" params="[opusId: params.opusId]"/>
 
-                <g:include controller="opus" action="taxaUploadPanel" params="[opusId: params.opusId]"/>
+%{--                <g:include controller="opus" action="taxaUploadPanel" params="[opusId: params.opusId]"/>--}%
 
-                <g:include controller="opus" action="occurrenceUploadPanel" params="[opusId: params.opusId]"/>
+%{--                <g:include controller="opus" action="occurrenceUploadPanel" params="[opusId: params.opusId]"/>--}%
 
-                <g:include controller="opus" action="phyloUploadPanel" params="[opusId: params.opusId]"/>
+%{--                <g:include controller="opus" action="phyloUploadPanel" params="[opusId: params.opusId]"/>--}%
 
                 <g:include controller="opus" action="editKeyConfigPanel" params="[opusId: params.opusId]"/>
 
-                <g:include controller="opus" action="keyUploadPanel" params="[opusId: params.opusId]"/>
+%{--                <g:include controller="opus" action="keyUploadPanel" params="[opusId: params.opusId]"/>--}%
 
                 <g:include controller="opus" action="editImageSourcesPanel" params="[opusId: params.opusId]"/>
 
