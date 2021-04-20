@@ -112,7 +112,7 @@ dependencies {
     compile 'net.sf.opencsv:opencsv:2.3'
     compile("org.grails.plugins:ala-map-plugin:3.0")
     if(!inplace){
-        compile("org.grails.plugins:ala-ws-plugin:2.1-SNAPSHOT")
+        compile("org.grails.plugins:ala-ws-plugin:2.1")
     }
 
     compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
@@ -124,6 +124,7 @@ dependencies {
 
     runtime "org.grails.plugins:jquery:1.11.1"
     compile 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.4'
+    assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.1'
     assets 'com.craigburke.angular:angular-annotate-asset-pipeline:2.4.1'
     assets "com.craigburke.angular:angular-template-asset-pipeline:2.4.0"
     if (Environment.current == Environment.DEVELOPMENT) {
@@ -167,4 +168,10 @@ tasks.withType(Test) {
 assets {
     minifyJs = true
     minifyCss = true
+    minifyOptions = [
+        excludes : ["**/*.min.js", "ckeditor/plugins/symbol/dialogs/lang/en.js"]
+    ]
+
+    excludes = ["webjars/leaflet/0.7.7/**/*.*"]
+    includes = ["webjars/leaflet/0.7.7/dist/*.*"]
 }

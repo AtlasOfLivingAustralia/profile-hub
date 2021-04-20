@@ -11,8 +11,10 @@ grails.mime.disable.accept.header.userAgents = []
 // Legacy setting for codec used to encode data with ${}
 grails.views.default.codec = "html"
 
-//grails.assets.bundle=true
-grails.assets.minifyOptions.excludes = ["**/*.min.js"]
+// when patterns are added below, make sure build.gradle is updated as well.
+grails.assets.minifyOptions.excludes = ["**/*.min.js", "ckeditor/plugins/symbol/dialogs/lang/en.js"]
+grails.assets.excludes = ["webjars/leaflet/0.7.7/**/*.*"]
+grails.assets.includes = ["webjars/leaflet/0.7.7/dist/*.*"]
 
 // The default scope for controllers. May be prototype, session or singleton.
 // If unspecified, controllers are prototype scoped.

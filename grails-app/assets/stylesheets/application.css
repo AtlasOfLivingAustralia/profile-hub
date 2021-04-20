@@ -9,14 +9,14 @@
 *= require keybase-override.css
 *= require dualMultiselect/dualmultiselect.css
 *= require nsl.css
-*= require mergedProfilesThemeColour
+*= require mergedProfilesThemeColour.scss
 *= require tree.css
 *= require sidebar.css
 *= require bootstrap-fileupload/bootstrap-fileupload.min.css
-*= require ala-admin.css
+*= require ala-admin-asset.css
 *= require animation.css
 *= require mapAndImages
-*= require self
+*= require_self
 */
 
 a.disabled {
