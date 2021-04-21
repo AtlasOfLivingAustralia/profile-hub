@@ -25,7 +25,8 @@ before_script:
   - npm install
 
 script:
-  - node_modules/karma/bin/karma start karma.conf.js --single-run --browsers Chrome,PhantomJS --port 9877 --log-level info && ./gradlew check
+  - node_modules/karma/bin/karma start karma.conf.js --single-run --browsers Chrome,PhantomJS --port 9877 --log-level info
+  - ./gradlew check
 
 after_success:
   - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew clean && travis_retry ./gradlew publish'
