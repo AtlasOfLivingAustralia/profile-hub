@@ -25,7 +25,7 @@ before_script:
   - npm install
 
 script:
-  - node_modules/karma/bin/karma start karma.conf.js --single-run --browsers Chrome,PhantomJS --port 9877 --log-level info
+  - node_modules/karma/bin/karma start karma.conf.js --single-run --browsers ChromeHeadless
   - ./gradlew check
 
 after_success:
