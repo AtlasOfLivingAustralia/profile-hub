@@ -176,3 +176,21 @@ assets {
     excludes = ["webjars/leaflet/0.7.7/**/*.*"]
     includes = ["webjars/leaflet/0.7.7/dist/*.*"]
 }
+
+bootJar {
+    enabled = true
+    classifier = 'exec'
+    launchScript()
+}
+
+assemble {
+    dependsOn bootJar
+}
+
+bootWar {
+    enabled = false
+}
+
+publish {
+    dependsOn assemble
+}
