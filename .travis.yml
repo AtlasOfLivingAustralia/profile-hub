@@ -1,7 +1,10 @@
 language: groovy
+dist: xenial
+services:
+- xvfb
 sudo: false
 jdk:
-  - openjdk7
+  - openjdk8
 node_js:
   - "6"
 env:
@@ -26,8 +29,6 @@ before_install:
   - export TZ=Australia/Canberra
   - date
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
   - npm install
   - mkdir -p ~/.grails; wget -q -O ~/.grails/settings.groovy https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/travis_grails_settings_new.groovy
   - MAVEN_REPO="ala-repo-snapshot"; grep '^app\.version=' ./application.properties |
