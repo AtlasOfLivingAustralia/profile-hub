@@ -61,7 +61,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /ckeditor5-[^\/\\]+[\/\\].+\.js$/,
+				test: /\.js$/,
 				use: [
 					{
 						loader: 'babel-loader',
