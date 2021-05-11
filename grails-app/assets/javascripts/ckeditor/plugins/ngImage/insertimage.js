@@ -3,6 +3,7 @@
  */
 import Plugin from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-ui/src/button/buttonview';
+import HtmlDataProcessor from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
 import imageIcon from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-core/theme/icons/image.svg';
 
 export default class InsertImage extends Plugin {
@@ -14,10 +15,10 @@ export default class InsertImage extends Plugin {
     }
 
     init() {
-        var editor = this.editor;
+        const editor = this.editor;
 
-        editor.ui.componentFactory.add( 'insertImage', function (locale) {
-            var view = new ButtonView( locale );
+        editor.ui.componentFactory.add( 'insertImage', locale => {
+            const view = new ButtonView( locale );
 
             view.set( {
                 label: 'Insert image',
@@ -26,10 +27,10 @@ export default class InsertImage extends Plugin {
             } );
 
             // Callback executed once the image is clicked.
-            view.on( 'execute', function () {
+            view.on( 'execute', () => {
                 editor.fire('insertimage', { callback:function (image) {
-                        editor.model.change( function (writer) {
-                            // var imageElement = writer.createElement( 'image', {
+                        editor.model.change( writer => {
+                            // const imageElement = writer.createElement( 'image', {
                             //     src: imageUrl,
                             //     alt: altText
                             // } );
@@ -37,38 +38,34 @@ export default class InsertImage extends Plugin {
                             // // Insert the image in the current selection location.
                             // editor.model.insertContent( imageElement, editor.model.document.selection );
 
-                            // var htmlDP = new HtmlDataProcessor( viewDocument );
-                            var viewFragment = editor.data.processor.toView( image );
-                            var modelFragment = editor.data.toModel( viewFragment );
+                            // const htmlDP = new HtmlDataProcessor( viewDocument );
+                            const viewFragment = editor.data.processor.toView( image );
+                            const modelFragment = editor.data.toModel( viewFragment );
 
                             editor.model.insertContent( modelFragment );
-                    });
-                } });
+                        });
+                    } });
             } );
 
             editor.model.schema.register( 'image', {
                 isObject: true,
                 isBlock: true,
-                isSelectable: true,
                 allowWhere: '$block',
                 allowAttributes: [ 'alt', 'src', 'class' ]
             } );
 
-            // editor.conversion.for( 'downcast' ).elementToElement( {
-            //     model: 'image',
-            //     view: 'img'
-            // } );
-
-            // editor.conversion.for( 'editingDowncast' ).elementToElement( {
-            //     model: 'image',
-            //     view:  'img'
-            // } );
-
-
-            editor.conversion.for( 'downcast' ).elementToElement( {
+            editor.conversion.for( 'dataDowncast' ).elementToElement( {
                 model: 'image',
                 view: 'img'
-            } )
+            } );
+
+            editor.conversion.for( 'editingDowncast' ).elementToElement( {
+                model: 'image',
+                view:  'img'
+            } );
+
+
+            editor.conversion.for( 'downcast' )
                 .add( modelToViewAttributeConverter( 'src' ) )
                 .add( modelToViewAttributeConverter( 'alt' ) )
                 .add( modelToViewAttributeConverter( 'class' ) );
@@ -83,26 +80,17 @@ export default class InsertImage extends Plugin {
                             class: true
                         }
                     },
-                    model: function ( viewImage, ref ) {
-                        ref.writer.createElement('image', {
-                            src: viewImage.getAttribute('src'),
-                            alt: viewImage.getAttribute('alt'),
-                            class: viewImage.getAttribute('class')
-                        })
-                    }
+                    model: ( viewImage, { writer } ) => writer.createElement( 'image', { src: viewImage.getAttribute( 'src' ),
+                        alt: viewImage.getAttribute( 'alt' ), class: viewImage.getAttribute( 'class' )} )
                 } );
 
-            // Model-to-view position mapper is needed since the model <infoBox> content needs to end up in the inner
-            // <div class="info-box-content">.
-            // editor.editing.mapper.on( 'modelToViewPosition', createModelToViewPositionMapper( editor.editing.view ) );
-            // editor.data.mapper.on( 'modelToViewPosition', createModelToViewPositionMapper( editor.editing.view ) );
             return view;
         } );
     }
 }
 
-function modelToViewAttributeConverter( attributeKey ) {
-    return function (dispatcher) {
+export function modelToViewAttributeConverter( attributeKey ) {
+    return dispatcher => {
         dispatcher.on( `attribute:${ attributeKey }:image`, converter );
     };
 
@@ -111,32 +99,13 @@ function modelToViewAttributeConverter( attributeKey ) {
             return;
         }
 
-        var viewWriter = conversionApi.writer;
-        var img = conversionApi.mapper.toViewElement( data.item );
+        const viewWriter = conversionApi.writer;
+        const img = conversionApi.mapper.toViewElement( data.item );
 
         viewWriter.setAttribute( data.attributeKey, data.attributeNewValue || '', img );
     }
 }
 
-function createImageViewElement( writer ) {
+export function createImageViewElement( writer ) {
     return  writer.createEmptyElement( 'img' );
-}
-
-function createModelToViewPositionMapper( view ) {
-    return function( evt, data ) {
-        var modelPosition = data.modelPosition;
-        var parent = modelPosition.parent;
-
-        // Only mapping of positions that are directly in
-        // the <infoBox> model element should be modified.
-        if ( !parent.is( 'element', 'image' ) ) {
-            return;
-        }
-
-        // Get the mapped view element <div class="info-box">.
-        var viewElement = data.mapper.toViewElement( parent );
-
-        // Translate the model position offset to the view position offset.
-        data.viewPosition = data.mapper.findPositionIn( viewElement, modelPosition.offset );
-    };
 }
