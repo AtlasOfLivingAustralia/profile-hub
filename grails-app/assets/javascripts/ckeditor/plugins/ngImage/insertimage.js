@@ -3,8 +3,8 @@
  */
 import Plugin from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-ui/src/button/buttonview';
-import HtmlDataProcessor from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
 import imageIcon from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-core/theme/icons/image.svg';
+import { toWidget } from '../../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-widget/src/utils';
 
 export default class InsertImage extends Plugin {
     /**
@@ -16,6 +16,7 @@ export default class InsertImage extends Plugin {
 
     init() {
         const editor = this.editor;
+        const t = editor.t;
 
         editor.ui.componentFactory.add( 'insertImage', locale => {
             const view = new ButtonView( locale );
@@ -30,19 +31,21 @@ export default class InsertImage extends Plugin {
             view.on( 'execute', () => {
                 editor.fire('insertimage', { callback:function (image) {
                         editor.model.change( writer => {
-                            // const imageElement = writer.createElement( 'image', {
-                            //     src: imageUrl,
-                            //     alt: altText
-                            // } );
+                            const imageElement = writer.createElement( 'image', {
+                                "src": image.url,
+                                "alt": image.title,
+                                "class": image.class,
+                                "position": image.position
+                            } );
+
+                            // Insert the image in the current selection location.
+                            editor.model.insertContent( imageElement, editor.model.document.selection );
+
+                            // // const htmlDP = new HtmlDataProcessor( viewDocument );
+                            // const viewFragment = editor.data.processor.toView( image );
+                            // const modelFragment = editor.data.toModel( viewFragment );
                             //
-                            // // Insert the image in the current selection location.
-                            // editor.model.insertContent( imageElement, editor.model.document.selection );
-
-                            // const htmlDP = new HtmlDataProcessor( viewDocument );
-                            const viewFragment = editor.data.processor.toView( image );
-                            const modelFragment = editor.data.toModel( viewFragment );
-
-                            editor.model.insertContent( modelFragment );
+                            // editor.model.insertContent( modelFragment );
                         });
                     } });
             } );
@@ -50,25 +53,27 @@ export default class InsertImage extends Plugin {
             editor.model.schema.register( 'image', {
                 isObject: true,
                 isBlock: true,
+                isInline: false,
                 allowWhere: '$block',
-                allowAttributes: [ 'alt', 'src', 'class' ]
+                allowAttributes: [ 'alt', 'src', 'class', 'position' ]
             } );
 
             editor.conversion.for( 'dataDowncast' ).elementToElement( {
                 model: 'image',
-                view: 'img'
-            } );
+                view: ( modelElement, { writer } ) => createImageViewElement( writer, false )
+            } )
+                .add( modelToDataViewAttributeConverter( 'src' ) )
+                .add( modelToDataViewAttributeConverter( 'alt' ) )
+                .add( modelToDataViewAttributeConverter( 'class' ) );
 
             editor.conversion.for( 'editingDowncast' ).elementToElement( {
                 model: 'image',
-                view:  'img'
-            } );
-
-
-            editor.conversion.for( 'downcast' )
-                .add( modelToViewAttributeConverter( 'src' ) )
-                .add( modelToViewAttributeConverter( 'alt' ) )
-                .add( modelToViewAttributeConverter( 'class' ) );
+                view:  ( modelElement, { writer } ) => toImageWidget( createImageViewElement( writer, true ), writer, t( 'image widget' ) )
+            } )
+                .add( modelToEditingViewAttributeConverter( 'src' ) )
+                .add( modelToEditingViewAttributeConverter( 'alt' ) )
+                .add( modelToEditingViewAttributeConverter( 'class' ) )
+                .add( modelToEditingViewAttributeConverter( 'position' ) );
 
             editor.conversion.for( 'upcast' )
                 .elementToElement( {
@@ -80,8 +85,12 @@ export default class InsertImage extends Plugin {
                             class: true
                         }
                     },
-                    model: ( viewImage, { writer } ) => writer.createElement( 'image', { src: viewImage.getAttribute( 'src' ),
-                        alt: viewImage.getAttribute( 'alt' ), class: viewImage.getAttribute( 'class' )} )
+                    model: ( viewImage, { writer } ) => writer.createElement( 'image', {
+                        src: viewImage.getAttribute( 'src' ),
+                        alt: viewImage.getAttribute( 'alt' ),
+                        class: viewImage.getAttribute( 'class' ),
+                        position: viewImage.hasClass( 'pull-right' ) ? 'pull-right' : 'pull-left'
+                    } )
                 } );
 
             return view;
@@ -89,7 +98,7 @@ export default class InsertImage extends Plugin {
     }
 }
 
-export function modelToViewAttributeConverter( attributeKey ) {
+export function modelToDataViewAttributeConverter(attributeKey ) {
     return dispatcher => {
         dispatcher.on( `attribute:${ attributeKey }:image`, converter );
     };
@@ -100,12 +109,71 @@ export function modelToViewAttributeConverter( attributeKey ) {
         }
 
         const viewWriter = conversionApi.writer;
-        const img = conversionApi.mapper.toViewElement( data.item );
-
+        let img = conversionApi.mapper.toViewElement( data.item )
         viewWriter.setAttribute( data.attributeKey, data.attributeNewValue || '', img );
     }
 }
 
-export function createImageViewElement( writer ) {
-    return  writer.createEmptyElement( 'img' );
+export function modelToEditingViewAttributeConverter(attributeKey ) {
+    return dispatcher => {
+        dispatcher.on( `attribute:${ attributeKey }:image`, converter );
+    };
+
+    function converter( evt, data, conversionApi ) {
+        if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
+            return;
+        }
+
+        const viewWriter = conversionApi.writer;
+        let div = conversionApi.mapper.toViewElement( data.item );
+        let img = getViewImgFromWidget(div);
+        switch (attributeKey) {
+            case "position":
+                div._addClass(data.attributeNewValue);
+                // viewWriter.setAttribute( 'class', (div.class || '') + " " + 'image-style-side', div );
+                break;
+            default:
+                viewWriter.setAttribute( data.attributeKey, data.attributeNewValue || '', img );
+                break;
+        }
+    }
+}
+
+export function createImageViewElement( writer, addWrapper ) {
+    if ( addWrapper) {
+        const emptyElement = writer.createEmptyElement( 'img' );
+        const div = writer.createContainerElement( 'div', { class: 'image' } );
+        writer.insert( writer.createPositionAt( div, 0 ), emptyElement );
+
+        return div;
+    } else {
+        return  writer.createEmptyElement( 'img' );
+    }
+}
+
+export function toImageWidget( viewElement, writer, label ) {
+    writer.setCustomProperty( 'image', true, viewElement );
+
+    return toWidget( viewElement, writer, { label: labelCreator } );
+
+    function labelCreator() {
+        // const imgElement = getViewImgFromWidget( viewElement );
+        const altText = viewElement.getAttribute( 'alt' );
+
+        return altText ? `${ altText } ${ label }` : label;
+    }
+}
+
+export function getViewImgFromWidget( divElement ) {
+    const divChildren = [];
+
+    for ( const divChild of divElement.getChildren() ) {
+        divChildren.push( divChild );
+
+        if ( divChild.is( 'element' ) ) {
+            divChildren.push( ...divChild.getChildren() );
+        }
+    }
+
+    return divChildren.find( viewChild => viewChild.is( 'element', 'img' ) );
 }
