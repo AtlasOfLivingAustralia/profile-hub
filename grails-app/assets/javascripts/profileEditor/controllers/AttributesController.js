@@ -35,8 +35,16 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
         });
 
         popup.result.then(function (imageMetadata) {
-            var imageElement = "<img src='" + imageMetadata.thumbnailUrl + "' class='thumbnail inline-attribute-image " + imageMetadata.size + " "  + imageMetadata.position + "' alt='" + imageMetadata.title + "'/>";
-            callback(imageElement);
+            var title = imageMetadata.metadata && imageMetadata.metadata.title
+            var imageElement = "<img src='" + imageMetadata.thumbnailUrl + "' class='thumbnail inline-attribute-image " + imageMetadata.size + " "  + imageMetadata.position + "' alt='" + title + "'/>";
+            var image = {
+                "url":  imageMetadata.thumbnailUrl,
+                "position": imageMetadata.position,
+                "class": "thumbnail inline-attribute-image " + imageMetadata.size + " "  + imageMetadata.position,
+                "alt": title
+            }
+
+            callback(image);
         });
     };
 

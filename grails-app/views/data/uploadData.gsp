@@ -4,6 +4,7 @@
     <g:set var="excludeBugherd" value="true" scope="request"/>
     <meta name="layout" content="${grailsApplication.config.layout}"/>
     <title>Upload data</title>
+    <asset:javascript src="webcomponentsjs/webcomponents-0.7.24.js"/>
 </head>
 
 <body>
