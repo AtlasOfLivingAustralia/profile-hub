@@ -1,3 +1,12 @@
+/**
+ * ckeditor directive is used to create ckeditor and link it with angular model. Besides the attribute directive, ng-model
+ * is other the required attribute. The possible values for directive  can be found in profiles.js. An example values are
+ * richTextSimpleToolbar, richTextSmall etc.
+ * Events fired by directice are
+ * 1. ckeditor:ready - fired after ckeditor instance is created.
+ * 2. ckeditor:modelupdated - fired every time angular model is updated.
+ * 3. ckeditor:editorupdated - fired when changes to angular model updates editor.
+ */
 'use strict';
 
 (function (angular, factory) {
@@ -21,21 +30,6 @@
 
         loaded = true;
         $defer.resolve();
-
-        // CKEDITOR.disableAutoInline = true;
-
-        // function checkLoaded() {
-        //   if (ClassicEditor.state === 'ready') {
-        //     loaded = true;
-        //     $defer.resolve();
-        //   }
-        //   else {
-        //     $timeout(checkLoaded, 100);
-        //   }
-        // }
-        //
-        // ClassicEditor.on('ready', checkLoaded);
-        // $timeout(checkLoaded, 100);
     }]);
 
     app.directive('ckeditor', ['$timeout', '$q', '$log', function ($timeout, $q, $log) {
@@ -76,18 +70,10 @@
                                 'insertImage',
                                 '|',
                                 'undo',
-                                'redo',
-                                '|'
+                                'redo'
                             ]
                         },
                         language: 'en',
-                        // image: {
-                        //     toolbar: [
-                        //         'imageTextAlternative',
-                        //         'imageStyle:full',
-                        //         'imageStyle:side'
-                        //     ]
-                        // },
                         licenseKey: ''
                     };
 
@@ -120,6 +106,7 @@
                             }
                         });
 
+                        element.trigger('ckeditor:ready');
                         return editor;
                     })
 
@@ -130,7 +117,7 @@
                         }
                     });
 
-                    var setModelData = function (setPristine) {
+                        var setModelData = function (setPristine) {
                         var data = instance.getData();
                         if (data === '') {
                             data = null;
@@ -138,6 +125,7 @@
 
                         if (setPristine !== true || data !== ngModel.$viewValue) {
                             ngModel.$setViewValue(data);
+                            element.trigger('ckeditor:modelupdated', [{value : data}]);
                         }
 
                         if (setPristine === true && form) {
@@ -155,13 +143,10 @@
                         })
                     };
 
-                    // instance.on('customConfigLoaded', function() {
-                    //   configLoaderDef.resolve();
-                    // });
-
                     ngModel.$render = function () {
                         data.push(ngModel.$viewValue);
                         onUpdateModelData(true);
+                        element.trigger("ckeditor:editorupdated", [{value: ngModel.$viewValue}]);
                     };
 
                     /**

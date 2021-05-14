@@ -25,25 +25,6 @@ profileEditor.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) 
 profileEditor.run(function ($rootScope, config) {
     $rootScope.config = config;
 
-    // CKEDITOR.plugins.addExternal('alaToolbar', config.contextPath + '/assets/ckeditor/plugins/alaToolbar/');
-    //
-    // CKEDITOR.plugins.addExternal('ngImage', config.contextPath + '/assets/ckeditor/plugins/ngImage/');
-    //
-    // // use HTML4 elements for Jasper compatibility.
-    // CKEDITOR.config.coreStyles_bold = { element: 'b', overrides: 'strong' };
-    // CKEDITOR.config.coreStyles_italic = { element: 'i', overrides: 'em' };
-    // CKEDITOR.config.coreStyles_strike = { element: 'strike', overrides: 's' };
-    //
-    // // CKEditor uses 'Allowed Content Filtering' (ACF), which defines what html elements are allowed in the text, and
-    // // what attributes and classes those elements can have. The 'extraAllowedContent' config item lets you add extra
-    // // allowed elements on top of the defaults.
-    // // Any element, class or attribute not explicitly listed will be removed by the editor.
-    // // The format is tag(css classes comma-separated)[attributes].
-    // //
-    // // Image tags are not allowed unless the images ckeditor plugin in included, but we don't want to use that because
-    // // we need to use our own angular controllers/directives to manage images for the whole profile.
-    // CKEDITOR.config.extraAllowedContent = 'img(thumbnail,inline-attribute-image,small,medium,large,pull-left,pull-right)[src,class,alt]';
-
     $rootScope.richTextNoFormatting = {
         language: 'en',
         removePlugins: 'toolbar',
@@ -92,7 +73,6 @@ profileEditor.run(function ($rootScope, config) {
 
     $rootScope.richTextFullToolbar = {
         language: 'en',
-        // extraPlugins: 'symbol,alaToolbar,ngImage,autogrow',
         class: 'four-line', // font-size 15px * 1.5em line height + 10px margin bottom per <p> for 4 lines
         plugins: [
             'Heading',
@@ -108,10 +88,6 @@ profileEditor.run(function ($rootScope, config) {
             'Indent',
             'FontBackgroundColor',
             'FontColor',
-            // 'Image',
-            // 'ImageStyle',
-            // 'ImageToolbar',
-            // 'ImageTextAlternative',
             'InsertImage',
             'Essentials'
         ],
@@ -139,8 +115,53 @@ profileEditor.run(function ($rootScope, config) {
                 'insertImage',
                 '|',
                 'undo',
-                'redo',
-                '|'
+                'redo'
+            ]
+        }
+    };
+
+    $rootScope.richTextFullToolbarForComment = {
+        language: 'en',
+        class: 'four-line', // font-size 15px * 1.5em line height + 10px margin bottom per <p> for 4 lines
+        plugins: [
+            'Heading',
+            'Bold',
+            'Italic',
+            'Underline',
+            'Strikethrough',
+            'Subscript',
+            'Superscript',
+            'SpecialCharacters',
+            'Link',
+            'List',
+            'Indent',
+            'FontBackgroundColor',
+            'FontColor',
+            'Essentials'
+        ],
+        toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'underline',
+                'strikethrough',
+                'subscript',
+                'superscript',
+                'specialCharacters',
+                'link',
+                '|',
+                'bulletedList',
+                'numberedList',
+                'outdent',
+                'indent',
+                '|',
+                'fontBackgroundColor',
+                'fontColor',
+                '|',
+                'undo',
+                'redo'
             ]
         }
     };
