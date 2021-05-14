@@ -4,7 +4,7 @@ services:
 - xvfb
 sudo: false
 jdk:
-- openjdk8
+  - openjdk8
 node_js:
 - "6"
 env:
@@ -17,8 +17,9 @@ addons:
     - g++-4.8
 branches:
   only:
-  - master
-  - dev
+    - master
+    - dev
+    - hotfix
 cache:
   directories:
   - node_modules
@@ -28,12 +29,12 @@ before_install:
 - export TZ=Australia/Canberra
 - date
 before_script:
-- npm install
-- mkdir -p ~/.grails; wget -q -O ~/.grails/settings.groovy https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/travis_grails_settings_new.groovy
-- MAVEN_REPO="ala-repo-snapshot"; grep '^app\.version=' ./application.properties |
-  grep -q "\-SNAPSHOT"; if [ "$?" = "1" ]; then MAVEN_REPO="ala-repo-release"; fi;
-- echo "MAVEN_REPO:$MAVEN_REPO"
-- export GRAILS_OPTS="-Xmx1536m -Xms1536m -server -Dfile.encoding=UTF-8 -XX:PermSize=32m -XX:MaxPermSize=256m"
+  - npm install
+  - mkdir -p ~/.grails; wget -q -O ~/.grails/settings.groovy https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/travis_grails_settings_new.groovy
+  - MAVEN_REPO="ala-repo-snapshot"; grep '^app\.version=' ./application.properties |
+    grep -q "\-SNAPSHOT"; if [ "$?" = "1" ]; then MAVEN_REPO="ala-repo-release"; fi;
+  - echo "MAVEN_REPO:$MAVEN_REPO"
+  - export GRAILS_OPTS="-Xmx1536m -Xms1536m -server -Dfile.encoding=UTF-8 -XX:PermSize=32m -XX:MaxPermSize=256m"
 script:
 - node_modules/karma/bin/karma start karma.conf.js --single-run --browsers Firefox,PhantomJS --port 9877 --log-level info && ./grailsw refresh-dependencies --non-interactive && ./grailsw test-app --non-interactive && ./grailsw prod war --non-interactive
 after_success:

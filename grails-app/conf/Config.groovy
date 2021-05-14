@@ -2,7 +2,13 @@ import org.apache.log4j.Level
 
 def appName = 'profile-hub'
 def ENV_NAME = "${appName.toUpperCase()}_CONFIG"
-default_config = "/data/${appName}/config/${appName}-config.properties"
+def default_config = "/data/${appName}/config/${appName}-config.properties"
+environments {
+    development {
+        default_config = "/data/${appName}/config/${appName}-config-grails2.properties"
+    }
+}
+
 if (!grails.config.locations || !(grails.config.locations instanceof List)) {
     grails.config.locations = []
 }
