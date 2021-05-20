@@ -25,7 +25,7 @@ before_script:
   - npm install
 
 script:
-  - node_modules/karma/bin/karma start karma.conf.js --single-run --browsers ChromeHeadless
+  - node_modules/karma/bin/karma start karma.conf.js --single-run --browsers Firefox,Chrome,ChromeHeadless
   - ./gradlew check
 
 after_success:

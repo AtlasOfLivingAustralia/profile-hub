@@ -25,88 +25,145 @@ profileEditor.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) 
 profileEditor.run(function ($rootScope, config) {
     $rootScope.config = config;
 
-    CKEDITOR.plugins.addExternal('alaToolbar', config.contextPath + '/assets/ckeditor/plugins/alaToolbar/');
-
-    CKEDITOR.plugins.addExternal('ngImage', config.contextPath + '/assets/ckeditor/plugins/ngImage/');
-
-    // override the default ckeditor stylesheet with ours
-    CKEDITOR.config.contentsCss = [config.mainCssFile, config.bootstrapCssFile];
-
-    // use HTML4 elements for Jasper compatibility.
-    CKEDITOR.config.coreStyles_bold = { element: 'b', overrides: 'strong' };
-    CKEDITOR.config.coreStyles_italic = { element: 'i', overrides: 'em' };
-    CKEDITOR.config.coreStyles_strike = { element: 'strike', overrides: 's' };
-
-    // CKEditor uses 'Allowed Content Filtering' (ACF), which defines what html elements are allowed in the text, and
-    // what attributes and classes those elements can have. The 'extraAllowedContent' config item lets you add extra
-    // allowed elements on top of the defaults.
-    // Any element, class or attribute not explicitly listed will be removed by the editor.
-    // The format is tag(css classes comma-separated)[attributes].
-    //
-    // Image tags are not allowed unless the images ckeditor plugin in included, but we don't want to use that because
-    // we need to use our own angular controllers/directives to manage images for the whole profile.
-    CKEDITOR.config.extraAllowedContent = 'img(thumbnail,inline-attribute-image,small,medium,large,pull-left,pull-right)[src,class,alt]';
-
     $rootScope.richTextNoFormatting = {
-        language: 'en-au',
-        'skin': 'moono',
-        removeButtons: '',
+        language: 'en',
         removePlugins: 'toolbar',
         height: 50
     };
     $rootScope.richTextSingleLine = { // this name is used as a constant to hack in some features
-        language: 'en-au',
-        'skin': 'moono',
-        removeButtons: '',
-        removePlugins: '',
+        language: 'en',
         height: 'auto',
-        toolbar: [
-            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Subscript', 'Superscript' ] }
-        ],
-        enterMode: CKEDITOR.ENTER_BR
+        toolbar: {
+            items: [
+                'bold',
+                'italic',
+                'underline',
+                'subscript',
+                'superscript'
+            ]
+        }
     };
     $rootScope.richTextSmall = {
-        language: 'en-au',
-        'skin': 'moono',
-        removeButtons: '',
-        removePlugins: '',
-        height: 50,
-        toolbar: [
-            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Subscript', 'Superscript' ] }
-        ]
+        language: 'en',
+        class: 'single-line',
+        toolbar: {
+            items: [
+                'bold',
+                'italic',
+                'underline',
+                'subscript',
+                'superscript'
+            ]
+        }
     };
 
     $rootScope.richTextSimpleToolbar = {
-        language: 'en-au',
-        'skin': 'moono',
-        removeButtons: '',
-        removePlugins: '',
-        height: '97px', // font-size 15px * 1.5em line height + 10px margin bottom per <p> for 3 lines
-        toolbar: [
-            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Subscript', 'Superscript' ] }
-        ],
-        enterMode: CKEDITOR.ENTER_BR
+        language: 'en',
+        class: 'three-line',// font-size 15px * 1.5em line height + 10px margin bottom per <p> for 3 lines
+        toolbar: {
+            items: [
+                'bold',
+                'italic',
+                'underline',
+                'subscript',
+                'superscript'
+            ]
+        }
     };
 
     $rootScope.richTextFullToolbar = {
-        language: 'en-au',
-        'skin': 'moono',
-        removeButtons: '',
-        removePlugins: '',
-        extraPlugins: 'symbol,alaToolbar,ngImage,autogrow',
-        autoGrow_minHeight: 130, // font-size 15px * 1.5em line height + 10px margin bottom per <p> for 4 lines
-        autoGrow_maxHeight: 400,
-        toolbar: [
-            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript' ] },
-            { name: 'clipboard', items: ['PasteText', '-', 'Undo', 'Redo' ] },
-            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent' ] },
-            { name: 'links', items: [ 'Link', 'Unlink' ] },
-            { name: 'image', items: [ 'ngImage' ] },
-            { name: 'insert', items: [ 'Symbol', 'Male', 'Female', 'PlusMinus', 'Times', 'Endash', 'Degree' ] },
-            { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-            { name: 'tools', items: [ 'Maximize' ] },
-            { name: 'styles', items: [ 'Styles', 'Format' ] }
-        ]
+        language: 'en',
+        class: 'four-line', // font-size 15px * 1.5em line height + 10px margin bottom per <p> for 4 lines
+        plugins: [
+            'Heading',
+            'Bold',
+            'Italic',
+            'Underline',
+            'Strikethrough',
+            'Subscript',
+            'Superscript',
+            'SpecialCharacters',
+            'Link',
+            'List',
+            'Indent',
+            'FontBackgroundColor',
+            'FontColor',
+            'InsertImage',
+            'Essentials'
+        ],
+        toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'underline',
+                'strikethrough',
+                'subscript',
+                'superscript',
+                'specialCharacters',
+                'link',
+                '|',
+                'bulletedList',
+                'numberedList',
+                'outdent',
+                'indent',
+                '|',
+                'fontBackgroundColor',
+                'fontColor',
+                '|',
+                'insertImage',
+                '|',
+                'undo',
+                'redo'
+            ]
+        }
+    };
+
+    $rootScope.richTextFullToolbarForComment = {
+        language: 'en',
+        class: 'four-line', // font-size 15px * 1.5em line height + 10px margin bottom per <p> for 4 lines
+        plugins: [
+            'Heading',
+            'Bold',
+            'Italic',
+            'Underline',
+            'Strikethrough',
+            'Subscript',
+            'Superscript',
+            'SpecialCharacters',
+            'Link',
+            'List',
+            'Indent',
+            'FontBackgroundColor',
+            'FontColor',
+            'Essentials'
+        ],
+        toolbar: {
+            items: [
+                'heading',
+                '|',
+                'bold',
+                'italic',
+                'underline',
+                'strikethrough',
+                'subscript',
+                'superscript',
+                'specialCharacters',
+                'link',
+                '|',
+                'bulletedList',
+                'numberedList',
+                'outdent',
+                'indent',
+                '|',
+                'fontBackgroundColor',
+                'fontColor',
+                '|',
+                'undo',
+                'redo'
+            ]
+        }
     };
 });
 

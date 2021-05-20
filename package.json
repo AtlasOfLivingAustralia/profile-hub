@@ -23,12 +23,12 @@
   "devDependencies": {
     "jasmine-core": "^2.99.1",
     "jasmine-data_driven_tests": "^1.0.0",
-    "karma": "^5.2.3",
+    "karma": "^6.3.2",
     "karma-chrome-launcher": "^3.1.0",
-    "karma-firefox-launcher": "^2.1.0",
-    "karma-phantomjs-launcher": "^1.0.4",
     "karma-coverage": "^2.0.3",
+    "karma-firefox-launcher": "^2.1.0",
     "karma-jasmine": "^4.0.1",
+    "karma-jasmine-jquery": "^0.1.1",
     "karma-ng-html2js-preprocessor": "^1.0.0"
   }
 }

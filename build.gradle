@@ -173,7 +173,7 @@ assets {
         excludes : ["**/*.min.js", "ckeditor/plugins/symbol/dialogs/lang/en.js"]
     ]
 
-    excludes = ["webjars/leaflet/0.7.7/**/*.*"]
+    excludes = ["webjars/leaflet/0.7.7/**/*.*", "ckeditor5/node_modules/**", "**/insertimage.js",  "ckeditor5/build/**", "ckeditor5/src/**", "ckeditor5/webpack.config.js"]
     includes = ["webjars/leaflet/0.7.7/dist/*.*"]
 }
 

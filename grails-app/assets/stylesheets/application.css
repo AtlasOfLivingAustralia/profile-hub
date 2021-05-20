@@ -4,7 +4,6 @@
 *= require angular-bootstrap-colorpicker-3.0.11/css/colorpicker.min.css
 *= require font-awesome-4.3.0/css/font-awesome.min.css
 *= require angular-loading-bar/loading-bar-0.7.1.min.css
-*= require ckeditor/ng-ckeditor-0.2.1.css
 *= require ala-keyplayer/keybase.player.css
 *= require keybase-override.css
 *= require dualMultiselect/dualmultiselect.css
@@ -24,4 +23,17 @@ a.disabled {
     cursor: default;
     pointer-events: none;
     text-decoration: none;
+}
+
+.single-line .ck-content.ck-editor__editable {
+    height: 50px;
+}
+
+.three-line .ck-content.ck-editor__editable {
+    height: 97px;
+}
+
+.four-line .ck-content.ck-editor__editable {
+    min-height: 130px;
+    max-height: 400px;
 }

@@ -23,7 +23,7 @@
 
                     <div ng-if="commentCtrl.currentComment && !commentCtrl.currentComment.uuid && !commentCtrl.currentComment.parentCommentId">
                         <label for="commentText" class="screen-reader-label">Comment text</label>
-                        <textarea id="commentText" ng-model="commentCtrl.currentComment.text" ckeditor="richTextFullToolbar" required="required"></textarea>
+                        <textarea id="commentText" ng-model="commentCtrl.currentComment.text" ckeditor="richTextFullToolbarForComment" required="required"></textarea>
 
                         <div class="row pull-right">
                             <div class="col-sm-12 padding-top-1">

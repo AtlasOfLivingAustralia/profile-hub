@@ -12,9 +12,6 @@
     <link href="http://www.ala.org.au/wp-content/themes/ala2011/images/favicon.ico" rel="shortcut icon"
           type="image/x-icon"/>
     <title><g:layoutTitle/></title>
-    <script>
-      var CKEDITOR_BASEPATH = '${request.contextPath}/assets/ckeditor/';
-    </script>
     <g:layoutHead/>
     <asset:stylesheet href="application.css" />
     <link rel="stylesheet" href="${createLink(controller: "stylesheet", action:"opus", id: "${opus?.uuid ?: ''}", params:[ver: o.cacheBuster(opus: opus)] )}" />
