@@ -10,7 +10,7 @@ buildscript {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
         classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.0"
         classpath "org.grails.plugins:hibernate5:7.0.4"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.2.4"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.3.1"
         classpath 'org.grails.plugins:quartz:2.0.13' // Needed to compile *Job classes
     }
 }
@@ -70,7 +70,7 @@ dependencies {
     profile "org.grails.profiles:web"
     runtime "org.glassfish.web:el-impl:2.1.2-b03"
     runtime "javax.xml.bind:jaxb-api:2.3.1"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.2.4"
+    runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.3.1"
     testCompile "io.micronaut:micronaut-inject-groovy"
     testCompile "org.grails:grails-gorm-testing-support"
     testCompile "org.mockito:mockito-core"
@@ -170,10 +170,10 @@ assets {
     minifyJs = true
     minifyCss = true
     minifyOptions = [
-        excludes : ["**/*.min.js", "ckeditor/plugins/symbol/dialogs/lang/en.js"]
+        excludes : ["**/*.min.js", "ckeditor5/build/ckeditor.js"]
     ]
 
-    excludes = ["webjars/leaflet/0.7.7/**/*.*", "ckeditor5/node_modules/**", "**/insertimage.js",  "ckeditor5/build/**", "ckeditor5/src/**", "ckeditor5/webpack.config.js"]
+    excludes = ["webjars/leaflet/0.7.7/**/*.*", "ckeditor5/build/ckeditor.js", "ckeditor5/node_modules/**", "ckeditor5/src/**", "ckeditor5/webpack.config.js"]
     includes = ["webjars/leaflet/0.7.7/dist/*.*"]
 }
 
