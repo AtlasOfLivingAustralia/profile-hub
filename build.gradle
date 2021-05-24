@@ -172,8 +172,7 @@ assets {
     minifyOptions = [
         excludes : ["**/*.min.js", "ckeditor5/build/ckeditor.js"]
     ]
-
-    excludes = ["webjars/leaflet/0.7.7/**/*.*", "ckeditor5/build/ckeditor.js", "ckeditor5/node_modules/**", "ckeditor5/src/**", "ckeditor5/webpack.config.js"]
+    excludes = ["webjars/leaflet/0.7.7/**/*.*",  "ckeditor5/node_modules/**/*.*", "ckeditor5/src/**/*.*", "ckeditor5/build/ckeditor.js", "ckeditor5/webpack.config.js"]
     includes = ["webjars/leaflet/0.7.7/dist/*.*"]
 }
 
