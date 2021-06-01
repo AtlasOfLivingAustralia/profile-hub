@@ -21,6 +21,10 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+# prevents travis from running ./gradle assemble command
+install:
+  - true
+
 before_script:
   - npm install
 
