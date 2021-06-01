@@ -11,3 +11,4 @@ out/
 .settings
 .classpath
 /node_modules/
+/coverage/
