@@ -33,7 +33,7 @@ script:
   - ./gradlew check
 
 after_success:
-  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew clean && travis_retry ./gradlew publish'
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew clean && travis_retry travis_wait 20 ./gradlew publish'
 
 env:
   global:
