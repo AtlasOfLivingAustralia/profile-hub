@@ -522,7 +522,7 @@ class ExportService {
         }
 
         if (nslNameIdentifier) {
-            def nslNameDetails = nslService.getNameDetails(nslNameIdentifier)?.resp?.name?.primaryInstance?.get(0) ?: null
+            def nslNameDetails = nslService.getNameDetails(nslNameIdentifier)?.resp?.primaryInstance?.get(0) ?: null
             String nslProtologue = nslNameDetails?.citationHtml?: null
             if (nslProtologue && nslNameDetails?.page) {
                 nslProtologue += ": " + nslNameDetails.page

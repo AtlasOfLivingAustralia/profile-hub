@@ -162,14 +162,15 @@
                                         ng-click="imageCtrl.editImage(image, imageCtrl.offset, imageCtrl.page)">
                                     <i class="fa fa-edit"></i> Edit
                                 </button>
-                                <button type="button" aria-label="Push image to open repository"
-                                        tooltip="Push '{{image.metadata.title}}' to open repository"
-                                        tooltip-placement="bottom" tooltip-append-to-body="true"
-                                        class="btn btn-sm btn-success"
-                                        ng-click="imageCtrl.publishPrivateImage(image.imageId)"
-                                        ng-show="image.type.name == 'PRIVATE'">
-                                    <i class="fa fa-paper-plane"></i> Push
-                                </button>
+%{--                                Removed due to https://github.com/AtlasOfLivingAustralia/profile-hub/issues/717 . TODO: remove publishing functionality from code later. --}%
+%{--                                <button type="button" aria-label="Push image to open repository"--}%
+%{--                                        tooltip="Push '{{image.metadata.title}}' to open repository"--}%
+%{--                                        tooltip-placement="bottom" tooltip-append-to-body="true"--}%
+%{--                                        class="btn btn-sm btn-success"--}%
+%{--                                        ng-click="imageCtrl.publishPrivateImage(image.imageId)"--}%
+%{--                                        ng-show="image.type.name == 'PRIVATE'">--}%
+%{--                                    <i class="fa fa-paper-plane"></i> Push--}%
+%{--                                </button>--}%
                                 <button type="button" aria-label="Delete image"
                                         tooltip="Delete '{{image.metadata.title}}'" tooltip-placement="bottom"
                                         tooltip-append-to-body="true"
