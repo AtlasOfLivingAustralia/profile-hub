@@ -9,7 +9,7 @@ class BieServiceSpec extends Specification implements ServiceUnitTest<BieService
     WebService webService
 
     def setup() {
-        grailsApplication.config.bie.base.url = "http://bie.service"
+        grailsApplication.config.bie.ws.url = "http://bie.service"
 
         webService = Mock(WebService)
         service = new BieService()

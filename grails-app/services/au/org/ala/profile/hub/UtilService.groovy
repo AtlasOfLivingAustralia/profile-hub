@@ -20,16 +20,16 @@ class UtilService {
         SimpleDateFormat sdf = new SimpleDateFormat('MMMMM dd, YYYY');
         switch (dr) {
             case DateRangeType.TODAY:
-                result['to'] = today + 1;
+                result['to'] = addDayToDate(today, 1)
                 result['from'] = today
                 break;
             case DateRangeType.LAST_7DAYS:
-                result['to'] = today + 1;
-                result['from'] = today - 6
+                result['to'] = addDayToDate(today, 1)
+                result['from'] = addDayToDate(today, -6)
                 break;
             case DateRangeType.LAST_30DAYS:
-                result['to'] = today + 1;
-                result['from'] = today - 29
+                result['to'] = addDayToDate(today, 1)
+                result['from'] = addDayToDate(today, -29)
                 break;
             case DateRangeType.CUSTOM:
                 result['to'] = to;
@@ -45,5 +45,12 @@ class UtilService {
     Date today() {
         Date now = new Date();
         Date today = new Date(now.getYear(), now.getMonth(), now.getDate());
+    }
+
+    Date addDayToDate(Date date, Integer days) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days);
+        cal.getTime();
     }
 }

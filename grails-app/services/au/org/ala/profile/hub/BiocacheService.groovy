@@ -76,13 +76,13 @@ class BiocacheService {
             int totalBiocacheImageCount = countImages(biocacheImageSearchUrl, searchIdentifier, opus)
 
             if (totalBiocacheImageCount > startIndex - 1) {
-                result = webService.get("${biocacheImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&im=true&pageSize=${pageSize}&startIndex=${startIndex}" + relevantFacets )
+                result = webService.get("${biocacheImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&sort=images&im=true&pageSize=${pageSize}&startIndex=${startIndex}" + relevantFacets )
                 int biocacheImageCount = result?.resp?.occurrences?.size() ?: 0
                 if (biocacheImageCount < pageSize) {
                     if (grailsApplication.config.sandbox.biocache.service.url) {
                         String sandboxImageSearchUrl = "${grailsApplication.config.sandbox.biocache.service.url}/occurrences/search.json"
                         startIndex = Math.max(0, startIndex - totalBiocacheImageCount)
-                        Map sandboxResult = webService.get("${sandboxImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&im=true&pageSize=${pageSize - biocacheImageCount}&startIndex=${startIndex}" + relevantFacets)
+                        Map sandboxResult = webService.get("${sandboxImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&sort=images&format=json&im=true&pageSize=${pageSize - biocacheImageCount}&startIndex=${startIndex}" + relevantFacets)
                         if (sandboxResult?.resp?.occurrences) {
                             if (!result?.resp?.occurrences) {
                                 result.resp.occurrences = []
@@ -94,7 +94,7 @@ class BiocacheService {
             } else {
                 String sandboxImageSearchUrl = "${grailsApplication.config.sandbox.biocache.service.url}/occurrences/search.json"
                 startIndex = Math.max(0, startIndex - totalBiocacheImageCount)
-                result = webService.get("${sandboxImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&im=true&pageSize=${pageSize}&startIndex=${startIndex}")
+                result = webService.get("${sandboxImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&sort=images&im=true&pageSize=${pageSize}&startIndex=${startIndex}")
             }
         }
 

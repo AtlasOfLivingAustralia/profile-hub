@@ -477,6 +477,7 @@ describe("OpusController tests", function () {
         scope.$apply();
 
         expect(profileService.saveOpus).toHaveBeenCalled();
+        expect(scope.opusCtrl.initialShortName).toEqual(scope.opusCtrl.opus.shortName);
     });
 
     it("should redirect to the update opus page after creating a new opus", function () {

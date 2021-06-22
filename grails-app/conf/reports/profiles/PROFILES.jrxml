@@ -5,7 +5,7 @@
 	<property name="com.jaspersoft.studio.book.group.cover.header" value="Cover and Table of Contents"/>
 	<property name="com.jaspersoft.studio.book.group.cover.footer" value="Backcover"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JSON Sample Data Source"/>
-	<template><![CDATA["PROFILES_styles.jrtx"]]></template>
+	<template><![CDATA["/reports/profiles/PROFILES_styles.jrtx"]]></template>
 	<parameter name="PROFILES_REPORT_OPTIONS" class="java.util.Map">
 		<defaultValueExpression><![CDATA[[
 	      "nomenclature": "true",
@@ -53,7 +53,7 @@
 					<subreportParameter name="REPORT_TEMPLATES">
 						<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportExpression><![CDATA["PROFILES_cover.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["/reports/profiles/PROFILES_cover.jasper"]]></subreportExpression>
 				</p:subreportPart>
 			</part>
 			<part uuid="7aed05b9-1301-4a53-b47e-34289560bc0d">
@@ -67,7 +67,7 @@
 					<subreportParameter name="REPORT_TEMPLATES">
 						<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportExpression><![CDATA["PROFILES_colophon.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["/reports/profiles/PROFILES_colophon.jasper"]]></subreportExpression>
 				</p:subreportPart>
 			</part>
 			<part evaluationTime="Report" uuid="56ab525c-754f-4f48-a52c-7cc23934be3d">
@@ -77,7 +77,7 @@
 					<subreportParameter name="REPORT_TEMPLATES">
 						<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportExpression><![CDATA["PROFILES_toc.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["/reports/profiles/PROFILES_toc.jasper"]]></subreportExpression>
 				</p:subreportPart>
 			</part>
 		</groupHeader>
@@ -93,7 +93,7 @@
 					<subreportParameter name="REPORT_DATA_SOURCE">
 						<subreportParameterExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource()]]></subreportParameterExpression>
 					</subreportParameter>
-					<subreportExpression><![CDATA["PROFILES_backcover.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["/reports/profiles/PROFILES_backcover.jasper"]]></subreportExpression>
 				</p:subreportPart>
 			</part>
 		</groupFooter>
@@ -110,7 +110,7 @@
 				<subreportParameter name="REPORT_TEMPLATES">
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
-				<subreportExpression><![CDATA["PROFILES_detail.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail.jasper"]]></subreportExpression>
 			</p:subreportPart>
 		</part>
 	</detail>

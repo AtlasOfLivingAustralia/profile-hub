@@ -12,7 +12,7 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<template><![CDATA["PROFILES_styles.jrtx"]]></template>
+	<template><![CDATA["/reports/profiles/PROFILES_styles.jrtx"]]></template>
 	<parameter name="showTitle" class="java.lang.Boolean">
 		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
 	</parameter>

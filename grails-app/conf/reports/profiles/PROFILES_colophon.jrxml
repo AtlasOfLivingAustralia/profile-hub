@@ -11,7 +11,7 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JSON Sample Data Source"/>
-	<template><![CDATA["PROFILES_styles.jrtx"]]></template>
+	<template><![CDATA["/reports/profiles/PROFILES_styles.jrtx"]]></template>
 	<parameter name="QR_CODE" class="java.io.InputStream" isForPrompting="false"/>
 	<queryString language="json">
 		<![CDATA[model]]>
