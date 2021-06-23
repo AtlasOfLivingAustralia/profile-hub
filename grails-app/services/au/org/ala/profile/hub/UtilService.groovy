@@ -47,6 +47,12 @@ class UtilService {
         Date today = new Date(now.getYear(), now.getMonth(), now.getDate());
     }
 
+    /**
+     * Add number of days to a reference date. To subtract add negative value.
+     * @param date
+     * @param days
+     * @return
+     */
     Date addDayToDate(Date date, Integer days) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
