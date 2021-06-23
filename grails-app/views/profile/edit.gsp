@@ -163,8 +163,6 @@
                                                        params="[opusId: params.opusId]"/>
                                             <g:include controller="profile" action="specimenPanel"
                                                        params="[opusId: params.opusId]"/>
-%{--                                            <g:include controller="profile" action="classificationPanel"--}%
-%{--                                                       params="[opusId: params.opusId]"/>--}%
                                             <g:include controller="profile" action="bibliographyPanel"
                                                        params="[opusId: params.opusId]"/>
                                             <g:if test="${!profile.archivedDate}">
