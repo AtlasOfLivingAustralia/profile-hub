@@ -147,12 +147,12 @@ profileEditor.controller('ProfileController',
         if (self.profile.nslNameIdentifier) {
             var nslPromise = profileService.getNslNameDetails(self.profile.nslNameIdentifier);
             nslPromise.then(function (data) {
-                self.nslNameStatus = data.name.status;
-                if (!_.isUndefined(data.name.primaryInstance) && data.name.primaryInstance && data.name.primaryInstance.length > 0) {
+                self.nslNameStatus = data.status;
+                if (!_.isUndefined(data.primaryInstance) && data.primaryInstance && data.primaryInstance.length > 0) {
 
-                    self.nslProtologue = data.name.primaryInstance[0].citationHtml;
-                    if (data.name.primaryInstance[0].page) {
-                        self.nslProtologue += ": " + data.name.primaryInstance[0].page;
+                    self.nslProtologue = data.primaryInstance[0].citationHtml;
+                    if (data.primaryInstance[0].page) {
+                        self.nslProtologue += ": " + data.primaryInstance[0].page;
                     }
                 }
             });

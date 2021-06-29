@@ -1,0 +1,115 @@
+---
+grails:
+    profile: web
+    codegen:
+        defaultPackage: au.org.ala.profile.hub
+    gorm:
+        reactor:
+            # Whether to translate GORM events into Reactor events
+            # Disabled by default for performance reasons
+            events: false
+info:
+    app:
+        name: '@info.app.name@'
+        version: '@info.app.version@'
+        grailsVersion: '@info.app.grailsVersion@'
+spring:
+    jmx:
+        unique-names: true
+    main:
+        banner-mode: "off"
+    groovy:
+        template:
+            check-template-location: false
+    devtools:
+        restart:
+            additional-exclude:
+                - '*.gsp'
+                - '**/*.gsp'
+                - '*.gson'
+                - '**/*.gson'
+                - 'logback.groovy'
+                - '*.properties'
+management:
+    endpoints:
+        enabled-by-default: false
+
+---
+grails:
+    mime:
+        types:
+            all: '*/*'
+            atom: application/atom+xml
+            css: text/css
+            csv: text/csv
+            form: application/x-www-form-urlencoded
+            html:
+              - text/html
+              - application/xhtml+xml
+            js: text/javascript
+            json:
+              - application/json
+              - text/json
+            multipartForm: multipart/form-data
+            pdf:
+              - application/pdf
+              - application/x-pdf
+            rss: application/rss+xml
+            text: text/plain
+            hal:
+              - application/hal+json
+              - application/hal+xml
+            xml:
+              - text/xml
+              - application/xml
+    urlmapping:
+        cache:
+            maxsize: 1000
+    controllers:
+        upload:
+            maxFileSize: 5000000
+            maxRequestSize: 5000000
+        defaultScope: singleton
+    converters:
+        encoding: UTF-8
+    views:
+        default:
+            codec: html
+        gsp:
+            encoding: UTF-8
+            htmlcodec: xml
+            codecs:
+                expression: html
+                scriptlet: html
+                taglib: none
+                staticparts: none
+management:
+    endpoints:
+        jmx:
+            unique-names: true
+
+server:
+    tomcat:
+        port-header: 'X-Forwarded-Port'
+        protocol-header: 'X-Forwarded-Proto'
+        remote-ip-header: 'X-Forwarded-For'
+---
+
+grails:
+    config:
+        locations:
+            - file:/data/profile-hub/config/profile-hub-config.properties
+            - file:/data/profile-hub/config/profile-hub-config.yml
+            - file:/data/profile-hub/config/profile-hub-config.groovy
+
+---
+security:
+    cas:
+        casServerName: 'https://auth.ala.org.au'
+        casServerUrlPrefix: 'https://auth.ala.org.au/cas'
+        loginUrl: 'https://auth.ala.org.au/cas/login'
+        logoutUrl: 'https://auth.ala.org.au/cas/logout'
+        adminRole: 'ROLE_ADMIN'
+        uriExclusionFilterPattern: '/images.*,/css.*,/js.*,/less.*,/assets/.*'
+        uriFilterPattern:
+        authenticateOnlyIfCookieFilterPattern: '*'

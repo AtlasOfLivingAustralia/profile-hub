@@ -163,8 +163,6 @@
                                                        params="[opusId: params.opusId]"/>
                                             <g:include controller="profile" action="specimenPanel"
                                                        params="[opusId: params.opusId]"/>
-                                            <g:include controller="profile" action="classificationPanel"
-                                                       params="[opusId: params.opusId]"/>
                                             <g:include controller="profile" action="bibliographyPanel"
                                                        params="[opusId: params.opusId]"/>
                                             <g:if test="${!profile.archivedDate}">
@@ -198,7 +196,7 @@
                                     </div>
                                 </tab>
                                 <tab heading="Documents" class="font-xxsmall" ng-show="!profileCtrl.readonly() || profileCtrl.profile.attachments.length > 0" managed-tab>
-                                    <g:render template="../common/attachments" model="[hideHeading: true]"/>
+                                    <g:render template="/common/attachments" model="[hideHeading: true]"/>
                                 </tab>
                             </tabset>
                         </div>

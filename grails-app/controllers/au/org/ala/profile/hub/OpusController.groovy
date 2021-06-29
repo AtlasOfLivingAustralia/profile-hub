@@ -7,7 +7,9 @@ import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest
+import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
+
+import java.text.SimpleDateFormat
 
 import static au.org.ala.profile.hub.util.HubConstants.*
 import static au.org.ala.profile.security.Role.ROLE_ADMIN
@@ -84,6 +86,7 @@ class OpusController extends OpusBaseController {
             def model = commonViewModelParams(opus, 'filter')
             def listType = grailsApplication.config.lists.masterlist.type ?: 'PROFILE'
             def lists = webService.get(grailsApplication.config.lists.base.url + '/ws/speciesList', [ 'listType': 'eq:' + listType , max: -1, user: authService.userId ])
+
             if (!lists || !(lists.statusCode in 200..299)) {
                 response.sendError(SC_BAD_GATEWAY, "lists service unavailable")
             } else {
@@ -189,10 +192,13 @@ class OpusController extends OpusBaseController {
 
     def getAboutHtml() {
         def response = profileService.getOpusAboutContent(params.opusId as String)
+        SimpleDateFormat longFormat = new SimpleDateFormat('dd MMMM yyyy - hh:mm')
+        SimpleDateFormat yearFormat = new SimpleDateFormat('yyyy')
+        Date today = new Date()
         response?.resp?.opus << [
                 opusUrl             : "${grailsApplication.config.grails.serverURL}/opus/${params.opusId}",
-                date                : new Date().format('dd MMMM yyyy - hh:mm'),
-                year                : new Date().format('yyyy'),
+                date                : longFormat.format(today),
+                year                : yearFormat.format(today),
                 genericCopyrightHtml: GENERIC_COPYRIGHT_TEXT
         ]
 
@@ -357,7 +363,7 @@ class OpusController extends OpusBaseController {
     def saveAttachment() {
         if (!params.opusId || !(request instanceof MultipartHttpServletRequest) || !request.getParameter("data")) {
             badRequest "opusId is a required parameter, a JSON data paramaeter must be provided, and the request must be a multipart request"
-        } else if (request instanceof DefaultMultipartHttpServletRequest) {
+        } else if (request instanceof AbstractMultipartHttpServletRequest) {
             if (request.fileNames && request.getFile(request.fileNames[0]).contentType != "application/pdf") {
                 badRequest "Invalid file type - must be one of [PDF]"
             } else {
@@ -458,8 +464,8 @@ class OpusController extends OpusBaseController {
     def uploadImage() {
         if (!params.opusId || !params.purpose) {
             badRequest "opusId and purpose are mandatory fields"
-        } else if (request instanceof DefaultMultipartHttpServletRequest) {
-            MultipartFile file = ((DefaultMultipartHttpServletRequest) request).getFile("file")
+        } else if (request instanceof AbstractMultipartHttpServletRequest) {
+            MultipartFile file = ((AbstractMultipartHttpServletRequest) request).getFile("file")
             uploadTransferrable(new MultipartFileTransferrableAdapter(multipartFile: file))
         } else if (params.url) {
             final url = new UrlTransferrableAdapter(url: params.url.toURL())

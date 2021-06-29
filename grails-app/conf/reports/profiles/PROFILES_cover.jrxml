@@ -11,7 +11,7 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="JSON Sample Data Source"/>
-	<template><![CDATA["PROFILES_styles.jrtx"]]></template>
+	<template><![CDATA["/reports/profiles/PROFILES_styles.jrtx"]]></template>
 	<subDataset name="logo" uuid="5ecedb89-c1b0-481b-91c2-d21fabd7d568">
 		<field name="logoUrl" class="java.lang.String">
 			<fieldDescription><![CDATA[logoUrl]]></fieldDescription>
@@ -80,14 +80,14 @@
 			<image scaleImage="FillFrame">
 				<reportElement x="0" y="0" width="595" height="240" uuid="1c0d107b-419b-48e8-b6c7-b5badc10efb6"/>
 				<graphicElement fill="Solid"/>
-				<imageExpression><![CDATA[$P{COVER_IMAGE} ?: "img/gahnia2.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{COVER_IMAGE} ?: "/reports/profiles/img/gahnia2.png"]]></imageExpression>
 			</image>
 			<image scaleImage="FillFrame">
 				<reportElement key="" style="DetailBox" x="0" y="55" width="595" height="185" uuid="081626e1-4b11-4060-bd86-786399ebeae2"/>
 				<box>
 					<topPen lineWidth="5.0"/>
 				</box>
-				<imageExpression><![CDATA[$P{GRADIENT} ?: "img/gradient.svg"]]></imageExpression>
+				<imageExpression><![CDATA[$P{GRADIENT} ?: "/reports/profiles/img/gradient.svg"]]></imageExpression>
 			</image>
 			<textField pattern="">
 				<reportElement mode="Transparent" x="54" y="113" width="487" height="82" uuid="0d3a8d10-05d2-4ec4-a48a-8104d58bda12">
@@ -146,7 +146,7 @@
 						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 						<printWhenExpression><![CDATA[!Boolean.valueOf($F{cover.logoUrl1}.asBoolean())]]></printWhenExpression>
 					</reportElement>
-					<imageExpression><![CDATA["img/ALA-logo-inline-reverse.png"]]></imageExpression>
+					<imageExpression><![CDATA["/reports/profiles/img/ALA-logo-inline-reverse.png"]]></imageExpression>
 				</image>
 			</frame>
 		</band>

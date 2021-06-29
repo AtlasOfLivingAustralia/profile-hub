@@ -176,6 +176,9 @@ profileEditor.controller('OpusController', function ($log, $scope, profileServic
                 console.log("Short name is unique");
 
                 save(form);
+                // Fix for https://github.com/AtlasOfLivingAustralia/profile-hub/issues/719.
+                // Config changes fails after saving changed short name.
+                self.initialShortName = self.opus.shortName;
             })
         } else {
             save(form)

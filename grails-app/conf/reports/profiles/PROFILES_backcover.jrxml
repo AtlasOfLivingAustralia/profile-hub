@@ -11,7 +11,7 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<template><![CDATA["PROFILES_styles.jrtx"]]></template>
+	<template><![CDATA["/reports/profiles/PROFILES_styles.jrtx"]]></template>
 	<parameter name="BACK_COVER_IMAGE" class="au.org.ala.profile.hub.reports.BackCoverImageRenderer" isForPrompting="false">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
@@ -28,14 +28,14 @@
 			<image vAlign="Middle" onErrorType="Blank">
 				<reportElement mode="Opaque" x="170" y="710" width="249" height="75" backcolor="#C9C8C5" uuid="ef222e70-2523-4f64-a03c-3f5b6102585f"/>
 				<graphicElement fill="Solid"/>
-				<imageExpression><![CDATA["img/ALA-logo-inline.png"]]></imageExpression>
+				<imageExpression><![CDATA["/reports/profiles/img/ALA-logo-inline.png"]]></imageExpression>
 			</image>
 			<image scaleImage="FillFrame">
 				<reportElement style="BackCover" x="0" y="0" width="595" height="230" uuid="b2d7a29f-c2a7-4d55-9d1e-9a091896c1a5"/>
 				<box>
 					<pen lineStyle="Solid"/>
 				</box>
-				<imageExpression><![CDATA[$P{BACK_COVER_IMAGE} ?: "img/Gahnia.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{BACK_COVER_IMAGE} ?: "/reports/profiles/img/Gahnia.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

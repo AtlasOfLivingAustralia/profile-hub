@@ -73,7 +73,7 @@
                         <g:if test="${opus?.brandingConfig?.issn}">
                             <div class="row margin-bottom-1">
                                 <div class="col-xs-12">
-                                    <g:render template="../opus/issn" model="${[issn: opus.brandingConfig.issn]}"></g:render>
+                                    <g:render template="/opus/issn" model="${[issn: opus.brandingConfig.issn]}"></g:render>
                                 </div>
                             </div>
                         </g:if>
@@ -118,7 +118,7 @@
         profileServiceUrl: '${grailsApplication.config.profile.service.url}',
         keybaseProjectUrl: '${grailsApplication.config.keybase.project.lookup}',
         imageServiceUrl: '${grailsApplication.config.images.service.url}',
-        bieServiceUrl: '${grailsApplication.config.bie.base.url}',
+        bieServiceUrl: '${grailsApplication.config.bie.ws.url}',
         biocacheServiceUrl: '${opus && opus.usePrivateRecordData ? "${request.contextPath}${request.contextPath.endsWith("/") ? '' : '/'}opus/${opus.uuid}" : grailsApplication.config.biocache.base.url}',
         biocacheRecordUrl: '${grailsApplication.config.biocache.base.url}${grailsApplication.config.biocache.occurrence.record.path}',
         nslNameUrl: '${grailsApplication.config.nsl.name.url.prefix}',

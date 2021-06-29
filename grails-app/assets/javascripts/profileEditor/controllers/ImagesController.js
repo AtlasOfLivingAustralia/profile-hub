@@ -286,7 +286,7 @@ profileEditor.controller('ImagesController', function ($browser, $scope, profile
                 baseUrl = util.getBaseHref(true);
             }
 
-            imgvwr.viewImage('#imageViewer', image.imageId, {
+            imgvwr.viewImage('#imageViewer', image.imageId, undefined, undefined, {
                 imageServiceBaseUrl: baseUrl,
                 addDrawer: false,
                 addSubImageToggle: false,

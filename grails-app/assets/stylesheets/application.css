@@ -4,19 +4,18 @@
 *= require angular-bootstrap-colorpicker-3.0.11/css/colorpicker.min.css
 *= require font-awesome-4.3.0/css/font-awesome.min.css
 *= require angular-loading-bar/loading-bar-0.7.1.min.css
-*= require ckeditor/ng-ckeditor-0.2.1.css
 *= require ala-keyplayer/keybase.player.css
 *= require keybase-override.css
 *= require dualMultiselect/dualmultiselect.css
 *= require nsl.css
-*= require mergedProfilesThemeColour
+*= require mergedProfilesThemeColour.scss
 *= require tree.css
 *= require sidebar.css
 *= require bootstrap-fileupload/bootstrap-fileupload.min.css
-*= require ala-admin.css
+*= require ala-admin-asset.css
 *= require animation.css
 *= require mapAndImages
-*= require self
+*= require_self
 */
 
 a.disabled {

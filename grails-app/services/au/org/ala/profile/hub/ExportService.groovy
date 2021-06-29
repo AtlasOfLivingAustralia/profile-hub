@@ -9,7 +9,7 @@ import au.org.ala.profile.hub.reports.JasperReportDef
 import au.org.ala.profile.hub.util.HubConstants
 import au.org.ala.ws.service.WebService
 import grails.converters.JSON
-import grails.transaction.NotTransactional
+import grails.gorm.transactions.NotTransactional
 import net.glxn.qrgen.QRCode
 import net.glxn.qrgen.image.ImageType
 import net.sf.jasperreports.engine.JRParameter
@@ -22,7 +22,7 @@ import net.sf.jasperreports.engine.type.ModeEnum
 import net.sf.jasperreports.engine.util.SimpleFileResolver
 import org.apache.commons.io.IOUtils
 import org.springframework.web.context.request.RequestContextHolder
-import org.codehaus.groovy.grails.web.mapping.LinkGenerator
+import grails.web.mapping.LinkGenerator
 
 import java.awt.Color
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -397,7 +397,7 @@ class ExportService {
     private Map loadProfileData(String profileId, Map opus, Map params) {
 
         Map<String, Map> model = [:]
-        model.profile = webService.get("${grailsApplication.config.profile.service.url}/opus/${opus.uuid}/profile/${URLEncoder.encode(profileId, "UTF-8")}?latest=${false}")?.resp
+        model.profile = webService.get("${grailsApplication.config.profile.service.url}/opus/${opus.uuid}/profile/${Utils.encPath(profileId)}?latest=${false}")?.resp
 
         if (params.taxonomy || params.conservation) {
             model.profile.speciesProfile = profileService.getSpeciesProfile(model.profile.guid)?.resp
@@ -522,7 +522,7 @@ class ExportService {
         }
 
         if (nslNameIdentifier) {
-            def nslNameDetails = nslService.getNameDetails(nslNameIdentifier)?.resp?.name?.primaryInstance?.get(0) ?: null
+            def nslNameDetails = nslService.getNameDetails(nslNameIdentifier)?.resp?.primaryInstance?.get(0) ?: null
             String nslProtologue = nslNameDetails?.citationHtml?: null
             if (nslProtologue && nslNameDetails?.page) {
                 nslProtologue += ": " + nslNameDetails.page

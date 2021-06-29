@@ -1,3 +1,4 @@
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
@@ -18,7 +19,7 @@
         </div>
 
         <div class="col-md-6">
-            <div class="pull-right"><span class="small-text">This document was produced on ${new Date().format("dd/MM/yyyy")}</span></div>
+            <div class="pull-right"><span class="small-text">This document was produced on ${new java.text.SimpleDateFormat("dd/MM/yyyy").format(new Date())}</span></div>
         </div>
     </div>
 </div>

@@ -3,6 +3,7 @@ package au.org.ala.profile.hub.jobs
 import au.org.ala.profile.hub.EmailService
 import au.org.ala.profile.hub.ExportService
 import au.org.ala.ws.service.WebService
+import grails.core.GrailsApplication
 import org.apache.http.entity.ContentType
 
 class AsynchPDFJob {
@@ -14,7 +15,7 @@ class AsynchPDFJob {
     // Make sure only 1 job executes at a time to avoid overloading heap usage with multiple large pdfs
     def concurrent = false
 
-    def grailsApplication
+    GrailsApplication grailsApplication
     ExportService exportService
     EmailService emailService
     WebService webService

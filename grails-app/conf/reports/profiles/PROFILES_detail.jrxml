@@ -12,7 +12,7 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<template><![CDATA["PROFILES_styles.jrtx"]]></template>
+	<template><![CDATA["/reports/profiles/PROFILES_styles.jrtx"]]></template>
 	<parameter name="PROFILES_REPORT_OPTIONS" class="java.util.Map"/>
 	<queryString language="json">
 		<![CDATA[]]>
@@ -102,7 +102,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.attributes")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_attributes.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_attributes.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="119" width="515" height="15" isRemoveLineWhenBlank="true" uuid="c4406011-49d1-4670-88cc-61c56e034718">
@@ -114,7 +114,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.speciesProfile.conservationStatuses")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_conservation.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_conservation.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="136" width="515" height="15" isRemoveLineWhenBlank="true" uuid="b4919f7c-674a-4180-9d3f-1e7830e644cb">
@@ -126,7 +126,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.status")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_status.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_status.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="152" width="515" height="15" isRemoveLineWhenBlank="true" uuid="552404e2-ac45-41a2-9591-e9b3d8496227">
@@ -139,7 +139,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.nomenclature.details")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_nomenclature.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_nomenclature.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="165" width="515" height="15" isRemoveLineWhenBlank="true" uuid="4335a7a3-5814-41bd-8b3c-5df2664bd10e">
@@ -151,7 +151,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.links")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_links.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_links.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="180" width="515" height="15" isRemoveLineWhenBlank="true" uuid="c675d85b-9e2b-476e-abd8-fb07375bff13">
@@ -163,7 +163,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.bhl")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_bhl.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_bhl.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="195" width="515" height="15" isRemoveLineWhenBlank="true" uuid="4fc93526-8bdf-4fb2-8457-072c20648f24">
@@ -175,7 +175,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.specimens")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_specimens.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_specimens.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="210" width="515" height="15" isRemoveLineWhenBlank="true" uuid="03b5da42-55f1-4da6-992b-5cacbdbbf258">
@@ -187,7 +187,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.images")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_images.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_images.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement key="" positionType="Float" x="0" y="225" width="515" height="15" isRemoveLineWhenBlank="true" uuid="539bd95e-2d2b-4a17-930d-8bf868ee50fd">
@@ -199,7 +199,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.bracketedKey")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_key.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_key.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="240" width="515" height="15" isRemoveLineWhenBlank="true" uuid="b1f29293-1251-4267-b7cc-2cbb4c7f158a">
@@ -212,7 +212,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.bibliography")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_bibliography.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_bibliography.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="255" width="515" height="10" isRemoveLineWhenBlank="true" uuid="34368ca4-5a4c-407c-a77b-b4b23c7146c8">
@@ -223,7 +223,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.acknowledgements")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_acknowledgements.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_acknowledgements.jasper"]]></subreportExpression>
 			</subreport>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" x="0" y="70" width="515" height="15" uuid="48a33605-a8e6-4819-a26d-85683f991038">
@@ -244,7 +244,7 @@
 					<subreportParameterExpression><![CDATA[(java.util.Collection<net.sf.jasperreports.engine.JRTemplate>)$P{REPORT_TEMPLATES}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[((net.sf.jasperreports.engine.data.JsonDataSource)$P{REPORT_DATA_SOURCE}).subDataSource("profile.distribution")]]></dataSourceExpression>
-				<subreportExpression><![CDATA["PROFILES_detail_map.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["/reports/profiles/PROFILES_detail_map.jasper"]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
