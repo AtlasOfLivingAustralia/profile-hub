@@ -7,7 +7,6 @@ branches:
   only:
     - master
     - dev
-    - grails3
     - grails4
 
 before_install:
