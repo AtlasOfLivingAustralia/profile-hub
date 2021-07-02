@@ -16,6 +16,9 @@ class AccessControlInterceptor {
 
     AccessControlInterceptor(){
         matchAll()
+        .excludes(uri: '/notAuthorised')
+        .excludes(uri: '/error')
+        .excludes(uri: '/notFound')
     }
 
     boolean  before () {

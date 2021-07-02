@@ -10,6 +10,10 @@ class AnalyticsInterceptor {
 
     AnalyticsInterceptor () {
         matchAll()
+            .excludes(uri: '/notAuthorised')
+            .excludes(uri: '/error')
+            .excludes(uri: '/notFound')
+
     }
 
     boolean before () {
@@ -20,8 +24,8 @@ class AnalyticsInterceptor {
         try {
             if (response.getStatus() in 200..299) { // only care about successful HTTP responses
                 final artefact = grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName)
-                final annotation = artefact.clazz.with { clazz ->
-                    (clazz.methods.find { it.name == actionName }?.getAnnotation(Analytics) ?: clazz.declaredFields.find { it.name == actionName }?.getAnnotation(Analytics)) ?: clazz.getAnnotation(Analytics)
+                final annotation = artefact?.clazz.with { clazz ->
+                    (clazz?.methods.find { it.name == actionName }?.getAnnotation(Analytics) ?: clazz?.declaredFields.find { it.name == actionName }?.getAnnotation(Analytics)) ?: clazz?.getAnnotation(Analytics)
                 }
                 if (annotation) {
                     final clientId = extractClientIdFromGoogleAnalyticsCookie(request.cookies)
