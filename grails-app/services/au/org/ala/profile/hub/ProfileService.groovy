@@ -651,4 +651,9 @@ class ProfileService {
         def url = "${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/florulaList"
         return webService.post(url, [florulaListId: florulaListId])
     }
+
+    def getProfiles(String opusId, String startIndex = "", String pageSize = "", String sort = "", String order = "", String includeArchived = 'false') {
+        def url = "${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/?startIndex=${startIndex}&pageSize=${pageSize}&sort=${sort}&order=${order}&includeArchived=${includeArchived}"
+        return webService.get(url)
+    }
 }

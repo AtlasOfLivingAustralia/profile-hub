@@ -43,6 +43,9 @@ configurations {
 }
 
 def httpmimeVersion = "4.4.1"
+def swaggerVersion = '1.5.22'
+def swaggerUIVersion = '3.20.9'
+
 dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     compile "org.springframework.boot:spring-boot-starter-logging"
@@ -121,6 +124,10 @@ dependencies {
             "-admin-plugin:2.2")
     compile "org.grails.plugins:quartz:2.0.13"
     compile "org.quartz-scheduler:quartz:2.2.1" // transitive dependency
+    compile "org.grails.plugins:swagger:1.0.1"
+    compile group: 'io.swagger', name: 'swagger-models', version: "${swaggerVersion}"
+    compile group: 'io.swagger', name: 'swagger-servlet', version: "${swaggerVersion}"
+    compile "org.webjars:swagger-ui:${swaggerUIVersion}"
     runtime("au.org.ala.plugins.grails:images-client-plugin:1.2")
 
     runtime "org.grails.plugins:jquery:1.11.1"

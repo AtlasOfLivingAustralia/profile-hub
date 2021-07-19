@@ -110,6 +110,16 @@ security:
         loginUrl: 'https://auth.ala.org.au/cas/login'
         logoutUrl: 'https://auth.ala.org.au/cas/logout'
         adminRole: 'ROLE_ADMIN'
-        uriExclusionFilterPattern: '/images.*,/css.*,/js.*,/less.*,/assets/.*'
+        uriExclusionFilterPattern: '.*/images.*,.*/css.*,.*/js.*,.*/less.*,.*/assets/.*,.*/api/.*'
         uriFilterPattern:
         authenticateOnlyIfCookieFilterPattern: '*'
+
+---
+biocache:
+    wms:
+        layer: 'ALA:occurrences'
+
+app:
+    http:
+        header:
+            userName: "X-ALA-userName"
