@@ -12,7 +12,7 @@ import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 
 
-@Api(value = "/api", tags = ["1.0"], description = "Profiles API", protocols = "https")
+@Api(value = "/api", tags = ["1.0"], description = "Profiles API", protocols = "http,https")
 class ApiController extends BaseController {
     static namespace = "v1"
     static allowedSortFields = ['scientificNameLower', 'lastUpdated', 'dateCreated']
@@ -42,6 +42,11 @@ class ApiController extends BaseController {
                     message = "An unexpected error has occurred while processing your request.")
     ])
     @ApiImplicitParams([
+            @ApiImplicitParam(name = "opusId",
+                    paramType = "path",
+                    dataType = "string",
+                    required = true,
+                    value = "Collection id"),
             @ApiImplicitParam(name = "pageSize",
                     paramType = "query",
                     required = false,
@@ -125,6 +130,16 @@ class ApiController extends BaseController {
                     message = "An unexpected error has occurred while processing your request.")
     ])
     @ApiImplicitParams([
+            @ApiImplicitParam(name = "opusId",
+                    paramType = "path",
+                    dataType = "string",
+                    required = true,
+                    value = "Collection id - UUID or short name"),
+            @ApiImplicitParam(name = "profileId",
+                    paramType = "path",
+                    dataType = "string",
+                    required = true,
+                    value = "Profile id - UUID or Scientific name."),
             @ApiImplicitParam(name = "includeImages",
                     paramType = "query",
                     required = false,
@@ -185,6 +200,16 @@ class ApiController extends BaseController {
                     message = "An unexpected error has occurred while processing your request.")
     ])
     @ApiImplicitParams([
+            @ApiImplicitParam(name = "opusId",
+                    paramType = "path",
+                    dataType = "string",
+                    required = true,
+                    value = "Collection id - UUID or short name"),
+            @ApiImplicitParam(name = "profileId",
+                    paramType = "path",
+                    dataType = "string",
+                    required = true,
+                    value = "Profile id - UUID or Scientific name"),
             @ApiImplicitParam(name = "pageSize",
                     paramType = "query",
                     required = false,
