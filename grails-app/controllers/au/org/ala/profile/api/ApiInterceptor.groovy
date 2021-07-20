@@ -13,6 +13,7 @@ class ApiInterceptor {
     ApiInterceptor() {
         match(uri: "/api/**")
         .excludes(uri: "/api") // api doc
+        .excludes(uri: "/webjars/**")
     }
 
     boolean before() {

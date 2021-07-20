@@ -20,6 +20,7 @@ class AccessControlInterceptor {
         .excludes(uri: '/error')
         .excludes(uri: '/notFound')
         .excludes(uri: '/api/**') // todo: needed?
+        .excludes(uri: '/webjars/**')
     }
 
     boolean  before () {
