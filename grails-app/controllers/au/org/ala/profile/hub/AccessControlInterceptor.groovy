@@ -19,8 +19,7 @@ class AccessControlInterceptor {
         .excludes(uri: '/notAuthorised')
         .excludes(uri: '/error')
         .excludes(uri: '/notFound')
-        .excludes(uri: '/api/**')
-        .excludes(uri: '/webjars/swagger-ui/**')
+        .excludes(uri: '/api/**') // todo: needed?
     }
 
     boolean  before () {

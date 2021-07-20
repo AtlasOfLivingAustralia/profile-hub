@@ -110,7 +110,7 @@ security:
         loginUrl: 'https://auth.ala.org.au/cas/login'
         logoutUrl: 'https://auth.ala.org.au/cas/logout'
         adminRole: 'ROLE_ADMIN'
-        uriExclusionFilterPattern: '.*/assets/.*,.*/api.*,.*/swagger/.*'
+        uriExclusionFilterPattern: '.*/assets/.*,.*/api.*,.*/webjars/.*'
         uriFilterPattern:
         authenticateOnlyIfCookieFilterPattern: '*'
 
