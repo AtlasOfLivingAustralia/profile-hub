@@ -243,7 +243,7 @@ class UrlMappings {
 
         // The following URLs need to match the URLs used by the ala-images-client plugin so that we can view draft
         // and private images (which do not exist in images.ala.org.au) in the plugin as well as ALA images.
-        "/ws/getImageInfo/$imageId" controller: "image", action: [GET: "getImageInfo"]
+        "/ws/image/$imageId" controller: "image", action: [GET: "getImageInfo"]
         "/image/proxyImage/$imageId" controller: "image", action: [GET: "downloadImage"]
         "/profile/$profileId/image/$imageId/tile/$zoom/$x/$y" controller: "image", action: [GET: "getTile"]
         "/opus/$opusId/profile/$profileId/image/$imageId/tile/$zoom/$x/$y" controller: "image", action: [GET: "getTile"]
