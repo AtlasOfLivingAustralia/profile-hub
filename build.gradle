@@ -15,7 +15,7 @@ buildscript {
     }
 }
 
-version "3.0.1-SNAPSHOT"
+version "3.0.1"
 group "au.org.ala"
 boolean inplace = false // Set to true it needed only for development
 
