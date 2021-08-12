@@ -1,12 +1,12 @@
 package au.org.ala.profile.api
 
 import au.org.ala.profile.hub.ProfileService
+import au.org.ala.profile.security.RequiresAccessToken
 import au.org.ala.web.AuthService
 import org.apache.http.HttpStatus
 
-
 class ApiInterceptor {
-    static final String ACCESS_TOKEN_HEADER = 'ACCESS-TOKEN'
+    static final String ACCESS_TOKEN_HEADER = 'Access-Token'
     ProfileService profileService
     AuthService authService
 
@@ -20,16 +20,25 @@ class ApiInterceptor {
         if (grailsApplication.config.security.authorisation.disable != "true") {
             String userName = request.getHeader(grailsApplication.config.app.http.header.userName)
             boolean authorised = false
-            def opus = null
+            def opus
             String token = request.getHeader(ACCESS_TOKEN_HEADER)
+            def controller = grailsApplication.getArtefactByLogicalPropertyName("Controller", controllerName)
+            Class controllerClass = controller?.clazz
+            def method = controllerClass?.getMethod(actionName, [] as Class[])
+
             if (userName) {
                 def user = authService.getUserForEmailAddress(userName)
                 if (user) {
                     if (params.opusId && (opus = profileService.getOpus(params.opusId))) {
                         params.isOpusPrivate = opus.privateCollection
-                        if (params.isOpusPrivate && (token != opus.accessToken)) {
+                        if ((params.isOpusPrivate
+                                || controllerClass?.isAnnotationPresent(RequiresAccessToken)
+                                || method?.isAnnotationPresent(RequiresAccessToken)
+                        ) && (token != opus.accessToken)) {
+                            log.warn("No valid access token for opus ${opus.uuid} when calling ${controllerName}/${actionName}")
                             authorised = false
-                        } else {
+                        }
+                        else {
                             authorised = true
                         }
                     }

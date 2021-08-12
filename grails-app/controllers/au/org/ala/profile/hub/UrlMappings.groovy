@@ -259,6 +259,8 @@ class UrlMappings {
             get "/opus/$opusId/profile" (version: "1.0", controller: "api", action: "getProfiles", namespace: "v1")
             get "/opus/$opusId/profile/$profileId" (version: "1.0", controller: "api", action: "get", namespace: "v1")
             get "/opus/$opusId/profile/$profileId/image" (version: "1.0", controller: "api", action: "getImages", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/attribute/$attributeId" (version: "1.0", controller: "api", action: "getAttributes", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/draft" (version: "1.0", controller: "api", action: "getDraftProfile", namespace: "v1")
 
             "/"(controller: 'apiDoc', action: 'getDocuments', method: 'get')
         }

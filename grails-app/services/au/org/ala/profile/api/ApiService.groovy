@@ -5,7 +5,6 @@ import au.org.ala.profile.hub.NslService
 import au.org.ala.profile.hub.ProfileService
 import grails.web.mapping.LinkGenerator
 
-import static au.org.ala.profile.hub.Utils.enc
 import static au.org.ala.profile.hub.Utils.encPath
 import static org.apache.http.HttpStatus.SC_OK
 
@@ -16,7 +15,19 @@ class ApiService {
     ProfileService profileService
     NslService nslService
 
-    def supplementProfileData (Map resp, int pageSize = 20, boolean includeImages = false) {
+    def getProfiles(String opusId, String startIndex = "", String pageSize = "", String sort = "", String order = "", String taxonName = "", String taxonRank = "", String rankFilter = "") {
+        if (taxonName && taxonRank) {
+            def profiles = profileService.findByNameAndTaxonLevelAndGetTotalProfilesCount(opusId, taxonRank, taxonName, pageSize, startIndex, sort, false, true, rankFilter)?.resp
+            [
+                    resp      : profiles,
+                    statusCode: 200
+            ]
+        } else {
+            profileService.getProfiles(opusId, startIndex, pageSize, sort, order, rankFilter)
+        }
+    }
+
+    def supplementProfileData(Map resp, int pageSize = 20, boolean includeImages = false) {
         Map profile = resp.profile
         Map opus = resp.opus
 
@@ -44,7 +55,7 @@ class ApiService {
             if (nslOutput?.primaryInstance?.size()) {
                 profile.nsl = [
                         citationHtml: nslOutput.primaryInstance[0].citationHtml,
-                        page: nslOutput.primaryInstance[0].page
+                        page        : nslOutput.primaryInstance[0].page
                 ]
             }
 
@@ -55,8 +66,8 @@ class ApiService {
             profile.map = [
                     wmsUrl: "${grailsApplication.config.biocache.ws.url}${grailsApplication.config.biocache.wms.path}${profile.occurrenceQuery}",
                     layers: grailsApplication.config.biocache.wms.layer,
-                    color: opus.mapConfig.mapPointColour,
-                    env: "color:${opus.mapConfig.mapPointColour};name:circle;size:4;opacity:1"
+                    color : opus.mapConfig.mapPointColour,
+                    env   : "color:${opus.mapConfig.mapPointColour};name:circle;size:4;opacity:1"
             ]
         }
 
@@ -71,19 +82,19 @@ class ApiService {
         Map result
         Map profileAndOpus = profileService.getProfile(opusId, profileId, false, false)
         if (profileAndOpus) {
-            String searchIdentifier = profileAndOpus.profile.guid ? "lsid:${profileAndOpus.profile.guid}" :""
+            String searchIdentifier = profileAndOpus.profile.guid ? "lsid:${profileAndOpus.profile.guid}" : ""
             result = imageService.retrieveImagesPaged(opusId, profileId, false, searchIdentifier, false, true, pageSize, startIndex)
         } else {
             result = [
                     statusCode: 404,
-                    resp: [:]
+                    resp      : [:]
             ]
         }
 
         result
     }
 
-    String addPublicationURL (Map profile) {
+    String addPublicationURL(Map profile) {
         profile.publications?.each {
             it.publicationURL = getPublicationURL(it)
             it.publicationFileURL = getPublicationFileURL(it, profile)
@@ -107,15 +118,20 @@ class ApiService {
     }
 
     String getBIEURL(Map profile) {
-        if (profile.guid){
-            return  "${grailsApplication.config.bie.base.url}/species/${profile.guid}"
+        if (profile.guid) {
+            return "${grailsApplication.config.bie.base.url}/species/${profile.guid}"
         }
     }
 
-    String getProfileURL (Map profile) {
+    String getProfileURL(Map profile) {
         String opusName = profile.opusShortName ?: profile.opusId
         String profileName = profile.scientificName ?: profile.uuid
         "${grailsApplication.config.grails.serverURL}${getContext()}/opus/${opusName}/profile/${encPath(profileName)}"
+    }
+
+    List getAttributes (Map profile, List attributes) {
+        attributes = attributes*.toLowerCase()
+        profile?.attributes?.findAll { attributes?.contains(it.uuid) || attributes?.contains(it.title.toLowerCase()) }
     }
 
     /** Returns true for HTTP status codes from 200 to 299 */

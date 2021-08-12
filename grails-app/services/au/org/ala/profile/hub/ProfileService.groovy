@@ -293,16 +293,22 @@ class ProfileService {
         webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/profile/search/scientificName?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&max=${max ?: ""}&sortBy=${sortBy}&useWildcard=${useWildcard}&autoCompleteScientificName=${autoCompleteScientificName}")
     }
 
-    def findByNameAndTaxonLevel(String opusId, String taxon, String scientificName, String max, String offset, String sortBy, boolean countChildren = false, boolean immediateChildrenOnly = false) {
+    def findByNameAndTaxonLevel(String opusId, String taxon, String scientificName, String max, String offset, String sortBy, boolean countChildren = false, boolean immediateChildrenOnly = false, boolean includeTaxon = false) {
         log.debug("Searching for '${scientificName}' in taxon ${taxon}")
 
-        webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/profile/search/taxon/name?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&taxon=${enc(taxon)}&max=${max}&offset=${offset}&sortBy=${sortBy}&countChildren=${countChildren}&immediateChildrenOnly=${immediateChildrenOnly}")
+        webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/profile/search/taxon/name?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&taxon=${enc(taxon)}&max=${max}&offset=${offset}&sortBy=${sortBy}&countChildren=${countChildren}&immediateChildrenOnly=${immediateChildrenOnly}&includeTaxon=${includeTaxon}")
     }
 
-    def countByNameAndTaxonLevel(String opusId, String taxon, String scientificName, boolean immediateChildrenOnly = false) {
+    def findByNameAndTaxonLevelAndGetTotalProfilesCount(String opusId, String taxon, String scientificName, String max, String offset, String sortBy, boolean immediateChildrenOnly = false, boolean includeTaxon = false, String rankFilter) {
+        log.debug("Searching for '${scientificName}' in taxon ${taxon}")
+
+        webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/profile/search/taxon/nameAndTotal?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&taxon=${enc(taxon)}&max=${max}&offset=${offset}&sortBy=${sortBy}&immediateChildrenOnly=${immediateChildrenOnly}&includeTaxon=${includeTaxon}&rankFilter=${rankFilter}")
+    }
+
+    def countByNameAndTaxonLevel(String opusId, String taxon, String scientificName, boolean immediateChildrenOnly = false, boolean includeTaxon = false) {
         log.debug("Counting for '${scientificName}' in taxon ${taxon}")
 
-        webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/profile/search/taxon/name/total?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&taxon=${enc(taxon)}&immediateChildrenOnly=${immediateChildrenOnly}")
+        webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/profile/search/taxon/name/total?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&taxon=${enc(taxon)}&immediateChildrenOnly=${immediateChildrenOnly}&includeTaxon=${includeTaxon}")
     }
 
     def groupByTaxonLevel(String opusId, String taxon, String max, String offset, String filter = null) {
@@ -652,8 +658,8 @@ class ProfileService {
         return webService.post(url, [florulaListId: florulaListId])
     }
 
-    def getProfiles(String opusId, String startIndex = "", String pageSize = "", String sort = "", String order = "", String includeArchived = 'false') {
-        def url = "${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/?startIndex=${startIndex}&pageSize=${pageSize}&sort=${sort}&order=${order}&includeArchived=${includeArchived}"
+    def getProfiles(String opusId, String startIndex = "", String pageSize = "", String sort = "", String order = "", String rankFilter = "") {
+        def url = "${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/?startIndex=${startIndex}&pageSize=${pageSize}&sort=${sort}&order=${order}&rankFilter=${rankFilter}"
         return webService.get(url)
     }
 }
