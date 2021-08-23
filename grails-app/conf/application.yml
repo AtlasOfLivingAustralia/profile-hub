@@ -123,3 +123,8 @@ app:
     http:
         header:
             userName: "X-ALA-userName"
+    analytics:
+        apiid: cd1
+        userid: cd2
+        collectionid: cd3
+        profileid: cd4

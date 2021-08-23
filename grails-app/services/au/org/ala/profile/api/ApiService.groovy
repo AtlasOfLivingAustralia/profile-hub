@@ -129,9 +129,9 @@ class ApiService {
         "${grailsApplication.config.grails.serverURL}${getContext()}/opus/${opusName}/profile/${encPath(profileName)}"
     }
 
-    List getAttributes (Map profile, List attributes) {
+    List getAttributes (Map profile, List attributes = []) {
         attributes = attributes*.toLowerCase()
-        profile?.attributes?.findAll { attributes?.contains(it.uuid) || attributes?.contains(it.title.toLowerCase()) }
+        profile?.attributes?.findAll { attributes?.contains(it.uuid) || attributes?.contains(it.title?.toLowerCase()) }
     }
 
     /** Returns true for HTTP status codes from 200 to 299 */

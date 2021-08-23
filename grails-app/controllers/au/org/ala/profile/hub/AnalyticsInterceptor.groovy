@@ -1,12 +1,18 @@
 package au.org.ala.profile.hub
 
 import au.org.ala.profile.analytics.Analytics
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
 
 import javax.servlet.http.Cookie
+
+import static com.google.common.net.HttpHeaders.REFERER
+import static com.google.common.net.HttpHeaders.USER_AGENT
 
 class AnalyticsInterceptor {
 
     def analyticsService
+    def authService
 
     AnalyticsInterceptor () {
         matchAll()
@@ -30,8 +36,23 @@ class AnalyticsInterceptor {
                 if (annotation) {
                     final clientId = extractClientIdFromGoogleAnalyticsCookie(request.cookies)
                     final path = URLDecoder.decode(request.forwardURI, 'utf-8')
+                    final apiAnnotation =  artefact.getClazz().getAnnotation(Api)
+                    Map payload = [:]
+                    if (apiAnnotation) {
+                        ApiOperation apiOperation = artefact.getClazz().methods.find {it.name == actionName}.getAnnotation(ApiOperation)
+                        // page title
+                        payload.dt = apiOperation.value() ?: ""
+                        payload[grailsApplication.config.app.analytics.apiid] = apiOperation.nickname() ?: ""
+                        if (params.opusId) payload[grailsApplication.config.app.analytics.collectionid] = params.opusId
+                        if (params.profileId) payload[grailsApplication.config.app.analytics.profileid] = params.profileId
+
+                        String userName = request.getHeader(grailsApplication.config.app.http.header.userName)
+                        def user = authService.getUserForEmailAddress(userName)
+                        if (user) payload[grailsApplication.config.app.analytics.userid] = user.getUserId()
+                    }
+
                     log.debug("Sending pageview to analytics for ${request.serverName}, $path, $clientId, ${request.remoteAddr}")
-                    analyticsService.pageView(request.serverName, path, clientId, request.remoteAddr, request.getHeader(USER_AGENT), request.getHeader(REFERER))
+                    analyticsService.pageView(request.serverName, path, clientId, request.remoteAddr, request.getHeader(USER_AGENT), request.getHeader(REFERER), payload)
                 }
             }
         } catch (e) {

@@ -1,18 +1,14 @@
 package au.org.ala.profile.api
 
+import au.org.ala.profile.analytics.Analytics
 import au.org.ala.profile.hub.BaseController
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
 import au.org.ala.profile.security.RequiresAccessToken
 import grails.converters.JSON
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
-import io.swagger.annotations.ApiImplicitParams
-import io.swagger.annotations.ApiOperation
-import io.swagger.annotations.ApiResponse
-import io.swagger.annotations.ApiResponses
+import io.swagger.annotations.*
 
-
+@Analytics
 @Api(value = "/api", tags = ["1.0"], description = "Profiles API", protocols = "http,https")
 class ApiController extends BaseController {
     static namespace = "v1"
@@ -390,7 +386,7 @@ class ApiController extends BaseController {
             List attributes = params.attributeId?.split(',')
             Map profileAndOpus = profileService.getProfile(params.opusId as String, params.profileId as String, latest, fullClassification)
 
-            if (!profileAndOpus) {
+            if (!profileAndOpus || !attributes) {
                 notFound()
             } else {
                 List profileAttributes = apiService.getAttributes(profileAndOpus.profile, attributes) ?: []
