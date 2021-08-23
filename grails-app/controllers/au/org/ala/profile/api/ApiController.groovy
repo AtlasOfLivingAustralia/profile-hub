@@ -24,7 +24,15 @@ class ApiController extends BaseController {
             nickname = "/opus/{opusId}/profile",
             produces = "application/json",
             httpMethod = "GET",
-            response = ProfileListResponse
+            response = ProfileBriefResponse,
+            responseContainer = "List",
+            responseHeaders = [
+                    @ResponseHeader(
+                            name = 'X-Total-Count',
+                            description = 'Total number of profiles',
+                            response = Integer
+                    )
+            ]
     )
     @ApiResponses([
             @ApiResponse(code = 400,
@@ -114,7 +122,11 @@ class ApiController extends BaseController {
             if (!opus) {
                 notFound()
             } else {
-                handle (apiService.getProfiles(params.opusId, startIndex, pageSize, sort, order, taxonName, taxonRank, rankFilter))
+                def result = apiService.getProfiles(params.opusId, startIndex, pageSize, sort, order, taxonName, taxonRank, rankFilter)
+                def profiles = result?.resp.profiles
+                def count = result?.resp.count
+                response.addIntHeader('X-Total-Count', count)
+                render profiles as JSON
             }
         }
     }
@@ -264,7 +276,15 @@ class ApiController extends BaseController {
             nickname = "/opus/{opusId}/profile/{profileId}/image",
             produces = "application/json",
             httpMethod = "GET",
-            response = ImageListResponse
+            response = ImageListResponse,
+            responseHeaders = [
+                    @ResponseHeader(
+                            name = 'X-Total-Count',
+                            description = 'Total number of images',
+                            response = Integer
+                    )
+            ]
+
     )
     @ApiResponses([
             @ApiResponse(code = 400,
@@ -320,8 +340,10 @@ class ApiController extends BaseController {
         } else {
             int startIndex = params.getInt('startIndex', 0)
             int pageSize = params.getInt('pageSize', 20)
-            def response = apiService.retrieveImagesPaged(params.opusId, params.profileId, pageSize, startIndex)
-            handle(response)
+            def result = apiService.retrieveImagesPaged(params.opusId, params.profileId, pageSize, startIndex)
+            int count = result?.resp?.count
+            response.addIntHeader('X-Total-Count', count)
+            handle(result)
         }
     }
 
