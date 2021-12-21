@@ -187,10 +187,30 @@
                     <label for="pdfLicense">License - long description</label>
 
                     <textarea id="pdfLicense" ng-model="opusCtrl.opus.brandingConfig.pdfLicense" rows="4"
-                              class="form-control" ng-maxlength="500" maxlength="500"></textarea>
+                              class="form-control" ng-maxlength="500" maxlength="500"  ckeditor="richTextFullToolbar"></textarea>
                     <div class="small">License details entered here will appear when profile is exported to PDF. The maximum characters permitted is 500.</div>
                     <div class="small italics">Characters remaining: {{500 - (opusCtrl.opus.brandingConfig.pdfLicense || '').length}}</div>
                 </div>
+
+                <div class="form-group">
+                    <label for="genericPdfCopyright">Generic PDF Copyright</label>
+
+                    <textarea id="genericPdfCopyright" ng-model="opusCtrl.opus.brandingConfig.genericPdfCopyright" rows="4"
+                              class="form-control" ng-maxlength="2000" maxlength="2000" ckeditor="richTextFullToolbar"></textarea>
+                    <div class="small">Copyright details entered here will appear when profile is exported to PDF. The maximum characters permitted is 2000.</div>
+                    <div class="small italics">Characters remaining: {{2000 - (opusCtrl.opus.brandingConfig.genericPdfCopyright || '').length}}</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="genericAboutCopyright">Generic Copyright</label>
+
+                    <textarea id="genericAboutCopyright" ng-model="opusCtrl.opus.brandingConfig.genericAboutCopyright" rows="4"
+                              class="form-control" ng-maxlength="2000" maxlength="2000"></textarea>
+                    <div class="small">Copyright details entered here will appear on about page. The maximum characters permitted is 2000.</div>
+                    <div class="small italics">Characters remaining: {{2000 - (opusCtrl.opus.brandingConfig.genericAboutCopyright || '').length}}</div>
+                </div>
+
             </div>
         </div>
     </div>

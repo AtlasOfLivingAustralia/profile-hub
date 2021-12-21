@@ -1,15 +1,11 @@
 package au.org.ala.profile.hub
 
-import au.org.ala.profile.hub.reports.BackCoverImageRenderer
-import au.org.ala.profile.hub.reports.ColourParser
-import au.org.ala.profile.hub.reports.ColourUtils
-import au.org.ala.profile.hub.reports.GradientRenderer
-import au.org.ala.profile.hub.reports.JasperExportFormat
-import au.org.ala.profile.hub.reports.JasperReportDef
+import au.org.ala.profile.hub.reports.*
 import au.org.ala.profile.hub.util.HubConstants
 import au.org.ala.ws.service.WebService
 import grails.converters.JSON
 import grails.gorm.transactions.NotTransactional
+import grails.web.mapping.LinkGenerator
 import net.glxn.qrgen.QRCode
 import net.glxn.qrgen.image.ImageType
 import net.sf.jasperreports.engine.JRParameter
@@ -22,22 +18,14 @@ import net.sf.jasperreports.engine.type.ModeEnum
 import net.sf.jasperreports.engine.util.SimpleFileResolver
 import org.apache.commons.io.IOUtils
 import org.springframework.web.context.request.RequestContextHolder
-import grails.web.mapping.LinkGenerator
 
-import java.awt.Color
+import java.awt.*
+import java.util.List
 import java.util.concurrent.ConcurrentLinkedQueue
 
-import static au.org.ala.profile.hub.reports.ColourUtils.contrastRatio
-import static au.org.ala.profile.hub.reports.ColourUtils.darken
-import static au.org.ala.profile.hub.reports.ColourUtils.lighten
-import static au.org.ala.profile.hub.reports.ColourUtils.relativeLuminance
+import static au.org.ala.profile.hub.reports.ColourUtils.*
 import static groovyx.gpars.GParsPool.withPool
-import static org.owasp.html.Sanitizers.BLOCKS
-import static org.owasp.html.Sanitizers.FORMATTING
-import static org.owasp.html.Sanitizers.IMAGES
-import static org.owasp.html.Sanitizers.LINKS
-import static org.owasp.html.Sanitizers.STYLES
-import static org.owasp.html.Sanitizers.TABLES
+import static org.owasp.html.Sanitizers.*
 
 class ExportService {
 
@@ -354,7 +342,7 @@ class ExportService {
                 ],
                 colophon: [
                         collectionCopyright: "&copy; ${opus.copyrightText}",
-                        genericCopyright   : HubConstants.PDF_COPYRIGHT_TEXT,
+                        genericCopyright   : opus.brandingConfig.genericPdfCopyright ?: HubConstants.PDF_COPYRIGHT_TEXT,
                         pdfLicense         : opus.brandingConfig.pdfLicense,
                         profileLink        : grailsLinkGenerator.link(uri: "/opus/${Utils.encPath(opus.shortName?: opus.uuid)}/profile/${Utils.encPath(firstProfile?.uuid)}", absolute: true),
                         citation           : firstProfile.citation?:null,

@@ -195,11 +195,12 @@ class OpusController extends OpusBaseController {
         SimpleDateFormat longFormat = new SimpleDateFormat('dd MMMM yyyy - hh:mm')
         SimpleDateFormat yearFormat = new SimpleDateFormat('yyyy')
         Date today = new Date()
+        def copyright = response?.resp?.opus?.brandingConfig?.genericAboutCopyright
         response?.resp?.opus << [
                 opusUrl             : "${grailsApplication.config.grails.serverURL}/opus/${params.opusId}",
                 date                : longFormat.format(today),
                 year                : yearFormat.format(today),
-                genericCopyrightHtml: GENERIC_COPYRIGHT_TEXT
+                genericCopyrightHtml: copyright ?: GENERIC_COPYRIGHT_TEXT
         ]
 
         handle response
