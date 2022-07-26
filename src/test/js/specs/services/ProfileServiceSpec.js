@@ -432,4 +432,10 @@ describe("ProfileService tests", function () {
 
         http.expectPOST("/someContext/image/abcdefghijlkmnop/metadata", data).respond("bla");
     });
+
+    it("should invoke GET request when getImageMetadata is called", function() {
+        service.getImageMetadata('abcdefghijlkmnop', true);
+
+        http.expectGET("/someContext/ws/image/abcdefghijlkmnop").respond("bla");
+    });
 });
