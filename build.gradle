@@ -4,7 +4,7 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
-        maven { url "http://jaspersoft.artifactoryonline.com/jaspersoft/jaspersoft-repo"}
+        maven { url "https://jaspersoft.jfrog.io/artifactory/third-party-ce-artifacts"}
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
