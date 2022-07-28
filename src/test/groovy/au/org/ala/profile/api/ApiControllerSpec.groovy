@@ -13,12 +13,14 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
     def setup() {
         profileService = controller.profileService = Mock(ProfileService)
         apiService = controller.apiService = Mock(ApiService)
+        apiService.profileService = profileService
         mapService = controller.mapService = Mock(MapService)
     }
 
     void "getProfiles should be provided with opus id parameter"() {
         setup:
         profileService.getOpus('opus1') >> [uuid: 'abc']
+        apiService.getProfiles('opus1', '0', '20', 'scientificNameLower', 'asc', '', '', '') >> [resp: [opus: [uuid: 'abc'], profiles: [[uuid: '123']], count: 1]]
 
         when:
         params.opusId = opusId
@@ -76,11 +78,13 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
 
     void "getImages should be provided with opus id and profile id parameters"() {
         setup:
-        profileService.retrieveImagesPaged('opus1', '123', 10, 1) >> [opus: [uuid: 'abc'], profile: [uuid: '123']]
+        apiService.retrieveImagesPaged('opus1', '123', 10, 1) >> [resp: [opus: [uuid: 'abc'], profile: [uuid: '123'], count: 1], statusCode: 200]
 
         when:
         params.opusId = opusId
         params.profileId = profileId
+        params.startIndex = startIndex
+        params.pageSize = pageSize
         controller.getImages()
 
         then:
