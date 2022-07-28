@@ -9,6 +9,10 @@ branches:
     - dev
     - /^feature\/.*$/
     - /^hotfix\/.*$/
+    - grails4
+
+node_js:
+  - 16
 
 before_install:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -26,6 +30,10 @@ install:
   - true
 
 before_script:
+  - cd $TRAVIS_BUILD_DIR
+  - nvm install 16.15.0
+  - nvm use 16.15.0
+  - node -v
   - npm install
 
 script:
