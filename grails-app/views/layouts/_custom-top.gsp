@@ -5,10 +5,6 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="-1">
     <meta name="app.version" content="${g.meta(name: 'info.app.version')}"/>
-<<<<<<< HEAD
-=======
-    <meta name="app.build" content="${g.meta(name: 'app.build')}"/>
->>>>>>> dev
     <meta name="description" content="Atlas of Living Australia"/>
     <meta name="author" content="Atlas of Living Australia">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
