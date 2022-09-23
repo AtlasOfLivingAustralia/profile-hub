@@ -29,7 +29,7 @@ class ExportController extends BaseController {
                     config.opusTitle = model.opus.title
                     exportService.createPdfAsych(config, latest)
 
-                    render [:] as JSON
+                    render text: [:] as JSON
                 } else {
                     try {
                         exportService.createPdf(extractOptionsFromParams(), {
