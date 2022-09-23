@@ -1,13 +1,15 @@
 package au.org.ala.profile.hub
 
+import au.org.ala.plugins.openapi.Path
 import au.org.ala.profile.analytics.Analytics
 import au.org.ala.profile.api.ProfileBriefResponse
 import au.org.ala.web.AuthService
 import au.org.ala.web.UserDetails
+import grails.converters.JSON
 import grails.events.Events
 import grails.testing.web.interceptor.InterceptorUnitTest
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiOperation
+import groovy.util.logging.Slf4j
+import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.grails.web.util.GrailsApplicationAttributes
 import spock.lang.Specification
 
@@ -30,36 +32,37 @@ import java.security.Principal
  * 
  * Created by Temi on 23/8/21.
  */
-
+@Slf4j
 class AnalyticsInterceptorSpec extends Specification implements InterceptorUnitTest<AnalyticsInterceptor> {
 
     def controller
 
     def setup() {
+        defineBeans {
+            authService(MockAuthService)
+            webServiceWrapperService(WebServiceWrapperService)
+        }
+
+        grailsApplication.addArtefact("Controller", ExampleController)
         grailsApplication.config.security.authorisation.disable = false
         grailsApplication.config.lists.base.url = "http://lists.ala.org.au"
         grailsApplication.config.image.staging.dir = "/data/profile-hub/"
-        grailsApplication.config.app.analytics = [apiid: "cd1", collectionid: "cd2", profileid: "cd3", userid: "cd4"]
-        controller = new ExampleController()
+        grailsApplication.config.app.analytics = [apiid: "cd1", collectionid: "cd3", profileid: "cd4", userid: "cd2"]
     }
 
     void "Send appropriate data to GA depending on called controller action"() {
         setup:
-        grailsApplication.addArtefact("Controller", ExampleController)
-        defineBeans {
-            authService(MockAuthService)
-//            analyticsService(MockAnalyticsService)
-        }
 
         interceptor.analyticsService = Mock(AnalyticsService)
         controller = (ExampleController) mockController(ExampleController)
+        interceptor.match(controller: "example")
 
         when:
         params.opusId = "public1"
         request.method = "GET"
-        request.addHeader(grailsApplication.config.app.http.header.userName, userName)
+        request.addHeader(MockAuthService.DEFAULT_AUTH_HEADER, userId)
         request.cookies = [new Cookie('_ga', 'GA1.1.abc.123')].toArray()
-        request.requestURI = "/api/opus/public1/profile"
+        request.requestURI = "/opus/public1/profile"
         request.setAttribute(GrailsApplicationAttributes.CONTROLLER_NAME_ATTRIBUTE, 'example')
         request.setAttribute(GrailsApplicationAttributes.ACTION_NAME_ATTRIBUTE, 'publicAction')
         withInterceptors(controller: "example", action: "publicAction") {
@@ -68,12 +71,12 @@ class AnalyticsInterceptorSpec extends Specification implements InterceptorUnitT
 
         then:
         response.status == responseCode
-        1 * interceptor.analyticsService.pageView("localhost", "/api/opus/public1/profile", 'abc.123', "127.0.0.1", null, null, payload)
+        1 * interceptor.analyticsService.pageView("localhost", "/opus/public1/profile", 'abc.123', "127.0.0.1", null, null, payload)
 
         where:
-        userName            | responseCode | payload
-        ""                  | 200          | [dt: "List profiles in a collection", cd1: "/opus/{opusId}/profile", cd2: "public1"]
-        "user1@test.org.au" | 200          | [dt: "List profiles in a collection", cd1: "/opus/{opusId}/profile", cd2: "public1", cd4: "123"]
+        userId            | responseCode | payload
+        ""                  | 200          | [dt: "List profiles in a collection", cd1: "/opus/{opusId}/profile", cd3: "public1"]
+        "123" | 200          | [dt: "List profiles in a collection", cd1: "/opus/{opusId}/profile", cd3: "public1", cd2: "123"]
 
     }
 }
@@ -98,28 +101,51 @@ class User implements Principal {
 }
 
 @Analytics
-@Api
 class ExampleController {
     MockAnalyticsService analyticsService
-
-    @ApiOperation(
-            value = "List profiles in a collection",
-            nickname = "/opus/{opusId}/profile",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = ProfileBriefResponse,
-            responseContainer = "List"
+    @Path("/opus/{opusId}/profile")
+    @io.swagger.v3.oas.annotations.Operation(
+            summary = "List profiles in a collection",
+            operationId = "/opus/{opusId}/profile",
+            method = "GET",
+            responses = [
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "200",
+                            content = @io.swagger.v3.oas.annotations.media.Content(
+                                    mediaType = "application/json",
+                                    array = @io.swagger.v3.oas.annotations.media.ArraySchema(
+                                            schema = @io.swagger.v3.oas.annotations.media.Schema(
+                                                    implementation = ProfileBriefResponse.class
+                                            )
+                                    )
+                            ),
+                            headers = [
+                                    @io.swagger.v3.oas.annotations.headers.Header(name = 'X-Total-Count', description = "Total number of profiles", schema = @io.swagger.v3.oas.annotations.media.Schema(type = "integer")),
+                                    @io.swagger.v3.oas.annotations.headers.Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @io.swagger.v3.oas.annotations.media.Schema(type = "String")),
+                                    @io.swagger.v3.oas.annotations.headers.Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @io.swagger.v3.oas.annotations.media.Schema(type = "String")),
+                                    @io.swagger.v3.oas.annotations.headers.Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @io.swagger.v3.oas.annotations.media.Schema(type = "String"))
+                            ]
+                    )
+            ]
     )
     def publicAction() {
+        [:] as JSON
     }
 }
 
 class MockAuthService extends AuthService implements Events {
+    static final String DEFAULT_AUTH_HEADER = "X-ALA-userId"
     @Override
     UserDetails getUserForEmailAddress(String emailAddress) {
         if (emailAddress) {
-            new UserDetails(userId:"123")
+            new UserDetails(userId: "123")
         }
+    }
+
+    @Override
+    String getUserId(){
+        def userId = GrailsWebRequest.lookup().getHeader(DEFAULT_AUTH_HEADER)
+        userId
     }
 }
 

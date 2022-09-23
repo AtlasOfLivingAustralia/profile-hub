@@ -2,7 +2,9 @@ package au.org.ala.profile.hub
 
 import org.apache.http.entity.ContentType
 import org.grails.web.util.WebUtils
-
+import org.pac4j.core.config.Config
+import org.pac4j.http.client.direct.DirectBearerAuthClient
+import org.springframework.beans.factory.annotation.Autowired
 /**
  * XXX Used to add florulaOverrideId to all GET requests if the cookie exists
  */
@@ -15,6 +17,10 @@ class WebServiceWrapperService {
     def webService
     def authService
     FlorulaCookieService florulaCookieService
+    @Autowired(required = false)
+    Config config
+    @Autowired(required = false)
+    DirectBearerAuthClient directBearerAuthClient
 
     Map get(String url, Map params = [:], ContentType contentType = ContentType.APPLICATION_JSON, boolean includeApiKey = true, boolean includeUser = true, Map customHeaders = [:]) {
         // only add it if there is no current user

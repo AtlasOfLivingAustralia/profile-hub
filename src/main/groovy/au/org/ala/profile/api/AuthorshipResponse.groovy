@@ -1,5 +1,6 @@
 package au.org.ala.profile.api
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import groovy.transform.Canonical
 
 /*
@@ -19,6 +20,7 @@ import groovy.transform.Canonical
  * Created by Temi on 16/7/21.
  */
 @Canonical
+@JsonIgnoreProperties('metaClass')
 class AuthorshipResponse {
     String text
     String category

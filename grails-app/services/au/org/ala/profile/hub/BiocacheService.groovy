@@ -172,6 +172,7 @@ class BiocacheService {
      * @param metadata - information about the image
      * @param useSandbox - is the image associatted to a private collection, if so store in private sandbox
      * @return Map response from the webservice including statusCode and resp
+     * @deprecated removed since biocache moved to pipelines
      */
     def uploadImage(String opusId, String profileId, String dataResourceId, file, Map metadata, boolean useSandbox = true) {
         String imageId = UUID.randomUUID()

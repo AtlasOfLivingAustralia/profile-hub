@@ -7,15 +7,14 @@ buildscript {
         maven { url "https://jaspersoft.jfrog.io/artifactory/third-party-ce-artifacts"}
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.0"
-        classpath "org.grails.plugins:hibernate5:7.0.5"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.2.4"
-        classpath 'org.grails.plugins:quartz:2.0.13' // Needed to compile *Job classes
+        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
+        classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.3.4"
+        classpath 'org.grails.plugins:quartz:2.0.13' // Needed to implementation *Job classes
     }
 }
 
-version "3.1-API-SNAPSHOT"
+version "4.0-API-SNAPSHOT"
 group "au.org.ala"
 boolean inplace = false // Set to true it needed only for development
 
@@ -43,103 +42,107 @@ configurations {
 }
 
 def httpmimeVersion = "4.4.1"
-def swaggerVersion = '1.5.22'
-def swaggerUIVersion = '3.20.9'
 
 dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    compile "org.springframework.boot:spring-boot-starter-logging"
-    compile "org.springframework.boot:spring-boot-autoconfigure"
-    compile "org.grails:grails-core"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile "org.springframework.boot:spring-boot-starter-tomcat"
-    // transitive dependency
-    compile "org.springframework.boot:spring-boot-starter-validation"
-    compile "org.grails:grails-web-boot"
-    compile "org.grails:grails-logging"
-    compile "org.grails:grails-plugin-rest"
-    compile "org.grails:grails-plugin-databinding"
-    compile "org.grails:grails-plugin-i18n"
-    compile "org.grails:grails-plugin-services"
-    compile "org.grails:grails-plugin-url-mappings"
-    compile "org.grails:grails-plugin-interceptors"
-    compile "org.grails.plugins:cache"
-    compile "org.grails.plugins:async"
-    compile "org.grails.plugins:scaffolding"
-    compile "org.grails.plugins:events"
-    compile "org.grails.plugins:gsp"
     compileOnly "io.micronaut:micronaut-inject-groovy"
     console "org.grails:grails-console"
+    implementation "org.springframework.boot:spring-boot-starter-logging"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-autoconfigure"
+    implementation "org.grails:grails-core"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
+    implementation "org.grails:grails-web-boot"
+    implementation "org.grails:grails-logging"
+    implementation "org.grails:grails-plugin-rest"
+    implementation "org.grails:grails-plugin-databinding"
+    implementation "org.grails:grails-plugin-i18n"
+    implementation "org.grails:grails-plugin-services"
+    implementation "org.grails:grails-plugin-url-mappings"
+    implementation "org.grails:grails-plugin-interceptors"
+    implementation "org.codehaus.groovy:groovy:$groovyVersion"
+    implementation ("org.grails.plugins:cache") {
+        exclude module: 'groovy'
+        exclude module: 'groovy-al'
+    }
+    implementation ("org.grails.plugins:async") {
+        exclude module: 'groovy'
+        exclude module: 'groovy-all'
+    }
+    implementation "org.grails.plugins:scaffolding"
+    implementation "org.grails.plugins:events"
+    implementation "org.grails.plugins:gsp"
+
     profile "org.grails.profiles:web"
-    runtime "org.glassfish.web:el-impl:2.1.2-b03"
-    runtime "javax.xml.bind:jaxb-api:2.3.1"
-    runtime "com.bertramlabs.plugins:asset-pipeline-grails:3.2.4"
-    testCompile "io.micronaut:micronaut-inject-groovy"
-    testCompile "org.grails:grails-gorm-testing-support"
-    testCompile "org.mockito:mockito-core"
-    testCompile "org.grails:grails-web-testing-support"
-    testCompile "org.grails.plugins:geb"
-    testCompile "org.seleniumhq.selenium:selenium-remote-driver:3.14.0"
-    testCompile "org.seleniumhq.selenium:selenium-api:3.14.0"
-    testCompile "org.seleniumhq.selenium:selenium-support:3.14.0"
-    testRuntime "org.seleniumhq.selenium:selenium-chrome-driver:3.14.0"
-    testRuntime "org.seleniumhq.selenium:selenium-firefox-driver:3.14.0"
+    runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
+    runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
+    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:3.3.4"
+    testImplementation "io.micronaut:micronaut-inject-groovy"
+    testImplementation "org.grails:grails-gorm-testing-support"
+    testImplementation "org.mockito:mockito-core"
+    testImplementation "org.grails:grails-web-testing-support"
+    testImplementation "org.grails.plugins:geb"
+    testImplementation "org.seleniumhq.selenium:selenium-remote-driver:4.0.0"
+    testImplementation "org.seleniumhq.selenium:selenium-api:4.0.0"
+    testImplementation "org.seleniumhq.selenium:selenium-support:4.0.0"
+    testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:4.0.0"
+    testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:4.0.0"
 
-    compile "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
-    compile "org.apache.httpcomponents:httpcore:${httpmimeVersion}"
-    compile "org.apache.httpcomponents:httpclient:${httpmimeVersion}"
+    implementation "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
+    implementation "org.apache.httpcomponents:httpcore:${httpmimeVersion}"
+    implementation "org.apache.httpcomponents:httpclient:${httpmimeVersion}"
 
-    compile 'net.sf.ehcache:ehcache:2.8.4'
-    runtime "org.springframework:spring-test:4.1.2.RELEASE" // required by the rendering plugin
-    compile 'au.org.ala:image-utils:1.8.2'
-    compile 'org.jsoup:jsoup:1.7.2'
-    compile 'org.apache.tika:tika-parsers:1.3'
-    compile "commons-fileupload:commons-fileupload:1.3.1"
+    implementation 'net.sf.ehcache:ehcache:2.8.4'
+    implementation 'au.org.ala:image-utils:1.8.2'
+    implementation 'org.jsoup:jsoup:1.7.2'
+    implementation 'org.apache.tika:tika-parsers:1.3'
+    implementation "commons-fileupload:commons-fileupload:1.3.1"
 
-    compile 'net.sf.jasperreports:jasperreports:6.4.1'
-    compile 'net.sf.jasperreports:jasperreports-functions:6.4.1'
-    compile 'au.org.ala:jasper-liberation-fonts-2.00.1:1.3'
-    compile 'net.glxn:qrgen:1.4'
-    compile 'org.apache.xmlgraphics:batik-bridge:1.9'
-    compile 'org.apache.xmlgraphics:batik-svggen:1.9'
-    compile 'com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20160827.1'
-    compile 'com.google.guava:guava:19.0'
-    compile 'com.google.code.findbugs:jsr305:3.0.1'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile "org.apache.httpcomponents:httpcore:${httpmimeVersion}"
-    compile "org.apache.httpcomponents:httpclient:${httpmimeVersion}"
-    compile "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
+    implementation 'net.sf.jasperreports:jasperreports:6.4.1'
+    implementation 'net.sf.jasperreports:jasperreports-functions:6.4.1'
+    implementation 'au.org.ala:jasper-liberation-fonts-2.00.1:1.3'
+    implementation 'net.glxn:qrgen:1.4'
+    implementation 'org.apache.xmlgraphics:batik-bridge:1.9'
+    implementation 'org.apache.xmlgraphics:batik-svggen:1.9'
+    implementation 'com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20160827.1'
+    implementation 'com.google.guava:guava:19.0'
+    implementation 'com.google.code.findbugs:jsr305:3.0.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
+    implementation "org.apache.httpcomponents:httpcore:${httpmimeVersion}"
+    implementation "org.apache.httpcomponents:httpclient:${httpmimeVersion}"
+    implementation "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
 
-    compile "org.grails.plugins:external-config:2.0.0"
-    compile "org.grails.plugins:ala-auth:3.2.3"
-    compile 'org.grails.plugins:csv:1.0.1'
-    compile 'net.sf.opencsv:opencsv:2.3'
-    compile("org.grails.plugins:ala-map-plugin:3.0")
+    implementation 'dk.glasius:external-config:3.0.0'
+    implementation "org.grails.plugins:ala-auth:5.1.1"
+    implementation "org.grails.plugins:ala-ws-security-plugin:4.1.2"
+    implementation 'org.grails.plugins:csv:1.0.1'
+    implementation 'net.sf.opencsv:opencsv:2.3'
+    implementation("org.grails.plugins:ala-map-plugin:3.0.1")
+    implementation 'au.org.ala.grails:interceptor-annotation-matcher:1.0.0'
     if(!inplace){
-        compile("org.grails.plugins:ala-ws-plugin:2.1")
+        implementation("org.grails.plugins:ala-ws-plugin:3.1.2")
     }
 
-    compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
-    compile("org.grails.plugins:ala" +
-            "-admin-plugin:2.2")
-    compile "org.grails.plugins:quartz:2.0.13"
-    compile "org.quartz-scheduler:quartz:2.2.1" // transitive dependency
-    compile "org.grails.plugins:swagger:1.0.1"
-    compile group: 'io.swagger', name: 'swagger-models', version: "${swaggerVersion}"
-    compile group: 'io.swagger', name: 'swagger-servlet', version: "${swaggerVersion}"
-    compile "org.webjars:swagger-ui:${swaggerUIVersion}"
-    runtime("au.org.ala.plugins.grails:images-client-plugin:1.2")
+    implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
+    implementation("org.grails.plugins:ala-admin-plugin:2.3.0")
+    implementation "org.grails.plugins:quartz:2.0.13"
+    implementation "org.quartz-scheduler:quartz:2.2.1" // transitive dependency
+    implementation 'org.pac4j:pac4j-core:5.3.1'
+    implementation 'org.pac4j:pac4j-http:5.3.1'
+    //    swagger API
+    implementation 'au.org.ala.plugins:openapi:1.1.0'
+    runtimeOnly("au.org.ala.plugins.grails:images-client-plugin:1.2")
 
-    runtime "org.grails.plugins:jquery:1.11.1"
-    compile 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.4'
+    runtimeOnly "org.grails.plugins:jquery:1.11.1"
+    implementation 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.4'
     assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.1'
-    assets 'com.craigburke.angular:angular-annotate-asset-pipeline:2.4.1'
-    assets "com.craigburke.angular:angular-template-asset-pipeline:2.4.0"
+    assets ("com.craigburke.angular:angular-template-asset-pipeline:2.5.0")
     if (Environment.current == Environment.DEVELOPMENT) {
-        compile "org.grails.plugins:console:1.5.11"
+        implementation "org.grails.plugins:console:1.5.11"
     }
 
-    testCompile "au.org.ala:userdetails-service-client:1.5.0"
+    testImplementation "au.org.ala:userdetails-service-client:2.0.0"
 }
 
 bootRun {
@@ -161,25 +164,35 @@ tasks.withType(GroovyCompile) {
 }
 
 webdriverBinaries {
-    chromedriver '2.45.0'
-    geckodriver '0.24.0'
+    if (!System.getenv().containsKey('GITHUB_ACTIONS')) {
+        chromedriver {
+            version = '2.45.0'
+            fallbackTo32Bit = true
+        }
+        geckodriver '0.30.0'
+    }
 }
 
 tasks.withType(Test) {
     systemProperty "geb.env", System.getProperty('geb.env')
     systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
-    systemProperty "webdriver.chrome.driver", System.getProperty('webdriver.chrome.driver')
-    systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
+    if (!System.getenv().containsKey('GITHUB_ACTIONS')) {
+        systemProperty 'webdriver.chrome.driver', System.getProperty('webdriver.chrome.driver')
+        systemProperty 'webdriver.gecko.driver', System.getProperty('webdriver.gecko.driver')
+    } else {
+        systemProperty 'webdriver.chrome.driver', "${System.getenv('CHROMEWEBDRIVER')}/chromedriver"
+        systemProperty 'webdriver.gecko.driver', "${System.getenv('GECKOWEBDRIVER')}/geckodriver"
+    }
 }
 
 
 assets {
-    minifyJs = true
+    minifyJs = false
     minifyCss = true
     minifyOptions = [
-        excludes : ["**/*.min.js", "ckeditor5/build/ckeditor.js"]
+        excludes : ["**/*.min.js", "ckeditor5/build/ckeditor.js", "webjars/swagger-ui/4.5.2/swagger-ui-bundle.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js']
     ]
-    excludes = ["webjars/leaflet/0.7.7/**/*.*",  "ckeditor5/node_modules/**/*.*", "ckeditor5/src/**/*.*", "ckeditor5/build/ckeditor.js", "ckeditor5/webpack.config.js"]
+    excludes = ["webjars/leaflet/0.7.7/**/*.*",  "ckeditor5/node_modules/**/*.*", "ckeditor5/src/**/*.*", "ckeditor5/build/ckeditor.js", "ckeditor5/webpack.config.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js']
     includes = ["webjars/leaflet/0.7.7/dist/*.*"]
 }
 
@@ -187,6 +200,10 @@ bootJar {
     enabled = true
     classifier = 'exec'
     launchScript()
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
 }
 
 assemble {

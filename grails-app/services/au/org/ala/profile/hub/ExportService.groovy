@@ -21,6 +21,7 @@ import net.sf.jasperreports.engine.fill.JRFileVirtualizer
 import net.sf.jasperreports.engine.type.ModeEnum
 import net.sf.jasperreports.engine.util.SimpleFileResolver
 import org.apache.commons.io.IOUtils
+import org.apache.http.entity.ContentType
 import org.springframework.web.context.request.RequestContextHolder
 import grails.web.mapping.LinkGenerator
 
@@ -110,7 +111,7 @@ class ExportService {
     @NotTransactional
     void createPdf(Map params, Closure<OutputStream> outputStreamSupplier, boolean latest = false) {
         // Create curated report model
-        Map opus = webService.get("${grailsApplication.config.profile.service.url}/opus/${URLEncoder.encode(params.opusId, "UTF-8")}")?.resp
+        Map opus = webService.get("${grailsApplication.config.profile.service.url}/opus/${URLEncoder.encode(params.opusId, "UTF-8")}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())?.resp
         Map curatedModel = getCurateReportModel(opus, params)
 
         // Transform curated model to JSON format input stream
@@ -397,7 +398,7 @@ class ExportService {
     private Map loadProfileData(String profileId, Map opus, Map params) {
 
         Map<String, Map> model = [:]
-        model.profile = webService.get("${grailsApplication.config.profile.service.url}/opus/${opus.uuid}/profile/${Utils.encPath(profileId)}?latest=${false}")?.resp
+        model.profile = webService.get("${grailsApplication.config.profile.service.url}/opus/${opus.uuid}/profile/${Utils.encPath(profileId)}?latest=${false}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())?.resp
 
         if (params.taxonomy || params.conservation) {
             model.profile.speciesProfile = profileService.getSpeciesProfile(model.profile.guid)?.resp

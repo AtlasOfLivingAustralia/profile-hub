@@ -105,14 +105,33 @@ grails:
 ---
 security:
     cas:
-        casServerName: 'https://auth.ala.org.au'
-        casServerUrlPrefix: 'https://auth.ala.org.au/cas'
-        loginUrl: 'https://auth.ala.org.au/cas/login'
-        logoutUrl: 'https://auth.ala.org.au/cas/logout'
+        enabled: false
         adminRole: 'ROLE_ADMIN'
-        uriExclusionFilterPattern: '.*/assets/.*,.*/api.*,.*/webjars/.*'
+        uriExclusionFilterPattern:
+            - '/assets/*'
+            - '/openapi/*'
+            - '/webjars/*'
         uriFilterPattern:
         authenticateOnlyIfCookieFilterPattern: '*'
+        authenticateOnlyIfLoggedInFilterPattern:
+    oidc:
+        enabled: true
+        discoveryUri: https://auth.ala.org.au/cas/oidc/.well-known
+        scope: "openid,profile,email,ala,roles"
+        clientId: some-client-id
+        secret: some-client-secret
+        allowUnsignedIdTokens: true
+    jwt:
+        enabled: true
+        discoveryUri: https://auth.ala.org.au/cas/oidc/.well-known
+        fallbackToLegacyBehaviour: true
+
+---
+
+webservice:
+    jwt: true
+    jwt-include-legacy-headers: true
+    jwt-scopes: "openid profile email ala roles profile-service/write"
 
 ---
 biocache:

@@ -3,6 +3,8 @@ package au.org.ala.profile.hub
 import au.org.ala.profile.api.ApiService
 import au.org.ala.ws.service.WebService
 import grails.testing.services.ServiceUnitTest
+import org.grails.web.mapping.DefaultLinkGenerator
+import org.grails.web.mapping.UrlMappingsHolderFactoryBean
 import spock.lang.Specification
 
 class ApiServiceSpec extends Specification implements ServiceUnitTest<ApiService>{
@@ -15,16 +17,22 @@ class ApiServiceSpec extends Specification implements ServiceUnitTest<ApiService
 
     void "getProfiles should get all profiles from collection if taxonRank and taxonName is not present"() {
         setup:
-        defineBeans{
+        defineBeans {
+            grailsUrlMappingsHolder(UrlMappingsHolderFactoryBean) {
+                getDelegate().grailsApplication = grailsApplication
+            }
+            grailsLinkGenerator(DefaultLinkGenerator, "")
             profileService(ProfileService)
+            authService(MockAuthService)
         }
 
         webService = service.profileService.webService = Mock(WebService)
         webServiceWrapperService = service.profileService.webServiceWrapperService = Mock(WebServiceWrapperService)
         service.profileService.grailsApplication = grailsApplication
+        service.profileService.authService = grailsApplication.getMainContext().getBean("authService")
 
         when:
-        1 * webService.get("/opus/opus1/profile/?startIndex=1&pageSize=20&sort=abc&order=desc&rankFilter=abc") >> [resp: [], statusCode: 200]
+        1 * webService.get("/opus/opus1/profile/?startIndex=1&pageSize=20&sort=abc&order=desc&rankFilter=abc", _, _, _, _, _) >> [resp: [], statusCode: 200]
         def result = service.getProfiles('opus1','1', '20', 'abc', 'desc', '', '', 'abc')
 
         then:
@@ -32,7 +40,7 @@ class ApiServiceSpec extends Specification implements ServiceUnitTest<ApiService
         result.statusCode == 200
 
         when:
-        1 * webServiceWrapperService.get("/profile/search/taxon/nameAndTotal?opusId=opus1&scientificName=plantae&taxon=kingdom&max=20&offset=1&sortBy=abc&immediateChildrenOnly=false&includeTaxon=true&rankFilter=abc") >> [resp: [], statusCode: 200]
+        1 * webServiceWrapperService.get("/profile/search/taxon/nameAndTotal?opusId=opus1&scientificName=plantae&taxon=kingdom&max=20&offset=1&sortBy=abc&immediateChildrenOnly=false&includeTaxon=true&rankFilter=abc", _, _, _, _, _) >> [resp: [], statusCode: 200]
         result = service.getProfiles('opus1','1', '20', 'abc', 'desc', 'plantae', 'kingdom', 'abc')
 
         then:
@@ -42,7 +50,16 @@ class ApiServiceSpec extends Specification implements ServiceUnitTest<ApiService
 
     void "retrieveImagesPaged should return images only if opus id is valid" () {
         setup:
+        defineBeans{
+            grailsUrlMappingsHolder(UrlMappingsHolderFactoryBean) {
+                getDelegate().grailsApplication = grailsApplication
+            }
+            grailsLinkGenerator(DefaultLinkGenerator, "")
+            authService(MockAuthService)
+        }
+
         service.profileService = Mock(ProfileService)
+        service.profileService.authService = grailsApplication.getMainContext().getBean("authService")
         service.imageService = Mock(ImageService)
 
         when:
@@ -61,6 +78,15 @@ class ApiServiceSpec extends Specification implements ServiceUnitTest<ApiService
     }
 
     void "getAttributes should only return asked attributes" () {
+        setup:
+        defineBeans {
+            grailsUrlMappingsHolder(UrlMappingsHolderFactoryBean) {
+                getDelegate().grailsApplication = grailsApplication
+            }
+            grailsLinkGenerator(DefaultLinkGenerator, "")
+            authService(MockAuthService)
+        }
+
         when:
         def result = service.getAttributes([attributes: [[uuid: 'abc'], [title: 'name1'], [title: 'name2']]], [])
 

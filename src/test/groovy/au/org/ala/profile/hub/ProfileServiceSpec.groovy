@@ -36,7 +36,7 @@ class ProfileServiceSpec extends Specification implements ServiceUnitTest<Profil
         service.getClassification("opusid", "profileid", "guid")
 
         then:
-        1 * webServiceWrapperService.get(expectedUrl)
+        1 * webServiceWrapperService.get(expectedUrl, _ , _ , _, _, _)
     }
 
     def "updateLinks() should construct the correct Profile Service URL"() {
@@ -47,7 +47,7 @@ class ProfileServiceSpec extends Specification implements ServiceUnitTest<Profil
         service.updateLinks("opusid", "profileId", "linkdata")
 
         then:
-        1 * webService.post(expectedUrl, [profileId: "profileId", links: "linkdata", userId: "user1", userDisplayName: "fred smith"])
+        1 * webService.post(expectedUrl, [profileId: "profileId", links: "linkdata", userId: "user1", userDisplayName: "fred smith"], _, _, _, _, _)
     }
 
     def "updateAuthorship() should construct the correct Profile Service URL"() {
@@ -58,7 +58,7 @@ class ProfileServiceSpec extends Specification implements ServiceUnitTest<Profil
         service.updateAuthorship("opusid", "profileId", [category: "author", text: "fred"])
 
         then:
-        1 * webService.post(expectedUrl, [category: "author", text: "fred"])
+        1 * webService.post(expectedUrl, [category: "author", text: "fred"], _ , _, _, _, _)
     }
 
 

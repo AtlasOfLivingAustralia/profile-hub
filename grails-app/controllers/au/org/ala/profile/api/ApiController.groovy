@@ -1,15 +1,33 @@
 package au.org.ala.profile.api
 
+import au.ala.org.ws.security.RequireApiKey
 import au.org.ala.profile.analytics.Analytics
 import au.org.ala.profile.hub.BaseController
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
 import au.org.ala.profile.security.RequiresAccessToken
 import grails.converters.JSON
-import io.swagger.annotations.*
+
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.enums.ParameterIn
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
+import io.swagger.v3.oas.annotations.headers.Header
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.security.SecurityScheme
+import au.org.ala.plugins.openapi.Path
+import org.bouncycastle.ocsp.Req
 
 @Analytics
-@Api(value = "/api", tags = ["1.0"], description = "Profiles API", protocols = "http,https")
+@SecurityScheme(name = "auth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer"
+)
+@RequireApiKey(roles = ["ROLE_USER"])
 class ApiController extends BaseController {
     static namespace = "v1"
     static allowedSortFields = ['scientificNameLower', 'lastUpdated', 'dateCreated']
@@ -19,93 +37,116 @@ class ApiController extends BaseController {
     MapService mapService
     ApiService apiService
 
-    @ApiOperation(
-            value = "List profiles in a collection",
-            nickname = "/opus/{opusId}/profile",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = ProfileBriefResponse,
-            responseContainer = "List",
-            responseHeaders = [
-                    @ResponseHeader(
-                            name = 'X-Total-Count',
-                            description = 'Total number of profiles',
-                            response = Integer
+    @Path("/api/opus/{opusId}/profile")
+    @Operation(
+            summary = "List profiles in a collection",
+            operationId = "/api/opus/{opusId}/profile",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(
+                                            schema = @Schema(
+                                                implementation = ProfileBriefResponse.class
+                                            )
+                                    )
+                            ),
+                            headers = [
+                                    @Header(name = 'X-Total-Count', description = "Total number of profiles", schema = @Schema(type = "integer")),
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId is a required parameter"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Collection not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ],
+            parameters = [
+                    @Parameter(
+                            name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id"
+                    ),
+                    @Parameter(name = "taxonName",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "Filter profiles to a taxon in the taxonomic tree. Result will include the mentioned taxon."),
+                    @Parameter(name = "taxonRank",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "The rank of the taxon provided in taxonName parameter. Example, acacia taxonName will have genus as taxonRank."),
+                    @Parameter(name = "pageSize",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "max number of profiles to return",
+                            schema = @Schema(
+                                    name = "version",
+                                    type = "integer",
+                                    format = "int64",
+                                    defaultValue = '20'
+                            )),
+                    @Parameter(name = "startIndex",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "index of the first profile to return",
+                            schema = @Schema(
+                                    name = "version",
+                                    type = "integer",
+                                    format = "int64",
+                                    defaultValue = '0'
+                            )),
+                    @Parameter(name = "sort",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "the field to sort the results by",
+                            schema = @Schema(
+                                name = "sort",
+                                type = "string",
+                                defaultValue = 'scientificNameLower',
+                                allowableValues =  ["scientificNameLower","dateCreated","lastUpdated"]
+                            )
+                    ),
+                    @Parameter(name = "order",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "the direction to sort the results by",
+                            schema = @Schema(
+                                    name = "order",
+                                    type = "string",
+                                    defaultValue = 'asc',
+                                    allowableValues =  ["asc","desc"]
+                            )
+                    ),
+                    @Parameter(name = "rankFilter",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "the result set will only show profiles at the provided rank"
+                    ),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
                     )
-            ]
+            ],
+            security = @SecurityRequirement(name="auth")
     )
-    @ApiResponses([
-            @ApiResponse(code = 400,
-                    message = "opusId is a required parameter"),
-            @ApiResponse(code = 403,
-                    message = "You do not have the necessary permissions to perform this action."),
-            @ApiResponse(code = 405,
-                    message = "An unexpected error has occurred while processing your request."),
-            @ApiResponse(code = 404,
-                    message = "Collection not found"),
-            @ApiResponse(code = 500,
-                    message = "An unexpected error has occurred while processing your request.")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "opusId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Collection id"),
-            @ApiImplicitParam(name = "taxonName",
-                    paramType = "query",
-                    dataType = "string",
-                    required = false,
-                    value = "Filter profiles to a taxon in the taxonomic tree. Result will include the mentioned taxon."),
-            @ApiImplicitParam(name = "taxonRank",
-                    paramType = "query",
-                    dataType = "string",
-                    required = false,
-                    value = "The rank of the taxon provided in taxonName parameter. Example, acacia taxonName will have genus as taxonRank."),
-            @ApiImplicitParam(name = "pageSize",
-                    paramType = "query",
-                    required = false,
-                    defaultValue = '20',
-                    value = "max number of profiles to return",
-                    dataType = "Integer"),
-            @ApiImplicitParam(name = "startIndex",
-                    paramType = "query",
-                    required = false,
-                    defaultValue = '0',
-                    value = "index of the first profile to return",
-                    dataType = "Integer"),
-            @ApiImplicitParam(name = "sort",
-                    paramType = "query",
-                    required = false,
-                    defaultValue = 'scientificNameLower',
-                    value = "the field to sort the results by",
-                    allowableValues = 'scientificNameLower,dateCreated,lastUpdated',
-                    dataType = "string"),
-            @ApiImplicitParam(name = "order",
-                    paramType = "query",
-                    required = false,
-                    defaultValue = 'asc',
-                    value = "the direction to sort the results by",
-                    allowableValues = 'asc,desc',
-                    dataType = "string"),
-            @ApiImplicitParam(name = "rankFilter",
-                    paramType = "query",
-                    required = false,
-                    value = "the result set will only show profiles at the provided rank",
-                    dataType = "string"),
-            @ApiImplicitParam(name = "X-ALA-userName",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    value = "Registered username (email address) of user accessing the API"),
-            @ApiImplicitParam(name = "Accept-Version",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    defaultValue = "1.0",
-                    allowableValues = "1.0",
-                    value = "The API version")
-    ])
     def getProfiles () {
         if (!params.opusId) {
             badRequest "opusId is a required parameter"
@@ -131,55 +172,69 @@ class ApiController extends BaseController {
         }
     }
 
-    @ApiOperation(
-            value = "Get a profile in a collection",
-            nickname = "/opus/{opusId}/profile/{profileId}",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = ProfileResponse
+    @Path("/api/opus/{opusId}/profile/{profileId}")
+    @Operation(
+            summary = "Get a profile in a collection",
+            operationId = "/api/opus/{opusId}/profile/{profileId}",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            implementation = ProfileResponse.class
+                                    )
+                            ),
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId and profileId are required parameters"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Collection or profile not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ],
+            parameters = [
+                    @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id - UUID or short name"),
+                    @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Profile id - UUID or Scientific name."),
+                    @Parameter(name = "includeImages",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "if true, the API will return a list of images associated with profile",
+                            schema = @Schema(
+                                    name = "includeImages",
+                                    type = "boolean",
+                                    defaultValue = "false"
+                            )),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
+                    )
+            ],
+            security = @SecurityRequirement(name="auth")
     )
-    @ApiResponses([
-            @ApiResponse(code = 400,
-                    message = "opusId and profileId are required parameters"),
-            @ApiResponse(code = 403,
-                    message = "You do not have the necessary permissions to perform this action."),
-            @ApiResponse(code = 405,
-                    message = "An unexpected error has occurred while processing your request."),
-            @ApiResponse(code = 404,
-                    message = "Collection or profile not found"),
-            @ApiResponse(code = 500,
-                    message = "An unexpected error has occurred while processing your request.")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "opusId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Collection id - UUID or short name"),
-            @ApiImplicitParam(name = "profileId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Profile id - UUID or Scientific name."),
-            @ApiImplicitParam(name = "includeImages",
-                    paramType = "query",
-                    required = false,
-                    dataType = "boolean",
-                    defaultValue = "false",
-                    value = "if true, the API will return a list of images associated with profile"),
-            @ApiImplicitParam(name = "X-ALA-userName",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    value = "Registered user name (email address) of user accessing the API"),
-            @ApiImplicitParam(name = "Accept-Version",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    defaultValue = "1.0",
-                    allowableValues = "1.0",
-                    value = "The API version")
-    ])
     def get() {
         if (!params.opusId || !params.profileId) {
             badRequest "opusId and profileId are required parameters"
@@ -201,54 +256,67 @@ class ApiController extends BaseController {
         }
     }
 
-    @ApiOperation(
-            value = "Get a draft profile in a collection",
-            nickname = "/opus/{opusId}/profile/{profileId}/draft",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = ProfileResponse
+    @Path("/api/opus/{opusId}/profile/{profileId}/draft")
+    @Operation(
+            summary = "Get a draft profile in a collection",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/draft",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(
+                                            schema = @Schema(
+                                                    implementation = ProfileResponse.class
+                                            )
+                                    )
+                            ),
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId and profileId are required parameters"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Collection or profile not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+
+            ],
+            parameters = [
+                    @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id - UUID or short name"),
+                    @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Profile id - UUID or Scientific name."),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "Access token for the collection"),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
+                    )
+            ],
+            security = @SecurityRequirement(name="auth")
     )
-    @ApiResponses([
-            @ApiResponse(code = 400,
-                    message = "opusId and profileId are required parameters"),
-            @ApiResponse(code = 403,
-                    message = "You do not have the necessary permissions to perform this action."),
-            @ApiResponse(code = 405,
-                    message = "An unexpected error has occurred while processing your request."),
-            @ApiResponse(code = 404,
-                    message = "Collection or profile not found"),
-            @ApiResponse(code = 500,
-                    message = "An unexpected error has occurred while processing your request.")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "opusId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Collection id - UUID or short name"),
-            @ApiImplicitParam(name = "profileId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Profile id - UUID or Scientific name."),
-            @ApiImplicitParam(name = "Access-Token",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    value = "Access token for the collection"),
-            @ApiImplicitParam(name = "X-ALA-userName",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    value = "Registered user name (email address) of user accessing the API"),
-            @ApiImplicitParam(name = "Accept-Version",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    defaultValue = "1.0",
-                    allowableValues = "1.0",
-                    value = "The API version")
-    ])
     @RequiresAccessToken
     def getDraftProfile() {
         if (!params.opusId || !params.profileId) {
@@ -271,69 +339,83 @@ class ApiController extends BaseController {
         }
     }
 
-    @ApiOperation(
-            value = "Get images associated with a profile",
-            nickname = "/opus/{opusId}/profile/{profileId}/image",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = ImageListResponse,
-            responseHeaders = [
-                    @ResponseHeader(
-                            name = 'X-Total-Count',
-                            description = 'Total number of images',
-                            response = Integer
+    @Path("/api/opus/{opusId}/profile/{profileId}/image")
+    @Operation(
+            summary = "Get images associated with a profile",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/image",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            implementation = ImageListResponse.class
+                                    )
+                            ),
+                            headers = [
+                                    @Header(name = 'X-Total-Count', description = "Total number of images", schema = @Schema(type = "integer")),
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId and profileId are required parameters"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Opus or profile not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ],
+            parameters = [
+                    @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id - UUID or short name"),
+                    @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Profile id - UUID or Scientific name"),
+                    @Parameter(name = "pageSize",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "max number of profiles to return",
+                            schema = @Schema(
+                                    name = "version",
+                                    type = "integer",
+                                    format = "int64",
+                                    defaultValue = '20'
+                            )
+                    ),
+                    @Parameter(name = "startIndex",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "index of the first image in a profile to return",
+                            schema = @Schema(
+                                    name = "version",
+                                    type = "integer",
+                                    format = "int64",
+                                    defaultValue = '0'
+                            )
+                    ),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
                     )
-            ]
-
+            ],
+            security = @SecurityRequirement(name="auth")
     )
-    @ApiResponses([
-            @ApiResponse(code = 400,
-                    message = "opusId and profileId are required parameters"),
-            @ApiResponse(code = 403,
-                    message = "You do not have the necessary permissions to perform this action."),
-            @ApiResponse(code = 405,
-                    message = "An unexpected error has occurred while processing your request."),
-            @ApiResponse(code = 404,
-                    message = "Opus or profile not found"),
-            @ApiResponse(code = 500,
-                    message = "An unexpected error has occurred while processing your request.")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "opusId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Collection id - UUID or short name"),
-            @ApiImplicitParam(name = "profileId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Profile id - UUID or Scientific name"),
-            @ApiImplicitParam(name = "pageSize",
-                    paramType = "query",
-                    required = false,
-                    defaultValue = '20',
-                    value = "max number of profiles to return",
-                    dataType = "Integer"),
-            @ApiImplicitParam(name = "startIndex",
-                    paramType = "query",
-                    required = false,
-                    defaultValue = '0',
-                    value = "index of the first image in a profile to return",
-                    dataType = "Integer"),
-            @ApiImplicitParam(name = "X-ALA-userName",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    value = "Registered user name (email address) of user accessing the API"),
-            @ApiImplicitParam(name = "Accept-Version",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    defaultValue = "1.0",
-                    allowableValues = "1.0",
-                    value = "The API version")
-    ])
     def getImages () {
         if (!params.opusId || !params.profileId ) {
             badRequest "opusId and profileId are required parameters"
@@ -347,56 +429,66 @@ class ApiController extends BaseController {
         }
     }
 
-
-    @ApiOperation(
-            value = "Get attributes of a profile in a collection",
-            nickname = "/opus/{opusId}/profile/{profileId}/attribute/{attributeId}",
-            produces = "application/json",
-            httpMethod = "GET",
-            response = AttributeResponse,
-            responseContainer = "List"
+    @Path("/api/opus/{opusId}/profile/{profileId}/attribute/{attributeId}")
+    @Operation(
+            summary = "Get attributes of a profile in a collection",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/attribute/{attributeId}",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(
+                                            schema = @Schema(
+                                                    implementation = AttributeResponse.class
+                                            )
+                                    )
+                            ),
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId and profileId are required parameters"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Collection or profile not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ],
+            parameters = [
+                    @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id - UUID or short name"),
+                    @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Profile id - UUID or Scientific name."),
+                    @Parameter(name = "attributeId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "This is the attribute id or attribute name. Multiple attributes must be comma separated."),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
+                    )
+            ],
+            security = @SecurityRequirement(name="auth")
     )
-    @ApiResponses([
-            @ApiResponse(code = 400,
-                    message = "opusId and profileId are required parameters"),
-            @ApiResponse(code = 403,
-                    message = "You do not have the necessary permissions to perform this action."),
-            @ApiResponse(code = 405,
-                    message = "An unexpected error has occurred while processing your request."),
-            @ApiResponse(code = 404,
-                    message = "Collection or profile not found"),
-            @ApiResponse(code = 500,
-                    message = "An unexpected error has occurred while processing your request.")
-    ])
-    @ApiImplicitParams([
-            @ApiImplicitParam(name = "opusId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Collection id - UUID or short name"),
-            @ApiImplicitParam(name = "profileId",
-                    paramType = "path",
-                    dataType = "string",
-                    required = true,
-                    value = "Profile id - UUID or Scientific name."),
-            @ApiImplicitParam(name = "attributeId",
-                    paramType = "path",
-                    required = true,
-                    dataType = "string",
-                    value = "This is the attribute id or attribute name. Multiple attributes must be comma separated."),
-            @ApiImplicitParam(name = "X-ALA-userName",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    value = "Registered user name (email address) of user accessing the API"),
-            @ApiImplicitParam(name = "Accept-Version",
-                    paramType = "header",
-                    required = true,
-                    dataType = "string",
-                    defaultValue = "1.0",
-                    allowableValues = "1.0",
-                    value = "The API version")
-    ])
     def getAttributes() {
         if (!params.opusId || !params.profileId) {
             badRequest "opusId and profileId are required parameters"

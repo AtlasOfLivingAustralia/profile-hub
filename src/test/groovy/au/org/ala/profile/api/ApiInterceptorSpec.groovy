@@ -6,9 +6,9 @@ import au.org.ala.web.AuthService
 import au.org.ala.web.UserDetails
 import grails.events.Events
 import grails.testing.web.interceptor.InterceptorUnitTest
+import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.grails.web.util.GrailsApplicationAttributes
 import spock.lang.Specification
-
 import java.security.Principal
 
 class ApiInterceptorSpec extends Specification implements InterceptorUnitTest<ApiInterceptor> {
@@ -20,6 +20,7 @@ class ApiInterceptorSpec extends Specification implements InterceptorUnitTest<Ap
         grailsApplication.config.lists.base.url = "http://lists.ala.org.au"
         grailsApplication.config.image.staging.dir = "/data/profile-hub/"
         controller = new ExampleController()
+        interceptor.match(controller: "example")
     }
 
     void "Public collection should be accessible when Username is provided"() {
@@ -34,7 +35,7 @@ class ApiInterceptorSpec extends Specification implements InterceptorUnitTest<Ap
         when:
         params.opusId = "public1"
         request.method = "GET"
-        request.addHeader(grailsApplication.config.app.http.header.userName, userName)
+        request.addHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, bearerToken)
         request.requestURI = "/api/opus/public1/profile"
         request.setAttribute(GrailsApplicationAttributes.CONTROLLER_NAME_ATTRIBUTE, 'example')
         request.setAttribute(GrailsApplicationAttributes.ACTION_NAME_ATTRIBUTE, 'publicAction')
@@ -46,9 +47,9 @@ class ApiInterceptorSpec extends Specification implements InterceptorUnitTest<Ap
         response.status == responseCode
 
         where:
-        userName            | responseCode
-        ""                  | 403
-        "user1@test.org.au" | 200
+        bearerToken  | responseCode
+        ""           | 403
+        "Bearer xyz" | 200
 
     }
 
@@ -63,7 +64,7 @@ class ApiInterceptorSpec extends Specification implements InterceptorUnitTest<Ap
         when:
         params.opusId = "private1"
         request.method = "GET"
-        request.addHeader(grailsApplication.config.app.http.header.userName, 'user1@test.org.au')
+        request.addHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer xyz")
         request.addHeader(ApiInterceptor.ACCESS_TOKEN_HEADER, accessToken)
         request.requestURI = "/api/opus/public1/profile"
         request.setAttribute(GrailsApplicationAttributes.CONTROLLER_NAME_ATTRIBUTE, 'example')
@@ -94,7 +95,7 @@ class ApiInterceptorSpec extends Specification implements InterceptorUnitTest<Ap
         when:
         params.opusId = "public1"
         request.method = "GET"
-        request.addHeader(grailsApplication.config.app.http.header.userName, 'user1@test.org.au')
+        request.addHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer xyz")
         request.addHeader(ApiInterceptor.ACCESS_TOKEN_HEADER, accessToken)
         request.requestURI = "/api/opus/public1/profile"
         request.setAttribute(GrailsApplicationAttributes.CONTROLLER_NAME_ATTRIBUTE, 'example')
@@ -164,6 +165,14 @@ class MockAuthService extends AuthService implements Events {
     UserDetails getUserForEmailAddress(String emailAddress) {
         if (emailAddress) {
             new UserDetails()
+        }
+    }
+
+    @Override
+    UserDetails userDetails() {
+        String token = GrailsWebRequest.lookup().getHeader(org.springframework.http.HttpHeaders.AUTHORIZATION)
+        if (token) {
+            new UserDetails(userId: "4", userName: "abc@abc.com")
         }
     }
 }

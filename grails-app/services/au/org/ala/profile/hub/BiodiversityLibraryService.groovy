@@ -1,6 +1,7 @@
 package au.org.ala.profile.hub
 
 import au.org.ala.ws.service.WebService
+import org.apache.http.entity.ContentType
 
 /**
  * Service for interacting with the Biodiversity Library
@@ -31,7 +32,7 @@ class BiodiversityLibraryService {
 
         try {
             if (json) {
-                webService.get(url).resp
+                webService.get(url, [:], ContentType.APPLICATION_JSON, false, false).resp
             } else {
                 new URL(url).text
             }
