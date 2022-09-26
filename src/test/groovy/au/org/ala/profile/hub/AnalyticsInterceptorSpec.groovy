@@ -144,7 +144,7 @@ class MockAuthService extends AuthService implements Events {
 
     @Override
     String getUserId(){
-        def userId = GrailsWebRequest.lookup().getHeader(DEFAULT_AUTH_HEADER)
+        def userId = GrailsWebRequest.lookup()?.getHeader(DEFAULT_AUTH_HEADER)
         userId
     }
 }
