@@ -75,6 +75,7 @@ environments {
     }
     test {
         security.cas.appServerName='http://devt.ala.org.au:8080'
+        grails.serverURL= "http://devt.ala.org.au:8098"
     }
     production {
         grails.logging.jul.usebridge = false
