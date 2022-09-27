@@ -64,7 +64,8 @@ dependencies {
     implementation "org.codehaus.groovy:groovy:$groovyVersion"
     implementation ("org.grails.plugins:cache") {
         exclude module: 'groovy'
-        exclude module: 'groovy-al'
+        exclude module: 'groovy-all'
+        exclude module: 'asset-pipeline-grails'
     }
     implementation ("org.grails.plugins:async") {
         exclude module: 'groovy'
