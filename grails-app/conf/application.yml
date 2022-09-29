@@ -131,7 +131,7 @@ security:
 webservice:
     jwt: true
     jwt-include-legacy-headers: true
-    jwt-scopes: "openid profile email ala roles profile-service/write"
+    jwt-scopes: "openid profile email ala roles profile-service/write users/read"
 
 ---
 biocache:
