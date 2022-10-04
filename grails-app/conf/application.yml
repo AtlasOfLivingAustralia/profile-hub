@@ -109,7 +109,7 @@ security:
         adminRole: 'ROLE_ADMIN'
         uriExclusionFilterPattern:
             - '/assets/.*'
-            - '/openapi/.*'
+            - '/openapi.*'
             - '/webjars/.*'
         uriFilterPattern:
         authenticateOnlyIfCookieFilterPattern: '*'
