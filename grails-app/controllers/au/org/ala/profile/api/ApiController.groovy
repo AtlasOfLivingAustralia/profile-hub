@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import au.org.ala.plugins.openapi.Path
-import org.bouncycastle.ocsp.Req
 
 @Analytics
 @SecurityScheme(name = "auth",
@@ -145,7 +144,7 @@ class ApiController extends BaseController {
                             )
                     )
             ],
-            security = @SecurityRequirement(name="auth")
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
     def getProfiles () {
         if (!params.opusId) {
@@ -233,7 +232,7 @@ class ApiController extends BaseController {
                             )
                     )
             ],
-            security = @SecurityRequirement(name="auth")
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
     def get() {
         if (!params.opusId || !params.profileId) {
@@ -315,7 +314,7 @@ class ApiController extends BaseController {
                             )
                     )
             ],
-            security = @SecurityRequirement(name="auth")
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
     @RequiresAccessToken
     def getDraftProfile() {
@@ -414,7 +413,7 @@ class ApiController extends BaseController {
                             )
                     )
             ],
-            security = @SecurityRequirement(name="auth")
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
     def getImages () {
         if (!params.opusId || !params.profileId ) {
@@ -487,7 +486,7 @@ class ApiController extends BaseController {
                             )
                     )
             ],
-            security = @SecurityRequirement(name="auth")
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
     def getAttributes() {
         if (!params.opusId || !params.profileId) {

@@ -111,6 +111,7 @@ security:
             - '/assets/.*'
             - '/openapi.*'
             - '/webjars/.*'
+            - '/api/.*'
         uriFilterPattern:
         authenticateOnlyIfCookieFilterPattern: '*'
         authenticateOnlyIfLoggedInFilterPattern:
@@ -165,4 +166,11 @@ openapi:
     components:
         security:
             oauth2:
+                password-flow-enabled: true
                 baseUrl: https://auth.ala.org.au/cas/oidc
+                scopes:
+                    openid: "openid scope"
+                    profile: "profile scope"
+                    email: "email scope"
+                    ala: "ala scope"
+                    roles: "user role"
