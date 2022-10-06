@@ -26,7 +26,7 @@ import au.org.ala.plugins.openapi.Path
         type = SecuritySchemeType.HTTP,
         scheme = "bearer"
 )
-@RequireApiKey(roles = ["ROLE_USER"])
+@RequireApiKey()
 class ApiController extends BaseController {
     static namespace = "v1"
     static allowedSortFields = ['scientificNameLower', 'lastUpdated', 'dateCreated']
