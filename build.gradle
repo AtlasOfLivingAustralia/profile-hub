@@ -14,7 +14,7 @@ buildscript {
     }
 }
 
-version "4.0-API-SNAPSHOT"
+version "$profileHubVersion"
 group "au.org.ala"
 boolean inplace = false // Set to true it needed only for development
 
