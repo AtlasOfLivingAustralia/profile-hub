@@ -27,8 +27,8 @@ class ApiInterceptor {
         def method = controllerClass?.getMethod(actionName, [] as Class[])
 
         if (authorization) {
-            def user = authService.userDetails()
-            if (user?.userId) {
+            def user = authService.userDetails() ?: request.getPrincipal().get()
+            if (user) {
                 if (params.opusId && (opus = profileService.getOpus(params.opusId))) {
                     params.isOpusPrivate = opus.privateCollection
                     if ((params.isOpusPrivate

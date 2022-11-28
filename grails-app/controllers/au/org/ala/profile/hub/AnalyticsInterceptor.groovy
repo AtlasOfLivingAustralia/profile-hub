@@ -63,6 +63,12 @@ class AnalyticsInterceptor {
 
                         def userId = authService.getUserId()
                         if (userId) payload[grailsApplication.config.app.analytics.userid] = userId
+                        else {
+                            String authorization = request.getHeader(HttpHeaders.AUTHORIZATION)
+                            if (authorization) {
+                                payload[grailsApplication.config.app.analytics.userid] = Utils.getClientId(authorization)
+                            }
+                        }
                     }
 
                     log.debug("Sending pageview to analytics for ${request.serverName}, $path, $clientId, ${request.remoteAddr}")

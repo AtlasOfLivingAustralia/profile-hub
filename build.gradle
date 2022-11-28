@@ -116,7 +116,7 @@ dependencies {
 
     implementation 'dk.glasius:external-config:3.0.0'
     implementation "org.grails.plugins:ala-auth:5.1.1"
-    implementation "org.grails.plugins:ala-ws-security-plugin:4.3.3-SNAPSHOT"
+    implementation "org.grails.plugins:ala-ws-security-plugin:4.3.4-SNAPSHOT"
     implementation 'org.grails.plugins:csv:1.0.1'
     implementation 'net.sf.opencsv:opencsv:2.3'
     implementation("org.grails.plugins:ala-map-plugin:3.0.1")
