@@ -11,7 +11,9 @@ profileEditor.filter("capitalize", function () {
         if (input) {
             var words = [];
             angular.forEach(input.split(" "), function(word) {
-                words.push(word[0].toUpperCase() + word.slice(1).toLocaleLowerCase());
+                if(word.length > 0) {
+                    words.push(word[0].toUpperCase() + word.slice(1).toLocaleLowerCase());
+                }
             });
             result = words.join(" ");
         }

@@ -61,6 +61,7 @@
                     <li><a href="#branding" du-smooth-scroll class="font-xxsmall">Branding</a></li>
                     <li><a href="#featureLists" du-smooth-scroll class="font-xxsmall">Feature Lists</a></li>
                     <li><a href="#glossary" du-smooth-scroll class="font-xxsmall">Glossary</a></li>
+                    <li><a href="#groupVocab" du-smooth-scroll class="font-xxsmall">Group vocabulary</a></li>
                     <li><a href="#helplinks" du-smooth-scroll class="font-xxsmall">Help links</a></li>
                     <li><a href="#landingpage" du-smooth-scroll class="font-xxsmall">Home page</a></li>
                     <li><a href="#imageSources" du-smooth-scroll class="font-xxsmall">Image options</a></li>
@@ -114,6 +115,8 @@
                 <g:include controller="opus" action="editFeatureListPanel" params="[opusId: params.opusId]"/>
 
                 <g:include controller="opus" action="editSupportingOpusPanel" params="[opusId: params.opusId]"/>
+
+                <g:include controller="opus" action="editGroupPanel" params="[opusId: params.opusId]"/>
 
                 <g:include controller="opus" action="editVocabPanel" params="[opusId: params.opusId]"/>
 

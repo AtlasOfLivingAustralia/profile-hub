@@ -398,6 +398,12 @@ class ProfileService {
         webService.post("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/vocab/${encPath(vocabId)}", vocab, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
     }
 
+    def createVocabulary(String opusId, vocab) {
+        log.debug("Creating vocabulary with data ${vocab}")
+
+        webService.post("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/vocab", vocab, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+    }
+
     def findUsagesOfVocabTerm(String opusId, String vocabId, String termName) {
         log.debug("Finding usages of term ${termName} from vocab ${vocabId}")
 

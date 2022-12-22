@@ -12,8 +12,10 @@
         <div class="row">
             <div class="col-sm-12">
                 <p>{{ vocabName }} settings</p>
-
-                <div class="radio">
+                <alert ng-if="vocabType=='group'" type="info">
+                    You can group attributes listed attribute vocabulary below. Use this vocabulary to create the groups.
+                </alert>
+                <div class="radio" ng-show="allowStrictSelection">
                     <label for="strict_{{$id}}" class="inline-label">
                         <input id="strict_{{$id}}" type="radio" name="strict_{{$id}}" ng-value="true"
                                ng-model="vocabulary.strict">
@@ -21,7 +23,7 @@
                     </label>
                 </div>
 
-                <div class="radio">
+                <div class="radio" ng-show="allowStrictSelection">
                     <label for="notStrict_{{$id}}" class="inline-label">
                         <input id="notStrict_{{$id}}" type="radio" name="strict_{{$id}}" ng-value="false"
                                ng-model="vocabulary.strict">
@@ -64,6 +66,15 @@
                                     Summary? <span class="fa fa-question-circle"
                                                    title="This indicates that the attribute should be displayed as the summary text in the search results."></span>
                                 </th>
+                                <th ng-show="allowDataType">
+                                    Data type <span class="fa fa-question-circle"
+                                                   title="This indicates that the group an attribute is associated. Attributes are displayed in groups on profile page."></span>
+                                </th>
+
+                                <th ng-show="allowGrouping">
+                                    Group by <span class="fa fa-question-circle"
+                                                   title="This indicates that the group an attribute is associated. Attributes are displayed in groups on profile page."></span>
+                                </th>
                                 <th>Options</th>
                                 </thead>
                                 <tbody>
@@ -79,6 +90,41 @@
                                     <td ng-show="allowCategories">
                                         <input id="term{{$index}}" type="radio" ng-model="term.summary" name="summary"
                                                ng-value="true" ng-change="summaryChanged($index)">
+                                    </td>
+                                    <td ng-show="allowDataType">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <select id="role" ng-model="term.dataType"
+                                                            class="form-control">
+                                                        <option value="text">Text</option>
+                                                        <option value="number">Number</option>
+                                                        <option value="range">Number range</option>
+                                                        <option value="singleselect">Single select from list</option>
+                                                        <option value="list">Multi select from list</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-if="['list', 'singleselect'].indexOf(term.dataType) != -1">
+                                                <div class="col-sm-12">
+                                                    <button class="btn btn-primary" ng-click="showConstraintListVocab(term, VocabForm)">
+                                                        Add items to list
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-if="['number', 'range'].indexOf(term.dataType) != -1">
+                                                <label class="sr-only" for="unit">Unit</label>
+                                                <div class="col-sm-12">
+                                                    <input type="text" class="form-control" id="unit" placeholder="enter unit"  ng-model="term.unit">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td ng-show="allowGrouping">
+                                        <select id="role" ng-model="term.groupBy"
+                                                class="form-control" ng-options="option.name for option in $parent.groupVocabulary.terms track by option.termId">
+                                            <option value="">No group</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <div class="inline-block">
