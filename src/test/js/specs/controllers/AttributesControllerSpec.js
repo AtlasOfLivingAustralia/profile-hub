@@ -222,7 +222,11 @@ describe("AttributesController tests", function () {
             "uuid": "uuid1",
             "title": "Attr Title", // titles are capitalized on save
             "text": "attrText",
-            "significantEdit": false
+            "significantEdit": false,
+            numbers: undefined,
+            numberRange: undefined,
+            unit: undefined,
+            constraintList: undefined
         });
     });
 
@@ -255,7 +259,11 @@ describe("AttributesController tests", function () {
             "title": "Attr Title", // titles are capitalized on save
             "text": "attrText",
             "original": {uuid: "uuid2"},
-            "significantEdit": false
+            "significantEdit": false,
+            numbers: undefined,
+            numberRange: undefined,
+            unit: undefined,
+            constraintList: undefined
         });
     });
 
@@ -276,7 +284,11 @@ describe("AttributesController tests", function () {
             "title": "Attr Title", // titles are capitalized on save
             "text": "attrText",
             "creators": "creatorList",
-            "significantEdit": false
+            "significantEdit": false,
+            numbers: undefined,
+            numberRange: undefined,
+            unit: undefined,
+            constraintList: undefined
         });
     });
 
@@ -297,7 +309,11 @@ describe("AttributesController tests", function () {
             "title": "Attr Title", // titles are capitalized on save
             "text": "attrText",
             "editors": "editorList",
-            "significantEdit": false
+            "significantEdit": false,
+            numbers: undefined,
+            numberRange: undefined,
+            unit: undefined,
+            constraintList: undefined
         });
     });
 
