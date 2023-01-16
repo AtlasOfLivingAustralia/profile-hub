@@ -151,9 +151,6 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
                     resolve: {
                         vocabId: function() {
                             return term.constraintListVocab;
-                        },
-                        callingScope: function () {
-                            return $scope;
                         }
                     }
                 });
@@ -427,7 +424,7 @@ profileEditor.controller('RemoveTermController', function ($modalInstance, usage
     }
 });
 
-profileEditor.controller('AddVocabularyPopupController', function ($modalInstance, $scope, vocabId, callingScope) {
+profileEditor.controller('AddVocabularyPopupController', function ($modalInstance, $scope, vocabId) {
     var self = this;
 
     $scope.vocabId = vocabId;
