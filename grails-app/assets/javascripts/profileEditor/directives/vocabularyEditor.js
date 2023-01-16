@@ -15,7 +15,8 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
             allowReplacement: '@',
             allowGrouping: '@',
             allowDataType: '@',
-            helpUrl: '@'
+            helpUrl: '@',
+            sharedObject: '='
         },
         templateUrl: '/profileEditor/vocabularyEditor.htm',
         controller: ['$scope', 'profileService', 'util', 'messageService', '$modal', '$filter', '$rootScope', function ($scope, profileService, util, messageService, $modal, $filter, $rootScope) {
@@ -35,7 +36,9 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
             $scope.allowGrouping = false;
             $scope.allowDataType = false;
             $scope.allMandatory = false; // force all terms to be mandatory
-            $scope.dataTypes = ['text', 'number', 'range', 'list']
+            $scope.dataTypes = ['text', 'number', 'range', 'list'];
+            if($scope.sharedObject)
+                $scope.sharedObject.directiveScope = $scope;
 
             var capitalize = $filter("capitalize");
             var orderBy = $filter("orderBy");
@@ -81,7 +84,7 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
                                 showRemoveTermPopup(data, index, form)
                             }
                             else {
-                                messageService.alert("Cannot delete term since it is used by atleast once. Remove linkage to delete the term.");
+                                messageService.alert("Cannot delete term since it is used at least once. Remove linkage to delete the term.");
                             }
                         }
                     },
@@ -148,6 +151,9 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
                     resolve: {
                         vocabId: function() {
                             return term.constraintListVocab;
+                        },
+                        callingScope: function () {
+                            return $scope;
                         }
                     }
                 });
@@ -241,6 +247,8 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
                         messageService.alert("An error occurred while updating the vocabulary.");
                     }
                 );
+
+                return promise;
             };
 
             $scope.loadVocabulary = function(form) {
@@ -419,13 +427,21 @@ profileEditor.controller('RemoveTermController', function ($modalInstance, usage
     }
 });
 
-profileEditor.controller('AddVocabularyPopupController', function ($modalInstance, $scope, vocabId) {
+profileEditor.controller('AddVocabularyPopupController', function ($modalInstance, $scope, vocabId, callingScope) {
     var self = this;
 
     $scope.vocabId = vocabId;
+    $scope.sharedObject = {};
 
     self.ok = function() {
-        $modalInstance.close({vocabId: $scope.vocabId});
+        if ($scope.ListVocabularyForm.$dirty && $scope.sharedObject.directiveScope) {
+            var promise = $scope.sharedObject.directiveScope.saveVocabulary($scope.ListVocabularyForm);
+            promise.then(function (data) {
+                $modalInstance.close({vocabId: data.vocabId});
+            });
+        } else {
+            $modalInstance.close({vocabId: $scope.vocabId});
+        }
     };
 
     self.cancel = function() {

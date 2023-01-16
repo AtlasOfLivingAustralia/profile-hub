@@ -753,4 +753,384 @@ describe("AttributesController tests", function () {
         // should add a 3rd attribute because even though mandatory2 exists in the attributes list, it is from a supporting collection
         expect(scope.attrCtrl.attributeTitles.length).toBe(3);
     });
+
+    describe("compareTitles", function() {
+        it("should consider group by order when sorting", function() {
+            var array = [{ groupBy: { order: 1 }, order: 1 }, { groupBy: { order: 2 }, order: 2 }];
+            var expected = [{ groupBy: { order: 1 }, order: 1 }, { groupBy: { order: 2 }, order: 2 }];
+            expect(array.sort(scope.attrCtrl.compareTitles)).toEqual(expected);
+
+            array = [{ groupBy: { order: 2 }, order: 2 }, { groupBy: { order: 1 }, order: 1 }];
+            expected = [{ groupBy: { order: 1 }, order: 1 }, { groupBy: { order: 2 }, order: 2 }];
+            expect(array.sort(scope.attrCtrl.compareTitles)).toEqual(expected);
+
+
+            array = [{ name: "a" , order: 4}, { order: 3 },{ groupBy: { order: 2 }, order: 2 }, { groupBy: { order: 1 }, order: 1 }];
+            expected = [{ groupBy: { order: 1 }, order: 1 }, { groupBy: { order: 2 }, order: 2 }, {order: 3}, {name: 'a', order: 4}];
+            console.log(array.sort(scope.attrCtrl.compareTitles))
+            expect(array.sort(scope.attrCtrl.compareTitles)).toEqual(expected);
+        });
+
+        it("should consider order when sorting if group by is not present", function() {
+            var array = [{ order: 1 }, { order: 2 }];
+            var expected = [{ order: 1 }, { order: 2 }];
+            expect(array.sort(scope.attrCtrl.compareTitles)).toEqual(expected);
+
+            var array = [{ order: 2 }, { order: 1 }];
+            var expected = [{ order: 1 }, { order: 2 }];
+            expect(array.sort(scope.attrCtrl.compareTitles)).toEqual(expected);
+        });
+
+    });
+
+    describe("isNumberRangeValid", function() {
+        var attribute, form;
+
+        beforeEach(function() {
+            attribute = {};
+            form = {
+                $setValidity: function(key, value) {}
+            };
+            spyOn(form, '$setValidity');
+        });
+
+        it("should set form validity to true if number range is valid", function() {
+            attribute.numberRange = {from: 10, to: 20};
+            attribute.dataType = 'range';
+
+            scope.attrCtrl.isNumberRangeValid(attribute, form);
+
+            expect(form.$setValidity).toHaveBeenCalledWith('fromgreaterthanto', true);
+        });
+
+        it("should set form validity to false if from is greater than to", function() {
+            attribute.numberRange = {from: 20, to: 10};
+            attribute.dataType = 'range';
+
+            scope.attrCtrl.isNumberRangeValid(attribute, form);
+
+            expect(form.$setValidity).toHaveBeenCalledWith('fromgreaterthanto', false);
+        });
+
+        it("should not set form validity if dataType is not range", function() {
+            attribute.numberRange = {from: 20, to: 10};
+            attribute.dataType = 'other';
+
+            scope.attrCtrl.isNumberRangeValid(attribute, form);
+
+            expect(form.$setValidity).not.toHaveBeenCalled();
+        });
+
+        it("should not set form validity if numberRange is not defined", function() {
+            attribute.dataType = 'range';
+
+            scope.attrCtrl.isNumberRangeValid(attribute, form);
+
+            expect(form.$setValidity).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("getSetConstraintList", function() {
+        var attribute, label;
+
+        beforeEach(function() {
+            attribute = {
+                dataType: "singleselect",
+                constraintList: []
+            };
+            label = {
+                termId: "term1"
+            };
+        });
+
+        it("should return value of model for single select data type", function() {
+            var constraint = scope.attrCtrl.getSetConstraintList(attribute, label)();
+            expect(constraint).toBeUndefined();
+            attribute.constraintList = ['term2'];
+            constraint = scope.attrCtrl.getSetConstraintList(attribute, label)();
+            expect(constraint).toEqual('term2');
+        });
+
+        it("should add term to single select list", function() {
+            attribute.constraintList = [];
+            var fn = scope.attrCtrl.getSetConstraintList(attribute, label);
+            fn('selected');
+            expect(attribute.constraintList.length).toEqual(1);
+            expect(attribute.constraintList[0]).toEqual(label.termId);
+
+            // selection should remain the same
+            fn('selected');
+            expect(attribute.constraintList.length).toEqual(1);
+            expect(attribute.constraintList[0]).toEqual(label.termId);
+        });
+
+        it("should return undefined when no constraint is set for list data type", function() {
+            attribute.dataType = "list";
+            attribute.constraintList = [];
+            var constraint = scope.attrCtrl.getSetConstraintList(attribute, label)();
+            expect(constraint).toBeUndefined();
+
+            attribute.constraintList = ['term1', 'term2'];
+            var constraint = scope.attrCtrl.getSetConstraintList(attribute, label)();
+            expect(constraint).toEqual('term1');
+        });
+
+        it("should add constraint for list attribute", function() {
+            attribute.dataType = "list";
+            attribute.constraintList = [];
+            scope.attrCtrl.getSetConstraintList(attribute, label)('clicked');
+            expect(attribute.constraintList).toEqual(["term1"]);
+
+            attribute.dataType = "list";
+            attribute.constraintList = ["term1"];
+            scope.attrCtrl.getSetConstraintList(attribute, label)('clicked');
+            expect(attribute.constraintList).toEqual([]);
+        });
+    });
+
+    describe('findAttributesByTitle', function() {
+        it('should return attributes with the given title', function() {
+            scope.attrCtrl.attributes = [{ title: 'attribute1', value: 'value1' }, { title: 'attribute2', value: 'value2' }, { title: 'attribute1', value: 'value3' }];
+            var title = 'attribute1';
+
+            var result = scope.attrCtrl.findAttributesByTitle(title);
+            expect(result.length).toEqual(2);
+            expect(result[0]).toEqual({ title: 'attribute1', value: 'value1' });
+            expect(result[1]).toEqual({ title: 'attribute1', value: 'value3' });
+        });
+    });
+
+    describe('findAttributeVocabByTitle', function() {
+        beforeEach(function() {
+            scope.attrCtrl.attributeVocabTerms = [{name: 'title1', termId: '1'}, {name: 'title2', termId: '2'}, {name: 'title3', termId: '3'}];
+        });
+
+        it('should return the vocab term with the matching title', function() {
+            var title = 'title2';
+            var expectedVocabTerm = {name: 'title2', termId: '2'};
+
+            var result = scope.attrCtrl.findAttributeVocabByTitle(title);
+
+            expect(result).toEqual(expectedVocabTerm);
+        });
+
+        it('should return null if no matching title is found', function() {
+            var title = 'non-existent title';
+
+            var result = scope.attrCtrl.findAttributeVocabByTitle(title);
+
+            expect(result).toBe(null);
+        });
+    });
+
+    describe("getGroupAttributes", function() {
+
+        beforeEach(function() {
+            scope.attrCtrl.showAttribute = function(attribute) { return true; };
+            scope.attrCtrl.attributes = [
+                { uuid: "1", title: "Attribute 1", groupBy: { uuid: "g1" }},
+                { uuid: "2", title: "attribute 2", groupBy: { uuid: "g1" }},
+                { uuid: "3", title: "attribute 3", groupBy: { uuid: "g2" }},
+                { uuid: "4", title: "attribute 4", groupBy: { uuid: "g2" }},
+                { uuid: "5", title: "attribute 5" }
+            ];
+        });
+
+        it("should return an array of attributes that belong to the same group", function() {
+            var result = scope.attrCtrl.getGroupAttributes({ uuid: "2", title: "attribute 2", groupBy: { uuid: "g1" }});
+            expect(result).toEqual([
+                { uuid: "1", title: "Attribute 1", groupBy: { uuid: "g1" } },
+                { uuid: "2", title: "attribute 2", groupBy: { uuid: "g1" } }
+            ]);
+        });
+
+        it("should return undefined if the input attribute doesn't belong to any group", function() {
+            var result = scope.attrCtrl.getGroupAttributes({ uuid: "5", title: "attribute 5" });
+            expect(result).toEqual(undefined);
+        });
+    });
+
+    describe("isFirstAttributeInGroup", function() {
+        beforeEach(function () {
+            // mock self.attributes
+            scope.attrCtrl.attributes = [
+                {title: "Title 1", groupBy: {uuid: "123"}},
+                {title: "Title 2", groupBy: {uuid: "123"}},
+                {title: "Title 3", groupBy: {uuid: "456"}},
+                {title: "Title 4", groupBy: null}
+            ];
+            // mock self.showTitleGroup to always return true
+            scope.attrCtrl.showTitleGroup = function () {
+                return true;
+            }
+            // mock self.showAttribute to always return true
+            scope.attrCtrl.showAttribute = function () {
+                return true;
+            }
+        });
+
+        it("should return true if the attribute is the first in its group", function () {
+            expect(scope.attrCtrl.isFirstAttributeInGroup("Title 1")).toBe(true);
+            expect(scope.attrCtrl.isFirstAttributeInGroup("Title 3")).toBe(true);
+        });
+
+        it("should return false if the attribute is not the first in its group", function () {
+            expect(scope.attrCtrl.isFirstAttributeInGroup("Title 2")).toBe(false);
+        });
+    });
+
+
+    describe("isLastAttributeInGroup", function() {
+        beforeEach(function () {
+            // mock self.attributes
+            scope.attrCtrl.attributes = [
+                {title: "Title 1", groupBy: {uuid: "123"}},
+                {title: "Title 2", groupBy: {uuid: "123"}},
+                {title: "Title 3", groupBy: {uuid: "456"}},
+                {title: "Title 4", groupBy: null}
+            ];
+            // mock self.showTitleGroup to always return true
+            scope.attrCtrl.showTitleGroup = function () {
+                return true;
+            }
+            // mock self.showAttribute to always return true
+            scope.attrCtrl.showAttribute = function () {
+                return true;
+            }
+        });
+
+        it("should return true if the attribute is the last in its group", function () {
+            expect(scope.attrCtrl.isLastAttributeInGroup("Title 2")).toBe(true);
+            expect(scope.attrCtrl.isLastAttributeInGroup("Title 3")).toBe(true);
+        });
+
+        it("should return false if the attribute is not the last in its group", function () {
+            expect(scope.attrCtrl.isLastAttributeInGroup("Title 1")).toBe(false);
+        });
+    });
+
+    describe('hasContent', function() {
+        var attribute;
+
+        beforeEach(function() {
+            attribute = {};
+        });
+
+        it('should return false for a number data type with no numbers', function() {
+            attribute.dataType = 'number';
+            attribute.numbers = null;
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(false);
+        });
+
+        it('should return true for a number data type with numbers', function() {
+            attribute.dataType = 'number';
+            attribute.numbers = [1, 2, 3];
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(true);
+        });
+
+        it('should return false for a range data type with no range', function() {
+            attribute.dataType = 'range';
+            attribute.numberRange = {};
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(false);
+        });
+
+        it('should return true for a range data type with a range', function() {
+            attribute.dataType = 'range';
+            attribute.numberRange = { from: 1, to: 10 };
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(true);
+        });
+
+        it('should return false for a singleselect data type with no constraintList', function() {
+            attribute.dataType = 'singleselect';
+            attribute.constraintList = null;
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(false);
+        });
+
+        it('should return true for a singleselect data type with a constraintList', function() {
+            attribute.dataType = 'singleselect';
+            attribute.constraintList = [1];
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(true);
+        });
+
+        it('should return false for a list data type with no constraintList', function() {
+            attribute.dataType = 'list';
+            attribute.constraintList = null;
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(false);
+        });
+
+        it('should return true for a list data type with a constraintList', function() {
+            attribute.dataType = 'list';
+            attribute.constraintList = [1];
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(true);
+        });
+
+        it('should return false for a text data type with no text', function() {
+            attribute.dataType = 'text';
+            attribute.text = null;
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(false);
+        });
+
+        it('should return true for a text data type with text', function() {
+            attribute.dataType = 'text';
+            attribute.text = 'Some Text';
+            expect(scope.attrCtrl.hasContent(attribute)).toBe(true);
+        });
+    });
+
+    describe("getContent", function() {
+
+        var attribute;
+
+        beforeEach(function() {
+            attribute = {};
+        });
+
+        it("should return numbers for 'number' dataType", function() {
+            attribute.dataType = 'number';
+            attribute.numbers = [1,2,3];
+            expect(scope.attrCtrl.getContent(attribute)).toEqual([1,2,3]);
+        });
+
+        it("should return number range for 'range' dataType", function() {
+            attribute.dataType = 'range';
+            attribute.numberRange = {from: 1, to: 2};
+            expect(scope.attrCtrl.getContent(attribute)).toEqual({from: 1, to: 2});
+        });
+
+        it("should return a string of comma separated names for 'singleselect' and 'list' dataType", function() {
+            attribute.dataType = 'singleselect';
+            attribute.constraintListExpanded = [{name: 'Option 1', uuid: 1}, {name: 'Option 2', uuid: 2}];
+            attribute.constraintList = [1, 2];
+            expect(scope.attrCtrl.getContent(attribute)).toEqual("Option 1, Option 2");
+        });
+
+        it("should return the value of 'text' for any other dataType", function() {
+            attribute.dataType = 'text';
+            attribute.text = "Sample Text";
+            expect(scope.attrCtrl.getContent(attribute)).toEqual("Sample Text");
+        });
+
+    });
+
+    describe('removeNumber', function() {
+        var attribute, form;
+
+        beforeEach(function() {
+            attribute = { numbers: [1, 2, 3] };
+            form = jasmine.createSpyObj('form', ['$setDirty']);
+        });
+
+        it('should remove the number at the specified index', function() {
+            scope.attrCtrl.removeNumber(attribute, form, 1);
+            expect(attribute.numbers).toEqual([1, 3]);
+            expect(form.$setDirty).toHaveBeenCalled();
+        });
+
+        it('should do nothing if attribute has no numbers', function() {
+            attribute.numbers = null;
+            scope.attrCtrl.removeNumber(attribute, form, 1);
+            expect(attribute.numbers).toBeNull();
+            expect(form.$setDirty).not.toHaveBeenCalled();
+        });
+    });
 });

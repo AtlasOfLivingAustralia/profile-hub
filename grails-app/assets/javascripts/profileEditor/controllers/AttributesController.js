@@ -119,7 +119,7 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
                 break;
             case 'singleselect':
             case 'list':
-                show = attribute.constraintList && (attribute.constraintList.length > 0);
+                show = attribute.constraintList ? (attribute.constraintList.length > 0) : false;
                 break;
             case 'text':
             default:
@@ -225,6 +225,8 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
         }
     }
 
+    self.getGroupAttributes = getGroupAttributes;
+
     function loadVocabulary() {
         if (self.opus.attributeVocabUuid != null) {
             var vocabPromise = profileService.getOpusVocabulary(self.opusId, self.opus.attributeVocabUuid);
@@ -283,43 +285,6 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
         }
     }
 
-    function getSetConstraintList(attribute, title) {
-        console.log(attribute);
-        console.log(title);
-        debugger;
-        var singleselect = title.dataType == 'singleselect'
-        return function(){
-            debugger;
-            var termId = this.termId;
-            if(arguments.length == 0) {
-                if (attribute.constraintList.indexOf(termId) >= 0){
-                    return termId;
-                }
-                else {
-                    return;
-                }
-            }
-            else {
-                switch(title.dataType) {
-                    case 'singleselect':
-                        if(attribute.constraintList.indexOf(termId) == -1) {
-                            attribute.constraintList.splice(0, attribute.constraintList.length);
-                            attribute.constraintList.push(termId);
-                        }
-                        break;
-                    case 'list':
-                        var indexOf = attribute.constraintList.indexOf(termId)
-                        if(indexOf == -1) {
-                            attribute.constraintList.push(termId);
-                        } else {
-                            attribute.constraintList.splice(indexOf, 1);
-                        }
-                        break;
-                }
-            }
-        }
-    }
-
     function loadMandatoryAttributes(vocabularyTerms) {
         if (!self.readonly) {
             var templateAttributes = [];
@@ -360,6 +325,8 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
         return attributes;
     }
 
+    self.findAttributesByTitle = findAttributesByTitle;
+
     function findAttributeVocabByTitle(title) {
         var vocabTerm = null;
 
@@ -372,6 +339,7 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
         return vocabTerm;
     }
 
+    self.findAttributeVocabByTitle = findAttributeVocabByTitle;
 
     function compareTitles(left, right) {
         var compare = -1;
@@ -393,9 +361,10 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
             compare = left.order < right.order ? -1 : 1;
         }
         return compare;
-    }
+    };
+    self.compareTitles = compareTitles;
 
-    function NumberRange(){
+        function NumberRange(){
         this.to = null;
         this.from = null;
         this.toInclusive = true;

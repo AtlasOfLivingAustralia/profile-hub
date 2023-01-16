@@ -3,10 +3,10 @@
     <close-modal close="addVocabularyPopupCtrl.cancel()"></close-modal>
 </div>
 
-<div class="modal-body">
+<div class="modal-body" ng-form="ListVocabularyForm">
     <vocabulary-editor vocab-id="vocabId"
                        vocab-name="Term vocabulary" allow-mandatory="false" allow-categories="false" allow-strict-selection="false"
-                       allow-replacement="false">
+                       allow-replacement="false" shared-object="sharedObject">
     </vocabulary-editor>
 </div>
 
