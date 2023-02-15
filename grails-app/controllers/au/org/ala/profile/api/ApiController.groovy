@@ -132,6 +132,10 @@ class ApiController extends BaseController {
                             required = false,
                             description = "the result set will only show profiles at the provided rank"
                     ),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = false,
+                            description = "Access token to read private collection"),
                     @Parameter(name = "Accept-Version",
                             in = ParameterIn.HEADER,
                             required = true,
@@ -146,6 +150,7 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
+    @RequiresAccessToken
     def getProfiles () {
         if (!params.opusId) {
             badRequest "opusId is a required parameter"
@@ -220,6 +225,10 @@ class ApiController extends BaseController {
                                     type = "boolean",
                                     defaultValue = "false"
                             )),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = false,
+                            description = "Access token to read private collection"),
                     @Parameter(name = "Accept-Version",
                             in = ParameterIn.HEADER,
                             required = true,
@@ -234,6 +243,7 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
+    @RequiresAccessToken
     def get() {
         if (!params.opusId || !params.profileId) {
             badRequest "opusId and profileId are required parameters"
@@ -401,6 +411,10 @@ class ApiController extends BaseController {
                                     defaultValue = '0'
                             )
                     ),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = false,
+                            description = "Access token to read private collection"),
                     @Parameter(name = "Accept-Version",
                             in = ParameterIn.HEADER,
                             required = true,
@@ -415,6 +429,7 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
+    @RequiresAccessToken
     def getImages () {
         if (!params.opusId || !params.profileId ) {
             badRequest "opusId and profileId are required parameters"
@@ -474,6 +489,10 @@ class ApiController extends BaseController {
                             in = ParameterIn.PATH,
                             required = true,
                             description = "This is the attribute id or attribute name. Multiple attributes must be comma separated."),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = false,
+                            description = "Access token to read private collection"),
                     @Parameter(name = "Accept-Version",
                             in = ParameterIn.HEADER,
                             required = true,
@@ -488,6 +507,7 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
+    @RequiresAccessToken
     def getAttributes() {
         if (!params.opusId || !params.profileId) {
             badRequest "opusId and profileId are required parameters"
