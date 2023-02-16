@@ -150,7 +150,6 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
-    @RequiresAccessToken
     def getProfiles () {
         if (!params.opusId) {
             badRequest "opusId is a required parameter"
@@ -243,7 +242,6 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
-    @RequiresAccessToken
     def get() {
         if (!params.opusId || !params.profileId) {
             badRequest "opusId and profileId are required parameters"
@@ -429,7 +427,6 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
-    @RequiresAccessToken
     def getImages () {
         if (!params.opusId || !params.profileId ) {
             badRequest "opusId and profileId are required parameters"
@@ -507,7 +504,6 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
-    @RequiresAccessToken
     def getAttributes() {
         if (!params.opusId || !params.profileId) {
             badRequest "opusId and profileId are required parameters"
