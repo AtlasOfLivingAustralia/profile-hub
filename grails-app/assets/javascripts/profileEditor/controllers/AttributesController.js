@@ -445,7 +445,7 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
 
     self.isNumberRangeValid = function(attribute, form) {
         if(attribute.numberRange && (attribute.dataType == 'range')) {
-            if(attribute.numberRange.from >= attribute.numberRange.to) {
+            if(attribute.numberRange.from > attribute.numberRange.to) {
                 form.$setValidity('fromgreaterthanto', false);
                 return false;
             }
