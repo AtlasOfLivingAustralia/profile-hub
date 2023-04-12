@@ -253,5 +253,20 @@ class UrlMappings {
         if (Environment.current == Environment.DEVELOPMENT) {
             "/console/$action?/$id?(.$format)?" controller: 'console'
         }
+
+        // The following are APIs.
+        group("/api") {
+            get "/opus/$opusId/profile" (version: "1.0", controller: "api", action: "getProfiles", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId" (version: "1.0", controller: "api", action: "get", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/image" (version: "1.0", controller: "api", action: "getImages", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/attribute/$attributeId" (version: "1.0", controller: "api", action: "getAttributes", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/draft" (version: "1.0", controller: "api", action: "getDraftProfile", namespace: "v1")
+        }
+
+        "/openapi/$action?/$id?(.$format)?"(controller: "openApi")
+        name openapiDoc: "/openapi/openapi(.$format)?" {
+            controller = 'openApi'
+            action = "openapi"
+        }
     }
 }

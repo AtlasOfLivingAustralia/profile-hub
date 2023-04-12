@@ -8,23 +8,30 @@ import au.org.ala.web.AuthService
 import org.apache.http.HttpStatus
 
 import java.lang.annotation.Annotation
+import au.org.ala.web.IAuthService
 
 class AccessControlInterceptor {
 
     AuthService authService
     ProfileService profileService
+    IAuthService delegateService
+
+    int order = LOWEST_PRECEDENCE - 50
 
     AccessControlInterceptor(){
         matchAll()
         .excludes(uri: '/notAuthorised')
         .excludes(uri: '/error')
         .excludes(uri: '/notFound')
+        .excludes(uri: '/openapi/**') // todo: needed?
+        .excludes(uri: '/api/**') // todo: needed?
+        .excludes(uri: '/webjars/**')
     }
 
     boolean  before () {
         params.currentUserId = authService.userId
         params.currentUser = authService.getDisplayName()
-        List<String> usersRoles = request.userPrincipal ? request.userPrincipal.attributes.authority.split(",") : []
+        List<String> usersRoles = delegateService?.getUserRoles()?.asList()
         params.isALAAdmin = usersRoles.contains(Role.ROLE_ADMIN.toString())
 
         if (grailsApplication.config.security.authorisation.disable != "true") {
@@ -53,26 +60,26 @@ class AccessControlInterceptor {
                         if (params.opusId && !params.opusId.contains(",") && (opus = profileService.getOpus(params.opusId))) {
 
                             params.isOpusAdmin = opus.authorities?.find {
-                                it.userId == request.userPrincipal?.attributes?.userid && it.role == Role.ROLE_PROFILE_ADMIN.toString()
+                                it.userId == delegateService?.getUserId() && it.role == Role.ROLE_PROFILE_ADMIN.toString()
                             } != null
 
                             params.isOpusEditor = opus.authorities?.find {
-                                it.userId == request.userPrincipal?.attributes?.userid && it.role == Role.ROLE_PROFILE_EDITOR.toString()
+                                it.userId == delegateService?.getUserId() && it.role == Role.ROLE_PROFILE_EDITOR.toString()
                             } != null || params.isOpusAdmin
 
                             params.isOpusAuthor = opus.authorities?.find {
-                                it.userId == request.userPrincipal?.attributes?.userid && it.role == Role.ROLE_PROFILE_AUTHOR.toString()
+                                it.userId == delegateService?.getUserId() && it.role == Role.ROLE_PROFILE_AUTHOR.toString()
                             } != null || params.isOpusAdmin //|| params.isOpusEditor
 
                             params.isOpusReviewer = opus.authorities?.find {
-                                it.userId == request.userPrincipal?.attributes?.userid && it.role == Role.ROLE_PROFILE_REVIEWER.toString()
+                                it.userId == delegateService?.getUserId() && it.role == Role.ROLE_PROFILE_REVIEWER.toString()
                             } != null || params.isOpusAdmin || params.isOpusAuthor || params.isOpusEditor
 
                             params.isOpusUser = !opus.privateCollection || opus.authorities?.find {
-                                it.userId == request.userPrincipal?.attributes?.userid && it.role == Role.ROLE_USER.toString()
+                                it.userId == delegateService?.getUserId() && it.role == Role.ROLE_USER.toString()
                             } != null || params.isOpusReviewer || params.isOpusAdmin || params.isOpusAuthor || params.isOpusEditor
                         }
-                        log.debug("User ${request.userPrincipal?.name} is : Opus Admin? ${params.isOpusAdmin}; Opus editor? ${params.isOpusEditor}; Opus author? ${params.isOpusAuthor}; Opus reviewer? ${params.isOpusReviewer}; Opus user? ${params.isOpusUser};")
+                        log.debug("User ${delegateService.getDisplayName()} is : Opus Admin? ${params.isOpusAdmin}; Opus editor? ${params.isOpusEditor}; Opus author? ${params.isOpusAuthor}; Opus reviewer? ${params.isOpusReviewer}; Opus user? ${params.isOpusUser};")
 
                         if (!opus || !opus.privateCollection || params.isOpusUser || controllerAction.isAnnotationPresent(PrivateCollectionSecurityExempt)) {
                             if (controllerAction.isAnnotationPresent(Secured) || controllerClass.getClazz().isAnnotationPresent(Secured)) {
@@ -84,16 +91,16 @@ class AccessControlInterceptor {
                                     if (opus) {
                                         if (requiredRole == Role.ROLE_PROFILE_ADMIN.toString()) {
                                             authorised = params.isOpusAdmin
-                                            log.debug "Action ${actionFullName} requires ROLE_PROFILE_ADMIN. User ${request.userPrincipal?.name} has it? ${authorised}"
+                                            log.debug "Action ${actionFullName} requires ROLE_PROFILE_ADMIN. User ${authService?.getDisplayName()} has it? ${authorised}"
                                         } else if (requiredRole == Role.ROLE_PROFILE_EDITOR.toString()) {
                                             authorised = params.isOpusAdmin || params.isOpusAuthor || params.isOpusEditor
-                                            log.debug "Action ${actionFullName} requires ${requiredRole}. User ${request.userPrincipal?.name} has it? ${authorised}"
+                                            log.debug "Action ${actionFullName} requires ${requiredRole}. User ${authService?.getDisplayName()} has it? ${authorised}"
                                         } else if (requiredRole == Role.ROLE_PROFILE_AUTHOR.toString()) {
                                             authorised = params.isOpusAdmin || params.isOpusAuthor
-                                            log.debug "Action ${actionFullName} requires ${requiredRole}. User ${request.userPrincipal?.name} has it? ${authorised}"
+                                            log.debug "Action ${actionFullName} requires ${requiredRole}. User ${authService?.getDisplayName()} has it? ${authorised}"
                                         } else if (requiredRole == Role.ROLE_PROFILE_REVIEWER.toString()) {
                                             authorised = params.isOpusAdmin || params.isOpusAuthor || params.isOpusReviewer || params.isOpusEditor
-                                            log.debug "Action ${actionFullName} requires ${requiredRole}. User ${request.userPrincipal?.name} has it? ${authorised}"
+                                            log.debug "Action ${actionFullName} requires ${requiredRole}. User ${authService?.getDisplayName()} has it? ${authorised}"
                                         } else if (requiredRole == Role.ROLE_USER.toString()) {
                                             authorised = params.isOpusAdmin || params.isOpusAuthor || params.isOpusReviewer || params.isOpusUser || params.isOpusEditor
                                         }
@@ -114,7 +121,7 @@ class AccessControlInterceptor {
                         params.isOpusEditor = true
                         params.isOpusReviewer = true
                         params.isOpusUser = true
-                        log.debug "User ${request.userPrincipal?.name} is an ALA Admin user"
+                        log.debug "User ${authService?.getDisplayName()} is an ALA Admin user"
                         authorised = true
                     }
                 }
@@ -123,7 +130,7 @@ class AccessControlInterceptor {
             }
 
             if (!authorised) {
-                log.debug "User ${request.userPrincipal?.name} is not authorised to access action ${actionFullName}"
+                log.debug "User ${authService?.getDisplayName()} is not authorised to access action ${actionFullName}"
                 response.status = HttpStatus.SC_FORBIDDEN
                 response.sendError(HttpStatus.SC_FORBIDDEN)
             }

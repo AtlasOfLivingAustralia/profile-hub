@@ -4,7 +4,7 @@ class NoCacheInterceptor {
     private static final String HEADER_PRAGMA = "Pragma";
     private static final String HEADER_EXPIRES = "Expires";
     private static final String HEADER_CACHE_CONTROL = "Cache-Control";
-
+    int order = LOWEST_PRECEDENCE - 30
     NoCacheInterceptor() {
         matchAll()
     }

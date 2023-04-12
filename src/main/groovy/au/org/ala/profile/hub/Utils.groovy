@@ -1,6 +1,6 @@
 package au.org.ala.profile.hub
 
-
+import grails.converters.JSON
 import org.apache.http.HttpStatus
 import org.apache.tika.config.TikaConfig
 import org.apache.tika.mime.MimeTypeException
@@ -111,5 +111,17 @@ class Utils {
     static Date parseISODateToObject(String date){
         DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
         df1.parse(date);
+    }
+
+    static getClientId (String authorization) {
+        if (authorization) {
+            authorization = authorization.replaceAll("Bearer\\s+", "")
+            String [] parts = authorization.split("\\.")
+            if (parts.size() == 3) {
+                def claims = new String(parts[1]?.decodeBase64())
+                claims = JSON.parse(claims)
+                return claims["client_id"]
+            }
+        }
     }
 }
