@@ -281,6 +281,9 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
             var vocabPromise = profileService.getOpusVocabulary(self.opusId, title.constraintListVocab);
             vocabPromise.then(function (data) {
                 title.constraintList = data.terms;
+                title.constraintList && title.constraintList.sort(function (a, b) {
+                    return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
+                });
             });
         }
     }
