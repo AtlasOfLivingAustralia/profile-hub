@@ -116,15 +116,18 @@ dependencies {
     implementation "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
 
     implementation 'dk.glasius:external-config:3.0.0'
-    implementation "org.grails.plugins:ala-auth:5.2.0-SNAPSHOT"
-    implementation "org.grails.plugins:ala-ws-security-plugin:4.3.5-SNAPSHOT"
+
+    implementation "org.grails.plugins:ala-auth:$alaSecurityLibsVersion"
+    implementation "org.grails.plugins:ala-ws-security-plugin:$alaSecurityLibsVersion"
+    if(!inplace){
+        implementation("org.grails.plugins:ala-ws-plugin:$alaSecurityLibsVersion")
+    }
+    testImplementation "au.org.ala:userdetails-service-client:$alaSecurityLibsVersion"
+
     implementation 'org.grails.plugins:csv:1.0.1'
     implementation 'net.sf.opencsv:opencsv:2.3'
     implementation("org.grails.plugins:ala-map-plugin:3.0.1")
     implementation 'au.org.ala.grails:interceptor-annotation-matcher:1.0.0'
-    if(!inplace){
-        implementation("org.grails.plugins:ala-ws-plugin:3.1.2")
-    }
 
     implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
     implementation("org.grails.plugins:ala-admin-plugin:2.3.0")
@@ -142,7 +145,6 @@ dependencies {
         implementation "org.grails.plugins:console:1.5.11"
     }
 
-    testImplementation "au.org.ala:userdetails-service-client:2.0.0"
 }
 
 bootRun {
