@@ -1,3 +1,4 @@
+<g:set var="authService" bean="authService"/>
 <g:if test="${params.currentUser}">
 <li class="dropdown font-xsmall" ng-controller="UserDetailController as userCtrl">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" title="Settings" aria-label="Settings">
@@ -44,12 +45,12 @@
             <a role="menuitem"
                tabindex="-1"
                target="_self"
-               href="${request.contextPath}/logout/logout?casUrl=${grailsApplication.config.security.cas.logoutUrl}&appUrl=${grailsApplication.config.serverURL}${request.forwardURI}">
+               href="${request.contextPath}/logout/logout?appUrl=${grailsApplication.config.serverURL}${request.forwardURI}">
                 <span class="fa fa-sign-out">&nbsp;&nbsp;</span>Logout</a>
         </li>
     </ul>
 </li>
 </g:if>
 <g:else>
-    <li><a href="${grailsApplication.config.security.cas.loginUrl}?service=${grailsApplication.config.serverURL}${request.forwardURI}"><span class="fa fa-sign-in">&nbsp;&nbsp;</span>Login</a></li>
+    <li><a href="${authService.loginUrl(request)}"><span class="fa fa-sign-in">&nbsp;&nbsp;</span>Login</a></li>
 </g:else>

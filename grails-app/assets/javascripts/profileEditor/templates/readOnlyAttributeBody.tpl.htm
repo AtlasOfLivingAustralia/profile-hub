@@ -2,7 +2,15 @@
 <div ng-show="attrCtrl.showAttribute(attribute)">
     <div class="row" ng-class="(!$first && attrCtrl.readonly) ? 'padding-top-1' : ''">
         <div class="col-md-12">
-            <div markup-text="attribute.text" class="display-text"></div>
+            <div ng-if="!attribute.dataType || (attribute.dataType == 'text')" markup-text="attribute.text" class="display-text"></div>
+            <div ng-if="attribute.dataType == 'number'" class="display-text">{{attribute.numbers && attribute.numbers.join(', ')}} {{attribute.unit || ''}}</div>
+            <div ng-if="(attribute.dataType == 'range') && attribute.numberRange" class="display-text">
+                From - {{attribute.numberRange.from}} {{attribute.numberRange.fromInclusive ? '(inclusive)' : ''}} {{attribute.unit || ''}}<br>
+                To - {{attribute.numberRange.to}} {{attribute.numberRange.toInclusive ? '(inclusive)' : ''}} {{attribute.unit || ''}}
+            </div>
+            <div ng-if="(['list', 'singleselect'].indexOf(attribute.dataType) > -1) && attribute.constraintList" class="display-text">
+                {{attrCtrl.getContent(attribute)}}
+            </div>
         </div>
 
         <div class="col-md-12" ng-show="attrCtrl.opus.allowFineGrainedAttribution">

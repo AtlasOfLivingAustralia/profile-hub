@@ -2,7 +2,7 @@
 <div class="panel panel-default" id="browse_attributes_edit">
     <div class="panel-body">
         <label for="attributeTitle" class="screen-reader-label">Title</label>
-        <select id="attributeTitle" ng-show="attrCtrl.vocabularyStrict" ng-change="attrCtrl.isName(attribute)"
+        <select id="attributeTitle" ng-show="attrCtrl.vocabularyStrict" ng-change="attrCtrl.attributeChanged(attribute)"
                 ng-model="attribute.title" class="form-control attribute-header-input margin-bottom-1">
             <option value="">--- Select one ---</option>
             <option ng-repeat="(key, value) in attrCtrl.allowedVocabulary | orderBy:'toString()'" value="{{value}}"
@@ -22,8 +22,74 @@
         <label for="attributeContent" class="screen-reader-label">Content</label>
 
         <div ng-show="attribute.matchedAsName" class="small padding-bottom-1"><i class="fa fa-info-circle">&nbsp;</i>This attribute will be displayed below the profile name. Any formatting, images, links, etc will be ignored.</div>
-        <textarea id="attributeContent" ng-model="attribute.text" name="attribute" ckeditor="richTextFullToolbar"></textarea>
+        <textarea id="attributeContent" ng-if="!attribute.titleTerm.dataType || attribute.titleTerm.dataType == 'text'" ng-model="attribute.text" name="attribute" ckeditor="richTextFullToolbar"></textarea>
+        <div ng-if="attribute.titleTerm.dataType == 'number'">
+            <div class="form-inline margin-bottom-1" ng-repeat="number in attribute.numbers track by $index">
+                <div class="form-group">
+                    <input class="form-control" type="number" ng-model="attribute.numbers[$index]">
+                    <button class="btn btn-danger" ng-click="attrCtrl.removeNumber(attribute, AttributeForm, $index)">Remove</button>
+                </div>
+            </div>
+            <button class="btn btn-default" ng-click="attrCtrl.addNumber(attribute)">Add number</button>
+        </div>
+        <div ng-if="attribute.titleTerm.dataType == 'range'">
+            <div class="form-horizontal" ng-if="attribute.numberRange">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="fromRange">From</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="fromRange" placeholder="enter a number" ng-model="attribute.numberRange.from" ng-change="attrCtrl.isValid(attribute, AttributeForm)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="checkbox" ng-model="attribute.numberRange.fromInclusive"> inclusive
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="toRange">To</label>
+                    <div class="col-sm-10">
+                        <input type="number" class="form-control" id="toRange" placeholder="enter a number"  ng-model="attribute.numberRange.to" ng-change="attrCtrl.isValid(attribute, AttributeForm)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="checkbox" id="toInclusive" ng-model="attribute.numberRange.toInclusive"> inclusive
+                    </div>
+                </div>
+            </div>
 
+            <div class="form-group">
+                <alert type="danger" ng-show="AttributeForm.$error.fromgreaterthanto">Lower bound (from) should be less than upper bound (to).</alert>
+            </div>
+            <div class="form-group">
+                <div class="col-12">
+                    <button ng-if="!attribute.numberRange" ng-click="attrCtrl.addNumberRange(attribute, AttributeForm)" class="btn btn-default">Add range</button>
+                    <button ng-if="attribute.numberRange" ng-click="attrCtrl.removeNumberRange(attribute, AttributeForm)" class="btn btn-danger">Remove range</button>
+                </div>
+            </div>
+        </div>
+        <div ng-if="attribute.titleTerm.dataType == 'list'">
+            <div class="form-group" ng-if="attribute.titleTerm.constraintList.length <= 0">
+                <alert type="info">No selection item(s) associated with {{attribute.title}}. Edit collection configuration to add selection items to this attribute.</alert>
+            </div>
+            <h5 ng-if="attribute.titleTerm.constraintList.length > 0">Make one or more selection from below list</h5>
+            <div class="form-group" ng-repeat="label in attribute.titleTerm.constraintList track by $index"  ng-init="getSetContraintList = attrCtrl.getSetConstraintList(attribute, label)">
+                <label class="checkbox-inline">
+                    <input type="checkbox" ng-true-value="'{{label.termId}}'" ng-model="getSetContraintList" ng-model-options="{getterSetter: true}"> {{label.name}}
+                </label>
+            </div>
+        </div>
+        <div ng-if="attribute.titleTerm.dataType == 'singleselect'">
+            <div class="form-group" ng-if="attribute.titleTerm.constraintList.length <= 0">
+                <alert type="info">No selection item(s) associated with {{attribute.title}}. Edit collection configuration to add selection items to this attribute.</alert>
+            </div>
+            <h5 ng-if="attribute.titleTerm.constraintList.length > 0">Make a selection from below list</h5>
+            <div class="form-group" ng-repeat="label in attribute.titleTerm.constraintList track by $index" ng-init="getSetContraintList = attrCtrl.getSetConstraintList(attribute, label)">
+                <label class="radio-inline">
+                    <input type="radio" name="{{attrCtrl.getName(attribute) + attributeIndex}}" ng-model="getSetContraintList" ng-model-options="{getterSetter: true}" ng-value="label.termId"> {{label.name}}
+                </label>
+            </div>
+        </div>
         <div class="row"
              ng-if="attrCtrl.opus.allowFineGrainedAttribution && (attribute.uuid || attribute.original)">
             <div class="col-md-3">
@@ -125,7 +191,7 @@
             <span class="col-md-12">
                 <button class="btn btn-default" ng-click="attrCtrl.deleteAttribute($index)">Delete attribute</button>
                 <save-button ng-click="attrCtrl.saveAttribute($index, AttributeForm)"
-                             disabled="!AttributeForm.$dirty || !attrCtrl.isValid(attribute.title)"
+                             disabled="!AttributeForm.$dirty || !attrCtrl.isValid(attribute.title) || !attrCtrl.isContentValid(attribute, AttributeForm)"
                              dirty="AttributeForm.$dirty || !attribute.uuid"
                              form="AttributeForm">
                 </save-button>

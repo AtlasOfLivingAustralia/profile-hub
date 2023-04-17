@@ -2,7 +2,6 @@ package au.org.ala.profile.hub
 
 import org.apache.http.entity.ContentType
 import org.grails.web.util.WebUtils
-
 /**
  * XXX Used to add florulaOverrideId to all GET requests if the cookie exists
  */

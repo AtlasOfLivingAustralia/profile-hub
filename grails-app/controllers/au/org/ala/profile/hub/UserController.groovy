@@ -38,7 +38,7 @@ class UserController extends BaseController {
 
             render user as JSON
         } else {
-            render [:] as JSON
+            render text: [:] as JSON
         }
 
     }

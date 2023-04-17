@@ -424,6 +424,17 @@ profileEditor.service('profileService', function ($http, util, $cacheFactory, co
             return util.toStandardPromise(future);
         },
 
+        createVocabulary: function (opusId, data) {
+            $log.debug("Creating vocabulary ");
+            var future = enqueue(function () {
+                return $http.post(util.contextRoot() + "/opus/" + opusId + "/vocab/create", data);
+            });
+            future.then(function (response) {
+                $log.debug("Vocab updated with response code " + response.status);
+            });
+            return util.toStandardPromise(future);
+        },
+
         findUsagesOfVocabTerm: function (opusId, vocabularyId, termName) {
             $log.debug("Finding usages of vocab term " + termName + " from vocab " + vocabularyId);
             var future = $http.get(util.contextRoot() + "/opus/" + opusId + "/vocab/" + vocabularyId + "/findUsages?termName=" + termName);
@@ -568,7 +579,7 @@ profileEditor.service('profileService', function ($http, util, $cacheFactory, co
         getImageMetadata: function (imageId, local) {
             var future = null;
             if (_.isBoolean(local) && local) {
-                future = $http.get(util.contextRoot() + "/ws/getImageInfo/" + imageId, {cache: true});
+                future = $http.get(util.contextRoot() + "/ws/image/" + imageId, {cache: true});
             } else {
                 future = $http.get(config.imageServiceUrl + "/ws/image/" + imageId, {cache: true});
             }

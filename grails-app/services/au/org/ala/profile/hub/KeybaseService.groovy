@@ -1,6 +1,7 @@
 package au.org.ala.profile.hub
 
 import au.org.ala.ws.service.WebService
+import org.apache.http.entity.ContentType
 
 class KeybaseService {
     static final String CHAR_ENCODING = "utf-8"
@@ -24,7 +25,7 @@ class KeybaseService {
 
         String key = null
 
-        def json = webService.get("${grailsApplication.config.keybase.taxon.lookup}${name}").resp
+        def json = webService.get("${grailsApplication.config.keybase.taxon.lookup}${name}", [:], ContentType.APPLICATION_JSON, false, false).resp
         json?.Items?.each {
             if (it.ProjectsID == projectId) {
                 key = it.KeysID
@@ -35,7 +36,7 @@ class KeybaseService {
     }
 
     def retrieveAllProjects() {
-        webService.get("${grailsApplication.config.keybase.project.lookup}")
+        webService.get("${grailsApplication.config.keybase.project.lookup}", [:], ContentType.APPLICATION_JSON, false, false)
     }
 
     /**
@@ -97,7 +98,7 @@ class KeybaseService {
         String keyId = findKey(name, projectId)
 
         if (keyId) {
-            Map key = webService.get("${grailsApplication.config.keybase.key.lookup}?key_id=${keyId}")?.resp as Map
+            Map key = webService.get("${grailsApplication.config.keybase.key.lookup}?key_id=${keyId}", [:], ContentType.APPLICATION_JSON, false, false)?.resp as Map
 
             if (key) {
                 Map items = key.items.collectEntries { [(it.item_id): it.item_name] }

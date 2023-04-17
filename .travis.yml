@@ -1,14 +1,18 @@
 os: linux
-dist: bionic
+dist: focal
 language: groovy
 jdk:
-  - openjdk8
+  - openjdk11
 branches:
   only:
-  - master
-  - dev
-  - grails3
-  - grails4
+    - master
+    - dev
+    - /^feature\/.*$/
+    - /^hotfix\/.*$/
+    - grails4
+
+node_js:
+  - 16
 
 before_install:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -26,6 +30,10 @@ install:
   - true
 
 before_script:
+  - cd $TRAVIS_BUILD_DIR
+  - nvm install 16.15.0
+  - nvm use 16.15.0
+  - node -v
   - npm install
 
 script:
@@ -33,7 +41,7 @@ script:
   - ./gradlew check
 
 after_success:
-  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew clean && travis_retry travis_wait 20 ./gradlew publish'
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && ./gradlew clean && travis_wait 20 ./gradlew publish'
 
 env:
   global:

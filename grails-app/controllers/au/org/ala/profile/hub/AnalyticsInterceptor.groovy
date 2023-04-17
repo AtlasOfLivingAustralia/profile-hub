@@ -1,15 +1,40 @@
 package au.org.ala.profile.hub
 
 import au.org.ala.profile.analytics.Analytics
+import au.org.ala.web.AuthService
+import grails.core.GrailsApplication
+import io.swagger.v3.oas.annotations.Operation
+import au.org.ala.grails.AnnotationMatcher
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 
+import javax.annotation.PostConstruct
 import javax.servlet.http.Cookie
+
+import static com.google.common.net.HttpHeaders.REFERER
+import static com.google.common.net.HttpHeaders.USER_AGENT
 
 class AnalyticsInterceptor {
 
-    def analyticsService
+    @Autowired
+    GrailsApplication grailsApplication
+    @Autowired(required = false)
+    AnalyticsService analyticsService
+    @Autowired
+    AuthService authService
+    @Autowired
+    WebServiceWrapperService webServiceWrapperService
+
+    // Code runs after controller action is called. Ordering it such that it is called last.
+    int order = HIGHEST_PRECEDENCE
 
     AnalyticsInterceptor () {
-        matchAll()
+
+    }
+
+    @PostConstruct
+    void init () {
+        AnnotationMatcher.matchAnnotation(this, grailsApplication, Analytics)
     }
 
     boolean before () {
@@ -20,14 +45,34 @@ class AnalyticsInterceptor {
         try {
             if (response.getStatus() in 200..299) { // only care about successful HTTP responses
                 final artefact = grailsApplication.getArtefactByLogicalPropertyName('Controller', controllerName)
-                final annotation = artefact.clazz.with { clazz ->
-                    (clazz.methods.find { it.name == actionName }?.getAnnotation(Analytics) ?: clazz.declaredFields.find { it.name == actionName }?.getAnnotation(Analytics)) ?: clazz.getAnnotation(Analytics)
+                final annotation = artefact?.clazz.with { clazz ->
+                    (clazz?.methods.find { it.name == actionName }?.getAnnotation(Analytics) ?: clazz?.declaredFields.find { it.name == actionName }?.getAnnotation(Analytics)) ?: clazz?.getAnnotation(Analytics)
                 }
                 if (annotation) {
                     final clientId = extractClientIdFromGoogleAnalyticsCookie(request.cookies)
                     final path = URLDecoder.decode(request.forwardURI, 'utf-8')
+                    Map payload = [:]
+                    def classAction = artefact.getClazz().methods.find {it.name == actionName}
+                    Operation operation = classAction.getAnnotation(Operation)
+                    if (operation) {
+                        // page title
+                        payload.dt = operation.summary() ?: ""
+                        payload[grailsApplication.config.app.analytics.apiid] = operation.operationId() ?: ""
+                        if (params.opusId) payload[grailsApplication.config.app.analytics.collectionid] = params.opusId
+                        if (params.profileId) payload[grailsApplication.config.app.analytics.profileid] = params.profileId
+
+                        def userId = authService.getUserId()
+                        if (userId) payload[grailsApplication.config.app.analytics.userid] = userId
+                        else {
+                            String authorization = request.getHeader(HttpHeaders.AUTHORIZATION)
+                            if (authorization) {
+                                payload[grailsApplication.config.app.analytics.userid] = Utils.getClientId(authorization)
+                            }
+                        }
+                    }
+
                     log.debug("Sending pageview to analytics for ${request.serverName}, $path, $clientId, ${request.remoteAddr}")
-                    analyticsService.pageView(request.serverName, path, clientId, request.remoteAddr, request.getHeader(USER_AGENT), request.getHeader(REFERER))
+                    analyticsService?.pageView(request.serverName, path, clientId, request.remoteAddr, request.getHeader(USER_AGENT), request.getHeader(REFERER), payload)
                 }
             }
         } catch (e) {

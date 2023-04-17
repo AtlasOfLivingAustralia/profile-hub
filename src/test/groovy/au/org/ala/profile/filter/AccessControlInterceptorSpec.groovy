@@ -11,6 +11,7 @@ import grails.converters.JSON
 import grails.events.Events
 import grails.testing.web.interceptor.InterceptorUnitTest
 import org.grails.spring.beans.factory.InstanceFactoryBean
+import org.grails.web.servlet.mvc.GrailsWebRequest
 import org.grails.web.util.GrailsApplicationAttributes
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -59,6 +60,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         // added call to mockInterceptor method since the first call to withInterceptors does not create
@@ -103,6 +105,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         when:
@@ -143,6 +146,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         when:
@@ -184,6 +188,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         when:
@@ -224,6 +229,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         when:
@@ -265,6 +271,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
             authService(MockAuthService)
             profileService(MockProfileService)
         }
+        interceptor.delegateService = new MockDelegateService()
 
         when:
         params.opusId = "reviewer1"
@@ -304,6 +311,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         when:
@@ -329,6 +337,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         when:
@@ -354,6 +363,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         when:
@@ -379,6 +389,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(MockProfileService)
+            delegateService(MockDelegateService)
         }
 
         when:
@@ -410,6 +421,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
             exportService(InstanceFactoryBean, eService, ExportService)
             mapService(InstanceFactoryBean, mService, MapService)
             imageService(InstanceFactoryBean, iService, ImageService)
+            delegateService(MockDelegateService)
         }
 
         boolean controllerCalled = false
@@ -701,6 +713,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         defineBeans {
             authService(MockAuthService)
             profileService(InstanceFactoryBean, pService, ProfileService)
+            delegateService(MockDelegateService)
         }
 
         boolean controllerCalled = false
@@ -786,6 +799,7 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
             profileService(InstanceFactoryBean, pService, ProfileService)
             florulaCookieService(InstanceFactoryBean, fCookieService, FlorulaCookieService)
             webService(InstanceFactoryBean, wService, WebService)
+            delegateService(MockDelegateService)
         }
 
         boolean controllerCalled = false
@@ -994,12 +1008,29 @@ class SecuredController {
 
 class MockAuthService extends AuthService implements Events {
     @Override
-    def getUserId() {
+    String getUserId() {
         "PROFILE_REVIEWER_USER"
     }
 
     @Override
-    def getDisplayName() {
+    String getDisplayName() {
+        "Fred Bloggs"
+    }
+}
+
+class MockDelegateService extends AuthService implements Events {
+    Set<String> getUserRoles() {
+        def role = GrailsWebRequest.lookup().userPrincipal?.attributes?.authority
+        role ? [role].toSet() : [].toSet()
+    }
+
+    @Override
+    String getUserId() {
+        GrailsWebRequest.lookup().userPrincipal?.attributes?.userid
+    }
+
+    @Override
+    String getDisplayName() {
         "Fred Bloggs"
     }
 }

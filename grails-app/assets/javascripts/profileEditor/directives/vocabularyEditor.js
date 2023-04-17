@@ -4,25 +4,41 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
         require: [],
         scope: {
             vocabId: '=',
+            vocabType: '=',
+            groupVocabId: '=',
             vocabName: '@',
             allowReordering: '@',
             allowMandatory: '@',
             allMandatory: '@',
             allowCategories: '@',
-            helpUrl: '@'
+            allowStrictSelection: '@',
+            allowReplacement: '@',
+            allowGrouping: '@',
+            allowDataType: '@',
+            helpUrl: '@',
+            sharedObject: '='
         },
         templateUrl: '/profileEditor/vocabularyEditor.htm',
-        controller: ['$scope', 'profileService', 'util', 'messageService', '$modal', '$filter', function ($scope, profileService, util, messageService, $modal, $filter) {
+        controller: ['$scope', 'profileService', 'util', 'messageService', '$modal', '$filter', '$rootScope', function ($scope, profileService, util, messageService, $modal, $filter, $rootScope) {
 
             $scope.opusId = util.getEntityId("opus");
             $scope.saving = false;
             $scope.newVocabTerm = null;
             $scope.vocabulary = null;
+            $scope.groupVocabulary = null;
+            $scope.constraintListVocab = null;
             $scope.replacements = [];
             $scope.allowReordering = true;
             $scope.allowMandatory = true; // allow the user to choose whether a term is mandatory or optional
             $scope.allowCategories = true; // allow the user to categorise terms as Name, Summary, etc
+            $scope.allowStrictSelection = true; // show or hide vocab's strict selector
+            $scope.allowReplacement = true;
+            $scope.allowGrouping = false;
+            $scope.allowDataType = false;
             $scope.allMandatory = false; // force all terms to be mandatory
+            $scope.dataTypes = ['text', 'number', 'range', 'list'];
+            if($scope.sharedObject)
+                $scope.sharedObject.directiveScope = $scope;
 
             var capitalize = $filter("capitalize");
             var orderBy = $filter("orderBy");
@@ -64,7 +80,12 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
 
                             form.$setDirty();
                         } else {
-                            showRemoveTermPopup(data, index, form)
+                            if($scope.allowReplacement) {
+                                showRemoveTermPopup(data, index, form)
+                            }
+                            else {
+                                messageService.alert("Cannot delete term since it is used at least once. Remove linkage to delete the term.");
+                            }
                         }
                     },
                     function() {
@@ -121,6 +142,26 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
                 });
             }
 
+            $scope.showConstraintListVocab = function(term, form) {
+                var popup = $modal.open({
+                    templateUrl: "/profileEditor/addVocabularyPopup.htm",
+                    controller: "AddVocabularyPopupController",
+                    controllerAs: "addVocabularyPopupCtrl",
+                    size: "md",
+                    resolve: {
+                        vocabId: function() {
+                            return term.constraintListVocab;
+                        }
+                    }
+                });
+
+                popup.result.then(function(data) {
+                    term.constraintListVocab = data.vocabId;
+
+                    form.$setDirty();
+                });
+            }
+
             $scope.termIsInReplacementList = function(term) {
                 var match = false;
                 angular.forEach($scope.replacements, function(item) {
@@ -165,8 +206,24 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
                 return result;
             }
 
+            $scope.initVocab = function(){
+                $scope.vocabulary = {
+                    name: 'Vocab constraint list',
+                    terms: []
+                }
+            }
+
             $scope.saveVocabulary = function (form) {
-                var promise = profileService.updateVocabulary($scope.opusId, $scope.vocabId, $scope.vocabulary);
+                var promise;
+                if ($scope.vocabId) {
+                    promise = profileService.updateVocabulary($scope.opusId, $scope.vocabId, $scope.vocabulary);
+                } else {
+                    promise = profileService.createVocabulary($scope.opusId, $scope.vocabulary);
+                    promise.then(function(data){
+                        $scope.vocabId = data.vocabId;
+                    });
+                }
+
                 promise.then(function () {
                         if ($scope.replacements.length > 0) {
                             var promise = profileService.replaceUsagesOfVocabTerm($scope.opusId, $scope.vocabId, $scope.replacements);
@@ -180,11 +237,15 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
                             $scope.loadVocabulary(form);
                             messageService.success("Vocabulary successfully updated.");
                         }
+
+                        $rootScope.$emit('refresh-group-vocab');
                     },
                     function () {
                         messageService.alert("An error occurred while updating the vocabulary.");
                     }
                 );
+
+                return promise;
             };
 
             $scope.loadVocabulary = function(form) {
@@ -205,6 +266,23 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
                         messageService.alert("An error occurred while loading the vocabulary.");
                     }
                 );
+            };
+
+            $scope.loadGroupVocabulary = function(form) {
+                if ($scope.groupVocabId) {
+                    messageService.info("Loading group by vocabulary...");
+                    $scope.replacements = [];
+
+                    var promise = profileService.getOpusVocabulary($scope.opusId, $scope.groupVocabId);
+                    promise.then(function (data) {
+                            data.terms = sortTerms(data.terms, true);
+                            $scope.groupVocabulary = data;
+                        },
+                        function () {
+                            messageService.alert("An error occurred while loading the group by vocabulary.");
+                        }
+                    );
+                }
             };
 
             $scope.summaryChanged = function(selectedIndex) {
@@ -238,14 +316,20 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
             };
 
             function sortVocabTerms() {
-                if ($scope.allowReordering) {
-                    $scope.vocabulary.terms = orderBy($scope.vocabulary.terms, "order");
+                $scope.vocabulary.terms = sortTerms($scope.vocabulary.terms, $scope.allowReordering);
+            }
+
+            function sortTerms(terms, allowReordering) {
+                if (allowReordering) {
+                    terms = orderBy(terms, "order");
                 } else {
-                    $scope.vocabulary.terms = orderBy($scope.vocabulary.terms, "name");
+                    terms = orderBy(terms, "name");
                 }
-                angular.forEach($scope.vocabulary.terms, function(term, index) {
+                angular.forEach(terms, function(term, index) {
                     term.order = index;
                 });
+
+                return terms
             }
 
             $scope.sortAlphabetically = function(form) {
@@ -256,11 +340,19 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
 
                 form.$setDirty();
             };
+            $rootScope.$on('refresh-group-vocab', $scope.loadGroupVocabulary);
         }],
         link: function (scope, element, attrs, ctrl) {
             scope.$watch("vocabId", function(newValue) {
-                if (newValue !== undefined) {
+                if (newValue !== undefined && newValue !== null) {
                     scope.loadVocabulary();
+                } else {
+                    scope.initVocab();
+                }
+            });
+            scope.$watch("groupVocabId", function(newValue) {
+                if (newValue !== undefined && newValue !== null) {
+                    scope.loadGroupVocabulary();
                 }
             });
             scope.$watch("allowMandatory", function(newValue) {
@@ -268,6 +360,18 @@ profileEditor.directive('vocabularyEditor', function ($browser) {
             });
             scope.$watch("allowCategories", function(newValue) {
                 scope.allowCategories = isTruthy(newValue);
+            });
+            scope.$watch("allowStrictSelection", function(newValue) {
+                scope.allowStrictSelection = isTruthy(newValue);
+            });
+            scope.$watch("allowGrouping", function(newValue) {
+                scope.allowGrouping = isTruthy(newValue);
+            });
+            scope.$watch("allowReplacement", function(newValue) {
+                scope.allowReplacement = isTruthy(newValue);
+            });
+            scope.$watch("allowDataType", function(newValue) {
+                scope.allowDataType = isTruthy(newValue);
             });
             scope.$watch("allowReordering", function(newValue) {
                 scope.allowReordering = isTruthy(newValue);
@@ -313,6 +417,28 @@ profileEditor.controller('RemoveTermController', function ($modalInstance, usage
 
     self.ok = function() {
         $modalInstance.close({existing: self.existingTerm, new: self.newTerm});
+    };
+
+    self.cancel = function() {
+        $modalInstance.dismiss("cancel");
+    }
+});
+
+profileEditor.controller('AddVocabularyPopupController', function ($modalInstance, $scope, vocabId) {
+    var self = this;
+
+    $scope.vocabId = vocabId;
+    $scope.sharedObject = {};
+
+    self.ok = function() {
+        if ($scope.ListVocabularyForm.$dirty && $scope.sharedObject.directiveScope) {
+            var promise = $scope.sharedObject.directiveScope.saveVocabulary($scope.ListVocabularyForm);
+            promise.then(function (data) {
+                $modalInstance.close({vocabId: data.vocabId});
+            });
+        } else {
+            $modalInstance.close({vocabId: $scope.vocabId});
+        }
     };
 
     self.cancel = function() {

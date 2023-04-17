@@ -81,6 +81,7 @@ class UrlMappings {
         "/opus/$opusId/data/$dataResourceId/delete" controller: "data", action: [DELETE: "deleteDataSet"]
 
         "/opus/$opusId/vocab/$vocabId/update" controller: "vocab", action: [POST: "update"]
+        "/opus/$opusId/vocab/create" controller: "vocab", action: [POST: "create"]
         "/opus/$opusId/vocab/$vocabId/findUsages" controller: "vocab", action: [GET: "findUsagesOfTerm"]
         "/opus/$opusId/vocab/$vocabId/replaceUsages" controller: "vocab", action: [POST: "replaceUsagesOfTerm"]
         "/opus/$opusId/vocab/$vocabId" controller: "vocab", action: [GET: "show"]
@@ -243,7 +244,7 @@ class UrlMappings {
 
         // The following URLs need to match the URLs used by the ala-images-client plugin so that we can view draft
         // and private images (which do not exist in images.ala.org.au) in the plugin as well as ALA images.
-        "/ws/getImageInfo/$imageId" controller: "image", action: [GET: "getImageInfo"]
+        "/ws/image/$imageId" controller: "image", action: [GET: "getImageInfo"]
         "/image/proxyImage/$imageId" controller: "image", action: [GET: "downloadImage"]
         "/profile/$profileId/image/$imageId/tile/$zoom/$x/$y" controller: "image", action: [GET: "getTile"]
         "/opus/$opusId/profile/$profileId/image/$imageId/tile/$zoom/$x/$y" controller: "image", action: [GET: "getTile"]
@@ -252,6 +253,21 @@ class UrlMappings {
         "/facets" controller: "resource", action: "facets"
         if (Environment.current == Environment.DEVELOPMENT) {
             "/console/$action?/$id?(.$format)?" controller: 'console'
+        }
+
+        // The following are APIs.
+        group("/api") {
+            get "/opus/$opusId/profile" (version: "1.0", controller: "api", action: "getProfiles", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId" (version: "1.0", controller: "api", action: "get", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/image" (version: "1.0", controller: "api", action: "getImages", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/attribute/$attributeId" (version: "1.0", controller: "api", action: "getAttributes", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/draft" (version: "1.0", controller: "api", action: "getDraftProfile", namespace: "v1")
+        }
+
+        "/openapi/$action?/$id?(.$format)?"(controller: "openApi")
+        name openapiDoc: "/openapi/openapi(.$format)?" {
+            controller = 'openApi'
+            action = "openapi"
         }
     }
 }

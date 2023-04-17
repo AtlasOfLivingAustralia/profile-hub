@@ -1,5 +1,5 @@
 <!-- template for the editable view of an attribute list -->
-<div ng-repeat="attribute in attrCtrl.attributes" ng-form="AttributeForm" ng-show="!attrCtrl.readonly" ng-cloak>
+<div ng-repeat="attribute in attrCtrl.attributes" ng-form="AttributeForm" ng-show="!attrCtrl.readonly" ng-cloak ng-init="attributeIndex = $index">
     <navigation-anchor anchor-name="edit_{{attribute.key}}" title="{{attribute.title}}" category="attribute"></navigation-anchor>
     <ng-include src="'/profileEditor/showEditableAttribute.htm'" ng-if="!attribute.fromCollection"></ng-include>
 

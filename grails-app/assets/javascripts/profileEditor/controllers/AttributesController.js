@@ -17,6 +17,7 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
 
     var capitalize = $filter("capitalize");
     var orderBy = $filter("orderBy");
+    var filterBy = $filter("filter");
 
     self.insertImage = function(callback) {
         var popup = $modal.open({
@@ -83,16 +84,86 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
     };
 
     self.showAttribute = function (attribute) {
-        return (self.readonly && !attribute.matchedAsName && attribute.text &&
+        return (self.readonly && !attribute.matchedAsName && self.hasContent(attribute) &&
             (!attribute.fromCollection ||
             (attribute.fromCollection && self.opus.showLinkedOpusAttributes && self.showSupportingData)))
             || (!self.readonly &&
             attribute.fromCollection && self.opus.allowCopyFromLinkedOpus && self.showSupportingData)
     };
 
+    self.addNumber = function (attribute) {
+        if(!attribute.numbers) {
+            attribute.numbers = [];
+        }
+
+        attribute.numbers.push(0);
+    };
+
+    self.removeNumber = function (attribute, form, index) {
+        if(!attribute.numbers) {
+            return
+        }
+
+        attribute.numbers.splice(index, 1);
+        form.$setDirty();
+    };
+
+    self.hasContent = function(attribute) {
+        var show = false
+        switch (attribute.dataType) {
+            case 'number':
+                show = attribute.numbers != null;
+                break;
+            case 'range':
+                show = attribute.numberRange && (attribute.numberRange.to != null) && (attribute.numberRange.from != null);
+                break;
+            case 'singleselect':
+            case 'list':
+                show = attribute.constraintList ? (attribute.constraintList.length > 0) : false;
+                break;
+            case 'text':
+            default:
+                show = !!attribute.text;
+        }
+
+        return show
+    }
+
+    self.getContent = function(attribute) {
+        var content
+        switch (attribute.dataType) {
+            case 'number':
+                content = attribute.numbers;
+                break;
+
+            case 'range':
+                content = attribute.numberRange;
+                break;
+            case 'singleselect':
+            case 'list':
+                if(attribute.constraintList) {
+                    var list = orderBy(attribute.constraintListExpanded, 'order');
+                    var names = [];
+                    angular.forEach(attribute.constraintListExpanded, function(item) {names.push(item.name)});
+                    content = names.join(', ');
+                }
+                break;
+            case 'text':
+            default:
+                content = attribute.text;
+        }
+
+        return content;
+    }
+
     self.isName = function(attribute) {
         attribute.matchedAsName = util.isNameAttribute(attribute);
     };
+
+    self.attributeChanged = function (attribute) {
+        self.isName(attribute)
+        attachTermToAttribute(attribute.title, attribute);
+    }
 
     self.showTitleGroup = function (title) {
         var show = false;
@@ -104,16 +175,75 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
         return show;
     };
 
+    self.isFirstAttributeInGroup = function(title) {
+        var show = false;
+        if(self.showTitleGroup(title)) {
+            var attribute = getAttributeFromTitle(title);
+            if (attribute) {
+                if (attribute.groupBy) {
+                    var itemsInGroup = getGroupAttributes(attribute);
+                    show = itemsInGroup.indexOf(attribute) == 0;
+                }
+            }
+        }
+
+        return show;
+    }
+
+    self.isLastAttributeInGroup = function(title) {
+        var show = false;
+        if(self.showTitleGroup(title)) {
+            var attribute = getAttributeFromTitle(title);
+            if (attribute) {
+                if (attribute.groupBy) {
+                    var itemsInGroup = getGroupAttributes(attribute);
+                    show = itemsInGroup.indexOf(attribute) == (itemsInGroup.length - 1);
+                }
+            }
+        }
+
+        return show;
+    }
+
+
+    function getAttributeFromTitle (title) {
+        // get attribute from title
+        var attribute = filterBy(self.attributes, function (attribute) {
+            return attribute.title == title;
+        });
+
+        return attribute && attribute.length > 0 ? attribute[0] : null
+    }
+
+    function getGroupAttributes (attribute) {
+        if (attribute.groupBy) {
+            var itemsInGroup = filterBy(self.attributes, function( item ) {
+                return item.groupBy && (item.groupBy.uuid == attribute.groupBy.uuid) && self.showAttribute(item);
+            }) || [];
+
+            return itemsInGroup;
+        }
+    }
+
+    self.getGroupAttributes = getGroupAttributes;
+
     function loadVocabulary() {
         if (self.opus.attributeVocabUuid != null) {
             var vocabPromise = profileService.getOpusVocabulary(self.opusId, self.opus.attributeVocabUuid);
             vocabPromise.then(function (data) {
                 self.attributeTitles = [];
                 self.allowedVocabulary = [];
+                self.attributeVocabTerms = data.terms;
                 angular.forEach(data.terms, function (term) {
-                    var title = {name: term.name, order: term.order, key: util.toKey(term.name)};
+                    var title = {name: term.name, order: term.order, key: util.toKey(term.name), groupBy: term.groupBy, constraintListVocab: term.constraintListVocab, dataType: term.dataType};
                     if (self.attributeTitles.map(function(t) { return t.name; }).indexOf(title.name) == -1) {
                         self.attributeTitles.push(title);
+                        loadConstraintList(title);
+                        var attributes = findAttributesByTitle(term.name);
+                        attributes.forEach(function(attribute){
+                            attribute.titleTerm = title;
+                            attribute.constraintList = attribute.constraintList || [];
+                        })
                     }
                     if (self.allowedVocabulary.indexOf(term.name) == -1) {
                         self.allowedVocabulary.push(term.name);
@@ -125,6 +255,35 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
                 self.vocabularyStrict = data.strict;
 
                 loadMandatoryAttributes(data.terms);
+            });
+        }
+    }
+
+    function attachTermToAttribute(name, attribute){
+        var titleTerm = null;
+
+        angular.forEach(self.attributeTitles, function(title){
+            if(title.name == name) {
+                titleTerm = title;
+            }
+        });
+
+        attribute.dataType = titleTerm.dataType;
+        attribute.titleTerm = titleTerm;
+        attribute.constraintList = []
+        attribute.numbers = []
+        attribute.numberRange = undefined;
+    }
+
+    function loadConstraintList(title) {
+        if(title.constraintListVocab) {
+            // var attribute = findAttributeByTitle(title.name)
+            var vocabPromise = profileService.getOpusVocabulary(self.opusId, title.constraintListVocab);
+            vocabPromise.then(function (data) {
+                title.constraintList = data.terms;
+                title.constraintList && title.constraintList.sort(function (a, b) {
+                    return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
+                });
             });
         }
     }
@@ -157,14 +316,151 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
         return attribute;
     }
 
+    function findAttributesByTitle(title) {
+        var attributes = [];
+
+        angular.forEach(self.attributes, function(attr) {
+            if (attr.title === title) {
+                attributes.push(attr);
+            }
+        });
+
+        return attributes;
+    }
+
+    self.findAttributesByTitle = findAttributesByTitle;
+
+    function findAttributeVocabByTitle(title) {
+        var vocabTerm = null;
+
+        angular.forEach(self.attributeVocabTerms, function(term) {
+            if (term.name === title) {
+                vocabTerm = term;
+            }
+        });
+
+        return vocabTerm;
+    }
+
+    self.findAttributeVocabByTitle = findAttributeVocabByTitle;
+
     function compareTitles(left, right) {
         var compare = -1;
-        if (left.order == right.order) {
+        if (left.groupBy || right.groupBy) {
+            if (left.groupBy && right.groupBy) {
+                if (left.groupBy.order == right.groupBy.order) {
+                    compare = left.order < right.order ? -1 : 1;
+                } else {
+                    compare = left.groupBy.order < right.groupBy.order ? -1 : 1;
+                }
+            } else if (left.groupBy) {
+                compare = -1;
+            } else if (right.groupBy) {
+                compare = 1;
+            }
+        } else if (left.order == right.order) {
             compare = left.name.toLowerCase() < right.name.toLowerCase() ? -1 : left.name.toLowerCase() > right.name.toLowerCase();
         } else {
             compare = left.order < right.order ? -1 : 1;
         }
         return compare;
+    };
+    self.compareTitles = compareTitles;
+
+        function NumberRange(){
+        this.to = null;
+        this.from = null;
+        this.toInclusive = true;
+        this.fromInclusive = true;
+    }
+
+    self.getSetConstraintList = function (attribute, label) {
+        return function() {
+            var termId = label.termId;
+
+            if(arguments.length == 0) {
+                switch(attribute.dataType) {
+                    case 'singleselect':
+                        return attribute.constraintList.length > 0 ? attribute.constraintList[0] : undefined;
+                        break;
+                    case 'list':
+                        if (attribute.constraintList.indexOf(termId) >= 0) {
+                            return termId;
+                        } else {
+                            return;
+                        }
+                        break;
+                }
+            }
+            else {
+                switch(attribute.dataType) {
+                    case 'singleselect':
+                        if(attribute.constraintList.indexOf(termId) == -1) {
+                            attribute.constraintList.splice(0, attribute.constraintList.length);
+                            attribute.constraintList.push(termId);
+                        }
+                        break;
+                    case 'list':
+                        var indexOf = attribute.constraintList.indexOf(termId)
+                        if(indexOf == -1) {
+                            attribute.constraintList.push(termId);
+                        } else {
+                            attribute.constraintList.splice(indexOf, 1);
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    self.addNumberRange = function(attribute, form){
+        if (!attribute.numberRange) {
+            attribute.numberRange = new NumberRange();
+            form.$setDirty();
+        }
+    }
+
+    self.removeNumberRange = function(attribute, form){
+        if (attribute.numberRange) {
+            attribute.numberRange = null;
+            form.$setDirty();
+        }
+    }
+
+    self.isContentValid = function(attribute, form){
+        var valid = false;
+        switch (attribute.dataType) {
+            case 'number':
+                valid = !!attribute.numbers;
+                break;
+            case 'range':
+                valid = self.isNumberRangeValid(attribute, form);
+                break;
+            case 'singleselect':
+            case 'list':
+            case 'text':
+            default:
+                valid = true;
+        }
+
+        return valid;
+    }
+
+    self.isNumberRangeValid = function(attribute, form) {
+        if(attribute.numberRange && (attribute.dataType == 'range')) {
+            if(attribute.numberRange.from > attribute.numberRange.to) {
+                form.$setValidity('fromgreaterthanto', false);
+                return false;
+            }
+            else {
+                form.$setValidity('fromgreaterthanto', true);
+                return true;
+            }
+        }
+    }
+
+    self.getName = function(attribute){
+        return attribute.title.replaceAll(" ", "_")
     }
 
     self.revertAttribute = function (attributeIdx, auditIdx, form) {
@@ -251,7 +547,11 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
             profileId: self.profile.uuid,
             uuid: attribute.uuid,
             title: capitalize(attribute.title),
-            text: attribute.text || ''
+            text: attribute.text || '',
+            numbers: attribute.numbers,
+            numberRange: attribute.numberRange,
+            unit: attribute.unit,
+            constraintList: attribute.constraintList
         };
 
         if (attribute.source) {
@@ -337,7 +637,8 @@ profileEditor.controller('AttributeEditor', ['profileService', 'util', 'messageS
                                     opusTitle: supporting.opus.title,
                                     profileId: supporting.profile.uuid,
                                     title: attribute.title,
-                                    text: attribute.text
+                                    text: attribute.text,
+                                    numbers: attribute.numbers
                                 });
                             });
                         });

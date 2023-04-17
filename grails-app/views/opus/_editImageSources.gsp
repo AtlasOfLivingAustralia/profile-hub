@@ -7,34 +7,6 @@
     </div>
 
     <div class="panel-body">
-        <h5 class="section-panel-heading padding-bottom-1">Image visibility</h5>
-        <div class="row">
-            <div class="col-sm-12">
-
-                <div class="col-sm-6">
-                    <div class="radio">
-                        <label for="privateImagesNo" class="inline-label">
-                            <input id="privateImagesNo" type="radio" name="privateImages" ng-value="false"
-                                   ng-model="opusCtrl.opus.keepImagesPrivate">
-                            Automatically push images to the Atlas of Living Australia image repository. This will make the images available to other Atlas of Living Australia applications.
-                        </label>
-                    </div>
-                </div>
-
-                <div class="col-sm-6">
-                    <div class="radio">
-                        <label for="privateImagesYes" class="inline-label">
-                            <input id="privateImagesYes" type="radio" name="privateImages" ng-value="true"
-                                   ng-model="opusCtrl.opus.keepImagesPrivate">
-                            Do not push images to the public Atlas of Living Australia image repository. Images will only be visible within this collection.
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr/>
-
         <div class="row">
 
             <div class="col-sm-12">

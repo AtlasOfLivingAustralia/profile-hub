@@ -648,6 +648,11 @@ class OpusController extends OpusBaseController {
         render template: "editVocab"
     }
 
+    def editGroupPanel = {
+        render template: "editGroupVocab"
+    }
+
+
     def editGlossaryPanel = {
         render template: "editGlossary"
     }

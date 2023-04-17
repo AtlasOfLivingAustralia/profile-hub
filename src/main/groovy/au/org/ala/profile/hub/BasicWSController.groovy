@@ -62,7 +62,7 @@ abstract class BasicWSController {
             }
         } else {
             response.setContentType(CONTENT_TYPE_JSON)
-            render [:] as JSON
+            render text: [:] as JSON
         }
     }
 

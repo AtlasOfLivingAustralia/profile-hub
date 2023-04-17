@@ -1,6 +1,7 @@
 package au.org.ala.profile.hub
 
 import au.org.ala.ws.service.WebService
+import org.apache.http.entity.ContentType
 
 class NslService {
     WebService webService
@@ -8,7 +9,7 @@ class NslService {
 
     def getNameDetails(String nslNameIdentifier) {
         if (nslNameIdentifier && nslNameIdentifier != "null") {
-            webService.get("${grailsApplication.config.nsl.service.url.prefix}${nslNameIdentifier}.json")
+            webService.get("${grailsApplication.config.nsl.service.url.prefix}${nslNameIdentifier}.json", [:], ContentType.APPLICATION_JSON, false, false)
         }
     }
 
@@ -16,7 +17,7 @@ class NslService {
         List<Map> formattedConcepts = []
 
         if (nslNameIdentifier && nslNameIdentifier != "null") {
-            def concepts = webService.get("${grailsApplication.config.nsl.service.url.prefix}${nslNameIdentifier}${grailsApplication.config.nsl.service.apni.concept.suffix}")
+            def concepts = webService.get("${grailsApplication.config.nsl.service.url.prefix}${nslNameIdentifier}${grailsApplication.config.nsl.service.apni.concept.suffix}", [:], ContentType.APPLICATION_JSON, false, false)
             formattedConcepts = concepts?.resp?.references?.collect { formatReference(it) }
         }
 

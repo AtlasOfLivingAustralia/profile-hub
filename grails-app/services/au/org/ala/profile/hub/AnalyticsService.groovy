@@ -20,7 +20,7 @@ class AnalyticsService {
      * @param userAgent The user agent for the page view
      * @param referrer The 'referer' for the page view
      */
-    void pageView(String hostname, String path, String clientId, String userIp, String userAgent, String referrer) {
+    void pageView(String hostname, String path, String clientId, String userIp, String userAgent, String referrer, Map payload = [:]) {
         final String googleAnalyticsId = grailsApplication.config.googleAnalyticsId
         if (googleAnalyticsId) {
             task {
@@ -30,7 +30,7 @@ class AnalyticsService {
                         uip: userIp,           // User IP
                         ua : userAgent ?: '',  // User Agent
                         dr : referrer ?: '',   // Document referrer
-                ]
+                ] + payload
                 final call = googleAnalyticsClient.collect('1', googleAnalyticsId, clientId, 'pageview', data)
                 try {
                     final resp = call.execute()
