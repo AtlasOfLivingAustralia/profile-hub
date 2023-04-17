@@ -81,6 +81,7 @@ class UrlMappings {
         "/opus/$opusId/data/$dataResourceId/delete" controller: "data", action: [DELETE: "deleteDataSet"]
 
         "/opus/$opusId/vocab/$vocabId/update" controller: "vocab", action: [POST: "update"]
+        "/opus/$opusId/vocab/create" controller: "vocab", action: [POST: "create"]
         "/opus/$opusId/vocab/$vocabId/findUsages" controller: "vocab", action: [GET: "findUsagesOfTerm"]
         "/opus/$opusId/vocab/$vocabId/replaceUsages" controller: "vocab", action: [POST: "replaceUsagesOfTerm"]
         "/opus/$opusId/vocab/$vocabId" controller: "vocab", action: [GET: "show"]

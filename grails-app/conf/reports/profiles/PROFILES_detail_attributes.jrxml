@@ -13,6 +13,24 @@
 	<field name="text" class="java.lang.String"/>
 	<field name="creators" class="java.lang.String"/>
 	<field name="editors" class="java.lang.String"/>
+	<field name="groupName" class="java.lang.String"/>
+	<group name="attributeGroup">
+		<groupExpression><![CDATA[$F{groupName}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="0" y="5" width="515" height="13" isRemoveLineWhenBlank="true" uuid="9304f71c-bcb9-450d-adfc-0d6e2d59005e">
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement markup="html">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{groupName}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

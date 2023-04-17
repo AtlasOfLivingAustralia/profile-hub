@@ -29,6 +29,10 @@ class AttributeResponse {
     String source
     String title
     String uuid
+    String groupName
+    Map groupBy
+    List constraintList
+    List<Map> constraintListExpanded
     Boolean required
     Boolean containsName
     String plainText

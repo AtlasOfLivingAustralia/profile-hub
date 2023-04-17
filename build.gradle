@@ -32,6 +32,7 @@ repositories {
     maven { url "https://repo.grails.org/grails/core" }
     maven { url "https://nexus.ala.org.au/content/groups/public/" }
     maven { url "https://jaspersoft.jfrog.io/artifactory/third-party-ce-artifacts"}
+    mavenCentral()
 }
 
 configurations {
@@ -115,22 +116,23 @@ dependencies {
     implementation "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
 
     implementation 'dk.glasius:external-config:3.0.0'
-    implementation "org.grails.plugins:ala-auth:5.1.1"
-    implementation "org.grails.plugins:ala-ws-security-plugin:4.3.4-SNAPSHOT"
+
+    implementation "org.grails.plugins:ala-auth:$alaSecurityLibsVersion"
+    implementation "org.grails.plugins:ala-ws-security-plugin:$alaSecurityLibsVersion"
+    if(!inplace){
+        implementation("org.grails.plugins:ala-ws-plugin:$alaSecurityLibsVersion")
+    }
+    testImplementation "au.org.ala:userdetails-service-client:$alaSecurityLibsVersion"
+
     implementation 'org.grails.plugins:csv:1.0.1'
     implementation 'net.sf.opencsv:opencsv:2.3'
     implementation("org.grails.plugins:ala-map-plugin:3.0.1")
     implementation 'au.org.ala.grails:interceptor-annotation-matcher:1.0.0'
-    if(!inplace){
-        implementation("org.grails.plugins:ala-ws-plugin:3.1.2")
-    }
 
     implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
     implementation("org.grails.plugins:ala-admin-plugin:2.3.0")
     implementation "org.grails.plugins:quartz:2.0.13"
     implementation "org.quartz-scheduler:quartz:2.2.1" // transitive dependency
-    implementation 'org.pac4j:pac4j-core:5.3.1'
-    implementation 'org.pac4j:pac4j-http:5.3.1'
     //    swagger API
     implementation 'au.org.ala.plugins:openapi:1.1.0'
     runtimeOnly("au.org.ala.plugins.grails:images-client-plugin:1.2")
@@ -143,7 +145,6 @@ dependencies {
         implementation "org.grails.plugins:console:1.5.11"
     }
 
-    testImplementation "au.org.ala:userdetails-service-client:2.0.0"
 }
 
 bootRun {
@@ -217,4 +218,35 @@ bootWar {
 
 publish {
     dependsOn assemble
+}
+
+
+tasks.register('reportCompile') {
+    ant.property(name: 'jasper.path', value: 'jasperreports-6.4.1.jar')
+
+//    ant.taskdef(resource: "com/abc/ant/antlib.xml", classpath: ant.properties['jasper.path'], loaderref: 'abc')
+
+
+    println "\n- Starting JasperReports *.jrxml compilation process..."
+    println configurations.runtimeClasspath.asPath
+    // define the Jasper Reports Compile Task
+    ant.taskdef(name:'reportCompile', classname: 'net.sf.jasperreports.ant.JRAntCompileTask', classpath: configurations.runtimeClasspath.asPath)
+
+    // remove existing jasper files
+    ant.delete{
+        fileset('dir':'grails-app/conf/reports', 'defaultexcludes':'yes'){
+            include('name':'**/*.jasper')
+        }
+    }
+
+    // create a temporary directory for use by the jasper compiler
+    ant.mkdir(dir:'target/jasper')
+
+    // compile the reports
+    ant.reportCompile(srcdir:'grails-app/conf/reports', destdir:'grails-app/conf/reports', tempdir:'target/jasper', keepJava:true, xmlvalidation:true){
+        include(name:'**/*.jrxml')
+//        include(classpath: configurations.developmentOnly.asPath)
+//        include(name:'**/*.jrtx')
+    }
+    println "-------\n- JasperReports compilation process finished"
 }

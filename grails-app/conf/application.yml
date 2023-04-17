@@ -23,12 +23,13 @@ spring:
             check-template-location: false
     devtools:
         restart:
-            additional-exclude:
+            exclude:
                 - '*.gsp'
                 - '**/*.gsp'
                 - '*.gson'
                 - '**/*.gson'
                 - 'logback.groovy'
+                - 'grails-app/conf/logback.groovy'
                 - '*.properties'
 management:
     endpoints:

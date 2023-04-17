@@ -16,7 +16,7 @@ describe('Directive: VocabularyEditor', function () {
     var util;
     var http;
     var profileService;
-    var findUsagesDefer, replaceUsagesDefer, updateVocabDefer, getVocabDefer;
+    var findUsagesDefer, replaceUsagesDefer, updateVocabDefer, getVocabDefer, mockPopupDefer, createVocabDefer;
 
     var getVocabResponse = '{"name":"vocab name", "strict":"true","terms":[{"name":"term1", "termId":"term1"},{"name":"term2", "termId":"term2"},{"name":"term3", "termId":"term3"}]}';
 
@@ -43,10 +43,14 @@ describe('Directive: VocabularyEditor', function () {
             replaceUsagesDefer = $q.defer();
             findUsagesDefer = $q.defer();
             updateVocabDefer = $q.defer();
+            createVocabDefer = $q.defer();
             getVocabDefer = $q.defer();
+            mockPopupDefer = $q.defer();
+            mockPopup.result = mockPopupDefer.promise;
 
             spyOn(profileService, "getOpusVocabulary").and.returnValue(getVocabDefer.promise);
             spyOn(profileService, "updateVocabulary").and.returnValue(updateVocabDefer.promise);
+            spyOn(profileService, "createVocabulary").and.returnValue(createVocabDefer.promise);
             spyOn(profileService, "findUsagesOfVocabTerm").and.returnValue(findUsagesDefer.promise);
             spyOn(profileService, "replaceUsagesOfVocabTerm").and.returnValue(replaceUsagesDefer.promise);
 
@@ -236,5 +240,58 @@ describe('Directive: VocabularyEditor', function () {
         scope.$apply();
 
         expect(profileService.replaceUsagesOfVocabTerm).toHaveBeenCalledWith("opusId1", "12345", replacements);
+    });
+
+    it('should open a modal window with the correct template URL', function() {
+        scope.showConstraintListVocab({ constraintListVocab: '123' }, form);
+
+        expect(modal.open).toHaveBeenCalledWith({
+            templateUrl: '/profileEditor/addVocabularyPopup.htm',
+            controller: 'AddVocabularyPopupController',
+            controllerAs: 'addVocabularyPopupCtrl',
+            size: 'md',
+            resolve: {
+                vocabId: jasmine.any(Function)
+            }
+        });
+    });
+
+    it('should call form.$setDirty() and set new vocab id when the modal is closed', function() {
+        var term = { constraintListVocab: '123' }
+        scope.showConstraintListVocab(term, form);
+        mockPopupDefer.resolve({ vocabId: '456' });
+        scope.$apply();
+
+        expect(term.constraintListVocab).toEqual('456');
+        expect(form.$setDirty).toHaveBeenCalled();
+    });
+
+    it("should save vocabulary if vocabId is not present", function (){
+        createVocabDefer.resolve({});
+
+        var vocab = {terms: [{name:"term1", termId:"term1"},{name:"term2", termId:"term2"},{name:"term3", termId:"term3"}]};
+
+        scope.opusId = "opus1";
+        scope.vocabId = undefined;
+        scope.vocabulary = vocab;
+
+        scope.saveVocabulary(form);
+        scope.$apply();
+
+        expect(profileService.createVocabulary).toHaveBeenCalledWith("opus1", vocab);
+    });
+
+    it("should load group vocabulary", function (){
+        var vocab = {terms: [{name:"term1", termId:"term1"},{name:"term2", termId:"term2"},{name:"term3", termId:"term3"}]};
+        getVocabDefer.resolve({
+            terms: vocab
+        });
+
+        scope.opusId = "opus1";
+        scope.groupVocabId = 'vocab1';
+
+        scope.loadGroupVocabulary(form);
+
+        expect(profileService.getOpusVocabulary).toHaveBeenCalledWith("opus1", "vocab1");
     });
 });

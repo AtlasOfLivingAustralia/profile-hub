@@ -462,6 +462,11 @@ class ExportService {
                 attribute.images = pairs.imagePairs
                 figureNumber = pairs.figureNumber
             }
+
+            // sort attribute by group to render correctly on pdf
+            model.profile.attributes?.sort {
+                it?.groupBy?.order ?: Integer.MAX_VALUE
+            }
         }
 
         if (distributionAttribute) {
