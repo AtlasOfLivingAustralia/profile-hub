@@ -1,6 +1,5 @@
 package au.org.ala.profile.hub
 
-import au.org.ala.profile.analytics.Analytics
 import grails.converters.JSON
 import org.springframework.web.context.request.RequestContextHolder
 
@@ -9,7 +8,6 @@ class ExportController extends BaseController {
     ProfileService profileService
     ExportService exportService
 
-    @Analytics
     def getPdf() {
         if (!params.profileId || !params.opusId) {
             badRequest "profileId and opusId are required parameters"

@@ -1,7 +1,6 @@
 package au.org.ala.profile.api
 
 import au.ala.org.ws.security.RequireApiKey
-import au.org.ala.profile.analytics.Analytics
 import au.org.ala.profile.hub.BaseController
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
@@ -21,7 +20,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import au.org.ala.plugins.openapi.Path
 
-@Analytics
 @SecurityScheme(name = "auth",
         type = SecuritySchemeType.HTTP,
         scheme = "bearer"
