@@ -46,7 +46,7 @@ class ApiController extends BaseController {
                                     mediaType = "application/json",
                                     array = @ArraySchema(
                                             schema = @Schema(
-                                                    implementation = ProfileBriefResponse.class
+                                                    implementation = OpusResponse.class
                                             )
                                     )
                             ),
