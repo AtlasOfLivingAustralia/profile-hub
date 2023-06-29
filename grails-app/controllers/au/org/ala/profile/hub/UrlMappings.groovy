@@ -257,6 +257,7 @@ class UrlMappings {
 
         // The following are APIs.
         group("/api") {
+            get "/opus/$opusId" (version: "1.0", controller: "api", action: "getOpus", namespace: "v1")
             get "/opus/$opusId/profile" (version: "1.0", controller: "api", action: "getProfiles", namespace: "v1")
             get "/opus/$opusId/profile/$profileId" (version: "1.0", controller: "api", action: "get", namespace: "v1")
             get "/opus/$opusId/profile/$profileId/image" (version: "1.0", controller: "api", action: "getImages", namespace: "v1")

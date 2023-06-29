@@ -1,7 +1,7 @@
 /**
  *  Export controller
  */
-profileEditor.controller('ExportController', function (util, $window, $modal, $http, config) {
+profileEditor.controller('ExportController', function (util, $window, $modal, $http, config, profileService) {
     var self = this;
 
     self.profileId = util.getEntityId("profile");
@@ -49,6 +49,8 @@ profileEditor.controller('ExportController', function (util, $window, $modal, $h
             } else {
                 $http.get(url);
             }
+
+            profileService.trackPageview(url);
         });
     }
 });

@@ -27,19 +27,16 @@ class ApiInterceptor {
         def method = controllerClass?.getMethod(actionName, [] as Class[])
 
         if (authorization) {
-            def user = authService.userDetails()
-            if (user) {
-                if (params.opusId && (opus = profileService.getOpus(params.opusId))) {
-                    params.isOpusPrivate = opus.privateCollection
-                    if ((params.isOpusPrivate
-                            || controllerClass?.isAnnotationPresent(RequiresAccessToken)
-                            || method?.isAnnotationPresent(RequiresAccessToken)
-                    ) && (token != opus.accessToken)) {
-                        log.warn("No valid access token for opus ${opus.uuid} when calling ${controllerName}/${actionName}")
-                        authorised = false
-                    } else {
-                        authorised = true
-                    }
+            if (params.opusId && (opus = profileService.getOpus(params.opusId))) {
+                params.isOpusPrivate = opus.privateCollection
+                if ((params.isOpusPrivate
+                        || controllerClass?.isAnnotationPresent(RequiresAccessToken)
+                        || method?.isAnnotationPresent(RequiresAccessToken)
+                ) && (token != opus.accessToken)) {
+                    log.warn("No valid access token for opus ${opus.uuid} when calling ${controllerName}/${actionName}")
+                    authorised = false
+                } else {
+                    authorised = true
                 }
             }
         }
