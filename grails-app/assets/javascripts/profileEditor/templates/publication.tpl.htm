@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="col-md-2">
-        <a ng-href="{{context}}/opus/{{opusId}}/profile/{{profileId}}/publication/{{publication.uuid}}/file"
+        <a ng-href="{{context}}/opus/{{opusId}}/profile/{{profileId}}/publication/{{publication.uuid}}/file" ng-click="trackDownload(context, opusId, profileId, publication.uuid)"
            target="_blank"><span class="fa fa-download color--green">&nbsp;Download</span></a>
     </div>
 </div>

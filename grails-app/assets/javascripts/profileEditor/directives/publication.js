@@ -12,8 +12,12 @@ profileEditor.directive('publication', function ($browser) {
             prefix: '@'
         },
         templateUrl: '/profileEditor/publication.htm',
-        controller: ['$scope', 'config', function ($scope, config) {
+        controller: ['$scope', 'config', 'profileService', function ($scope, config, profileService) {
             $scope.context = config.contextPath;
+            $scope.trackDownload = function (context, opusId, profileId, publicationId) {
+                var url =  context + '/opus/' + opusId + '/profile/' + profileId + '/publication/' + publicationId + '/file'
+                profileService.trackPageview(url);
+            }
         }],
         link: function (scope, element, attrs, ctrl) {
 

@@ -17,6 +17,36 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
         mapService = controller.mapService = Mock(MapService)
     }
 
+    void "getOpus should be provided with opus id parameter"() {
+        setup:
+        profileService.getOpus('opus1') >> [uuid: 'abc']
+
+        when:
+        params.opusId = opusId
+        controller.getOpus()
+
+        then:
+        response.status == responseCode
+
+        where:
+        opusId  | responseCode
+        null    | 400
+        'abc'   | 404
+        'opus1' | 200
+    }
+
+    void "getOpus output should not contain access token"() {
+        setup:
+        profileService.getOpus('opus1') >> [uuid: 'abc', accessToken: 'test1']
+
+        when:
+        params.opusId = "opus1"
+        controller.getOpus()
+
+        then:
+        response.json.accessToken == null
+    }
+
     void "getProfiles should be provided with opus id parameter"() {
         setup:
         profileService.getOpus('opus1') >> [uuid: 'abc']

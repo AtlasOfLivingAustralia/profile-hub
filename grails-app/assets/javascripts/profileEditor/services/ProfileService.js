@@ -1277,6 +1277,22 @@ profileEditor.service('profileService', function ($http, util, $cacheFactory, co
         loadMasterListItems: function(opus) {
             var future = $http.get(util.contextRoot() + '/opus/' + opus.uuid + '/masterList/keybaseItems', {disableAlertOnFailure: true });
             return util.toStandardPromise(future);
+        },
+
+        trackPageview: function (url, referrer) {
+            if ((typeof fathom !== 'undefined') && fathom.trackPageview) {
+                var payload = { };
+                if (url) {
+                    payload.url = url;
+                }
+
+                if (referrer) {
+                    payload.referrer = referrer;
+                }
+
+                console.debug("Tracking pageview with payload: " + JSON.stringify(payload));
+                fathom.trackPageview(payload);
+            }
         }
     }
 });

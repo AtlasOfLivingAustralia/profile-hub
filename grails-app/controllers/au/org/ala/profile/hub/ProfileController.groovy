@@ -1,6 +1,5 @@
 package au.org.ala.profile.hub
 
-import au.org.ala.profile.analytics.Analytics
 import au.org.ala.profile.security.PrivateCollectionSecurityExempt
 import au.org.ala.profile.security.Secured
 import au.org.ala.web.AuthService
@@ -532,7 +531,6 @@ class ProfileController extends BaseController {
         }
     }
 
-    @Analytics
     def proxyPublicationDownload() {
         final pubId = params.publicationId as String
         if (!pubId) {
