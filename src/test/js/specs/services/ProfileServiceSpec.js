@@ -438,4 +438,23 @@ describe("ProfileService tests", function () {
 
         http.expectGET("/someContext/ws/image/abcdefghijlkmnop").respond("bla");
     });
+
+    it("should invoke GET request when trackService is called", function() {
+        window.fathom = {
+            trackPageview: function(payload) {
+
+                http.get(payload.url);
+            }
+        };
+
+        spyOn(window.fathom, 'trackPageview');
+        service.trackPageview('/opus/xyz/profile/abc/pdf');
+
+        expect(window.fathom.trackPageview).toHaveBeenCalledWith({url: '/opus/xyz/profile/abc/pdf'});
+
+        // Ignore below lines. added to prevent call to http.flush from throwing an error
+        service.getImageMetadata('abcdefghijlkmnop', true);
+        http.expectGET("/someContext/ws/image/abcdefghijlkmnop").respond("bla");
+        // end ignore
+    });
 });

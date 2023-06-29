@@ -37,4 +37,10 @@ profileEditor.controller('DoiController', function (util, $filter, profileServic
             }
         });
     }
+
+    self.trackDownload = function (context, opusId, profileId, publicationId) {
+        var url =  context + '/opus/' + opusId + '/profile/' + profileId + '/publication/' + publicationId + '/file'
+        profileService.trackPageview(url);
+    }
+
 });
