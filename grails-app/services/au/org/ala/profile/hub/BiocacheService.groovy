@@ -49,8 +49,13 @@ class BiocacheService {
 
     private int countImages(String imageSearchUrl, String searchIdentifier, Map opus, String minusQuery = "") {
         String imagesQuery = constructQueryString(searchIdentifier, opus, minusQuery)
-        Map result = webService.get("${imageSearchUrl}?q=${imagesQuery}&facets=multimedia&flimit=0&foffset=0&fq=multimedia:Image&pageSize=0")
+//        Map params = ["q":"${imagesQuery}","facets":"multimedia","flimit":"0","foffset":"0","fq":"multimedia:Image","pageSize":"0"]
+//        Map result = webService.get("${imageSearchUrl}", params, ContentType.APPLICATION_JSON,false)
 
+        Map result = webService.get("${imageSearchUrl}?q=${imagesQuery}&facets=multimedia&flimit=0&foffset=0&fq=multimedia:Image&pageSize=0")
+//        Map result = webService.get("${imageSearchUrl}?facets=multimedia&flimit=0&foffset=0&fq=multimedia:Image&pageSize=0", [q: imagesQuery], ContentType.APPLICATION_FORM_URLENCODED)
+
+//        Map result = webService.get("${imageSearchUrl}?facets=multimedia&flimit=0&foffset=0&fq=multimedia:Image&pageSize=0", [q: imagesQuery])
         int count = result?.resp?.totalRecords ?: 0
 
         count
@@ -76,7 +81,8 @@ class BiocacheService {
             int totalBiocacheImageCount = countImages(biocacheImageSearchUrl, searchIdentifier, opus)
 
             if (totalBiocacheImageCount > startIndex - 1) {
-                result = webService.get("${biocacheImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&sort=images&im=true&pageSize=${pageSize}&startIndex=${startIndex}" + relevantFacets )
+//                result = webService.get("${biocacheImageSearchUrl}?fq=multimedia:Image&format=json&sort=images&im=true&pageSize=${pageSize}&startIndex=${startIndex}" + relevantFacets, [q: imagesQuery])
+                result = webService.get("${biocacheImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&sort=images&im=true&pageSize=${pageSize}&startIndex=${startIndex}" + relevantFacets)
                 int biocacheImageCount = result?.resp?.occurrences?.size() ?: 0
                 if (biocacheImageCount < pageSize) {
                     if (grailsApplication.config.sandbox.biocache.service.url) {
