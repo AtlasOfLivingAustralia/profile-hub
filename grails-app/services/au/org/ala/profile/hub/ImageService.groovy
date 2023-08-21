@@ -380,13 +380,6 @@ class ImageService {
         response.resp.images = combinedImages
         response.resp.count = numberOfPublishedImages + numberOfLocalImages
 
-//        if (excluded && !readonlyView) {
-//            int excludedCount = excluded?.size()
-//            response.resp.availImagesCount = response.resp.count - excludedCount
-//        } else {
-//            response.resp.availImagesCount = response.resp.count
-//        }
-
         if (!readonlyView) {
             response.resp.availImagesCount = publishedImagesMap?.resp?.totalRecords + numberOfLocalImages
         } else {
