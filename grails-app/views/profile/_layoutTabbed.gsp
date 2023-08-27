@@ -91,7 +91,7 @@
                             <g:render template="/common/attachments" model="[hideHeading: false]"/>
                             <g:render template="links"/>
                             <g:render template="bhlLinks"/>
-                            <g:render template="publications"/>
+%{--                            <g:render template="publications"/>--}%
                             <g:render template="bibliography"/>
                             <g:if test="${!profile.archivedDate}">
                                 <g:render template="lists"/>

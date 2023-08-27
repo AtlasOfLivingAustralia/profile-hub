@@ -101,9 +101,9 @@ dependencies {
     implementation 'org.apache.tika:tika-parsers:1.3'
     implementation "commons-fileupload:commons-fileupload:1.3.1"
 
-    implementation 'net.sf.jasperreports:jasperreports:6.4.1'
-    implementation 'net.sf.jasperreports:jasperreports-functions:6.4.1'
-    implementation 'au.org.ala:jasper-liberation-fonts-2.00.1:1.3'
+//    implementation 'net.sf.jasperreports:jasperreports:6.4.1'
+//    implementation 'net.sf.jasperreports:jasperreports-functions:6.4.1'
+//    implementation 'au.org.ala:jasper-liberation-fonts-2.00.1:1.3'
     implementation 'net.glxn:qrgen:1.4'
     implementation 'org.apache.xmlgraphics:batik-bridge:1.9'
     implementation 'org.apache.xmlgraphics:batik-svggen:1.9'
@@ -221,32 +221,32 @@ publish {
 }
 
 
-tasks.register('reportCompile') {
-    ant.property(name: 'jasper.path', value: 'jasperreports-6.4.1.jar')
+//tasks.register('reportCompile') {
+//    ant.property(name: 'jasper.path', value: 'jasperreports-6.4.1.jar')
 
 //    ant.taskdef(resource: "com/abc/ant/antlib.xml", classpath: ant.properties['jasper.path'], loaderref: 'abc')
 
 
-    println "\n- Starting JasperReports *.jrxml compilation process..."
-    println configurations.runtimeClasspath.asPath
-    // define the Jasper Reports Compile Task
-    ant.taskdef(name:'reportCompile', classname: 'net.sf.jasperreports.ant.JRAntCompileTask', classpath: configurations.runtimeClasspath.asPath)
-
-    // remove existing jasper files
-    ant.delete{
-        fileset('dir':'grails-app/conf/reports', 'defaultexcludes':'yes'){
-            include('name':'**/*.jasper')
-        }
-    }
+//    println "\n- Starting JasperReports *.jrxml compilation process..."
+//    println configurations.runtimeClasspath.asPath
+//    // define the Jasper Reports Compile Task
+//    ant.taskdef(name:'reportCompile', classname: 'net.sf.jasperreports.ant.JRAntCompileTask', classpath: configurations.runtimeClasspath.asPath)
+//
+//    // remove existing jasper files
+//    ant.delete{
+//        fileset('dir':'grails-app/conf/reports', 'defaultexcludes':'yes'){
+//            include('name':'**/*.jasper')
+//        }
+//    }
 
     // create a temporary directory for use by the jasper compiler
-    ant.mkdir(dir:'target/jasper')
+//    ant.mkdir(dir:'target/jasper')
 
     // compile the reports
-    ant.reportCompile(srcdir:'grails-app/conf/reports', destdir:'grails-app/conf/reports', tempdir:'target/jasper', keepJava:true, xmlvalidation:true){
-        include(name:'**/*.jrxml')
+//    ant.reportCompile(srcdir:'grails-app/conf/reports', destdir:'grails-app/conf/reports', tempdir:'target/jasper', keepJava:true, xmlvalidation:true){
+//        include(name:'**/*.jrxml')
 //        include(classpath: configurations.developmentOnly.asPath)
 //        include(name:'**/*.jrtx')
-    }
-    println "-------\n- JasperReports compilation process finished"
-}
+//    }
+//    println "-------\n- JasperReports compilation process finished"
+//}

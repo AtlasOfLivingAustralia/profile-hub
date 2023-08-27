@@ -270,12 +270,6 @@ class ProfileService {
         webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/publication", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
     }
 
-    def savePublication(String opusId, String profileId, file) {
-        log.debug("Saving publication for profile ${profileId}")
-
-        webService.postMultipart("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/publication", [:], null, [file], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
-    }
-
     def proxyGetPublicationFile(HttpServletResponse response, String opusId, String profileId, String publicationId) {
         log.debug("Proxying publication $publicationId")
 
