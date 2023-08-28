@@ -20,7 +20,6 @@ class ProfileController extends BaseController {
     AuthService authService
     ProfileService profileService
     BiocacheService biocacheService
-//    ExportService exportService
     ImageService imageService
     MapService mapService
     FlorulaCookieService florulaCookieService
@@ -135,10 +134,6 @@ class ProfileController extends BaseController {
         if (!params.profileId) {
             badRequest()
         } else {
-            if (params.snapshot == 'true' && enabled("publications")) {
-                savePublication()
-            }
-
             def response = profileService.toggleDraftMode(params.opusId as String, params.profileId as String)
 
             handle response
@@ -151,10 +146,6 @@ class ProfileController extends BaseController {
         if (!params.profileId) {
             badRequest()
         } else {
-            if (params.snapshot == 'true' && enabled("publications")) {
-                savePublication()
-            }
-
             // if we're already in draft mode and are publishing the changes, then we also need to publish any staged images
             def profile = profileService.getProfile(params.opusId, params.profileId, true)
             if (profile.profile.privateMode) {
@@ -234,11 +225,6 @@ class ProfileController extends BaseController {
         if (!params.profileId || !params.opusId || !json?.archiveComment) {
             badRequest "profileId, opusId and archiveComment are required parameters"
         } else {
-
-            // create a final snapshot version of the profile before archiving it, if the publications feature is enabled
-            if (enabled("publications")) {
-                savePublication()
-            }
 
             def response = profileService.archiveProfile(params.opusId as String, params.profileId as String, json.archiveComment as String)
 
@@ -568,41 +554,6 @@ class ProfileController extends BaseController {
         }
     }
 
-//    @PrivateCollectionSecurityExempt
-//    @Secured(role = ROLE_PROFILE_ADMIN)
-//    def savePublication() {
-//        if (!enabled("publications")) {
-//            badRequest "The publications feature has been disabled"
-//        } else if (!params.profileId || !params.opusId) {
-//            badRequest "profileId and opusId are required parameters"
-//        } else {
-//            Map pdfOptions = [
-//                    profileId   : params.profileId,
-//                    opusId      : params.opusId,
-//                    attributes  : true,
-//                    map         : true,
-//                    nomenclature: true,
-//                    taxonomy    : true,
-//                    bibliography: true,
-//                    links       : true,
-//                    bhllinks    : true,
-//                    specimens   : true,
-//                    conservation: true,
-//                    images      : true,
-//                    status      : true,
-//                    key         : true,
-//                    printVersion: true
-//            ]
-//
-//            ByteArrayOutputStream pdfStream = new ByteArrayOutputStream()
-//            exportService.createPdf(pdfOptions, pdfStream)
-//
-//            def response = profileService.savePublication(params.opusId as String, params.profileId as String, pdfStream.toByteArray())
-//
-//            handle response
-//        }
-//    }
-
     @Secured(role = ROLE_PROFILE_EDITOR)
     def updateAuthorship() {
         def json = request.getJSON()
@@ -757,10 +708,6 @@ class ProfileController extends BaseController {
     def listsPanel = {
         render template: "lists"
     }
-
-//    def publicationsPanel = {
-//        render template: "publications"
-//    }
 
     def bibliographyPanel = {
         render template: "bibliography"

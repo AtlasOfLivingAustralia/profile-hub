@@ -412,13 +412,11 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         // unless we manually add the dummy controller class used in this test
         grailsApplication.addArtefact("Controller", ProfileController)
         ProfileService pService = Mock(ProfileService)
-//        ExportService eService = Mock(ExportService)
         ImageService iService = Mock(ImageService)
         MapService mService = Mock(MapService)
         defineBeans {
             authService(MockAuthService)
             profileService(InstanceFactoryBean, pService, ProfileService)
-//            exportService(InstanceFactoryBean, eService, ExportService)
             mapService(InstanceFactoryBean, mService, MapService)
             imageService(InstanceFactoryBean, iService, ImageService)
             delegateService(MockDelegateService)
@@ -437,7 +435,6 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         pService.createProfile(*_) >> wsResponse
         pService.archiveProfile(*_) >> wsResponse
         pService.toggleDraftMode(*_) >> wsResponse
-//        pService.savePublication(*_) >> wsResponse
         pService.updateAttribute(*_) >> wsResponse
         pService.renameProfile(*_) >> wsResponse
         pService.deleteAttribute(*_) >> wsResponse
@@ -447,13 +444,12 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         pService.setPrimaryMultimedia(*_) >> wsResponse
         pService.setStatus(*_) >> wsResponse
         iService.updateLocalImageMetadata(*_) >> wsResponse
-//        iService.publishPrivateImage(*_) >> wsResponse
+        iService.publishPrivateImage(*_) >> wsResponse
         iService.updateLocalImageMetadata(*_) >> wsResponse
         iService.deletePrivateImage(*_) >> wsResponse
         mService.getSnapshotImageUrlWithUUIDs(*_) >> wsResponse
         mService.createMapSnapshot(*_) >> null
         mService.deleteMapSnapshot(*_) >> null
-//        eService.createPdf(*_) >> null
 
         controller = new ProfileController()
         controller.profileService = pService
@@ -694,14 +690,6 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         "publishDraft"          | "AUTHOR"                    | 403
         "publishDraft"          | "ADMIN"                     | 200
         "publishDraft"          | "ALA_ADMIN"                 | 200
-        // create profile snapshot
-//        "savePublication"       | "NOT_LOGGED_IN_USER"        | 403
-//        "savePublication"       | "LOGGED_IN_USER"            | 403
-//        "savePublication"       | "REVIEWER"                  | 403
-//        "savePublication"       | "EDITOR"                    | 403
-//        "savePublication"       | "AUTHOR"                    | 403
-//        "savePublication"       | "ADMIN"                     | 200
-//        "savePublication"       | "ALA_ADMIN"                 | 200
     }
 
     void "check to ensure users with correct privilege can comment on a profile"() {

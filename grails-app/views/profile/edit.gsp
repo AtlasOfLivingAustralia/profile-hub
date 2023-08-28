@@ -53,15 +53,6 @@
                             {{profileCtrl.profile.archiveComment}}
                         </p>
 
-%{--                        <p>--}%
-%{--                            If you need to reference this profile, you can do so using the last published version:--}%
-
-%{--                        <div class="archived-publication">--}%
-%{--                            <publication data="profileCtrl.profile.publications[0]" opus-id="profileCtrl.opusId"--}%
-%{--                                         profile-id="profileCtrl.profileId"  prefix="${grailsApplication.config.doi.resolver.prefix}">--}%
-%{--                            </publication>--}%
-%{--                        </div>--}%
-
                         <p>
                             Archived profiles will only appear in the general search results if the 'Include archived profiles' option is selected.
                             Archived profiles will NOT appear in the Browse, Quick Find, Taxonomic Tree or Subordinate Taxa lists.
@@ -174,8 +165,6 @@
                                                            params="[opusId: params.opusId]"/>
                                                 <multimedia profile="profileCtrl.profile" readonly="profileCtrl.readonly"></multimedia>
                                             </g:if>
-%{--                                            <g:include controller="profile" action="publicationsPanel"--}%
-%{--                                                       params="[opusId: params.opusId]"/>--}%
                                             <g:include controller="profile" action="authorPanel"
                                                        params="[opusId: params.opusId]"/>
                                             <g:if test="${params.isOpusReviewer}">
