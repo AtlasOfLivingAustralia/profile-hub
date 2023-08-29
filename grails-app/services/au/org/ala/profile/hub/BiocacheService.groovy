@@ -49,13 +49,7 @@ class BiocacheService {
 
     private int countImages(String imageSearchUrl, String searchIdentifier, Map opus, String minusQuery = "") {
         String imagesQuery = constructQueryString(searchIdentifier, opus, minusQuery)
-//        Map params = ["q":"${imagesQuery}","facets":"multimedia","flimit":"0","foffset":"0","fq":"multimedia:Image","pageSize":"0"]
-//        Map result = webService.get("${imageSearchUrl}", params, ContentType.APPLICATION_JSON,false)
-
         Map result = webService.get("${imageSearchUrl}?q=${imagesQuery}&facets=multimedia&flimit=0&foffset=0&fq=multimedia:Image&pageSize=0")
-//        Map result = webService.get("${imageSearchUrl}?facets=multimedia&flimit=0&foffset=0&fq=multimedia:Image&pageSize=0", [q: imagesQuery], ContentType.APPLICATION_FORM_URLENCODED)
-
-//        Map result = webService.get("${imageSearchUrl}?facets=multimedia&flimit=0&foffset=0&fq=multimedia:Image&pageSize=0", [q: imagesQuery])
         int count = result?.resp?.totalRecords ?: 0
 
         count

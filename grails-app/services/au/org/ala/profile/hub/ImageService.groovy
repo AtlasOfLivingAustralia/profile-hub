@@ -293,6 +293,7 @@ class ImageService {
         switch (opusDefaultOption) {
             case ImageOption.INCLUDE:
                 List excluded = profile?.imageSettings.findAll { isExcluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+                //find all private images from profile imageSettings with same imageId from profile privateImages because there is no private info in imageSettings
                 List privateImages = profile?.imageSettings.findAll {profile?.privateImages?.imageId.contains(it?.imageId?.toString())}
                 if (privateImages?.size() > 0) {
                     List excludedPrivateImages = privateImages?.findAll { isExcluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
@@ -309,6 +310,7 @@ class ImageService {
                 break
             case ImageOption.EXCLUDE:
                 List included = profile?.imageSettings.findAll { isIncluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+                //find all private images from profile imageSettings with same imageId from profile privateImages because there is no private info in imageSettings
                 List privateImages = profile?.imageSettings.findAll {profile?.privateImages?.imageId.contains(it?.imageId?.toString())}
                 List includedPrivateImages = privateImages?.findAll { isIncluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
                 numberOfIncludedLocalImages = (includedPrivateImages)? includedPrivateImages.size() : 0
