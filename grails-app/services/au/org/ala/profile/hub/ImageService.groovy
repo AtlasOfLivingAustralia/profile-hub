@@ -286,9 +286,10 @@ class ImageService {
         Map model = profileService.getProfile(opusId, profileId, latest)
         Map profile = model.profile
         Map opus = model.opus
-        String minusQuery = ""
+        String includeExcludeQuery = ""
         ImageOption opusDefaultOption = ImageOption.byName(opus.approvedImageOption, ImageOption.INCLUDE)
         Integer numberOfIncludedLocalImages = 0;
+
 
         switch (opusDefaultOption) {
             case ImageOption.INCLUDE:
@@ -305,7 +306,7 @@ class ImageService {
                 }
 
                 if ((excluded?.size() > 0) && readonlyView) {
-                    minusQuery = excluded.collect { "-image_url:$it" }.join(' AND ')
+                    includeExcludeQuery = excluded.collect { "-image_url:$it" }.join(' AND ')
                 }
                 break
             case ImageOption.EXCLUDE:
@@ -315,12 +316,12 @@ class ImageService {
                 List includedPrivateImages = privateImages?.findAll { isIncluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
                 numberOfIncludedLocalImages = (includedPrivateImages)? includedPrivateImages.size() : 0
                 if ((included?.size() > 0) && readonlyView) {
-                    minusQuery = "(" + included.collect { "image_url:$it" }.join(' OR ') + ")"
+                    includeExcludeQuery = "(" + included.collect { "image_url:$it" }.join(' OR ') + ")"
                 }
                 break
         }
 
-        Map numberOfPublishedImagesMap = biocacheService.imageCount(searchIdentifier, opus, minusQuery)
+        Map numberOfPublishedImagesMap = biocacheService.imageCount(searchIdentifier, opus, includeExcludeQuery)
         if (numberOfPublishedImagesMap && numberOfPublishedImagesMap?.resp && numberOfPublishedImagesMap?.resp?.totalRecords > 0) {
             numberOfPublishedImages = numberOfPublishedImagesMap?.resp?.totalRecords
         }
@@ -365,7 +366,7 @@ class ImageService {
             List publishedImageList = []
 
             if (readonlyView) {
-                publishedImagesMap = biocacheService.retrieveImages(searchIdentifier, opus, newPageSize, newStartIndex, "&fl=id,image_url", minusQuery)
+                publishedImagesMap = biocacheService.retrieveImages(searchIdentifier, opus, newPageSize, newStartIndex, "&fl=id,image_url", includeExcludeQuery)
             } else {
                 publishedImagesMap = biocacheService.retrieveImages(searchIdentifier, opus, newPageSize, newStartIndex)
             }

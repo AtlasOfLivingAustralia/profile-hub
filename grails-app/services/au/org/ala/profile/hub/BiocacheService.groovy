@@ -75,8 +75,7 @@ class BiocacheService {
             int totalBiocacheImageCount = countImages(biocacheImageSearchUrl, searchIdentifier, opus)
 
             if (totalBiocacheImageCount > startIndex - 1) {
-//                result = webService.get("${biocacheImageSearchUrl}?fq=multimedia:Image&format=json&sort=images&im=true&pageSize=${pageSize}&startIndex=${startIndex}" + relevantFacets, [q: imagesQuery])
-                result = webService.get("${biocacheImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&sort=images&im=true&pageSize=${pageSize}&startIndex=${startIndex}" + relevantFacets)
+                result = webService.get("${biocacheImageSearchUrl}?q=${imagesQuery}&fq=multimedia:Image&format=json&sort=images&im=true&pageSize=${pageSize}&startIndex=${startIndex}" + relevantFacets )
                 int biocacheImageCount = result?.resp?.occurrences?.size() ?: 0
                 if (biocacheImageCount < pageSize) {
                     if (grailsApplication.config.sandbox.biocache.service.url) {
