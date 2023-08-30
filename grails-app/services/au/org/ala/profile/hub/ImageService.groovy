@@ -361,7 +361,13 @@ class ImageService {
         //3.PUBLISHED IMAGES
         if (combinedImages.size() < Integer.valueOf(pageSize) && numberOfPublishedImagesMap && numberOfPublishedImagesMap?.size() > 0) {
             Integer newPageSize = Integer.valueOf(pageSize) - combinedImages.size() //partial page of private images
-            Integer newStartIndex = Integer.valueOf(startIndex) - ((numberOfIncludedLocalImages > 0)? numberOfIncludedLocalImages : numberOfLocalImages) + combinedImages.size() + numberOfStagedImages
+            //if numberOfIncludedLocal Images is not exist on readonly view mode, doesn't need to count number Of local images
+            if (readonlyView) {
+                numberOfLocalImages = 0;
+            }
+
+            Integer newStartIndex = Integer.valueOf(startIndex) - ((numberOfIncludedLocalImages > 0? numberOfIncludedLocalImages : numberOfLocalImages) + numberOfStagedImages) + combinedImages.size()
+
             if (newStartIndex < 0) newStartIndex = 0
 
             List publishedImageList = []
