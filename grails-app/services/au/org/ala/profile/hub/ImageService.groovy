@@ -282,7 +282,6 @@ class ImageService {
         Map response = [:]
         List combinedImages = []
         Integer numberOfLocalImages = 0
-        Integer numberOfStagedImages = 0
         Integer numberOfPublishedImages = 0
         Map model = profileService.getProfile(opusId, profileId, latest)
         Map profile = model.profile
@@ -341,22 +340,6 @@ class ImageService {
             }
         }
 
-        //2.STAGED IMAGES
-        //we want to display the images in a specific order - private, staged, published
-        //unlikely private image, needs to define new numberOfStagedImages because there is no related to profile.imageSettings
-        if (profile.privateMode && profile.stagedImages) {
-            numberOfStagedImages = profile.stagedImages.size()
-            if (combinedImages.size() < pageSize && profile.stagedImages.size() > 0) {
-                Integer newPageSize = pageSize - combinedImages.size() //partial page of private images
-                Integer newStartIndex = startIndex - profile.privateImages.size() + combinedImages.size()
-                List stagedImagesPaged = pageImages(profile.stagedImages, newStartIndex, newPageSize)
-                if (stagedImagesPaged && stagedImagesPaged.size() > 0) {
-                    combinedImages.addAll(convertLocalImages(stagedImagesPaged, opus, profile, ImageType.STAGED, useInternalPaths, readonlyView))
-                }
-            }
-
-        }
-
         Map publishedImagesMap = [:]
         //3.PUBLISHED IMAGES
         if (combinedImages.size() < Integer.valueOf(pageSize) && numberOfPublishedImagesMap && numberOfPublishedImagesMap?.size() > 0) {
@@ -366,7 +349,7 @@ class ImageService {
                 numberOfLocalImages = 0;
             }
 
-            Integer newStartIndex = Integer.valueOf(startIndex) - ((numberOfIncludedLocalImages > 0? numberOfIncludedLocalImages : numberOfLocalImages) + numberOfStagedImages) + combinedImages.size()
+            Integer newStartIndex = Integer.valueOf(startIndex) - ((numberOfIncludedLocalImages > 0? numberOfIncludedLocalImages : numberOfLocalImages)) + combinedImages.size()
 
             if (newStartIndex < 0) newStartIndex = 0
 
@@ -388,12 +371,12 @@ class ImageService {
         //we don't have support for JSON objects or serialization so this is a workaround
         response.resp = [:]
         response.resp.images = combinedImages
-        response.resp.count = numberOfPublishedImages + numberOfLocalImages + numberOfStagedImages
+        response.resp.count = numberOfPublishedImages + numberOfLocalImages
 
         if (!readonlyView) {
-            response.resp.availImagesCount = publishedImagesMap?.resp?.totalRecords + numberOfLocalImages + numberOfStagedImages
+            response.resp.availImagesCount = publishedImagesMap?.resp?.totalRecords + numberOfLocalImages
         } else {
-            response.resp.count = numberOfPublishedImages + ((numberOfIncludedLocalImages > 0)? numberOfIncludedLocalImages : 0) + numberOfStagedImages
+            response.resp.count = numberOfPublishedImages + ((numberOfIncludedLocalImages > 0)? numberOfIncludedLocalImages : 0)
             response.resp.availImagesCount   = response.resp.count
         }
 

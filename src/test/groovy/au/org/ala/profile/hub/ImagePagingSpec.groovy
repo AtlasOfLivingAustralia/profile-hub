@@ -35,9 +35,6 @@ class ImagePagingSpec extends Specification implements ServiceUnitTest<ImageServ
     @Shared
     List privateImagesComplex = [[imageId: 'imageId1'], [imageId: 'imageId2'], [imageId: 'imageId3'], [imageId: 'imageId4'], [imageId: 'imageId5'], [imageId: 'imageId6'], [imageId: 'imageId7'], [imageId: 'imageId8'], [imageId: 'imageId9'], [imageId: 'imageId10'], [imageId: 'imageId11'], [imageId: 'imageId12']]
     @Shared
-    List stagedImagesComplex = [[imageId: 'staged1'], [imageId: 'staged2'], [imageId: 'staged3'], [imageId: 'staged4'], [imageId: 'staged5'], [imageId: 'staged6'], [imageId: 'staged7'], [imageId: 'staged8'], [imageId: 'staged9'], [imageId: 'staged10'], [imageId: 'staged11'], [imageId: 'staged12']]
-    //List [[:],[:],[:],[:]]
-    @Shared
     List publishedImages = [[image: "published1"], [image: "published2"], [image: "published3"], [image: "published4"], [image: "published5"], [image: "published6"], [image: "published7"], [image: "published8"], [image: "published9"], [image: "published10"], [image: "published11"]]
 
 
@@ -219,7 +216,6 @@ class ImagePagingSpec extends Specification implements ServiceUnitTest<ImageServ
         where: "combinations of image types are"
         profileResponse                                                                                                                                                || image1Id | page3Size | totalNumberOfImages | biocacheService | test_description
         [profile: [scientificName: 'Olympia', uuid: 'profile1', privateImages: privateImagesComplex, imageSettings: imageSettings], opus: [keepImagesPrivate: true, uuid: 'collection1']]            || 'imageId1' | 2 | 12 | biocacheServiceMockNoImages | "Private images only"
-        [profile: [scientificName: 'Olympia', uuid: 'profile1', privateMode: true, stagedImages: stagedImagesComplex, privateImages: []], opus: [uuid: 'collection1']] || 'staged1' | 2 | 12 | biocacheServiceMockNoImages | "Staged images only"
         [profile: [scientificName: 'Olympia', uuid: 'profile1', stagedImages: [], privateImages: []], opus: [uuid: 'collection1']]                                     || 'published1' | 1 | 11 | biocacheServiceMockMoreImages | "Published images only"
     }
 
@@ -254,9 +250,6 @@ class ImagePagingSpec extends Specification implements ServiceUnitTest<ImageServ
         where: "combinations of image types are"
         profileResponse                                                                                                                                                                              || image1Id | image2Id | lastPageSize | biocacheService | test_description
         [profile: [scientificName: 'Olympia', uuid: 'profile1', privateImages: privateImagesComplex, imageSettings: imageSettings], opus: [keepImagesPrivate: true, uuid: 'collection1']]                                          || 'imageId11' | 'published3' | 3 | biocacheServiceMockImages | "Private and published images"
-        [profile: [scientificName: 'Olympia', uuid: 'profile1', privateMode: true, stagedImages: stagedImagesComplex, privateImages: []], opus: [uuid: 'collection1']]                               || 'staged11' | 'published3' | 3 | biocacheServiceMockImages | "Staged and published images"
-        [profile: [scientificName: 'Olympia', uuid: 'profile1', privateMode: true, stagedImages: stagedImagesComplex, privateImages: privateImagesComplex, imageSettings: imageSettings], opus: [uuid: 'collection1']]             || 'imageId11' | 'staged3' | 4 | biocacheServiceMockNoImages | "Private and staged images"
-        [profile: [scientificName: 'Olympia', uuid: 'profile1', privateMode: true, stagedImages: stagedImagesComplex[0..5], privateImages: privateImagesComplex[0..5], imageSettings: imageSettings[0..5]], opus: [uuid: 'collection1']] || 'staged5' | 'published3' | 3 | biocacheServiceMockImages | "Private, staged and published images"
     }
 
 }
