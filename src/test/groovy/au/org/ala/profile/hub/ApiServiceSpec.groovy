@@ -2,6 +2,7 @@ package au.org.ala.profile.hub
 
 import au.org.ala.profile.api.ApiService
 import au.org.ala.ws.service.WebService
+import au.org.ala.web.AuthService
 import grails.testing.services.ServiceUnitTest
 import org.grails.web.mapping.DefaultLinkGenerator
 import org.grails.web.mapping.UrlMappingsHolderFactoryBean
@@ -23,7 +24,7 @@ class ApiServiceSpec extends Specification implements ServiceUnitTest<ApiService
             }
             grailsLinkGenerator(DefaultLinkGenerator, "")
             profileService(ProfileService)
-            authService(MockAuthService)
+            authService(AuthService)
         }
 
         webService = service.profileService.webService = Mock(WebService)
@@ -55,7 +56,7 @@ class ApiServiceSpec extends Specification implements ServiceUnitTest<ApiService
                 getDelegate().grailsApplication = grailsApplication
             }
             grailsLinkGenerator(DefaultLinkGenerator, "")
-            authService(MockAuthService)
+            authService(AuthService)
         }
 
         service.profileService = Mock(ProfileService)
@@ -84,7 +85,7 @@ class ApiServiceSpec extends Specification implements ServiceUnitTest<ApiService
                 getDelegate().grailsApplication = grailsApplication
             }
             grailsLinkGenerator(DefaultLinkGenerator, "")
-            authService(MockAuthService)
+            authService(AuthService)
         }
 
         when:

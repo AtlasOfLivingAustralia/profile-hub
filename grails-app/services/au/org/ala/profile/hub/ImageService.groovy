@@ -289,7 +289,7 @@ class ImageService {
         String includeExcludeQuery = ""
         ImageOption opusDefaultOption = ImageOption.byName(opus.approvedImageOption, ImageOption.INCLUDE)
         Integer numberOfIncludedLocalImages = 0;
-
+        List includedPrivateImages = []
 
         switch (opusDefaultOption) {
             case ImageOption.INCLUDE:
@@ -297,12 +297,8 @@ class ImageService {
                 //find all private images from profile imageSettings with same imageId from profile privateImages because there is no private info in imageSettings
                 List privateImages = profile?.imageSettings.findAll {profile?.privateImages?.imageId.contains(it?.imageId?.toString())}
                 if (privateImages?.size() > 0) {
-                    List excludedPrivateImages = privateImages?.findAll { isExcluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
-                    if (excludedPrivateImages?.size() > 0) {
-                        numberOfIncludedLocalImages = privateImages.size() - excludedPrivateImages.size()
-                    } else {
-                        numberOfIncludedLocalImages = privateImages.size()
-                    }
+                    includedPrivateImages = privateImages?.findAll { !isExcluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+                    numberOfIncludedLocalImages = (includedPrivateImages)? includedPrivateImages.size() : 0
                 }
 
                 if ((excluded?.size() > 0) && readonlyView) {
@@ -313,7 +309,7 @@ class ImageService {
                 List included = profile?.imageSettings.findAll { isIncluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
                 //find all private images from profile imageSettings with same imageId from profile privateImages because there is no private info in imageSettings
                 List privateImages = profile?.imageSettings.findAll {profile?.privateImages?.imageId.contains(it?.imageId?.toString())}
-                List includedPrivateImages = privateImages?.findAll { isIncluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+                includedPrivateImages = privateImages?.findAll { isIncluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
                 numberOfIncludedLocalImages = (includedPrivateImages)? includedPrivateImages.size() : 0
                 if ((included?.size() > 0) && readonlyView) {
                     includeExcludeQuery = "(" + included.collect { "image_url:$it" }.join(' OR ') + ")"
@@ -334,14 +330,22 @@ class ImageService {
             if (profile.privateImages?.size() > 0) {
                 numberOfLocalImages = profile.privateImages.size()
             }
-            List privateImagesPaged = pageImages(profile.privateImages, startIndex, pageSize)
+
+            def filteredIncludedPrivateImages
+            if (readonlyView) {
+                filteredIncludedPrivateImages = profile.privateImages.findAll{includedPrivateImages.contains(it.imageId.toString())}
+            } else {
+                filteredIncludedPrivateImages = profile.privateImages as List
+            }
+
+            List privateImagesPaged = pageImages(filteredIncludedPrivateImages, startIndex, pageSize)
             if (privateImagesPaged && privateImagesPaged.size() > 0) {
                 combinedImages.addAll(convertLocalImages(privateImagesPaged, opus, profile, ImageType.PRIVATE, useInternalPaths, readonlyView))
             }
         }
 
         Map publishedImagesMap = [:]
-        //3.PUBLISHED IMAGES
+        //2.PUBLISHED IMAGES
         if (combinedImages.size() < Integer.valueOf(pageSize) && numberOfPublishedImagesMap && numberOfPublishedImagesMap?.size() > 0) {
             Integer newPageSize = Integer.valueOf(pageSize) - combinedImages.size() //partial page of private images
             //if numberOfIncludedLocal Images is not exist on readonly view mode, doesn't need to count number Of local images
