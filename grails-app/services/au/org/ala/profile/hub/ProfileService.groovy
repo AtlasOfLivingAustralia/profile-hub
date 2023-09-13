@@ -45,6 +45,11 @@ class ProfileService {
         webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())?.resp
     }
 
+    def getOpusList() {
+        webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/opus/list", [:], ContentType.APPLICATION_JSON, false, false, null)?.resp
+    }
+
+
     def updateOpus(String opusId, Map json) {
         webService.post("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}", json, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
     }

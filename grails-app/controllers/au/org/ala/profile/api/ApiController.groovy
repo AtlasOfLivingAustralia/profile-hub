@@ -24,7 +24,7 @@ import au.org.ala.plugins.openapi.Path
         type = SecuritySchemeType.HTTP,
         scheme = "bearer"
 )
-@RequireApiKey()
+//@RequireApiKey()
 class ApiController extends BaseController {
     static namespace = "v1"
     static allowedSortFields = ['scientificNameLower', 'lastUpdated', 'dateCreated']
@@ -34,6 +34,7 @@ class ApiController extends BaseController {
     MapService mapService
     ApiService apiService
 
+    @RequireApiKey()
     @Path("/api/opus/{opusId}")
     @Operation(
             summary = "Get collection (opus) details",
@@ -106,6 +107,41 @@ class ApiController extends BaseController {
         }
     }
 
+    @Path("/api/opus/list")
+    @Operation(
+            summary = "Get all collection (opus) details",
+            operationId = "/api/opus/list",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(
+                                            schema = @Schema(
+                                                    implementation = OpusResponse.class
+                                            )
+                                    )
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId is a required parameter"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Collection not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ]
+    )
+    def getListCollections () {
+       List opus = profileService.getOpusList() as List
+       render opus as JSON
+    }
+
+    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile")
     @Operation(
             summary = "List profiles in a collection",
@@ -245,6 +281,7 @@ class ApiController extends BaseController {
         }
     }
 
+    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile/{profileId}")
     @Operation(
             summary = "Get a profile in a collection",
@@ -333,6 +370,7 @@ class ApiController extends BaseController {
         }
     }
 
+    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile/{profileId}/draft")
     @Operation(
             summary = "Get a draft profile in a collection",
@@ -416,6 +454,7 @@ class ApiController extends BaseController {
         }
     }
 
+    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile/{profileId}/image")
     @Operation(
             summary = "Get images associated with a profile",
@@ -510,6 +549,7 @@ class ApiController extends BaseController {
         }
     }
 
+    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile/{profileId}/attribute/{attributeId}")
     @Operation(
             summary = "Get attributes of a profile in a collection",

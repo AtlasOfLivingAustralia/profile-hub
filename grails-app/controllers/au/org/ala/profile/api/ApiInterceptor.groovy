@@ -26,6 +26,8 @@ class ApiInterceptor {
         Class controllerClass = controller?.clazz
         def method = controllerClass?.getMethod(actionName, [] as Class[])
 
+        if (method.name == "getListCollections") return true
+
         if (authorization) {
             if (params.opusId && (opus = profileService.getOpus(params.opusId))) {
                 params.isOpusPrivate = opus.privateCollection
