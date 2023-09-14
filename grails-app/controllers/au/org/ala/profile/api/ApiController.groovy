@@ -1,6 +1,7 @@
 package au.org.ala.profile.api
 
 import au.ala.org.ws.security.RequireApiKey
+import au.org.ala.profile.domain.CollectionList
 import au.org.ala.profile.hub.BaseController
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
@@ -25,6 +26,7 @@ import au.org.ala.plugins.openapi.Path
         scheme = "bearer"
 )
 
+@RequireApiKey()
 class ApiController extends BaseController {
     static namespace = "v1"
     static allowedSortFields = ['scientificNameLower', 'lastUpdated', 'dateCreated']
@@ -34,7 +36,6 @@ class ApiController extends BaseController {
     MapService mapService
     ApiService apiService
 
-    @RequireApiKey()
     @Path("/api/opus/{opusId}")
     @Operation(
             summary = "Get collection (opus) details",
@@ -107,10 +108,10 @@ class ApiController extends BaseController {
         }
     }
 
-    @Path("/api/opus/list")
+    @Path("/api/opus")
     @Operation(
-            summary = "Get all collection (opus) details",
-            operationId = "/api/opus/list",
+            summary = "Get all public collections",
+            operationId = "/api/opus",
             method = "GET",
             responses = [
                     @ApiResponse(
@@ -137,11 +138,12 @@ class ApiController extends BaseController {
             ]
     )
     def getListCollections () {
-       List opus = profileService.getOpusList() as List
-       render opus as JSON
+       List opus = profileService.getOpus() as List
+       List filtered = opus.findAll(it-> !it.privateCollection)
+                .collect{new CollectionList(uuid: it.uuid, shortName:it.shortName, title:it.title, thumbnailUrl:it.thumbnailUrl, description:it.description)}
+       render filtered as JSON
     }
 
-    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile")
     @Operation(
             summary = "List profiles in a collection",
@@ -281,7 +283,6 @@ class ApiController extends BaseController {
         }
     }
 
-    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile/{profileId}")
     @Operation(
             summary = "Get a profile in a collection",
@@ -370,7 +371,6 @@ class ApiController extends BaseController {
         }
     }
 
-    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile/{profileId}/draft")
     @Operation(
             summary = "Get a draft profile in a collection",
@@ -454,7 +454,6 @@ class ApiController extends BaseController {
         }
     }
 
-    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile/{profileId}/image")
     @Operation(
             summary = "Get images associated with a profile",
@@ -549,7 +548,6 @@ class ApiController extends BaseController {
         }
     }
 
-    @RequireApiKey()
     @Path("/api/opus/{opusId}/profile/{profileId}/attribute/{attributeId}")
     @Operation(
             summary = "Get attributes of a profile in a collection",
