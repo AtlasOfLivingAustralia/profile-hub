@@ -5,6 +5,7 @@ import au.org.ala.profile.domain.CollectionList
 import au.org.ala.profile.hub.BaseController
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
+import au.org.ala.profile.security.GrantAccess
 import au.org.ala.profile.security.RequiresAccessToken
 import grails.converters.JSON
 
@@ -108,6 +109,7 @@ class ApiController extends BaseController {
         }
     }
 
+    @GrantAccess
     @Path("/api/opus")
     @Operation(
             summary = "Get all public collections",
