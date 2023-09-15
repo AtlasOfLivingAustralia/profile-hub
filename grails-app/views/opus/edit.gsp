@@ -30,12 +30,6 @@
                     <a href="${request.contextPath}/opus/{{opusCtrl.opus.shortName ? opusCtrl.opus.shortName : opusCtrl.opus.uuid}}"
                        class="btn btn-default" target="_self" ng-show="opusCtrl.opus.uuid"><i
                             class="fa fa-eye"></i> Public View</a>
-                    <g:if test="${params.isALAAdmin}">
-                        <button ng-click="opusCtrl.deleteOpus()" class="btn btn-danger" target="_self"
-                                ng-show="opusCtrl.opus.uuid"><i
-                                class="fa fa-trash-o"></i> Delete this collection
-                        </button>
-                    </g:if>
             </div>
         </div>
     </div>
@@ -127,7 +121,10 @@
                 <g:include controller="opus" action="editAboutPanel" params="[opusId: params.opusId]"/>
 
                 <additional-statuses opus="opusCtrl.opus"></additional-statuses>
+
+                <g:include controller="opus" action="editDeleteCollectionPanel" params="[opusId: params.opusId]"/>
             </g:if>
+
         </div>
     </div>
 
