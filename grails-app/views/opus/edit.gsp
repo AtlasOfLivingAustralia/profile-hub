@@ -122,7 +122,9 @@
 
                 <additional-statuses opus="opusCtrl.opus"></additional-statuses>
 
-                <g:include controller="opus" action="editDeleteCollectionPanel" params="[opusId: params.opusId]"/>
+                <g:if test="${params.isALAAdmin}">
+                      <g:include controller="opus" action="editDeleteCollectionPanel" params="[opusId: params.opusId]"/>
+                </g:if>
             </g:if>
 
         </div>
