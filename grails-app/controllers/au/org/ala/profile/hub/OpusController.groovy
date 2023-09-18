@@ -677,6 +677,10 @@ class OpusController extends OpusBaseController {
         render template: "editAboutPage"
     }
 
+    def editDeleteCollectionPanel = {
+        render template: "editDeleteCollectionPage"
+    }
+
     def reportPanel = {
         render template: "report"
     }
