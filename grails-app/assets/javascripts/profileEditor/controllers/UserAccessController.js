@@ -81,7 +81,11 @@ profileEditor.controller('UserAccessController', function (messageService, util,
     };
 
     self.privateModeChanged = function() {
-        self.roles.push(userRole);
+        if (self.opus.privateCollection) {
+            self.roles.push(userRole);
+        } else {
+            self.roles.splice(4, 1)
+        }
     };
 
     function showPopup(user) {
