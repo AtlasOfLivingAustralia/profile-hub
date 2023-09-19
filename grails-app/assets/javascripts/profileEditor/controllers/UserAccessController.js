@@ -84,8 +84,8 @@ profileEditor.controller('UserAccessController', function (messageService, util,
         if (self.opus.privateCollection) {
             self.roles.push(userRole);
         } else {
-            self.roles.splice(4, 1)
-            if (form.$dirty) {
+            var hasRole_USER = self.users.find(it=>it.role === 'ROLE_USER')
+            if (form.$dirty && hasRole_USER) {
                 self.users = self.users.filter(it => it.role !== 'ROLE_USER')
                 var data = {privateCollection: self.opus.privateCollection, authorities: self.users};
                 var promise = profileService.updateUsers(self.opusId, data);
@@ -95,6 +95,7 @@ profileEditor.controller('UserAccessController', function (messageService, util,
                     messageService.alert("An error has occurred while updating user access.");
                 });
             }
+            self.roles.splice(4, 1)
         }
     };
 

@@ -122,9 +122,9 @@
         <div class="row">
             <div class="col-md-12" ng-show="userCtrl.accessControlTab == 'user'">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="userCtrl.addUser(UserForm)" ng-disabled="!userCtrl.opus.privateCollection && UserForm.$dirty">
+                    <button class="btn btn-default" ng-click="userCtrl.addUser(UserForm)">
                         <i class="fa fa-plus"></i>  Add user</button>
-                    <button class="btn btn-default" ng-click="userCtrl.reset(UserForm)" ng-disabled="!userCtrl.opus.privateCollection && UserForm.$dirty">Reset</button>
+                    <button class="btn btn-default" ng-click="userCtrl.reset(UserForm)">Reset</button>
                 </div>
                 <save-button ng-click="userCtrl.save(UserForm)" form="UserForm"></save-button>
             </div>
