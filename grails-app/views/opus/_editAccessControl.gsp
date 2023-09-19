@@ -21,12 +21,16 @@
                         <div class="checkbox padding-bottom-1">
                             <label for="privateCollection" class="inline-label">
                                 <input id="privateCollection" type="checkbox" name="privateCollection"
-                                    ng-change="userCtrl.privateModeChanged()"
+                                    ng-change="userCtrl.privateModeChanged(UserForm)"
                                        ng-model="userCtrl.opus.privateCollection" ng-false-value="false">
                                 Make this collection private
                             </label>
                             <div class="small padding-left-1" ng-show="userCtrl.opus.privateCollection">
                                 When the collection is 'private' only people who have been added to the collection with at least the 'User' role will be allowed to view the profiles within the collection.
+                                <p class="bg-info alert alert-danger">
+                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="sr-only">Error:</span>When you change collection private to public, existing all users who have USER ROLE will be deleted.
+                                </p>
                             </div>
                         </div>
 
@@ -118,9 +122,9 @@
         <div class="row">
             <div class="col-md-12" ng-show="userCtrl.accessControlTab == 'user'">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="userCtrl.addUser(UserForm)"><i
-                            class="fa fa-plus"></i>  Add user</button>
-                    <button class="btn btn-default" ng-click="userCtrl.reset(UserForm)">Reset</button>
+                    <button class="btn btn-default" ng-click="userCtrl.addUser(UserForm)" ng-disabled="!userCtrl.opus.privateCollection && UserForm.$dirty">
+                        <i class="fa fa-plus"></i>  Add user</button>
+                    <button class="btn btn-default" ng-click="userCtrl.reset(UserForm)" ng-disabled="!userCtrl.opus.privateCollection && UserForm.$dirty">Reset</button>
                 </div>
                 <save-button ng-click="userCtrl.save(UserForm)" form="UserForm"></save-button>
             </div>
