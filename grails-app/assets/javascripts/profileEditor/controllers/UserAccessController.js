@@ -80,12 +80,12 @@ profileEditor.controller('UserAccessController', function (messageService, util,
         });
     };
 
-    self.privateModeChanged = function(form) {
+    self.privateModeChanged = function() {
         if (self.opus.privateCollection) {
             self.roles.push(userRole);
         } else {
             var hasRole_USER = self.users.find(it=>it.role === 'ROLE_USER')
-            if (form.$dirty && hasRole_USER) {
+            if (hasRole_USER) {
                 self.users = self.users.filter(it => it.role !== 'ROLE_USER')
                 var data = {privateCollection: self.opus.privateCollection, authorities: self.users};
                 var promise = profileService.updateUsers(self.opusId, data);

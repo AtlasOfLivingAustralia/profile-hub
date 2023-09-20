@@ -21,7 +21,7 @@
                         <div class="checkbox padding-bottom-1">
                             <label for="privateCollection" class="inline-label">
                                 <input id="privateCollection" type="checkbox" name="privateCollection"
-                                    ng-change="userCtrl.privateModeChanged(UserForm)"
+                                    ng-change="userCtrl.privateModeChanged()"
                                        ng-model="userCtrl.opus.privateCollection" ng-false-value="false">
                                 Make this collection private
                             </label>
