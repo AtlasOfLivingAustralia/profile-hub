@@ -66,6 +66,7 @@ profileEditor.controller('CommentController', function (profileService, util, co
             messageService.success("Comment successfully saved.");
 
             var comment = null;
+
             if (self.currentComment.uuid) {
                 comment = find(path);
                 comment.text = self.currentComment.text;
@@ -76,6 +77,9 @@ profileEditor.controller('CommentController', function (profileService, util, co
                 }
                 comment.children.push(data);
             } else {
+                if (!Array.isArray(self.comments)) {
+                    self.comments = [];
+                }
                 self.comments.push(data);
             }
 
