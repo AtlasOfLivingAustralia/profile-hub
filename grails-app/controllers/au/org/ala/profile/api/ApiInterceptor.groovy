@@ -38,6 +38,8 @@ class ApiInterceptor {
                 } else {
                     authorised = true
                 }
+            } else if (method?.isAnnotationPresent(GrantAccess)) {
+                authorised = true
             }
         }
 
