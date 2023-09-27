@@ -111,7 +111,14 @@
                                       ng-class="image.type.name == 'OPEN' ? 'pill-blue' : image.type.name == 'PRIVATE' ? 'pill-green' : 'pill-yellow'"
                                       title="This image is {{image.type.name == 'OPEN' ? 'available in the Atlas of Living Australia image library' : image.type.name == 'PRIVATE' ? 'only visible within this collection' : 'only visible in draft mode'}}">{{image.type.name}}</span>
 
-                                <div class="meta inline-block">{{ image.dataResourceName }}</div>
+                                <p class="caption"
+                                   ng-if="imageCtrl.imageCaption(image)">"<span ng-bind-html="imageCtrl.imageCaption(image) | sanitizeHtml"></span>"
+                                    <span class="caption"
+                                          ng-if="image.metadata.creator">by {{ image.metadata.creator }}<span
+                                            ng-if="image.metadata.created">, {{ image.metadata.created | date: 'dd/MM/yyyy' }}</span>
+                                    </span>
+                                    <span ng-if="image.metadata.rightsHolder">(&copy; {{ image.metadata.rightsHolder }})</span>
+                                </p>
 
                             </div>
                         </div>
