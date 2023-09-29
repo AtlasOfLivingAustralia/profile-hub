@@ -35,11 +35,13 @@ profileEditor.controller('ALAAdminController', function ($http, util, messageSer
     };
 
     self.tags = [];
+    self.cacheRegions = [];
 
     loadBackupFileList();
     loadOpusList();
     loadPendingJobs();
     loadTags();
+    cacheManagement();
 
     self.reloadHelpUrls = function() {
         var promise = $http.post(util.contextRoot() + "/admin/reloadHelpUrls");
@@ -223,6 +225,26 @@ profileEditor.controller('ALAAdminController', function ($http, util, messageSer
             self.loadingTags = false;
         }, function() {
             self.loadingTags = false;
+        });
+    }
+
+    function cacheManagement() {
+        self.loadingCacheManagement = true;
+        var promise = $http.get(util.contextRoot() + "/admin/cacheManagement/");
+        promise.then(function (response) {
+            self.cacheRegions = response.data || [];
+            self.loadingCacheManagement = false;
+        }, function() {
+            self.loadingCacheManagement = false;
+        });
+    }
+
+    self.clearCache = function (cache) {
+        var promise = $http.get(util.contextRoot() + "/admin/clearCache/" + cache);
+        promise.then(function() {
+            messageService.success("Job clear cache for " +  cache);
+        }, function() {
+            messageService.alert("Failed to clear cache the job");
         });
     }
 });

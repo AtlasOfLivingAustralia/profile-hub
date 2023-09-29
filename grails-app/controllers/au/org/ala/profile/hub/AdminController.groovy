@@ -10,10 +10,12 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 
 import javax.validation.constraints.NotNull
 import static groovy.io.FileType.DIRECTORIES
+import org.grails.plugin.cache.GrailsCacheManager
 class AdminController extends BaseController {
 
     WebService webService
     ProfileService profileService
+    GrailsCacheManager grailsCacheManager
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def index() {
@@ -118,6 +120,20 @@ class AdminController extends BaseController {
 
     private String getBackupRestoreDir() {
         return grailsApplication.config.backupRestoreDir?: '/data/profile-service/backup/db'
+    }
+
+    @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
+    def cacheManagement() {
+        def cacheNames = grailsCacheManager.getCacheNames()
+        success cacheNames
+    }
+
+    @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
+    def clearCache() {
+        if (params.id) {
+            grailsCacheManager.getCache(params.id).clear()
+        }
+        render view: "admin.gsp"
     }
 
 }
