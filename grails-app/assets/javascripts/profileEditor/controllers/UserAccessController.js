@@ -80,7 +80,7 @@ profileEditor.controller('UserAccessController', function (messageService, util,
         });
     };
 
-    self.privateModeChanged = function() {
+    self.privateModeChanged = function(form) {
         if (self.opus.privateCollection) {
             self.roles.push(userRole);
         } else {
@@ -90,6 +90,7 @@ profileEditor.controller('UserAccessController', function (messageService, util,
                 var data = {privateCollection: self.opus.privateCollection, authorities: self.users};
                 var promise = profileService.updateUsers(self.opusId, data);
                 promise.then(function () {
+                    form.$setPristine();
                     messageService.success("User access has been successfully updated.");
                 }, function () {
                     messageService.alert("An error has occurred while updating user access.");
@@ -142,7 +143,7 @@ profileEditor.controller('UserAccessController', function (messageService, util,
                     popupateUserDetails(user);
                 });
 
-                self.privateModeChanged();
+                self.privateModeChanged(form);
 
                 if (form) {
                     form.$setPristine();
