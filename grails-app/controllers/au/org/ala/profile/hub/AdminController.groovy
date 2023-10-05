@@ -3,10 +3,7 @@ package au.org.ala.profile.hub
 import au.org.ala.profile.security.Role
 import au.org.ala.profile.security.Secured
 import au.org.ala.ws.service.WebService
-import grails.converters.JSON
-import grails.util.Environment
 import org.apache.http.entity.ContentType
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 
 import javax.validation.constraints.NotNull
 import static groovy.io.FileType.DIRECTORIES
@@ -135,5 +132,4 @@ class AdminController extends BaseController {
         }
         render view: "admin.gsp"
     }
-
 }

@@ -167,12 +167,19 @@
 
         <div class="panel panel-body">
             <h4>Caches Management</h4>
-            <div class="form-group">
-                <ui>
-                    <li class="nav col-md-12 form-inline padding-bottom-1" ng-repeat="cache in adminCtrl.cacheRegions">
-                                <button class="btn btn-sm btn-danger" ng-click="adminCtrl.clearCache(cache)"><i class="fa fa-times"></i>Clear</button> {{cache}}
-                    </li>
-                </ui>
+            <div class="table-responsive" ng-show="adminCtrl.cacheRegions.length > 0">
+                <table class="table table-striped">
+                    <thead>
+                    <th>Cache Name</th>
+                    <th>Cache Clear</th>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="cache in adminCtrl.cacheRegions">
+                        <td>{{ cache }}</td>
+                        <td><button class="btn btn-sm btn-danger" ng-click="adminCtrl.clearCache(cache)"><i class="fa fa-times"></i>Clear</button></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
