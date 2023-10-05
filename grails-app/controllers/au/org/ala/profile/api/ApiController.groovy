@@ -513,23 +513,19 @@ class ApiController extends BaseController {
         }
     }
 
-    @GrantAccess
     @Path("/api/opus/{opusId}/profile/{profileId}/image/{imageId}")
     @Operation(
-            summary = "Get images associated with a profile",
+            summary = "Get image associated with a profile",
             operationId = "/api/opus/{opusId}/profile/{profileId}/image/{imageId}",
             method = "GET",
             responses = [
                     @ApiResponse(
                             responseCode = "200",
                             content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(
-                                            implementation = ImageListResponse.class
-                                    )
+                                    mediaType = "image/*",
+                                    schema = @Schema(type = "String", format = "binary")
                             ),
                             headers = [
-                                    @Header(name = 'X-Total-Count', description = "Total number of images", schema = @Schema(type = "integer")),
                                     @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
                                     @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
                                     @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
@@ -548,23 +544,22 @@ class ApiController extends BaseController {
             ],
             parameters = [
                     @Parameter(name = "opusId",
-                            in = ParameterIn.PATH,
                             required = true,
                             description = "Collection id - UUID or short name"),
                     @Parameter(name = "profileId",
-                            in = ParameterIn.PATH,
                             required = true,
                             description = "Profile id - UUID or Scientific name"),
                     @Parameter(name = "type",
-                            in = ParameterIn.PATH,
                             required = true,
-                            description = "type - private or open"),
+                            description = "type - private",
+                            schema = @Schema(
+                                    type = "string",
+                                    allowableValues =  ['PRIVATE']
+                            ),
                     @Parameter(name = "Access-Token",
-                            in = ParameterIn.HEADER,
                             required = false,
                             description = "Access token to read private collection"),
                     @Parameter(name = "Accept-Version",
-                            in = ParameterIn.HEADER,
                             required = true,
                             description = "The API version",
                             schema = @Schema(
