@@ -555,7 +555,8 @@ class ApiController extends BaseController {
                             schema = @Schema(
                                     type = "string",
                                     allowableValues =  ['PRIVATE']
-                            ),
+                            )
+                    ),
                     @Parameter(name = "Access-Token",
                             required = false,
                             description = "Access token to read private collection"),
