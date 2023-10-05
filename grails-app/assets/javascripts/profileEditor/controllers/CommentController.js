@@ -76,6 +76,9 @@ profileEditor.controller('CommentController', function (profileService, util, co
                 }
                 comment.children.push(data);
             } else {
+                if (!Array.isArray(self.comments)) {
+                    self.comments = [];
+                }
                 self.comments.push(data);
             }
 
