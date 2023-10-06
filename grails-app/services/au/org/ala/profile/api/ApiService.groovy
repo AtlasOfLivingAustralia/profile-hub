@@ -139,37 +139,4 @@ class ApiService {
     protected isSuccessful(int statusCode) {
         return statusCode >= SC_OK && statusCode <= 299
     }
-
-    def displayLocalImage(String path, String collectionId, String profileId, String fileName, Boolean thumbnail) {
-        if (!fileName) {
-            badRequest "fileId is a required parameter"
-        } else {
-            File file
-            String imageId = fileName.substring(0, fileName.lastIndexOf("."))
-            if (thumbnail) {
-                String thumbnailName = makeThumbnailName(fileName)
-                file = new File("${path}/${collectionId}/${profileId}/${imageId}/${imageId}_thumbnails/${thumbnailName}")
-                if (!file.exists()) {  //use the image if there is no thumbnail
-                    file = new File("${path}/${collectionId}/${profileId}/${imageId}/${fileName}")
-                }
-            } else {
-                file = new File("${path}/${collectionId}/${profileId}/${imageId}/${fileName}")
-            }
-
-            if (!file.exists()) {  //support for version 1 file locations
-                file = new File("${path}/${profileId}/${fileName}")
-            }
-            if (!file.exists()) {
-                notFound "The requested file could not be found"
-            } else {
-                return file
-            }
-        }
-    }
-
-    String makeThumbnailName(String fileName) {
-        String extension = Utils.getExtension(fileName)
-        String imageId = fileName.substring(0, fileName.lastIndexOf('.'))
-        "${imageId}_thumbnail${extension}"
-    }
 }

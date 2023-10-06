@@ -2,11 +2,8 @@ package au.org.ala.profile.api
 
 import au.ala.org.ws.security.RequireApiKey
 import au.org.ala.profile.hub.BaseController
-import au.org.ala.profile.hub.ImageType
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
-import au.org.ala.profile.hub.Utils
-import au.org.ala.profile.security.GrantAccess
 import au.org.ala.profile.security.RequiresAccessToken
 import grails.converters.JSON
 
@@ -573,44 +570,24 @@ class ApiController extends BaseController {
             ],
             security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
     )
-    def getLocalImage () {
-        if (!params.type) {
-            badRequest "type is a required parameter"
-        } else {
-            try {
-                ImageType type = params.type as ImageType
-                if (type == ImageType.PRIVATE) {
-                    def result = apiService.displayLocalImage("${grailsApplication.config.image.private.dir}/", params.opusId, params.profileId, params.imageId, false)
-                    if (result) {
-                        response.setHeader("Content-disposition", "attachment;filename=${params.imageId}")
-                        response.setContentType(Utils.getContentType(result))
-                        result.withInputStream { response.outputStream << it }
-                    }
-                }
-            } catch (IllegalArgumentException e) {
-                log.warn(e)
-                badRequest "Invalid image type ${params.type}"
-            }
-        }
+
+    def getLocalImage() {
+        forward controller: "profile", action: "getLocalImage", namespace: "v1"
     }
 
-    @GrantAccess
-    @Path("/api/opus/{opusId}/profile/{profileId}/image/{imageId}")
+    @Path("/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{imageId}")
     @Operation(
-            summary = "Get images associated with a profile",
-            operationId = "/api/opus/{opusId}/profile/{profileId}/image/{imageId}",
+            summary = "Get thumbnail image associated with a profile",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{imageId}",
             method = "GET",
             responses = [
                     @ApiResponse(
                             responseCode = "200",
                             content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(
-                                            implementation = ImageListResponse.class
-                                    )
+                                    mediaType = "image/*",
+                                    schema = @Schema(type = "String", format = "binary")
                             ),
                             headers = [
-                                    @Header(name = 'X-Total-Count', description = "Total number of images", schema = @Schema(type = "integer")),
                                     @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
                                     @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
                                     @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
@@ -629,23 +606,23 @@ class ApiController extends BaseController {
             ],
             parameters = [
                     @Parameter(name = "opusId",
-                            in = ParameterIn.PATH,
                             required = true,
                             description = "Collection id - UUID or short name"),
                     @Parameter(name = "profileId",
-                            in = ParameterIn.PATH,
                             required = true,
                             description = "Profile id - UUID or Scientific name"),
                     @Parameter(name = "type",
-                            in = ParameterIn.PATH,
                             required = true,
-                            description = "type - private or open"),
+                            description = "type - private",
+                            schema = @Schema(
+                                    type = "string",
+                                    allowableValues =  ['PRIVATE']
+                            )
+                    ),
                     @Parameter(name = "Access-Token",
-                            in = ParameterIn.HEADER,
                             required = false,
                             description = "Access token to read private collection"),
                     @Parameter(name = "Accept-Version",
-                            in = ParameterIn.HEADER,
                             required = true,
                             description = "The API version",
                             schema = @Schema(
@@ -660,24 +637,7 @@ class ApiController extends BaseController {
     )
 
     def retrieveLocalThumbnailImage () {
-        if (!params.type) {
-            badRequest "type is a required parameter"
-        } else {
-            try {
-                ImageType type = params.type as ImageType
-                if (type == ImageType.PRIVATE) {
-                    def result = apiService.displayLocalImage("${grailsApplication.config.image.private.dir}/", params.opusId, params.profileId, params.imageId, true)
-                    if (result) {
-                        response.setHeader("Content-disposition", "attachment;filename=${params.imageId}")
-                        response.setContentType(Utils.getContentType(result))
-                        result.withInputStream { response.outputStream << it }
-                    }
-                }
-            } catch (IllegalArgumentException e) {
-                log.warn(e)
-                badRequest "Invalid image type ${params.type}"
-            }
-        }
+        forward controller: "profile", action: "retrieveLocalThumbnailImage", namespace: "v1"
     }
 
     @Path("/api/opus/{opusId}/profile/{profileId}/attribute/{attributeId}")
