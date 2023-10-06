@@ -124,10 +124,10 @@ profileEditor.controller('UserAccessController', function (messageService, util,
     }
 
     self.reset = function (form) {
-        loadOpus(form);
+        loadOpus(form, true);
     };
 
-    function loadOpus(form) {
+    function loadOpus(form, isReset) {
         if (!self.opusId) {
             return;
         }
@@ -143,7 +143,9 @@ profileEditor.controller('UserAccessController', function (messageService, util,
                     popupateUserDetails(user);
                 });
 
-                self.privateModeChanged(form);
+                if (isReset) {
+                    self.privateModeChanged(form);
+                }
 
                 if (form) {
                     form.$setPristine();
