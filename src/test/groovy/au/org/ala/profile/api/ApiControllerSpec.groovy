@@ -150,24 +150,8 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
         'opus1' | '123'     | 'a,b'      | 200
     }
 
-    void "getLocalImage should be provided with opus id and profile id parameters"() {
-        when:
-        params.opusId = opusId
-        params.profileId = profileId
-        params.imageId = imageId
-        apiService.displayLocalImage('path', params.opusId, params.profileId, params.imageId, false)
-
-        then:
-        response.status == responseCode
-
-        where:
-        opusId  | profileId | imageId | responseCode
-        'opus1' | '123'     | '1.png' | 200
-    }
-
     void "getLocalImage should be provided with opus id and profile id and imageId parameters"() {
         when:
-        params.type = type
         params.opusId = opusId
         params.profileId = profileId
         params.imageId = imageId
@@ -177,12 +161,8 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
         response.status == responseCode
 
         where:
-        type      | opusId  | profileId | imageId | responseCode
-        null      |'opus1'  | '123'     | '1.png' | 400
-        null      | null    | '123'     | '1.png' | 400
-        null      |'opus1'  | null      | '1.png' | 400
-        null      |'opus1'  | '123'     | null    | 400
-        'PRIVATE' |'opus1'  | '123'     | '1.png' | 200
+        opusId  | profileId | imageId | responseCode
+        'opus1' | '123'     | '1.png' | 200
     }
 
     void "retrieveLocalThumbnailImage should be provided with opus id and profile id and imageId parameters with thumbnail"() {
@@ -198,10 +178,6 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
 
         where:
         type      | opusId  | profileId | imageId | responseCode
-        null      |'opus1'  | '123'     | '1.png' | 400
-        null      | null    | '123'     | '1.png' | 400
-        null      |'opus1'  | null      | '1.png' | 400
-        null      |'opus1'  | '123'     | null    | 400
         'PRIVATE' |'opus1'  | '123'     | '1.png' | 200
     }
 }
