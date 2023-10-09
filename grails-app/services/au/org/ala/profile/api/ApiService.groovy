@@ -3,6 +3,7 @@ package au.org.ala.profile.api
 import au.org.ala.profile.hub.ImageService
 import au.org.ala.profile.hub.NslService
 import au.org.ala.profile.hub.ProfileService
+import au.org.ala.profile.hub.Utils
 import grails.web.mapping.LinkGenerator
 
 import static au.org.ala.profile.hub.Utils.encPath

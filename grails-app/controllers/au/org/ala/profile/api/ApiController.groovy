@@ -549,6 +549,154 @@ class ApiController extends BaseController {
         }
     }
 
+    @Path("/api/opus/{opusId}/profile/{profileId}/image/{imageId}")
+    @Operation(
+            summary = "Get image associated with a profile",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/image/{imageId}",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "image/*",
+                                    schema = @Schema(type = "String", format = "binary")
+                            ),
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId and profileId are required parameters"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Opus or profile not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ],
+            parameters = [
+                    @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id - UUID or short name"),
+                    @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Profile id - UUID or Scientific name"),
+                    @Parameter(name = "imageId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Image id - UUID"),
+                    @Parameter(name = "type",
+                            in = ParameterIn.QUERY,
+                            required = true,
+                            description = "type - private",
+                            schema = @Schema(
+                                    type = "string",
+                                    allowableValues =  ['PRIVATE']
+                            )
+                    ),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = false,
+                            description = "Access token to read private collection"),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
+                    )
+            ],
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
+    )
+
+    def getLocalImage() {
+        forward controller: "profile", action: "getLocalImage"
+    }
+
+    @Path("/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{imageId}")
+    @Operation(
+            summary = "Get thumbnail image associated with a profile",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{imageId}",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "image/*",
+                                    schema = @Schema(type = "String", format = "binary")
+                            ),
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId and profileId are required parameters"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Opus or profile not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ],
+            parameters = [
+                    @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id - UUID or short name"),
+                    @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Profile id - UUID or Scientific name"),
+                    @Parameter(name = "imageId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Image id - UUID"),
+                    @Parameter(name = "type",
+                            in = ParameterIn.QUERY,
+                            required = true,
+                            description = "type - private",
+                            schema = @Schema(
+                                    type = "string",
+                                    allowableValues =  ['PRIVATE']
+                            )
+                    ),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = false,
+                            description = "Access token to read private collection"),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
+                    )
+            ],
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
+    )
+
+    def retrieveLocalThumbnailImage () {
+        forward controller: "profile", action: "retrieveLocalThumbnailImage"
+    }
+
     @Path("/api/opus/{opusId}/profile/{profileId}/attribute/{attributeId}")
     @Operation(
             summary = "Get attributes of a profile in a collection",
