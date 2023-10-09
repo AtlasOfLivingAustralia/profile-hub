@@ -378,7 +378,7 @@ class ImageService {
         response.resp.count = numberOfPublishedImages + numberOfLocalImages
 
         if (!readonlyView) {
-            response.resp.availImagesCount = publishedImagesMap?.resp?.totalRecords + numberOfLocalImages
+            response.resp.availImagesCount = (publishedImagesMap.resp?publishedImagesMap?.resp?.totalRecords:0) + numberOfLocalImages
         } else {
             response.resp.count = numberOfPublishedImages + ((numberOfIncludedLocalImages > 0)? numberOfIncludedLocalImages : 0)
             response.resp.availImagesCount   = response.resp.count
