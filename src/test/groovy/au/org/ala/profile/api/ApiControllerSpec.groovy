@@ -150,6 +150,7 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
         'opus1' | '123'     | 'a,b'      | 200
     }
 
+
     void "getLocalImage should be provided with opus id and profile id and imageId parameters"() {
         when:
         params.opusId = opusId
@@ -179,5 +180,16 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
         where:
         type      | opusId  | profileId | imageId | responseCode
         'PRIVATE' |'opus1'  | '123'     | '1.png' | 200
+
+    void "getOpusList should be provided"() {
+        setup:
+        profileService.getOpusList()>> [[uuid: 'abc',shortName:'alatest',title:'title1',desciption:'desc1',thubnailUrl:'test.png']]
+
+        when:
+        controller.getListCollections()
+
+        then:
+        response.status == 200
+
     }
 }
