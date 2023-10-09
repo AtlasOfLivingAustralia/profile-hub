@@ -4,6 +4,7 @@ import au.ala.org.ws.security.RequireApiKey
 import au.org.ala.profile.hub.BaseController
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
+import au.org.ala.profile.security.GrantAccess
 import au.org.ala.profile.security.RequiresAccessToken
 import grails.converters.JSON
 
@@ -24,6 +25,7 @@ import au.org.ala.plugins.openapi.Path
         type = SecuritySchemeType.HTTP,
         scheme = "bearer"
 )
+
 @RequireApiKey()
 class ApiController extends BaseController {
     static namespace = "v1"
@@ -104,6 +106,43 @@ class ApiController extends BaseController {
                 render opus as JSON
             }
         }
+    }
+
+    @GrantAccess
+    @Path("/api/opus")
+    @Operation(
+            summary = "Get all public collections",
+            operationId = "/api/opus",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(
+                                            schema = @Schema(
+                                                    implementation = CollectionList.class
+                                            )
+                                    )
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId is a required parameter"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Collection not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ]
+    )
+    def getListCollections () {
+       List opus = profileService.getOpus() as List
+       List filtered = opus.findAll(it-> !it.privateCollection)
+                .collect{new CollectionList(uuid: it.uuid, shortName:it.shortName, title:it.title, thumbnailUrl:it.thumbnailUrl, description:it.description)}
+       render filtered as JSON
     }
 
     @Path("/api/opus/{opusId}/profile")

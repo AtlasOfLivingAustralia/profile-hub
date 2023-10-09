@@ -149,4 +149,15 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
         'opus1' | '123'     | null       | 404
         'opus1' | '123'     | 'a,b'      | 200
     }
+
+    void "getOpusList should be provided"() {
+        setup:
+        profileService.getOpusList()>> [[uuid: 'abc',shortName:'alatest',title:'title1',desciption:'desc1',thubnailUrl:'test.png']]
+
+        when:
+        controller.getListCollections()
+
+        then:
+        response.status == 200
+    }
 }
