@@ -1,4 +1,4 @@
-package au.org.ala.profile.domain
+package au.org.ala.profile.api
 
 import groovy.transform.ToString
 

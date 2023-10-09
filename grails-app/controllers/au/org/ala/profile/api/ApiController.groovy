@@ -1,7 +1,6 @@
 package au.org.ala.profile.api
 
 import au.ala.org.ws.security.RequireApiKey
-import au.org.ala.profile.domain.CollectionList
 import au.org.ala.profile.hub.BaseController
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
@@ -122,7 +121,7 @@ class ApiController extends BaseController {
                                     mediaType = "application/json",
                                     array = @ArraySchema(
                                             schema = @Schema(
-                                                    implementation = OpusResponse.class
+                                                    implementation = CollectionList.class
                                             )
                                     )
                             )
