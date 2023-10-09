@@ -541,12 +541,19 @@ class ApiController extends BaseController {
             ],
             parameters = [
                     @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
                             required = true,
                             description = "Collection id - UUID or short name"),
                     @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
                             required = true,
                             description = "Profile id - UUID or Scientific name"),
+                    @Parameter(name = "imageId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Image id - UUID or Scientific name"),
                     @Parameter(name = "type",
+                            in = ParameterIn.QUERY,
                             required = true,
                             description = "type - private",
                             schema = @Schema(
@@ -555,9 +562,11 @@ class ApiController extends BaseController {
                             )
                     ),
                     @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
                             required = false,
                             description = "Access token to read private collection"),
                     @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
                             required = true,
                             description = "The API version",
                             schema = @Schema(
@@ -572,7 +581,7 @@ class ApiController extends BaseController {
     )
 
     def getLocalImage() {
-        forward controller: "profile", action: "getLocalImage", namespace: "v1"
+        forward controller: "profile", action: "getLocalImage"
     }
 
     @Path("/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{imageId}")
@@ -606,12 +615,19 @@ class ApiController extends BaseController {
             ],
             parameters = [
                     @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
                             required = true,
                             description = "Collection id - UUID or short name"),
                     @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
                             required = true,
                             description = "Profile id - UUID or Scientific name"),
+                    @Parameter(name = "imageId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Image id - UUID or Scientific name"),
                     @Parameter(name = "type",
+                            in = ParameterIn.QUERY,
                             required = true,
                             description = "type - private",
                             schema = @Schema(
@@ -620,9 +636,11 @@ class ApiController extends BaseController {
                             )
                     ),
                     @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
                             required = false,
                             description = "Access token to read private collection"),
                     @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
                             required = true,
                             description = "The API version",
                             schema = @Schema(
@@ -637,7 +655,7 @@ class ApiController extends BaseController {
     )
 
     def retrieveLocalThumbnailImage () {
-        forward controller: "profile", action: "retrieveLocalThumbnailImage", namespace: "v1"
+        forward controller: "profile", action: "retrieveLocalThumbnailImage"
     }
 
     @Path("/api/opus/{opusId}/profile/{profileId}/attribute/{attributeId}")
