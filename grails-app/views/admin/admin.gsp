@@ -170,8 +170,10 @@
             <div class="table-responsive" ng-show="adminCtrl.cacheRegions.length > 0">
                 <table class="table table-striped">
                     <thead>
-                    <th>Cache Name</th>
-                    <th>Cache Clear</th>
+                    <tr>
+                        <th>Cache Name</th>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="cache in adminCtrl.cacheRegions">

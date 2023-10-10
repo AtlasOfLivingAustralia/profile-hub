@@ -127,9 +127,15 @@ class AdminController extends BaseController {
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def clearCache() {
+        Map result = [:]
         if (params.id) {
             grailsCacheManager.getCache(params.id).clear()
+            result.resp = "Successfully cleared cache - " + params.id
+            result.statusCode = HttpStatus.SC_OK
+        } else {
+            result.error = "Failed to clear cache the job"
+            result.statusCode = HttpStatus.SC_INTERNAL_SERVER_ERROR
         }
-        render view: "admin.gsp"
+        success result
     }
 }

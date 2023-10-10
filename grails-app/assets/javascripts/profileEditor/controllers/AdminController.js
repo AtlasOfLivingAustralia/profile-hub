@@ -230,7 +230,7 @@ profileEditor.controller('ALAAdminController', function ($http, util, messageSer
 
     function cacheManagement() {
         self.loadingCacheManagement = true;
-        var promise = $http.get(util.contextRoot() + "/admin/cacheManagement/");
+        var promise = $http.get(util.contextRoot() + "/admin/cacheManagement");
         promise.then(function (response) {
             self.cacheRegions = response.data || [];
             self.loadingCacheManagement = false;
@@ -241,10 +241,14 @@ profileEditor.controller('ALAAdminController', function ($http, util, messageSer
 
     self.clearCache = function (cache) {
         var promise = $http.get(util.contextRoot() + "/admin/clearCache/" + cache);
-        promise.then(function() {
-            messageService.success("Job clear cache for " +  cache);
+        promise.then(function(response) {
+            if (response.data.error) {
+                messageService.alert(response.data.error);
+            } else {
+                messageService.success(response.data.resp);
+            }
         }, function() {
-            messageService.alert("Failed to clear cache the job");
+            messageService.alert(response.data.error);
         });
     }
 });
