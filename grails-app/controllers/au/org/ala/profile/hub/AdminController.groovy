@@ -3,6 +3,7 @@ package au.org.ala.profile.hub
 import au.org.ala.profile.security.Role
 import au.org.ala.profile.security.Secured
 import au.org.ala.ws.service.WebService
+import org.apache.http.HttpStatus
 import org.apache.http.entity.ContentType
 
 import javax.validation.constraints.NotNull
@@ -132,10 +133,11 @@ class AdminController extends BaseController {
             grailsCacheManager.getCache(params.id).clear()
             result.resp = "Successfully cleared cache - " + params.id
             result.statusCode = HttpStatus.SC_OK
+            success result
         } else {
             result.error = "Failed to clear cache the job"
             result.statusCode = HttpStatus.SC_INTERNAL_SERVER_ERROR
+            sendError result
         }
-        success result
     }
 }
