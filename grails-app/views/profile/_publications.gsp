@@ -25,18 +25,4 @@
             </div>
         </div>
     </div>
-
-    <div class="panel-footer" ng-if="!pubCtrl.readonly()">
-        <div class="row">
-            <div class="col-md-12">
-                <g:if test="${params.isOpusAdmin && grailsApplication.config.feature?.publications != 'false'}">
-                    <button ng-show="!pubCtrl.readonly() && !pubCtrl.newPublication"
-                            ng-click="pubCtrl.savePublication()"
-                            class="btn btn-default"><i
-                            class="fa fa-plus"></i> Create snapshot version
-                    </button>
-                </g:if>
-            </div>
-        </div>
-    </div>
 </div>
