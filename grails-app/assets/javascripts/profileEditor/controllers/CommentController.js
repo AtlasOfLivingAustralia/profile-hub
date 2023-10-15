@@ -20,7 +20,7 @@ profileEditor.controller('CommentController', function (profileService, util, co
         var promise = profileService.getComments(self.opusId, self.profileId);
         promise.then(function(data) {
             self.comments = orderBy(data, 'dateCreated');
-            self.savedComments = orderBy(data, 'dateCreated');
+            self.savedComments = self.comments;
         })
     };
 
@@ -93,7 +93,6 @@ profileEditor.controller('CommentController', function (profileService, util, co
     };
 
     function find(path) {
-        // var array = self.comments;
         var array = self.savedComments;
         var comment = null;
         angular.forEach(path, function(index) {
@@ -128,13 +127,10 @@ profileEditor.controller('CommentController', function (profileService, util, co
             let selectedComment = self.savedComments[path[0]]
             let filterdComments = self.comments.filter(i => i !== selectedComment)
             self.comments = filterdComments;
-            // if (self.comments.length === 1) {
-            //     self.comments.splice(0,1);
-            // } else if (self.comments.length < path[0]){
-            //     self.comments.splice(path[0]-1, 1);
-            // } else {
-            //     self.comments.splice(path[0], 1);
-            // }
+
+            if (self.comments.length === 0) {
+                self.savedComments = [];
+            }
         }
     }
 });
