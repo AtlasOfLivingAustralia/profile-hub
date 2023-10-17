@@ -6,15 +6,15 @@ import spock.lang.Specification
 
 class AdminControllerSpec extends Specification implements ControllerUnitTest<AdminController> {
 
-    AdminController mockAdminController
+    AdminController controller
 
     def setup() {
-        mockAdminController = Mock(AdminController)
+        controller = new AdminController()
     }
 
     def "cache management should display to the admin controller when admin mode"() {
         when:
-        mockAdminController.cacheManagement()
+        controller.cacheManagement()
 
         then:
         assert response.status == HttpStatus.SC_OK
@@ -23,9 +23,18 @@ class AdminControllerSpec extends Specification implements ControllerUnitTest<Ad
     def "clearCache() should return a 200 (OK_REQUEST) if id has been provided"() {
         when:
         params.id = "userDetailsCache"
-        mockAdminController.clearCache()
+        controller.clearCache()
 
         then:
         response.status == HttpStatus.SC_OK
+    }
+
+    def "clearCache() should return a 400 (BAD_REQUEST) if id has not been provided"() {
+        when:
+        params.id = ""
+        controller.clearCache()
+
+        then:
+        response.status != HttpStatus.SC_OK
     }
 }

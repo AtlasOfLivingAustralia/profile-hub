@@ -248,7 +248,7 @@ profileEditor.controller('ALAAdminController', function ($http, util, messageSer
                 messageService.success(response.data.resp);
             }
         }, function() {
-            messageService.alert(response.data.error);
+            messageService.alert("Failed to clear cache the job");
         });
     }
 });
