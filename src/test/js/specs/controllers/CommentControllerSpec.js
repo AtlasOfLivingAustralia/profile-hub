@@ -86,6 +86,7 @@ describe("CommentController tests", function () {
         scope.ctrl.comments = [{text: "Text1", uuid: "comment1", dateCreated: new Date(2013, 1, 1)},
             comment2,
             {text: "Text3", uuid: "comment3", dateCreated: new Date(2015, 1, 1)}];
+        scope.ctrl.savedComments = scope.ctrl.comments;
 
         scope.ctrl.editComment([1]);
 
@@ -114,6 +115,7 @@ describe("CommentController tests", function () {
             {text: "Text3", uuid: "comment3", dateCreated: new Date(2015, 1, 1)}];
         scope.ctrl.profileId = "profileId";
         scope.ctrl.opusId = "opusId";
+        scope.ctrl.savedComments = scope.ctrl.comments;
 
         confirmDefer.resolve({});
         deleteDefer.resolve({});
@@ -134,6 +136,7 @@ describe("CommentController tests", function () {
                         {text: "level2, first", uuid: "comment3", dateCreated: new Date(2015, 1, 1)},
                         {text: "level2, second", uuid: "comment4", dateCreated: new Date(2015, 1, 1)}]}
             ]}];
+        scope.ctrl.savedComments = scope.ctrl.comments;
         scope.ctrl.profileId = "profileId";
         scope.ctrl.opusId = "opusId";
 
@@ -151,6 +154,7 @@ describe("CommentController tests", function () {
         scope.ctrl.comments = [{text: "Text1", uuid: "comment1", dateCreated: new Date(2013, 1, 1)},
             {text: "Text2", uuid: "comment2", dateCreated: new Date(2014, 1, 1)},
             {text: "Text3", uuid: "comment3", dateCreated: new Date(2015, 1, 1)}];
+        scope.ctrl.savedComments = scope.ctrl.comments;
         scope.ctrl.profileId = "profileId";
         scope.ctrl.opusId = "opusId";
 
@@ -165,6 +169,7 @@ describe("CommentController tests", function () {
         scope.ctrl.comments = [{text: "Text1", uuid: "comment1", dateCreated: new Date(2013, 1, 1)},
             {text: "Text2", uuid: "comment2", dateCreated: new Date(2014, 1, 1)},
             {text: "Text3", uuid: "comment3", dateCreated: new Date(2015, 1, 1)}];
+        scope.ctrl.savedComments = scope.ctrl.comments;
         scope.ctrl.profileId = "profileId";
         scope.ctrl.opusId = "opusId";
 
@@ -196,6 +201,7 @@ describe("CommentController tests", function () {
 
     it("should invoke the updateComment service and modify the existing comment in the list when saveComment is called for an edited comment", function() {
         scope.ctrl.comments = [{text: "Text1", uuid: "comment1", dateCreated: new Date(2013, 1, 1)}];
+        scope.ctrl.savedComments = scope.ctrl.comments;
         scope.ctrl.profileId = "profileId";
         scope.ctrl.opusId = "opusId";
 
@@ -216,6 +222,7 @@ describe("CommentController tests", function () {
             {text: "Child1", uuid: "child1", dateCreated: new Date(2013, 1, 1)},
             {text: "Child2", uuid: "child2", dateCreated: new Date(2013, 1, 1)}]
         }];
+        scope.ctrl.savedComments = scope.ctrl.comments;
         scope.ctrl.profileId = "profileId";
         scope.ctrl.opusId = "opusId";
 
