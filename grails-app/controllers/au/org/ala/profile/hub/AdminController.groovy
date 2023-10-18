@@ -3,10 +3,9 @@ package au.org.ala.profile.hub
 import au.org.ala.profile.security.Role
 import au.org.ala.profile.security.Secured
 import au.org.ala.ws.service.WebService
-import net.sf.ehcache.Cache
-import net.sf.ehcache.CacheManager
 import org.apache.http.HttpStatus
 import org.apache.http.entity.ContentType
+import org.springframework.cache.Cache
 
 import javax.validation.constraints.NotNull
 import static groovy.io.FileType.DIRECTORIES
@@ -16,11 +15,6 @@ class AdminController extends BaseController {
     WebService webService
     ProfileService profileService
     GrailsCacheManager grailsCacheManager
-    static long ONE_DAY_SECONDS = 86400
-    static String USER_DETAILS_CACHE = "userDetailsCache"
-    static String USER_DETAILS_BY_ID_CACHE = "userDetailsByIdCache"
-    static String USER_LIST_CACHE = "userListCache"
-    static String VOCAB_LIST_CACHE = "vocabListCache"
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def index() {
         render view: "admin.gsp"
@@ -128,45 +122,16 @@ class AdminController extends BaseController {
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def cacheManagement() {
-        def cacheNames
-        if (grailsCacheManager == null) {
-            cacheNames = getCacheManager().getCacheNames()
-        } else {
-            cacheNames = grailsCacheManager.getCacheNames()
-        }
+        def cacheNames = grailsCacheManager.getCacheNames()
         success cacheNames
-    }
-
-    private static CacheManager getCacheManager() {
-        CacheManager manager = CacheManager.create()
-        Cache userDetailCache = new Cache(USER_DETAILS_CACHE, 2000, true, false, ONE_DAY_SECONDS, 2)
-        if (!manager.ehcaches.get(USER_DETAILS_CACHE)) {
-            manager.addCache(userDetailCache)
-        }
-        Cache userDetailsByIdCache = new Cache(USER_DETAILS_BY_ID_CACHE, 2000, true, false, ONE_DAY_SECONDS, 2)
-        if (!manager.getEhcache(USER_DETAILS_BY_ID_CACHE)) {
-            manager.addCache(userDetailsByIdCache)
-        }
-        Cache userListCache = new Cache(USER_LIST_CACHE, 2000, true, false, ONE_DAY_SECONDS, 2)
-        if (!manager.getEhcache(USER_LIST_CACHE)) {
-            manager.addCache(userListCache)
-        }
-        Cache vocabListCache = new Cache(VOCAB_LIST_CACHE, 2000, true, false, ONE_DAY_SECONDS, 2)
-        if (!manager.getEhcache(VOCAB_LIST_CACHE)) {
-            manager.addCache(vocabListCache)
-        }
-        return manager
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def clearCache() {
         Map result = [:]
         if (params.id) {
-            if (grailsCacheManager == null) {
-                getCacheManager().getCache(params.id).remove(params.id)
-            } else {
-                grailsCacheManager.getCache(params.id).clear()
-            }
+            Cache cache = grailsCacheManager.getCache(params.id)
+            cache.clear()
             result.resp = "Successfully cleared cache - " + params.id
             result.statusCode = HttpStatus.SC_OK
             success result
