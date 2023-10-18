@@ -3,6 +3,9 @@ grails:
     profile: web
     codegen:
         defaultPackage: au.org.ala.profile.hub
+    cache:
+        ehcache:
+            ehcacheXmlLocation: 'classpath:profile-ehcache.xml'
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events

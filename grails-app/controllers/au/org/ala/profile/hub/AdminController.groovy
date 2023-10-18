@@ -3,18 +3,18 @@ package au.org.ala.profile.hub
 import au.org.ala.profile.security.Role
 import au.org.ala.profile.security.Secured
 import au.org.ala.ws.service.WebService
-import grails.converters.JSON
-import grails.util.Environment
+import org.apache.http.HttpStatus
 import org.apache.http.entity.ContentType
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+import org.springframework.cache.Cache
 
 import javax.validation.constraints.NotNull
 import static groovy.io.FileType.DIRECTORIES
+import org.grails.plugin.cache.GrailsCacheManager
 class AdminController extends BaseController {
 
     WebService webService
     ProfileService profileService
-
+    GrailsCacheManager grailsCacheManager
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def index() {
         render view: "admin.gsp"
@@ -120,4 +120,24 @@ class AdminController extends BaseController {
         return grailsApplication.config.backupRestoreDir?: '/data/profile-service/backup/db'
     }
 
+    @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
+    def cacheManagement() {
+        def cacheNames = grailsCacheManager.getCacheNames()
+        success cacheNames
+    }
+
+    @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
+    def clearCache() {
+        Map result = [:]
+        if (params.id) {
+            Cache cache = grailsCacheManager.getCache(params.id)
+            cache.clear()
+            result.resp = "Successfully cleared cache - " + params.id
+            result.statusCode = HttpStatus.SC_OK
+            success result
+        } else {
+            var message = "Failed to clear cache the job"
+            sendError(HttpStatus.SC_BAD_REQUEST, message ?:"");
+        }
+    }
 }
