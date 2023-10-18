@@ -498,12 +498,10 @@ class ImageService {
         }
 
         if (!image) {
-            //if the primary image has been turned off, then default to the first image in biocache
-            if (biocacheImagesList && biocacheImagesList.size() > 0) {
-                // get the first image in the list
-                image = biocacheImagesList[0]
-                log.debug ("Set default primary image to first biocache list image: ")
-               // log.debug (toJson(image))
+            //when local images exists in profile, find from profile primaryImage
+            if (biocacheImagesList && biocacheImagesList.size() > 0 && profile.primaryImage) {
+                image = biocacheImagesList.find(it -> it.imageId == profile.primaryImage)
+                //log.debug (toJson(image))
             } else {
                 String searchIdentifier = profile.guid ? "lsid:" + profile.guid : profile.scientificName
                 List images = retrieveImages(opus, profile, searchIdentifier)?.resp
