@@ -32,7 +32,7 @@
         <li role="presentation">
             <a role="menuitem"
                tabindex="-1"
-               href="${grailsApplication.config.casServerName}/userdetails/myprofile"><span class="fa fa-user">&nbsp;&nbsp;</span>My Profile</a>
+               href="${grailsApplication.config.security.cas.casServerName}/userdetails/myprofile"><span class="fa fa-user">&nbsp;&nbsp;</span>My Profile</a>
         </li>
         <g:if test="${params.isALAAdmin}">
             <li role="presentation">
