@@ -1094,6 +1094,11 @@ profileEditor.service('profileService', function ($http, util, $cacheFactory, co
             return util.toStandardPromise(future);
         },
 
+        getCategories: function () {
+            var future = $http.get(util.contextRoot() + "/attachment/categories", {cache: true});
+            return util.toStandardPromise(future);
+        },
+
         getLicences: function () {
             var future = $http.get(util.contextRoot() + "/licences", {cache: true});
             return util.toStandardPromise(future);
