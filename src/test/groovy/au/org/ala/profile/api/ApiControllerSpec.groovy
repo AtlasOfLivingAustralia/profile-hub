@@ -179,7 +179,8 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
 
         where:
         type      | opusId  | profileId | imageId | responseCode
-        'PRIVATE' |'opus1'  | '123'     | '1.png' | 200
+        'PRIVATE' | 'opus1' | '123' | '1.png' | 200
+    }
 
     void "getOpusList should be provided"() {
         setup:

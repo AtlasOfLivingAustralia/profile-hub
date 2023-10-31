@@ -93,7 +93,7 @@ profileEditor.controller("AttachmentUploadController", function (profileService,
 
     if (self.categories == null) {
         profileService.getCategories().then(function (data) {
-            self.categories = data;
+            self.categories = data.resp;
         });
     }
 

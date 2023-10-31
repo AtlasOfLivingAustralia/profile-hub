@@ -361,7 +361,7 @@ class OpusController extends OpusBaseController {
 
     def getCategories() {
         def result = profileService.getCategories()
-        handle result
+        render result as JSON
     }
 
     @Secured(role = ROLE_PROFILE_ADMIN)
