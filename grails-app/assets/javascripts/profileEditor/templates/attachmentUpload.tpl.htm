@@ -83,7 +83,7 @@
 
                 <div class="col-sm-9">
                     <select id="category" ng-model="attachmentUploadCtrl.metadata.category"
-                            ng-options="category.key as category.title for category in attachmentUploadCtrl.categories" class="form-control">
+                            ng-options="category.key as category.value for category in attachmentUploadCtrl.categories" class="form-control">
                         <option value="">Select a category</option>
                     </select>
                 </div>
