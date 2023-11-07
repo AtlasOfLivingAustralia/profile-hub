@@ -112,6 +112,7 @@ class UrlMappings {
         "/opus/$opusId/attachment/$attachmentId" controller: "opus", action: [GET: "getAttachmentMetadata", DELETE: "deleteAttachment"]
         "/opus/$opusId/attachment/$attachmentId/download" controller: "opus", action: [GET: "proxyAttachmentDownload"]
         "/opus/$opusId/attachment/" controller: "opus", action: [GET: "getAttachmentMetadata", POST: "saveAttachment"]
+        "/attachment/categories/" controller: "opus", action: [GET: "getCategories"]
 
         "/opus/$opusId/florulaList" controller: "opus", action: [POST: "updateFlorulaList"]
         "/opus/$opusId/users/update" controller: "opus", action: [POST: "updateUsers"]

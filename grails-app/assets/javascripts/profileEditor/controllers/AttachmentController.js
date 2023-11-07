@@ -91,6 +91,12 @@ profileEditor.controller("AttachmentUploadController", function (profileService,
     var pdfType = {key: "PDF", title: "PDF Document"};
     self.types = [pdfType, urlType];
 
+    if (self.categories == null) {
+        profileService.getCategories().then(function (data) {
+            self.categories = data.resp;
+        });
+    }
+
     self.metadata = angular.isDefined(attachment) ? _.clone(attachment) : {};
     self.files = null;
     self.error = null;

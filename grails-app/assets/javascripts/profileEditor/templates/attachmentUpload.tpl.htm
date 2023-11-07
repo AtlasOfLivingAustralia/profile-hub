@@ -82,10 +82,9 @@
                 <label for="category" class="col-sm-3 control-label">Category</label>
 
                 <div class="col-sm-9">
-                    <select id="category" ng-model="attachmentUploadCtrl.metadata.category" class="form-control">
+                    <select id="category" ng-model="attachmentUploadCtrl.metadata.category"
+                            ng-options="category.key as category.value for category in attachmentUploadCtrl.categories" class="form-control">
                         <option value="">Select a category</option>
-                        <option value="General">General</option>
-                        <option value="Management">Management</option>
                     </select>
                 </div>
             </div>
