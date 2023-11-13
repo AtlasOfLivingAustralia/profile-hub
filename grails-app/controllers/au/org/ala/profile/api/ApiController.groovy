@@ -549,10 +549,10 @@ class ApiController extends BaseController {
         }
     }
 
-    @Path("/api/opus/{opusId}/profile/{profileId}/image/{imageId}")
+    @Path("/api/opus/{opusId}/profile/{profileId}/image/{fileName}")
     @Operation(
             summary = "Get image associated with a profile",
-            operationId = "/api/opus/{opusId}/profile/{profileId}/image/{imageId}",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/image/{fileName}",
             method = "GET",
             responses = [
                     @ApiResponse(
@@ -587,10 +587,10 @@ class ApiController extends BaseController {
                             in = ParameterIn.PATH,
                             required = true,
                             description = "Profile id - UUID or Scientific name"),
-                    @Parameter(name = "imageId",
+                    @Parameter(name = "fileName",
                             in = ParameterIn.PATH,
                             required = true,
-                            description = "Image id - UUID"),
+                            description = "fileName"),
                     @Parameter(name = "type",
                             in = ParameterIn.QUERY,
                             required = true,
@@ -623,10 +623,10 @@ class ApiController extends BaseController {
         forward controller: "profile", action: "getLocalImage"
     }
 
-    @Path("/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{imageId}")
+    @Path("/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{fileName}")
     @Operation(
             summary = "Get thumbnail image associated with a profile",
-            operationId = "/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{imageId}",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{fileName}",
             method = "GET",
             responses = [
                     @ApiResponse(
@@ -661,10 +661,10 @@ class ApiController extends BaseController {
                             in = ParameterIn.PATH,
                             required = true,
                             description = "Profile id - UUID or Scientific name"),
-                    @Parameter(name = "imageId",
+                    @Parameter(name = "fileName",
                             in = ParameterIn.PATH,
                             required = true,
-                            description = "Image id - UUID"),
+                            description = "fileName"),
                     @Parameter(name = "type",
                             in = ParameterIn.QUERY,
                             required = true,

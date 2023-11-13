@@ -409,9 +409,9 @@ class ProfileController extends BaseController {
                 ImageType type = params.type as ImageType
                 //NB this imageId param already has the file extension on it, really the file name on disk
                 if (type == ImageType.STAGED) {
-                    displayLocalImage("${grailsApplication.config.image.staging.dir}/", params.opusId, params.profileId, params.imageId, true)
+                    displayLocalImage("${grailsApplication.config.image.staging.dir}/", params.opusId, params.profileId, params.fileName, true)
                 } else if (type == ImageType.PRIVATE) {
-                    displayLocalImage("${grailsApplication.config.image.private.dir}/", params.opusId, params.profileId, params.imageId, true)
+                    displayLocalImage("${grailsApplication.config.image.private.dir}/", params.opusId, params.profileId, params.fileName, true)
                 }
             } catch (IllegalArgumentException e) {
                 log.warn(e)
@@ -428,9 +428,9 @@ class ProfileController extends BaseController {
                 ImageType type = params.type as ImageType
                 //NB this imageId param already has the file extension on it, really the file name on disk
                 if (type == ImageType.STAGED) {
-                    displayLocalImage("${grailsApplication.config.image.staging.dir}/", params.opusId, params.profileId, params.imageId, false)
+                    displayLocalImage("${grailsApplication.config.image.staging.dir}/", params.opusId, params.profileId, params.fileName, false)
                 } else if (type == ImageType.PRIVATE) {
-                    displayLocalImage("${grailsApplication.config.image.private.dir}/", params.opusId, params.profileId, params.imageId, false)
+                    displayLocalImage("${grailsApplication.config.image.private.dir}/", params.opusId, params.profileId, params.fileName, false)
                 }
             } catch (IllegalArgumentException e) {
                 log.warn(e)
