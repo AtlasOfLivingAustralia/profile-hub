@@ -620,6 +620,7 @@ class ApiController extends BaseController {
     )
 
     def getLocalImage() {
+        params.imageId = params.fileName
         forward controller: "profile", action: "getLocalImage"
     }
 
@@ -694,6 +695,7 @@ class ApiController extends BaseController {
     )
 
     def retrieveLocalThumbnailImage () {
+        params.imageId = params.fileName
         forward controller: "profile", action: "retrieveLocalThumbnailImage"
     }
 
