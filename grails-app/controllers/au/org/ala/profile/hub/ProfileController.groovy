@@ -709,6 +709,10 @@ class ProfileController extends BaseController {
         render template: "lists"
     }
 
+    def publicationsPanel = {
+        render template: "publications"
+    }
+
     def bibliographyPanel = {
         render template: "bibliography"
     }
