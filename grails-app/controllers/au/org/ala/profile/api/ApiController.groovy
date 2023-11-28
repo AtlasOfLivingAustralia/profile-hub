@@ -551,7 +551,7 @@ class ApiController extends BaseController {
 
     @Path("/api/opus/{opusId}/profile/{profileId}/image/{fileName}")
     @Operation(
-            summary = "Get image associated with a profile",
+            summary = "Get private image associated with a profile",
             operationId = "/api/opus/{opusId}/profile/{profileId}/image/{fileName}",
             method = "GET",
             responses = [
@@ -582,11 +582,11 @@ class ApiController extends BaseController {
                     @Parameter(name = "opusId",
                             in = ParameterIn.PATH,
                             required = true,
-                            description = "Collection id - UUID or short name"),
+                            description = "Collection id - ONLY UUID accepted"),
                     @Parameter(name = "profileId",
                             in = ParameterIn.PATH,
                             required = true,
-                            description = "Profile id - UUID or Scientific name"),
+                            description = "Profile id - ONLY UUID accepted"),
                     @Parameter(name = "fileName",
                             in = ParameterIn.PATH,
                             required = true,
@@ -626,7 +626,7 @@ class ApiController extends BaseController {
 
     @Path("/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{fileName}")
     @Operation(
-            summary = "Get thumbnail image associated with a profile",
+            summary = "Get thumbnail of private image associated with a profile",
             operationId = "/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{fileName}",
             method = "GET",
             responses = [
@@ -657,11 +657,11 @@ class ApiController extends BaseController {
                     @Parameter(name = "opusId",
                             in = ParameterIn.PATH,
                             required = true,
-                            description = "Collection id - UUID or short name"),
+                            description = "Collection id - ONLY UUID accepted"),
                     @Parameter(name = "profileId",
                             in = ParameterIn.PATH,
                             required = true,
-                            description = "Profile id - UUID or Scientific name"),
+                            description = "Profile id - ONLY UUID accepted"),
                     @Parameter(name = "fileName",
                             in = ParameterIn.PATH,
                             required = true,
