@@ -220,6 +220,10 @@ class ProfileService {
         }
     }
 
+    def getCategories() {
+        webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/attachment/categories", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+    }
+
     def deleteAttachment(String opusId, String profileId, String attachmentId) {
         if (profileId) {
             webService.delete("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/attachment/${encPath(attachmentId)}?latest=true", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
@@ -268,12 +272,6 @@ class ProfileService {
         log.debug("Retrieving publications for ${profileId}")
 
         webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/publication", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
-    }
-
-    def savePublication(String opusId, String profileId, file) {
-        log.debug("Saving publication for profile ${profileId}")
-
-        webService.postMultipart("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/publication", [:], null, [file], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
     }
 
     def proxyGetPublicationFile(HttpServletResponse response, String opusId, String profileId, String publicationId) {

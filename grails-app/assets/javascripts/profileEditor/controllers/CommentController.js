@@ -5,6 +5,7 @@ profileEditor.controller('CommentController', function (profileService, util, co
     var self = this;
 
     self.comments = [];
+    self.savedComments = [];
     self.currentComment = null;
     self.opusId = util.getEntityId("opus");
     self.profileId = util.getEntityId("profile");
@@ -19,6 +20,7 @@ profileEditor.controller('CommentController', function (profileService, util, co
         var promise = profileService.getComments(self.opusId, self.profileId);
         promise.then(function(data) {
             self.comments = orderBy(data, 'dateCreated');
+            self.savedComments = self.comments;
         })
     };
 
@@ -76,7 +78,12 @@ profileEditor.controller('CommentController', function (profileService, util, co
                 }
                 comment.children.push(data);
             } else {
+                if (!Array.isArray(self.comments)) {
+                    self.comments = [];
+                    self.savedComments = []
+                }
                 self.comments.push(data);
+                self.savedComments.push(data);
             }
 
             self.currentComment = null;
@@ -86,9 +93,12 @@ profileEditor.controller('CommentController', function (profileService, util, co
     };
 
     function find(path) {
-        var array = self.comments;
+        var array = self.savedComments;
         var comment = null;
         angular.forEach(path, function(index) {
+            if (index > array.length-1) {
+                index = array.length-1
+            }
             comment = array[index];
             if (comment.children) {
                 array = orderBy(comment.children, 'dateCreated');
@@ -114,7 +124,13 @@ profileEditor.controller('CommentController', function (profileService, util, co
 
             comment.children.splice(lastIndex, 1);
         } else {
-            self.comments.splice(path[0], 1);
+            let selectedComment = self.savedComments[path[0]]
+            let filterdComments = self.comments.filter(i => i !== selectedComment)
+            self.comments = filterdComments;
+
+            if (self.comments.length === 0) {
+                self.savedComments = [];
+            }
         }
     }
 });

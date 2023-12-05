@@ -359,6 +359,11 @@ class OpusController extends OpusBaseController {
         }
     }
 
+    def getCategories() {
+        def result = profileService.getCategories()
+        render result as JSON
+    }
+
     @Secured(role = ROLE_PROFILE_ADMIN)
     def saveAttachment() {
         if (!params.opusId || !(request instanceof MultipartHttpServletRequest) || !request.getParameter("data")) {
@@ -675,6 +680,10 @@ class OpusController extends OpusBaseController {
 
     def editAboutPanel = {
         render template: "editAboutPage"
+    }
+
+    def editDeleteCollectionPanel = {
+        render template: "editDeleteCollectionPage"
     }
 
     def reportPanel = {

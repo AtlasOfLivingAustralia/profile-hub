@@ -112,6 +112,7 @@ class UrlMappings {
         "/opus/$opusId/attachment/$attachmentId" controller: "opus", action: [GET: "getAttachmentMetadata", DELETE: "deleteAttachment"]
         "/opus/$opusId/attachment/$attachmentId/download" controller: "opus", action: [GET: "proxyAttachmentDownload"]
         "/opus/$opusId/attachment/" controller: "opus", action: [GET: "getAttachmentMetadata", POST: "saveAttachment"]
+        "/attachment/categories/" controller: "opus", action: [GET: "getCategories"]
 
         "/opus/$opusId/florulaList" controller: "opus", action: [POST: "updateFlorulaList"]
         "/opus/$opusId/users/update" controller: "opus", action: [POST: "updateUsers"]
@@ -202,6 +203,8 @@ class UrlMappings {
         "/admin/job/$jobType/$jobId" controller: "admin", action: [DELETE: "deleteJob"]
         "/admin/job/" controller: "admin", action: [GET: "listPendingJobs"]
         "/admin/tag/$tagId?" controller: "admin", action: [GET: "getTag", PUT: "createTag", POST: "updateTag", DELETE: "deleteTag"]
+        "/admin/cacheManagement" controller: "admin", action: [GET: "cacheManagement"]
+        "/admin/clearCache/$id" controller: "admin", action: [GET: "clearCache"]
         "/admin/reloadHelpUrls" controller: "admin", action: [POST: "reloadHelpUrls"]
         "/admin" controller: "admin", action: [GET: "index"]
         "/alaAdmin/index" controller: "admin", action: [GET: "alaIndex"]
@@ -261,8 +264,11 @@ class UrlMappings {
             get "/opus/$opusId/profile" (version: "1.0", controller: "api", action: "getProfiles", namespace: "v1")
             get "/opus/$opusId/profile/$profileId" (version: "1.0", controller: "api", action: "get", namespace: "v1")
             get "/opus/$opusId/profile/$profileId/image" (version: "1.0", controller: "api", action: "getImages", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/image/$fileName" (version: "1.0", controller: "api", action: "getLocalImage", namespace: "v1")
+            get "/opus/$opusId/profile/$profileId/image/thumbnail/$fileName" (version: "1.0", controller: "api", action: "retrieveLocalThumbnailImage", namespace: "v1")
             get "/opus/$opusId/profile/$profileId/attribute/$attributeId" (version: "1.0", controller: "api", action: "getAttributes", namespace: "v1")
             get "/opus/$opusId/profile/$profileId/draft" (version: "1.0", controller: "api", action: "getDraftProfile", namespace: "v1")
+            get "/opus" (version: "1.0", controller: "api", action: "getListCollections", namespace: "v1")
         }
 
         "/openapi/$action?/$id?(.$format)?"(controller: "openApi")

@@ -202,4 +202,18 @@ class OpusControllerSpec extends Specification implements ControllerUnitTest<Opu
         then:
         assert response.json == [opus1, opus2, opus3, opus4]
     }
+
+    def "new categories should return a model with the expected number of elements"() {
+        setup:
+        mockProfileService.getCategories() >> [[key: 'key1', title: 'title1'],[key: 'key2', title: 'title2'],[key: 'key3', title: 'title3']]
+
+        when:
+        controller.getCategories()
+
+        then:
+        assert response.json.size() == 3
+        assert response.json.toString().contains("key1")
+        assert response.json.toString().contains("key2")
+        assert response.json.toString().contains("key3")
+    }
 }

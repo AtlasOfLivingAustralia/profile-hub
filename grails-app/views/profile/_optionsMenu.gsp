@@ -30,13 +30,6 @@
                         </a>
                     </li>
                 </g:if>
-                <li role="presentation" ng-controller="ExportController as exportCtrl"
-                    ng-hide="profileCtrl.isArchived() || !profileCtrl.readonly()">
-                    <a href=""
-                       ng-click="exportCtrl.exportPdf(profileCtrl.profile.rank, profileCtrl.profile.scientificName)"
-                       target="_blank"><span class="fa fa-file-pdf-o"></span>&nbsp;&nbsp;Export as PDF
-                    </a>
-                </li>
                 <g:if test="${params.isOpusAdmin || params.isOpusEditor || params.isOpusAuthor}">
                     <li class="divider" ng-hide="profileCtrl.isArchived() || !profileCtrl.readonly()"></li>
                     <li role="presentation" ng-hide="!profileCtrl.readonly() || profileCtrl.isArchived()">

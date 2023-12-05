@@ -63,6 +63,7 @@ class Utils {
                 result = 'application/octet-stream'
             }
         }
+        return result
     }
 
     static String getExtension(String fileName) {

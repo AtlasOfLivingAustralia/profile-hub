@@ -80,10 +80,24 @@ profileEditor.controller('UserAccessController', function (messageService, util,
         });
     };
 
-    self.privateModeChanged = function() {
+    self.privateModeChanged = function(form, isOptionChanged) {
         if (self.opus.privateCollection) {
             self.roles.push(userRole);
         } else {
+            if (isOptionChanged) {
+                var hasRole_USER = self.users.find(it => it.role === 'ROLE_USER')
+                if (hasRole_USER) {
+                    self.users = self.users.filter(it => it.role !== 'ROLE_USER')
+                    var data = {privateCollection: self.opus.privateCollection, authorities: self.users};
+                    var promise = profileService.updateUsers(self.opusId, data);
+                    promise.then(function () {
+                        form.$setPristine();
+                        messageService.success("User access has been successfully updated.");
+                    }, function () {
+                        messageService.alert("An error has occurred while updating user access.");
+                    });
+                }
+            }
             self.roles.splice(4, 1)
         }
     };

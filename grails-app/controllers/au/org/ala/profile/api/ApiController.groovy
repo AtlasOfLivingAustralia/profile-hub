@@ -4,6 +4,7 @@ import au.ala.org.ws.security.RequireApiKey
 import au.org.ala.profile.hub.BaseController
 import au.org.ala.profile.hub.MapService
 import au.org.ala.profile.hub.ProfileService
+import au.org.ala.profile.security.GrantAccess
 import au.org.ala.profile.security.RequiresAccessToken
 import grails.converters.JSON
 
@@ -24,6 +25,7 @@ import au.org.ala.plugins.openapi.Path
         type = SecuritySchemeType.HTTP,
         scheme = "bearer"
 )
+
 @RequireApiKey()
 class ApiController extends BaseController {
     static namespace = "v1"
@@ -104,6 +106,43 @@ class ApiController extends BaseController {
                 render opus as JSON
             }
         }
+    }
+
+    @GrantAccess
+    @Path("/api/opus")
+    @Operation(
+            summary = "Get all public collections",
+            operationId = "/api/opus",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    array = @ArraySchema(
+                                            schema = @Schema(
+                                                    implementation = CollectionList.class
+                                            )
+                                    )
+                            )
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId is a required parameter"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Collection not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ]
+    )
+    def getListCollections () {
+       List opus = profileService.getOpus() as List
+       List filtered = opus.findAll(it-> !it.privateCollection)
+                .collect{new CollectionList(uuid: it.uuid, shortName:it.shortName, title:it.title, thumbnailUrl:it.thumbnailUrl, description:it.description)}
+       render filtered as JSON
     }
 
     @Path("/api/opus/{opusId}/profile")
@@ -508,6 +547,156 @@ class ApiController extends BaseController {
             response.addIntHeader('X-Total-Count', count)
             handle(result)
         }
+    }
+
+    @Path("/api/opus/{opusId}/profile/{profileId}/image/{fileName}")
+    @Operation(
+            summary = "Get private image associated with a profile",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/image/{fileName}",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "image/*",
+                                    schema = @Schema(type = "String", format = "binary")
+                            ),
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId and profileId are required parameters"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Opus or profile not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ],
+            parameters = [
+                    @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id - ONLY UUID accepted"),
+                    @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Profile id - ONLY UUID accepted"),
+                    @Parameter(name = "fileName",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "fileName"),
+                    @Parameter(name = "type",
+                            in = ParameterIn.QUERY,
+                            required = true,
+                            description = "type - private",
+                            schema = @Schema(
+                                    type = "string",
+                                    allowableValues =  ['PRIVATE']
+                            )
+                    ),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = false,
+                            description = "Access token to read private collection"),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
+                    )
+            ],
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
+    )
+
+    def getLocalImage() {
+        params.imageId = params.fileName
+        forward controller: "profile", action: "getLocalImage"
+    }
+
+    @Path("/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{fileName}")
+    @Operation(
+            summary = "Get thumbnail of private image associated with a profile",
+            operationId = "/api/opus/{opusId}/profile/{profileId}/image/thumbnail/{fileName}",
+            method = "GET",
+            responses = [
+                    @ApiResponse(
+                            responseCode = "200",
+                            content = @Content(
+                                    mediaType = "image/*",
+                                    schema = @Schema(type = "String", format = "binary")
+                            ),
+                            headers = [
+                                    @Header(name = 'Access-Control-Allow-Headers', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Methods', description = "CORS header", schema = @Schema(type = "String")),
+                                    @Header(name = 'Access-Control-Allow-Origin', description = "CORS header", schema = @Schema(type = "String"))
+                            ]
+                    ),
+                    @ApiResponse(responseCode = "400",
+                            description = "opusId and profileId are required parameters"),
+                    @ApiResponse(responseCode = "403",
+                            description = "You do not have the necessary permissions to perform this action."),
+                    @ApiResponse(responseCode = "405",
+                            description = "An unexpected error has occurred while processing your request."),
+                    @ApiResponse(responseCode = "404",
+                            description = "Opus or profile not found"),
+                    @ApiResponse(responseCode = "500",
+                            description = "An unexpected error has occurred while processing your request.")
+            ],
+            parameters = [
+                    @Parameter(name = "opusId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Collection id - ONLY UUID accepted"),
+                    @Parameter(name = "profileId",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "Profile id - ONLY UUID accepted"),
+                    @Parameter(name = "fileName",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            description = "fileName"),
+                    @Parameter(name = "type",
+                            in = ParameterIn.QUERY,
+                            required = true,
+                            description = "type - private",
+                            schema = @Schema(
+                                    type = "string",
+                                    allowableValues =  ['PRIVATE']
+                            )
+                    ),
+                    @Parameter(name = "Access-Token",
+                            in = ParameterIn.HEADER,
+                            required = false,
+                            description = "Access token to read private collection"),
+                    @Parameter(name = "Accept-Version",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            description = "The API version",
+                            schema = @Schema(
+                                    name = "Accept-Version",
+                                    type = "string",
+                                    defaultValue = '1.0',
+                                    allowableValues =  ["1.0"]
+                            )
+                    )
+            ],
+            security = [@SecurityRequirement(name="auth"), @SecurityRequirement(name = "oauth")]
+    )
+
+    def retrieveLocalThumbnailImage () {
+        params.imageId = params.fileName
+        forward controller: "profile", action: "retrieveLocalThumbnailImage"
     }
 
     @Path("/api/opus/{opusId}/profile/{profileId}/attribute/{attributeId}")

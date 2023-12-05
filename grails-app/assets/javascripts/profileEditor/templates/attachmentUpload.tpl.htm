@@ -84,8 +84,8 @@
                 <div class="col-sm-9">
                     <select id="category" ng-model="attachmentUploadCtrl.metadata.category" class="form-control">
                         <option value="">Select a category</option>
-                        <option value="General">General</option>
-                        <option value="Management">Management</option>
+                        <option ng-repeat="category in attachmentUploadCtrl.categories | orderBy:'toString()'" value="{{category.key}}"
+                                ng-selected="attachmentUploadCtrl.metadata.category == category.key">{{category.key}}</option>
                     </select>
                 </div>
             </div>

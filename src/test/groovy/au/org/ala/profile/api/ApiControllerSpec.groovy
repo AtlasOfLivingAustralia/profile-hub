@@ -149,4 +149,48 @@ class ApiControllerSpec extends Specification implements ControllerUnitTest<ApiC
         'opus1' | '123'     | null       | 404
         'opus1' | '123'     | 'a,b'      | 200
     }
+
+
+    void "getLocalImage should be provided with opus id and profile id and imageId parameters"() {
+        when:
+        params.opusId = opusId
+        params.profileId = profileId
+        params.imageId = imageId
+        controller.getLocalImage()
+
+        then:
+        response.status == responseCode
+
+        where:
+        opusId  | profileId | imageId | responseCode
+        'opus1' | '123'     | '1.png' | 200
+    }
+
+    void "retrieveLocalThumbnailImage should be provided with opus id and profile id and imageId parameters with thumbnail"() {
+        when:
+        params.type = type
+        params.opusId = opusId
+        params.profileId = profileId
+        params.imageId = imageId
+        controller.retrieveLocalThumbnailImage()
+
+        then:
+        response.status == responseCode
+
+        where:
+        type      | opusId  | profileId | imageId | responseCode
+        'PRIVATE' | 'opus1' | '123' | '1.png' | 200
+    }
+
+    void "getOpusList should be provided"() {
+        setup:
+        profileService.getOpusList()>> [[uuid: 'abc',shortName:'alatest',title:'title1',desciption:'desc1',thubnailUrl:'test.png']]
+
+        when:
+        controller.getListCollections()
+
+        then:
+        response.status == 200
+
+    }
 }

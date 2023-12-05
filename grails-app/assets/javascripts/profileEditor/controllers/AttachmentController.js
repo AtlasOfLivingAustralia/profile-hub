@@ -92,6 +92,16 @@ profileEditor.controller("AttachmentUploadController", function (profileService,
     self.types = [pdfType, urlType];
 
     self.metadata = angular.isDefined(attachment) ? _.clone(attachment) : {};
+
+    if (self.categories == null) {
+        profileService.getCategories().then(function (data) {
+            self.categories = data.resp;
+            if (self.metadata.category == null) {
+                self.metadata.category = self.categories[0].value;
+            }
+        });
+    }
+
     self.files = null;
     self.error = null;
     self.type = angular.isDefined(attachment.url) && attachment.url ? urlType.key : pdfType.key;

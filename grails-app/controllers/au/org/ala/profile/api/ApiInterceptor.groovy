@@ -2,6 +2,7 @@ package au.org.ala.profile.api
 
 import au.org.ala.profile.hub.ProfileService
 import au.org.ala.profile.security.RequiresAccessToken
+import au.org.ala.profile.security.GrantAccess
 import au.org.ala.web.AuthService
 import grails.converters.JSON
 import org.apache.http.HttpStatus
@@ -38,6 +39,8 @@ class ApiInterceptor {
                 } else {
                     authorised = true
                 }
+            } else if (method?.isAnnotationPresent(GrantAccess)){
+                authorised = true
             }
         }
 

@@ -286,16 +286,38 @@ class ImageService {
         Map model = profileService.getProfile(opusId, profileId, latest)
         Map profile = model.profile
         Map opus = model.opus
-        String minusQuery = ""
+        String includeExcludeQuery = ""
         ImageOption opusDefaultOption = ImageOption.byName(opus.approvedImageOption, ImageOption.INCLUDE)
+        Integer numberOfIncludedLocalImages = 0;
+        List includedPrivateImages = []
 
-        List excluded = profile?.imageSettings.findAll { isExcluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+        switch (opusDefaultOption) {
+            case ImageOption.INCLUDE:
+                List excluded = profile?.imageSettings.findAll { isExcluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+                //find all private images from profile imageSettings with same imageId from profile privateImages because there is no private info in imageSettings
+                List privateImages = profile?.imageSettings.findAll {profile?.privateImages?.imageId.contains(it?.imageId?.toString())}
+                if (privateImages?.size() > 0) {
+                    includedPrivateImages = privateImages?.findAll { !isExcluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+                    numberOfIncludedLocalImages = (includedPrivateImages)? includedPrivateImages.size() : 0
+                }
 
-        if (readonlyView) {
-            minusQuery = excluded.collect { "-image_url: $it" }.join(' AND ')
+                if ((excluded?.size() > 0) && readonlyView) {
+                    includeExcludeQuery = excluded.collect { "-image_url:$it" }.join(' AND ')
+                }
+                break
+            case ImageOption.EXCLUDE:
+                List included = profile?.imageSettings.findAll { isIncluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+                //find all private images from profile imageSettings with same imageId from profile privateImages because there is no private info in imageSettings
+                List privateImages = profile?.imageSettings.findAll {profile?.privateImages?.imageId.contains(it?.imageId?.toString())}
+                includedPrivateImages = privateImages?.findAll { isIncluded(opusDefaultOption, it?.displayOption?.toString()) }*.imageId
+                numberOfIncludedLocalImages = (includedPrivateImages)? includedPrivateImages.size() : 0
+                if ((included?.size() > 0) && readonlyView) {
+                    includeExcludeQuery = "(" + included.collect { "image_url:$it" }.join(' OR ') + ")"
+                }
+                break
         }
 
-        Map numberOfPublishedImagesMap = biocacheService.imageCount(searchIdentifier, opus, minusQuery)
+        Map numberOfPublishedImagesMap = biocacheService.imageCount(searchIdentifier, opus, includeExcludeQuery)
         if (numberOfPublishedImagesMap && numberOfPublishedImagesMap?.resp && numberOfPublishedImagesMap?.resp?.totalRecords > 0) {
             numberOfPublishedImages = numberOfPublishedImagesMap?.resp?.totalRecords
         }
@@ -308,35 +330,37 @@ class ImageService {
             if (profile.privateImages?.size() > 0) {
                 numberOfLocalImages = profile.privateImages.size()
             }
-            List privateImagesPaged = pageImages(profile.privateImages, startIndex, pageSize)
+
+            def filteredIncludedPrivateImages
+            if (readonlyView) {
+                filteredIncludedPrivateImages = profile.privateImages.findAll{includedPrivateImages.contains(it.imageId.toString())}
+            } else {
+                filteredIncludedPrivateImages = profile.privateImages as List
+            }
+
+            List privateImagesPaged = pageImages(filteredIncludedPrivateImages, startIndex, pageSize)
             if (privateImagesPaged && privateImagesPaged.size() > 0) {
                 combinedImages.addAll(convertLocalImages(privateImagesPaged, opus, profile, ImageType.PRIVATE, useInternalPaths, readonlyView))
             }
         }
 
-        //2.STAGED IMAGES
-        //we want to display the images in a specific order - private, staged, published
-        if (profile.privateMode && profile.stagedImages) {
-            numberOfLocalImages += profile.stagedImages.size()
-            if (combinedImages.size() < pageSize && profile.stagedImages.size() > 0) {
-                Integer newPageSize = pageSize - combinedImages.size() //partial page of private images
-                Integer newStartIndex = startIndex - profile.privateImages.size() + combinedImages.size()
-                List stagedImagesPaged = pageImages(profile.stagedImages, newStartIndex, newPageSize)
-                if (stagedImagesPaged && stagedImagesPaged.size() > 0) {
-                    combinedImages.addAll(convertLocalImages(stagedImagesPaged, opus, profile, ImageType.STAGED, useInternalPaths, readonlyView))
-                }
-            }
-
-        }
-
-        //3.PUBLISHED IMAGES
+        Map publishedImagesMap = [:]
+        //2.PUBLISHED IMAGES
         if (combinedImages.size() < Integer.valueOf(pageSize) && numberOfPublishedImagesMap && numberOfPublishedImagesMap?.size() > 0) {
             Integer newPageSize = Integer.valueOf(pageSize) - combinedImages.size() //partial page of private images
-            Integer newStartIndex = Integer.valueOf(startIndex) - numberOfLocalImages + combinedImages.size()
-            List publishedImageList = []
-            Map publishedImagesMap = [:]
+            //if numberOfIncludedLocal Images is not exist on readonly view mode, doesn't need to count number Of local images
             if (readonlyView) {
-                publishedImagesMap = biocacheService.retrieveImages(searchIdentifier, opus, newPageSize, newStartIndex, "&fl=id,image_url", minusQuery)
+                numberOfLocalImages = 0;
+            }
+
+            Integer newStartIndex = Integer.valueOf(startIndex) - ((numberOfIncludedLocalImages > 0? numberOfIncludedLocalImages : numberOfLocalImages)) + combinedImages.size()
+
+            if (newStartIndex < 0) newStartIndex = 0
+
+            List publishedImageList = []
+
+            if (readonlyView) {
+                publishedImagesMap = biocacheService.retrieveImages(searchIdentifier, opus, newPageSize, newStartIndex, "&fl=id,image_url", includeExcludeQuery)
             } else {
                 publishedImagesMap = biocacheService.retrieveImages(searchIdentifier, opus, newPageSize, newStartIndex)
             }
@@ -353,11 +377,11 @@ class ImageService {
         response.resp.images = combinedImages
         response.resp.count = numberOfPublishedImages + numberOfLocalImages
 
-        if (excluded && !readonlyView) {
-            int excludedCount = excluded?.size()
-            response.resp.availImagesCount = response.resp.count - excludedCount
+        if (!readonlyView) {
+            response.resp.availImagesCount = (publishedImagesMap.resp?publishedImagesMap?.resp?.totalRecords:0) + numberOfLocalImages
         } else {
-            response.resp.availImagesCount = response.resp.count
+            response.resp.count = numberOfPublishedImages + ((numberOfIncludedLocalImages > 0)? numberOfIncludedLocalImages : 0)
+            response.resp.availImagesCount   = response.resp.count
         }
 
         if (profile.primaryImage) {
@@ -474,12 +498,10 @@ class ImageService {
         }
 
         if (!image) {
-            //if the primary image has been turned off, then default to the first image in biocache
-            if (biocacheImagesList && biocacheImagesList.size() > 0) {
-                // get the first image in the list
-                image = biocacheImagesList[0]
-                log.debug ("Set default primary image to first biocache list image: ")
-               // log.debug (toJson(image))
+            //when local images exists in profile, find from profile primaryImage
+            if (biocacheImagesList && biocacheImagesList.size() > 0 && profile.primaryImage) {
+                image = biocacheImagesList.find(it -> it.imageId == profile.primaryImage)
+                //log.debug (toJson(image))
             } else {
                 String searchIdentifier = profile.guid ? "lsid:" + profile.guid : profile.scientificName
                 List images = retrieveImages(opus, profile, searchIdentifier)?.resp
@@ -640,6 +662,10 @@ class ImageService {
 
     private static boolean isExcluded(ImageOption defaultOption, String displayOptionStr) {
         return ImageOption.byName(displayOptionStr, defaultOption) == ImageOption.EXCLUDE
+    }
+
+    private static boolean isIncluded(ImageOption defaultOption, String displayOptionStr) {
+        return ImageOption.byName(displayOptionStr, defaultOption) == ImageOption.INCLUDE
     }
 
     def updateLocalImageMetadata(String imageId, Map metadata) {
