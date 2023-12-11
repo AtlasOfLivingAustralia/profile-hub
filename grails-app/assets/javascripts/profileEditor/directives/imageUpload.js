@@ -99,6 +99,7 @@ profileEditor.directive('imageUpload', function ($browser, $http, config) {
             }
 
             $scope.save = function() {
+                console.log("Scope save", $scope, $scope.opusId)
               if ($scope.image) {
                   $scope.metadata.created = util.formatLocalDate($scope.metadata.created);
                   $cacheFactory.get('$http').removeAll();
