@@ -669,7 +669,7 @@ class ImageService {
     }
 
     def updateLocalImageMetadata(String opusId, String imageId, Map metadata) {
-        webService.post("${grailsApplication.config.profile.service.url}/opus/${opusId}/image/${encPath(imageId)}/metadata", metadata, [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${opusId}/image/${encPath(imageId)}/metadata", metadata, [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
     }
 
     def publishPrivateImage(String opusId, String profileId, String imageId) {
