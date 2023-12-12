@@ -668,8 +668,8 @@ class ImageService {
         return ImageOption.byName(displayOptionStr, defaultOption) == ImageOption.INCLUDE
     }
 
-    def updateLocalImageMetadata(String imageId, Map metadata) {
-        webService.post("${grailsApplication.config.profile.service.url}/image/${encPath(imageId)}/metadata", metadata, [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+    def updateLocalImageMetadata(String opusId, String imageId, Map metadata) {
+        webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${opusId}/image/${encPath(imageId)}/metadata", metadata, [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
     }
 
     def publishPrivateImage(String opusId, String profileId, String imageId) {
