@@ -99,12 +99,11 @@ profileEditor.directive('imageUpload', function ($browser, $http, config) {
             }
 
             $scope.save = function() {
-                console.log("Scope save", $scope, $scope.opusId)
               if ($scope.image) {
                   $scope.metadata.created = util.formatLocalDate($scope.metadata.created);
                   $cacheFactory.get('$http').removeAll();
 
-                  profileService.saveImageMetadata($scope.opusId, $scope.image.imageId, $scope.metadata).then(function(data) {
+                  profileService.saveImageMetadata(util.getEntityId("opus"), $scope.image.imageId, $scope.metadata).then(function(data) {
                       if (angular.isDefined($scope.callbackHandler)) {
                           $scope.callbackHandler(data);
                       }

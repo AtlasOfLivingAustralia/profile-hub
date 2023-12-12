@@ -587,7 +587,6 @@ profileEditor.service('profileService', function ($http, util, $cacheFactory, co
         },
 
         saveImageMetadata: function(opusId, imageId, data) {
-            console.log('saveImageMetadata', opusId, data);
             $log.debug("Saving image metadata: " + imageId);
             var future = null;
             if (opusId && imageId) {
