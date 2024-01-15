@@ -19,7 +19,7 @@
                          ng-show="!image.excluded">
                         <div class="imgCon ">
                             <a href="" ng-click="imageCtrl.showMetadata(image)" target="_blank"
-                               ng-if="image.thumbnailUrl" title="View details">
+                               ng-if="image.thumbnailUrl" title="{{image.metadata.originalFileName}}">
                                 <img ng-src="{{image.thumbnailUrl}}"
                                      ng-if="image.thumbnailUrl && image.type.name == 'OPEN'"
                                      class="thumbnail"/>
@@ -100,7 +100,7 @@
                         <div class="col-sm-4">
                             <div class="imgCon">
                                 <a href="" ng-click="imageCtrl.showMetadata(image)" target="_blank"
-                                   ng-if="image.largeImageUrl" title="View details">
+                                   ng-if="image.largeImageUrl" title="{{image.metadata.originalFileName}}">
                                     <img ng-src="{{image.largeImageUrl}}"
                                          ng-if="image.largeImageUrl && image.type.name == 'OPEN'"
                                          class="thumbnail"/>
