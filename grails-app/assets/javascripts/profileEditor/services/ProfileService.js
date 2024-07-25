@@ -586,12 +586,12 @@ profileEditor.service('profileService', function ($http, util, $cacheFactory, co
             return util.toStandardPromise(future);
         },
 
-        saveImageMetadata: function(imageId, data) {
+        saveImageMetadata: function(opusId, imageId, data) {
             $log.debug("Saving image metadata: " + imageId);
             var future = null;
-            if (imageId) {
+            if (opusId && imageId) {
                 future = enqueue(function() {
-                    return $http.post(util.contextRoot() + "/image/" + imageId + "/metadata", data)
+                    return $http.post(util.contextRoot() + "/opus/" + opusId + "/image/" + imageId + "/metadata", data)
                 });
             }
 

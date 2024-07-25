@@ -78,6 +78,15 @@
                 <span>{{ imageMetadataCtrl.image.metadata.licence }}</span>
             </div>
         </div>
+
+        <div class= "row margin-bottom-1" ng-show="imageMetadataCtrl.image.metadata.originalFileName">
+            <div class="col-sm-3">
+                <span class="output-label">File Name</span>
+            </div>
+            <div class="col-sm-9">
+                <span>{{ imageMetadataCtrl.image.metadata.originalFileName }}</span>
+            </div>
+        </div>
     </div>
 
     <div class="modal-footer">

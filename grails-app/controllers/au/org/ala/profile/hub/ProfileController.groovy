@@ -172,10 +172,10 @@ class ProfileController extends BaseController {
     @Secured(role = ROLE_PROFILE_EDITOR)
     def updateLocalImageMetadata() {
         def metadata = request.getJSON()
-        if (!params.imageId || !metadata) {
-            badRequest "imageId or metadata is required"
+        if (!params.opusId || !params.imageId || !metadata) {
+            badRequest "opusId, imageId and metadata is required"
         } else {
-            handle imageService.updateLocalImageMetadata(params.imageId, metadata)
+            handle imageService.updateLocalImageMetadata(params.opusId, params.imageId, metadata)
         }
     }
 
