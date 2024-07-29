@@ -271,16 +271,11 @@ class ApiController extends BaseController {
             String taxonRank = params.taxonRank ?: ""
             String rankFilter = params.rankFilter ?: ""
 
-            def opus = profileService.getOpus(params.opusId)
-            if (!opus) {
-                notFound()
-            } else {
-                def result = apiService.getProfiles(params.opusId, startIndex, pageSize, sort, order, taxonName, taxonRank, rankFilter)
-                def profiles = result?.resp.profiles
-                def count = result?.resp.count
-                response.addIntHeader('X-Total-Count', count)
-                render profiles as JSON
-            }
+            def result = apiService.getProfiles(params.opusId, startIndex, pageSize, sort, order, taxonName, taxonRank, rankFilter)
+            def profiles = result?.resp.profiles
+            def count = result?.resp.count
+            response.addIntHeader('X-Total-Count', count)
+            render profiles as JSON
         }
     }
 
