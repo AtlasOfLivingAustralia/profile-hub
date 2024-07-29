@@ -328,6 +328,15 @@ class ApiController extends BaseController {
                                     type = "boolean",
                                     defaultValue = "false"
                             )),
+                    @Parameter(name = "onlyContent",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "if true, only return the species description and not additional information like opus metadata etc.",
+                            schema = @Schema(
+                                    name = "onlyContent",
+                                    type = "boolean",
+                                    defaultValue = "false"
+                            )),
                     @Parameter(name = "Access-Token",
                             in = ParameterIn.HEADER,
                             required = false,
@@ -354,14 +363,24 @@ class ApiController extends BaseController {
             boolean latest = false
             final fullClassification = true
             boolean includeImages = params.getBoolean('includeImages', false)
-            Map profileAndOpus = profileService.getProfile(params.opusId as String, params.profileId as String, latest, fullClassification)
+            boolean onlyContent = params.getBoolean('onlyContent', false)
+            Map profileAndOpus
+            if (onlyContent) {
+                profileAndOpus = apiService.getProfile(params.opusId as String, params.profileId as String, latest, fullClassification)
+            }
+            else {
+                profileAndOpus = profileService.getProfile(params.opusId as String, params.profileId as String, latest, fullClassification)
+            }
 
             if (!profileAndOpus) {
                 notFound()
             } else {
-                String fullURL = grailsApplication.config.grails.serverURL +  (request.contextPath ? "/${request.contextPath}" : "")
-                profileAndOpus.profile.mapSnapshot = mapService.getSnapshotImageUrlWithUUIDs(fullURL, profileAndOpus.opus.uuid, profileAndOpus.profile.uuid)
-                apiService.supplementProfileData(profileAndOpus, 20, includeImages)
+                if (!onlyContent) {
+                    String fullURL = grailsApplication.config.grails.serverURL +  (request.contextPath ? "/${request.contextPath}" : "")
+                    profileAndOpus.profile.mapSnapshot = mapService.getSnapshotImageUrlWithUUIDs(fullURL, profileAndOpus.opus.uuid, profileAndOpus.profile.uuid)
+                    apiService.supplementProfileData(profileAndOpus, 20, includeImages)
+                }
+
                 render profileAndOpus.profile as JSON
             }
         }
