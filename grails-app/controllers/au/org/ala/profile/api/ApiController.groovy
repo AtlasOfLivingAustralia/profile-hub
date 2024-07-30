@@ -331,11 +331,20 @@ class ApiController extends BaseController {
                     @Parameter(name = "onlyContent",
                             in = ParameterIn.QUERY,
                             required = false,
-                            description = "if true, only return the species description and not additional information like opus metadata etc.",
+                            description = "if true, only return the species description and not additional information like opus metadata, map configuration etc.",
                             schema = @Schema(
                                     name = "onlyContent",
                                     type = "boolean",
                                     defaultValue = "false"
+                            )),
+                    @Parameter(name = "fullClassification",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "if true, annotate classification with links to its profile page. Response will be slow.",
+                            schema = @Schema(
+                                    name = "fullClassification",
+                                    type = "boolean",
+                                    defaultValue = "true"
                             )),
                     @Parameter(name = "Access-Token",
                             in = ParameterIn.HEADER,
@@ -361,7 +370,7 @@ class ApiController extends BaseController {
         } else {
             response.setContentType(CONTENT_TYPE_JSON)
             boolean latest = false
-            final fullClassification = true
+            boolean fullClassification = params.getBoolean('fullClassification', true)
             boolean includeImages = params.getBoolean('includeImages', false)
             boolean onlyContent = params.getBoolean('onlyContent', false)
             Map profileAndOpus
