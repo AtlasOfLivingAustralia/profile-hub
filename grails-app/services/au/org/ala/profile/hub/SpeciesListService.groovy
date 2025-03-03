@@ -13,6 +13,6 @@ class SpeciesListService {
     }
 
     def getAllLists() {
-        webService.get("${grailsApplication.config.lists.base.url}/speciesList/?page=1&pageSize=1000")
+        webService.get("${grailsApplication.config.lists.base.url}/speciesList?page=1&pageSize=1000")
     }
 }
