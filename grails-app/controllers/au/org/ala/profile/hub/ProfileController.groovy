@@ -369,7 +369,7 @@ class ProfileController extends BaseController {
                         originalFilename: transferrable.originalFilename
                 ]
         ]
-        Map metadata = [multimedia: multimedia]
+        Map metadata = [multimedia: multimedia, imageId : params.imageId ?: ""]
 
         def response = imageService.uploadImage(request.contextPath, params.opusId, params.profileId, request.getParameter("dataResourceId"), metadata, transferrable)
 

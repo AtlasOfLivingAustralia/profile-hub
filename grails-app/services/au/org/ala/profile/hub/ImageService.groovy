@@ -106,7 +106,8 @@ class ImageService {
                     file = getLocalImageFile(dir, imageProperties.profileId, imageId, extension)
                     imageUrl = "${contextPath}/opus/${imageProperties.opusId}/profile/${imageProperties.profileId}/image/${imageId}${extension}?type=${imageProperties.type}"
                     thumbnailUrl = "${contextPath}/opus/${imageProperties.opusId}/profile/${imageProperties.profileId}/image/${imageId}${extension}?type=${imageProperties.type}"
-                    tileZoomLevels = new File("${dir}/${imageProperties.profileId}/${imageId}_tiles/")?.listFiles()?.size()
+                    String tileLocation = buildFilePath(dir, imageProperties.opusId, imageProperties.profileId, imageId) + separator + imageId + '_tiles/'
+                    tileZoomLevels = new File(tileLocation)?.listFiles()?.size()
                     tileUrlPattern = "${contextPath}/profile/${imageProperties.profileId}/image/${imageId}/tile/{z}/{x}/{y}?type=${imageProperties.type}"
                 }
                 BufferedImage bufferedImage = ImageIO.read(file)
@@ -201,8 +202,10 @@ class ImageService {
 
     void storeLocalImage(Map opus, Map profile, Map metadata, Transferrable file, String directory) throws IOException {
         String extension = file.fileExtension ?: metadata.extension
+        if (!metadata?.imageId) {
+            metadata.action = "add"
+        }
         metadata.imageId = metadata.imageId ?: UUID.randomUUID().toString()
-        metadata.action = "add"
         String fileLocation = buildFilePath(directory, opus.uuid, profile.uuid, metadata.imageId)
         File localDir = new File(fileLocation)
         localDir.mkdirs()
