@@ -39,15 +39,15 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'node_modules/jasmine-data_driven_tests/src/all.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/vendor/jquery-2.1.4/jquery-2.1.4.min.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/vendor/leaflet-0.7.7/leaflet.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/vendor/Leaflet.Coordinates-0.1.5/Leaflet.Coordinates-0.1.5.min.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/vendor/Leaflet.loading-0.1.16/Control.Loading.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/vendor/Leaflet.EasyButton-1.2.0/easy-button.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/vendor/urijs-1.18.0/URI.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/js/layers/SmartWmsLayer.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/js/Map.js',
-            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin/web-app/js/OccurrenceMap.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/vendor/jquery-2.1.4/jquery-2.1.4.min.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/vendor/leaflet-0.7.7/leaflet.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/vendor/Leaflet.Coordinates-0.1.5/Leaflet.Coordinates-0.1.5.min.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/vendor/Leaflet.loading-0.1.16/Control.Loading.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/vendor/Leaflet.EasyButton-1.2.0/easy-button.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/vendor/urijs-1.18.0/URI.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/js/layers/SmartWmsLayer.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/js/Map.js',
+            'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/js/OccurrenceMap.js',
             'grails-app/assets/thirdparty/modernizr/modernizer.js',
             'grails-app/assets/thirdparty/angular/angular-1.3.20.js',
             'grails-app/assets/thirdparty/angular/angular-sanitize-1.3.20.js',
@@ -112,8 +112,9 @@ module.exports = function (config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            'Chrome',
-            'ChromeHeadless'
+            'Chrome'
+            // ,
+            // 'ChromeHeadless'
         ],
 
 
