@@ -27,6 +27,9 @@ apply plugin:"com.bertramlabs.asset-pipeline"
 apply plugin:"org.grails.grails-gsp"
 apply from: "${project.projectDir}/gradle/publish.gradle"
 
+sourceCompatibility = '11'
+targetCompatibility = '17'
+
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
@@ -62,7 +65,7 @@ dependencies {
     implementation "org.grails:grails-plugin-services"
     implementation "org.grails:grails-plugin-url-mappings"
     implementation "org.grails:grails-plugin-interceptors"
-    implementation "org.codehaus.groovy:groovy:$groovyVersion"
+//    implementation "org.codehaus.groovy:groovy:$groovyVersion"
     implementation ("org.grails.plugins:cache") {
         exclude module: 'groovy'
         exclude module: 'groovy-all'
