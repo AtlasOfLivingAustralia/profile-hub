@@ -38,7 +38,7 @@ class BiocacheService {
         // Therefore, we need to query both the production biocache AND the local sandbox biocache for images. In the
         // production environment, there should never be any sandbox images, but in lower environments there might be.
 
-        String biocacheImageSearchUrl = "${grailsApplication.config.biocache.base.url}/ws/occurrences/search.json"
+        String biocacheImageSearchUrl = "${grailsApplication.config.getProperty('biocache.ws.url')}/ws/occurrences/search.json"
         String sandboxImageSearchUrl = "${grailsApplication.config.sandbox.biocache.service.url}/occurrences/search.json"
 
         int biocacheImages = countImages(biocacheImageSearchUrl, searchIdentifier, opus, minusQuery)
@@ -71,7 +71,7 @@ class BiocacheService {
             String imagesQuery = constructQueryString(searchIdentifier, opus, minusQuery)
             log.debug("Fetching images for ${searchIdentifier} using query ${imagesQuery}")
 
-            String biocacheImageSearchUrl = "${grailsApplication.config.biocache.base.url}/ws/occurrences/search.json"
+            String biocacheImageSearchUrl = "${grailsApplication.config.getProperty('biocache.ws.url')}/ws/occurrences/search.json"
             int totalBiocacheImageCount = countImages(biocacheImageSearchUrl, searchIdentifier, opus)
 
             if (totalBiocacheImageCount > startIndex - 1) {
@@ -210,6 +210,6 @@ class BiocacheService {
     }
 
     def lookupSpecimen(String specimenId) {
-        webService.get("${grailsApplication.config.biocache.base.url}/ws/occurrences/${specimenId}")
+        webService.get("${grailsApplication.config.getProperty('biocache.ws.url')}/ws/occurrences/${specimenId}")
     }
 }
