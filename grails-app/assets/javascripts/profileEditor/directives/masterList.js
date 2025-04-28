@@ -5,8 +5,7 @@
         var self = this;
 
         self.lists = [];
-        var listType = config.masterListType;
-        $http.get(config.listServiceUrl + '/ws/speciesList', { params: { 'listType': 'eq:' + config.masterListType, max: -1, user: config.currentUserId } })
+        $http.get(config.listServiceUrl + '/speciesList', { params: { 'listType': config.masterListType, page: 1, pageSize: 1000, owner: config.currentUserId } })
             .then(function(response) {
                 self.lists = response.data.lists;
             }, function(response) {
