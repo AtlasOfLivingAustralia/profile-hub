@@ -210,6 +210,7 @@ class UrlMappings {
         "/alaAdmin" controller: "admin", action: [GET: "alaIndex"]
 
         "500"(view: "/error")
+        "502"(view: "/error")
         "404"(view: "/notFound")
         "403"(view: "/notAuthorised")
         "401"(view: "/notAuthorised")

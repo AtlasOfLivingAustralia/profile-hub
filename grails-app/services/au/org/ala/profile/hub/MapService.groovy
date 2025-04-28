@@ -31,7 +31,7 @@ class MapService {
         if (useSandbox) {
             url = "${grailsApplication.config.sandbox.biocache.service.url}/mapping/wms/image?${occurrenceQuery}&"
         } else {
-            url = "${grailsApplication.config.biocache.base.url}/ws/mapping/wms/image?${occurrenceQuery}&"
+            url = "${grailsApplication.config.getProperty('biocache.ws.url')}/ws/mapping/wms/image?${occurrenceQuery}&"
         }
 
         params.each { k, v -> url += "${k}=${v}&" }
