@@ -14,6 +14,9 @@
 *= require bootstrap-fileupload/bootstrap-fileupload.min.css
 *= require ala-admin-asset.css
 *= require animation.css
+*= require ckeditor5/css/ckeditor5.css
+*= require ckeditor5/css/ckeditor5-content.css
+*= require ckeditor5/css/ckeditor5-editor.css
 *= require mapAndImages
 *= require_self
 */

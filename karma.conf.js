@@ -36,6 +36,9 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'grails-app/assets/thirdparty/ckeditor5/css/ckeditor5.css',
+            'grails-app/assets/thirdparty/ckeditor5/css/ckeditor5-content.css',
+            'grails-app/assets/thirdparty/ckeditor5/css/ckeditor5-editor.css',
             'node_modules/jasmine-data_driven_tests/src/all.js',
             'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/vendor/jquery-2.1.4/jquery-2.1.4.min.js',
             'https://cdn.jsdelivr.net/gh/AtlasOfLivingAustralia/ala-map-plugin@ala-map-plugin-2.0.4/web-app/vendor/leaflet-0.7.7/leaflet.js',
@@ -58,8 +61,9 @@ module.exports = function (config) {
             'grails-app/assets/thirdparty/ng-file-upload/ng-file-upload-5.0.7.min.js',
             'grails-app/assets/thirdparty/angular-leaflet/angular-leaflet-directive.min.js',
             'grails-app/assets/thirdparty/angular-loading-bar/loading-bar-0.7.1.min.js',
+            'grails-app/assets/thirdparty/ckeditor5/js/ckeditor5.umd.js',
+            'grails-app/assets/javascripts/ckeditor/plugins/insertimage.js',
             'grails-app/assets/thirdparty/ckeditor5/ng-ckeditor.js',
-            'grails-app/assets/thirdparty/ckeditor5/build/ckeditor.js',
             'grails-app/assets/thirdparty/google-diff-match-patch/diff_match_patch.js',
             'grails-app/assets/thirdparty/angular-scroll/angular-scroll.min.js',
             'grails-app/assets/thirdparty/checklist-model/checklist-model-0.2.4.js',
