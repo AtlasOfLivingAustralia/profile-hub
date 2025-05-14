@@ -8,17 +8,17 @@
 // interpreted by the asset pipeline as a sort of inline //= require, which means it will load the version from
 // the image plugin unless overridden
 //= require leaflet
-//= require webjars/leaflet-draw/0.4.14/dist/leaflet.draw.js
+//= require webjars/github-com-kbartas-Leaflet-draw/1.0.4/leaflet.draw-src.js
 // TODO Add src.js to plugin
 //= require webjars/Leaflet.Coordinates/0.1.5/dist/Leaflet.Coordinates-0.1.5.src.js
-//= require webjars/leaflet-easybutton/1.2.0/src/easy-button.js
+//= require webjars/leaflet-easybutton/2.4.0/src/easy-button.js
 // The Geocoder control would go here but it doesn't play nicely with the asset-pipeline and we don't need it in this app.
-//= require webjars/leaflet-control-geocoder/1.5.5/dist/Control.Geocoder.js
-//= require webjars/leaflet.markercluster/0.5.0/dist/leaflet.markercluster.js
+//= require webjars/leaflet-control-geocoder/2.4.0/dist/Control.Geocoder.js
+//= require webjars/leaflet.markercluster/1.5.3/dist/leaflet.markercluster-src.js
 //= require webjars/leaflet-loading/0.1.24/src/Control.Loading.js
 //= require webjars/leaflet-sleep/0.5.1/Leaflet.Sleep.js
 //= require turf-2.0.2/turf.min.js
-//= require webjars/handlebars/4.0.11-1/handlebars.js
+//= require webjars/handlebars/4.7.7/dist/handlebars
 //= require plugins/ala-map/Map.js
 //= require plugins/ala-map/OccurrenceMap.js
 //= require plugins/ala-map/layers/SmartWmsLayer.js

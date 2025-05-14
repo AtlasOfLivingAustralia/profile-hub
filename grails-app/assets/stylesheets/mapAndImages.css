@@ -1,14 +1,14 @@
 /*
  * maps
  *= require plugins/ala-map/map.css
- *= require webjars/leaflet/0.7.7/dist/leaflet.css
- *= require webjars/leaflet-draw/0.4.14/dist/leaflet.draw.css
+ *= require webjars/leaflet/1.6.0/dist/leaflet.css
+  *= require webjars/github-com-kbartas-Leaflet-draw/1.0.4/leaflet.draw-src.css
  *= require webjars/Leaflet.Coordinates/0.1.5/dist/Leaflet.Coordinates-0.1.5.css
  *= require webjars/Leaflet.Coordinates/0.1.5/dist/Leaflet.Coordinates-0.1.5.ie.css
- *= require webjars/leaflet-easybutton/1.2.0/src/easy-button.css
- * Geocoder would go here but the JS doesn't work with the asset-pipeline
- *= require webjars/leaflet.markercluster/0.5.0/dist/MarkerCluster.css
- *= require webjars/leaflet.markercluster/0.5.0/dist/MarkerCluster.Default.css
+ *= require webjars/leaflet-easybutton/2.4.0/src/easy-button.css
+ *= require webjars/leaflet-control-geocoder/2.4.0/dist/Control.Geocoder.css
+ *= require webjars/leaflet.markercluster/1.5.3/dist/MarkerCluster.css
+ *= require webjars/leaflet.markercluster/2.5.4/dist/MarkerCluster.Default.css
  *= require webjars/leaflet-loading/0.1.24/src/Control.Loading.css
  *
  * images
