@@ -81,31 +81,36 @@ describe('Directive: ckeditor', function () {
         });
     });
 
-    // execCommand is not supported in firefox anymore
-    if(!isFirefox()) {
-        it("model should be updated when user adds content", function (done) {
-            var text = "model updated",
-                htmlText = "<p>" + text + "</p>";
-            addEditorToPage(element);
+    it("model should be updated when user adds content", function (done) {
+        var text = "model updated",
+            expectedHtml = "<p>" + text + "Test</p>";
+        addEditorToPage(element);
 
-            element.find("textarea").on("ckeditor:modelupdated", function (event, data) {
-                if(data.value == htmlText) {
-                    setTimeout(function () {
-                        expect(testScope.data).toBe(htmlText);
-                        done();
-                    }, 0);
-                }
-            });
-
-            setTimeout(function () {
-                var editor = element.find(".ck.ck-content.ck-editor__editable:last");
-                editor.focus();
-                document.execCommand('selectAll');
-                document.execCommand('delete');
-                document.execCommand('insertText', false, text);
-            },0);
+        element.find("textarea").on("ckeditor:modelupdated", function (event, data) {
+            if(data.value == expectedHtml) {
+                setTimeout(function () {
+                    expect(testScope.data).toBe(expectedHtml);
+                    done();
+                }, 0);
+            }
         });
-    }
+
+        setTimeout(function () {
+            var editor = element.find(".ck.ck-content.ck-editor__editable:last");
+
+            editor = editor[0];
+
+            editor.dispatchEvent( new window.InputEvent( 'beforeinput', {
+                bubbles: true,
+                cancelable: true,
+                inputType: 'insertText',
+                data: text,
+                targetRanges: [new StaticRange({ startContainer: editor, startOffset: 0, endContainer: editor, endOffset: 0 })]
+            } ) );
+
+        },0);
+    });
+
 
     function addEditorToPage(editor) {
         var body = angular.element(document).find("body");

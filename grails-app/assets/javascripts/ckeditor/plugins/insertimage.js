@@ -8,12 +8,12 @@
  * For data view, it creates the below content. This content is saved to the database.
  * <img src="https://..." alt="..." class="..."/>
  */
-import Plugin from '../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-core/src/plugin';
-import ButtonView from '../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-ui/src/button/buttonview';
-import imageIcon from '../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-core/theme/icons/image.svg';
-import {toWidget} from '../../../thirdparty/ckeditor5/node_modules/@ckeditor/ckeditor5-widget/src/utils';
+const Plugin = CKEDITOR.Plugin;
+const ButtonView = CKEDITOR.ButtonView;
+const imageIcon = CKEDITOR.IconImage;
+const toWidget = CKEDITOR.toWidget;
 
-export default class InsertImage extends Plugin {
+class InsertImage extends Plugin {
     /**
      * @inheritDoc
      */
@@ -105,7 +105,7 @@ export default class InsertImage extends Plugin {
     }
 }
 
-export function modelToDataViewAttributeConverter(attributeKey) {
+function modelToDataViewAttributeConverter(attributeKey) {
     return dispatcher => {
         dispatcher.on(`attribute:${attributeKey}:image`, converter);
     };
@@ -121,7 +121,7 @@ export function modelToDataViewAttributeConverter(attributeKey) {
     }
 }
 
-export function modelToEditingViewAttributeConverter(attributeKey) {
+function modelToEditingViewAttributeConverter(attributeKey) {
     return dispatcher => {
         dispatcher.on(`attribute:${attributeKey}:image`, converter);
     };
@@ -146,7 +146,7 @@ export function modelToEditingViewAttributeConverter(attributeKey) {
     }
 }
 
-export function createImageViewElement(writer, addWrapper) {
+function createImageViewElement(writer, addWrapper) {
     if (addWrapper) {
         const emptyElement = writer.createEmptyElement('img');
         const div = writer.createContainerElement('div', {class: 'image'});
@@ -158,7 +158,7 @@ export function createImageViewElement(writer, addWrapper) {
     }
 }
 
-export function toImageWidget(viewElement, writer, label) {
+function toImageWidget(viewElement, writer, label) {
     writer.setCustomProperty('image', true, viewElement);
 
     return toWidget(viewElement, writer, {label: labelCreator});
@@ -170,7 +170,7 @@ export function toImageWidget(viewElement, writer, label) {
     }
 }
 
-export function getViewImgFromWidget(divElement) {
+function getViewImgFromWidget(divElement) {
     const divChildren = [];
 
     for (const divChild of divElement.getChildren()) {
