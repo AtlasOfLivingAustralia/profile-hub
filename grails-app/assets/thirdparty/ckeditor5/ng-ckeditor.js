@@ -81,7 +81,7 @@
 
                     options = angular.extend(options, scope[attrs.ckeditor]);
 
-                    if (options.plugins && options.plugins.indexOf('SpecialCharacters') > -1) {
+                    if (options.plugins && options.plugins.indexOf(CKEDITOR.SpecialCharacters) > -1) {
                         options.plugins.push(SpecialCharactersForProfiles);
                     }
 
