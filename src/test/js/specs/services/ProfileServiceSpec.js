@@ -428,9 +428,9 @@ describe("ProfileService tests", function () {
 
     it("should invoke the updateLocalImageMetadata service on the context root when saveImageMetadata is called", function() {
         var data = {creator: "one", createdDate: new Date(), rights: "rights", licence: "licence"};
-        service.saveImageMetadata('abcdefghijlkmnop', data);
+        service.saveImageMetadata('opusId', 'abcdefghijlkmnop', data);
 
-        http.expectPOST("/someContext/image/abcdefghijlkmnop/metadata", data).respond("bla");
+        http.expectPOST("/someContext/opus/opusId/image/abcdefghijlkmnop/metadata", data).respond("bla");
     });
 
     it("should invoke GET request when getImageMetadata is called", function() {

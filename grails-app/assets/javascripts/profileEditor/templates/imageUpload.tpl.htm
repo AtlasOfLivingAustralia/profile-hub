@@ -1,4 +1,13 @@
 <div class="form-horizontal">
+    <div class="form-horizontal" ng-if="metadata.originalFileName">
+        <div class="form-group">
+            <label for="licence" class="col-sm-3" style="text-align: right">Current Image</label>
+
+            <div class="col-sm-9">
+                <span>{{ metadata.originalFileName }}</span>
+            </div>
+        </div>
+    </div>
     <div class="form-group" ng-hide="disableSource">
         <label class="col-sm-3 control-label">Upload source</label>
         <div class="col-sm-9">

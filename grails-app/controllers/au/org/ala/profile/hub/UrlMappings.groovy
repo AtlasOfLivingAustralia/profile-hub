@@ -122,6 +122,7 @@ class UrlMappings {
 
         "/opus/$opusId/statistics" controller: "statistics", action: [GET: "index"]
         "/opus/$opusId/image/$filename" controller: "opus", action: [GET: "downloadImage", DELETE: "deleteImage"]
+        "/opus/$opusId/image/$imageId/metadata" controller: "profile", action: [POST: "updateLocalImageMetadata"]
         "/opus/$opusId/image" controller: "opus", action: [POST: "uploadImage", PUT: "uploadImage"]
 
         "/opus/$opusId/update" controller: "opus", action: [GET: "edit", POST: "updateOpus"]
@@ -186,8 +187,6 @@ class UrlMappings {
 
         "/publication/$pubId" controller: "profile", action: [GET: "getPublication"]
         "/publication/$pubId/json" controller: "profile", action: [GET: "getPublicationJson"]
-
-        "/image/$imageId/metadata" controller: "profile", action: [POST: "updateLocalImageMetadata"]
 
         "/" controller: "opus", action: [GET: "index"]
 
