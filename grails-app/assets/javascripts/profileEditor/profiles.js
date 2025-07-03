@@ -75,21 +75,20 @@ profileEditor.run(function ($rootScope, config) {
         language: 'en',
         class: 'four-line', // font-size 15px * 1.5em line height + 10px margin bottom per <p> for 4 lines
         plugins: [
-            'Heading',
-            'Bold',
-            'Italic',
-            'Underline',
-            'Strikethrough',
-            'Subscript',
-            'Superscript',
-            'SpecialCharacters',
-            'Link',
-            'List',
-            'Indent',
-            'FontBackgroundColor',
-            'FontColor',
-            'InsertImage',
-            'Essentials'
+            CKEDITOR.Heading,
+            CKEDITOR.Bold,
+            CKEDITOR.Italic,
+            CKEDITOR.Underline,
+            CKEDITOR.Strikethrough,
+            CKEDITOR.Subscript,
+            CKEDITOR.Superscript,
+            CKEDITOR.SpecialCharacters,
+            CKEDITOR.Link, CKEDITOR.AutoLink,
+            CKEDITOR.List,
+            CKEDITOR.Indent,
+            CKEDITOR.Font,
+            InsertImage,
+            CKEDITOR.Essentials
         ],
         toolbar: {
             items: [
@@ -124,20 +123,19 @@ profileEditor.run(function ($rootScope, config) {
         language: 'en',
         class: 'four-line', // font-size 15px * 1.5em line height + 10px margin bottom per <p> for 4 lines
         plugins: [
-            'Heading',
-            'Bold',
-            'Italic',
-            'Underline',
-            'Strikethrough',
-            'Subscript',
-            'Superscript',
-            'SpecialCharacters',
-            'Link',
-            'List',
-            'Indent',
-            'FontBackgroundColor',
-            'FontColor',
-            'Essentials'
+            CKEDITOR.Heading,
+            CKEDITOR.Bold,
+            CKEDITOR.Italic,
+            CKEDITOR.Underline,
+            CKEDITOR.Strikethrough,
+            CKEDITOR.Subscript,
+            CKEDITOR.Superscript,
+            CKEDITOR.SpecialCharacters,
+            CKEDITOR.Link, CKEDITOR.AutoLink,
+            CKEDITOR.List,
+            CKEDITOR.Indent,
+            CKEDITOR.Font,
+            CKEDITOR.Essentials
         ],
         toolbar: {
             items: [

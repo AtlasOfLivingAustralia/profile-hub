@@ -24,7 +24,7 @@
     app.run(['$q', '$timeout', function ($q, $timeout) {
         $defer = $q.defer();
 
-        if (angular.isUndefined(ClassicEditor)) {
+        if (angular.isUndefined(CKEDITOR.ClassicEditor)) {
             throw new Error('CKEDITOR not found');
         }
 
@@ -46,45 +46,47 @@
 
                 var onLoad = function () {
                     var options = {
-                        toolbar: {
-                            items: [
-                                'heading',
-                                '|',
-                                'bold',
-                                'italic',
-                                'underline',
-                                'strikethrough',
-                                'subscript',
-                                'superscript',
-                                'specialCharacters',
-                                'link',
-                                '|',
-                                'bulletedList',
-                                'numberedList',
-                                'outdent',
-                                'indent',
-                                '|',
-                                'fontBackgroundColor',
-                                'fontColor',
-                                '|',
-                                'insertImage',
-                                '|',
-                                'undo',
-                                'redo'
-                            ]
-                        },
-                        language: 'en',
-                        licenseKey: ''
+                        licenseKey: "GPL",
+                        plugins: [CKEDITOR.Essentials, CKEDITOR.Bold, CKEDITOR.Italic, CKEDITOR.Paragraph, CKEDITOR.Font,
+                            CKEDITOR.Alignment, CKEDITOR.RemoveFormat, CKEDITOR.Heading, CKEDITOR.Fullscreen, CKEDITOR.HorizontalLine,
+                            CKEDITOR.Link, CKEDITOR.AutoLink, CKEDITOR.List, CKEDITOR.Table, CKEDITOR.TableToolbar, CKEDITOR.ShowBlocks,
+                            CKEDITOR.PasteFromOffice, CKEDITOR.List, CKEDITOR.Indent, CKEDITOR.SourceEditing, CKEDITOR.Subscript, CKEDITOR.BlockQuote, CKEDITOR.Superscript, CKEDITOR.Strikethrough, CKEDITOR.Underline],
+                        toolbar: [
+                            'heading',
+                            '|',
+                            'bold',
+                            'italic',
+                            'underline',
+                            'strikethrough',
+                            'subscript',
+                            'superscript',
+                            'specialCharacters',
+                            'link',
+                            '|',
+                            'bulletedList',
+                            'numberedList',
+                            'outdent',
+                            'indent',
+                            '|',
+                            'fontBackgroundColor',
+                            'fontColor',
+                            '|',
+                            'insertImage',
+                            '|',
+                            'undo',
+                            'redo'
+                        ],
+                        language: 'en'
                     };
 
                     options = angular.extend(options, scope[attrs.ckeditor]);
 
-                    if (options.plugins && options.plugins.indexOf('SpecialCharacters') > -1) {
+                    if (options.plugins && options.plugins.indexOf(CKEDITOR.SpecialCharacters) > -1) {
                         options.plugins.push(SpecialCharactersForProfiles);
                     }
 
                     var instance;
-                    var instancePromise = ClassicEditor.create(element[0], options).then(function (editor) {
+                    var instancePromise = CKEDITOR.ClassicEditor.create(element[0], options).then(function (editor) {
                         instance = editor;
                         setSize(instance, options);
                         instance.setData(ngModel.$viewValue || EMPTY_HTML);
@@ -174,7 +176,7 @@
                     }
                 };
 
-                if (angular.isDefined(ClassicEditor)) {
+                if (angular.isDefined(CKEDITOR.ClassicEditor)) {
                     loaded = true;
                 }
                 if (loaded) {

@@ -1,49 +1,38 @@
 Software License Agreement
 ==========================
 
-Copyright (c) 2014-2021, CKSource - Frederico Knabben. All rights reserved.
+**CKEditor&nbsp;5** (https://github.com/ckeditor/ckeditor5)<br>
+Copyright (c) 2003–2025, [CKSource Holding sp. z o.o.](https://cksource.com) All rights reserved.
 
-Online builder code samples are licensed under the terms of the MIT License (see Appendix A):
+Licensed under a dual-license model, this software is available under:
 
-	http://en.wikipedia.org/wiki/MIT_License
+* the [GNU General Public License Version 2 or later](https://www.gnu.org/licenses/gpl.html) (see COPYING.GPL),
+* or commercial license terms from CKSource Holding sp. z o.o.
 
-CKEditor 5 collaboration features are only available under a commercial license. [Contact us](https://ckeditor.com/contact/) for more details.
+For more information, see: [https://ckeditor.com/legal/ckeditor-licensing-options](https://ckeditor.com/legal/ckeditor-licensing-options).
 
-Free 30-days trials of CKEditor 5 collaboration features are available:
- * https://ckeditor.com/collaboration/ - Real-time collaboration (with all features).
- * https://ckeditor.com/collaboration/comments/ - Inline comments feature (without real-time collaborative editing).
- * https://ckeditor.com/collaboration/track-changes/ - Track changes feature (without real-time collaborative editing).
+If you are using CKEditor under commercial terms, you are free to remove the COPYING.GPL file with the full copy of a GPL license.
+
+Sources of Intellectual Property Included in CKEditor
+-----------------------------------------------------
+
+Where not otherwise indicated, all CKEditor content is authored by CKSource engineers and consists of CKSource-owned intellectual property. In some specific instances, CKEditor will incorporate work done by developers outside of CKSource with their express permission.
+
+The following libraries are included in CKEditor under the [MIT license](https://opensource.org/licenses/MIT):
+
+* BlurHash - Copyright (c) 2018 Wolt Enterprises (MIT license).
+* color-convert - Copyright (c) 2011–2016 Heather Arthur <fayearthur@gmail.com>, copyright (c) 2016–2021 Josh Junon <josh@junon.me>.
+* color-parse - Copyright (c) 2015 Dmitry Ivanov.
+* emojibase-data - Copyright (c) 2017-2019 Miles Johnson.
+* fuzzysort - Copyright (c) 2018 Stephen Kamenar.
+* is-emoji-supported - Copyright (c) 2016-2020 Koala Interactive, Inc.
+* es-toolkit - Copyright (c) 2024 Viva Republica, Inc.
+* Marked - Copyright (c) 2018+, MarkedJS (https://github.com/markedjs/), copyright (c) 2011–2018, Christopher Jeffrey (https://github.com/chjj/).
+* Turndown - Copyright (c) 2017+ Dom Christie.
+* turndown-plugin-gfm - Copyright (c) 2017+ Dom Christie.
+* vanilla-colorful - Copyright (c) 2020 Serhii Kulykov <iamkulykov@gmail.com>.
 
 Trademarks
 ----------
 
-CKEditor is a trademark of CKSource - Frederico Knabben. All other brand
-and product names are trademarks, registered trademarks or service
-marks of their respective holders.
-
----
-
-Appendix A: The MIT License
----------------------------
-
-The MIT License (MIT)
-
-Copyright (c) 2014-2021, CKSource - Frederico Knabben
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+**CKEditor** is a trademark of [CKSource Holding sp. z o.o.](https://cksource.com) All other brand and product names are trademarks, registered trademarks or service marks of their respective holders.
