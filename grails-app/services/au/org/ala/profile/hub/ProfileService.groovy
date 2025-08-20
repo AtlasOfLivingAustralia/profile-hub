@@ -132,7 +132,7 @@ class ProfileService {
     }
 
     def getListMetadata(String drid) {
-        webService.get("${grailsApplication.config.lists.base.url}/ws/speciesList/${drid}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())?.resp
+        webService.get("${grailsApplication.config.lists.base.url}/ws/speciesList${drid}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())?.resp
     }
 
     def getListItems(String drid) {

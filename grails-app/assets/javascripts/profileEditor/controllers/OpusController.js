@@ -860,7 +860,7 @@ profileEditor.controller('OpusController', function ($log, $scope, profileServic
         lists.then(function (data) {
             self.allSpeciesLists = [];
             angular.forEach(data.lists, function (list) {
-                self.allSpeciesLists.push({dataResourceUid: list.dataResourceUid, listName: list.listName.trim()});
+                self.allSpeciesLists.push({dataResourceUid: list.dataResourceUid, listName: list.title.trim()});
             });
             self.allSpeciesLists = orderBy(self.allSpeciesLists, "listName");
         });
