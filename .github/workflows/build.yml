@@ -1,4 +1,4 @@
-name: profile-hub build
+name: "profile-hub build"
 
 on:
   push:
