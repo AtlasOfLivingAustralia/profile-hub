@@ -1,4 +1,4 @@
-name: profile-hub build
+name: "profile-hub build"
 
 on:
   push:
@@ -7,7 +7,6 @@ on:
       - master
       - feature/**
       - hotfix/**
-      - #745-Problem selecting and displaying multiple images when there are private images
 
 env:
   TZ: Australia/Canberra
