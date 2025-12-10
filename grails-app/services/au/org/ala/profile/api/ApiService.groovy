@@ -4,10 +4,16 @@ import au.org.ala.profile.hub.ImageService
 import au.org.ala.profile.hub.NslService
 import au.org.ala.profile.hub.ProfileService
 import au.org.ala.profile.hub.Utils
+import au.org.ala.profile.hub.WebServiceWrapperService
 import grails.web.mapping.LinkGenerator
+import org.apache.http.entity.ContentType
 
 import static au.org.ala.profile.hub.Utils.encPath
+import static au.org.ala.profile.hub.util.HubConstants.getDEFAULT_OPUS_BANNER_URL
+import static au.org.ala.profile.hub.util.HubConstants.getDEFAULT_OPUS_LOGOS
+import static au.org.ala.profile.hub.util.HubConstants.getDEFAULT_OPUS_TITLE
 import static org.apache.http.HttpStatus.SC_OK
+import static au.org.ala.profile.hub.Utils.*
 
 class ApiService {
     def grailsApplication
@@ -15,6 +21,7 @@ class ApiService {
     ImageService imageService
     ProfileService profileService
     NslService nslService
+    WebServiceWrapperService webServiceWrapperService
 
     def getProfiles(String opusId, String startIndex = "", String pageSize = "", String sort = "", String order = "", String taxonName = "", String taxonRank = "", String rankFilter = "") {
         if (taxonName && taxonRank) {
@@ -133,6 +140,40 @@ class ApiService {
     List getAttributes (Map profile, List attributes = []) {
         attributes = attributes*.toLowerCase()
         profile?.attributes?.findAll { attributes?.contains(it.uuid) || attributes?.contains(it.title?.toLowerCase()) }
+    }
+
+    /**
+     * Faster profile lookup.
+     *
+    */
+    def getProfile(String opusId, String profileId, boolean latest = false, Boolean fullClassification = false) {
+        log.debug("Loading profile " + profileId)
+
+        Map result
+
+        try {
+            String encodedProfileId = encPath(profileId)
+            def profile = webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/${encodedProfileId}?latest=${latest}&fullClassification=${fullClassification}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())?.resp
+
+            if (!profile) {
+                return null
+            }
+
+            profileService.injectThumbnailUrls(profile)
+
+            result = [
+                    profile      : profile
+            ]
+
+        } catch (FileNotFoundException e) {
+            log.error("Profile ${profileId} not found")
+            result = null
+        } catch (Exception e) {
+            log.error("Failed to retrieve profile ${profileId}", e)
+            result = [error: "Failed to retrieve profile ${profileId} due to ${e.getMessage()}"]
+        }
+
+        result
     }
 
     /** Returns true for HTTP status codes from 200 to 299 */

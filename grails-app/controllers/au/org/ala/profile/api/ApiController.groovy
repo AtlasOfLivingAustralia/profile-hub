@@ -271,16 +271,11 @@ class ApiController extends BaseController {
             String taxonRank = params.taxonRank ?: ""
             String rankFilter = params.rankFilter ?: ""
 
-            def opus = profileService.getOpus(params.opusId)
-            if (!opus) {
-                notFound()
-            } else {
-                def result = apiService.getProfiles(params.opusId, startIndex, pageSize, sort, order, taxonName, taxonRank, rankFilter)
-                def profiles = result?.resp.profiles
-                def count = result?.resp.count
-                response.addIntHeader('X-Total-Count', count)
-                render profiles as JSON
-            }
+            def result = apiService.getProfiles(params.opusId, startIndex, pageSize, sort, order, taxonName, taxonRank, rankFilter)
+            def profiles = result?.resp.profiles
+            def count = result?.resp.count
+            response.addIntHeader('X-Total-Count', count)
+            render profiles as JSON
         }
     }
 
@@ -333,6 +328,24 @@ class ApiController extends BaseController {
                                     type = "boolean",
                                     defaultValue = "false"
                             )),
+                    @Parameter(name = "onlyContent",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "if true, only return the species description and not additional information like opus metadata, map configuration etc.",
+                            schema = @Schema(
+                                    name = "onlyContent",
+                                    type = "boolean",
+                                    defaultValue = "false"
+                            )),
+                    @Parameter(name = "fullClassification",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            description = "if true, annotate classification with links to its profile page. Response will be slow.",
+                            schema = @Schema(
+                                    name = "fullClassification",
+                                    type = "boolean",
+                                    defaultValue = "true"
+                            )),
                     @Parameter(name = "Access-Token",
                             in = ParameterIn.HEADER,
                             required = false,
@@ -357,16 +370,26 @@ class ApiController extends BaseController {
         } else {
             response.setContentType(CONTENT_TYPE_JSON)
             boolean latest = false
-            final fullClassification = true
+            boolean fullClassification = params.getBoolean('fullClassification', true)
             boolean includeImages = params.getBoolean('includeImages', false)
-            Map profileAndOpus = profileService.getProfile(params.opusId as String, params.profileId as String, latest, fullClassification)
+            boolean onlyContent = params.getBoolean('onlyContent', false)
+            Map profileAndOpus
+            if (onlyContent) {
+                profileAndOpus = apiService.getProfile(params.opusId as String, params.profileId as String, latest, fullClassification)
+            }
+            else {
+                profileAndOpus = profileService.getProfile(params.opusId as String, params.profileId as String, latest, fullClassification)
+            }
 
             if (!profileAndOpus) {
                 notFound()
             } else {
-                String fullURL = grailsApplication.config.grails.serverURL +  (request.contextPath ? "/${request.contextPath}" : "")
-                profileAndOpus.profile.mapSnapshot = mapService.getSnapshotImageUrlWithUUIDs(fullURL, profileAndOpus.opus.uuid, profileAndOpus.profile.uuid)
-                apiService.supplementProfileData(profileAndOpus, 20, includeImages)
+                if (!onlyContent) {
+                    String fullURL = grailsApplication.config.grails.serverURL +  (request.contextPath ? "/${request.contextPath}" : "")
+                    profileAndOpus.profile.mapSnapshot = mapService.getSnapshotImageUrlWithUUIDs(fullURL, profileAndOpus.opus.uuid, profileAndOpus.profile.uuid)
+                    apiService.supplementProfileData(profileAndOpus, 20, includeImages)
+                }
+
                 render profileAndOpus.profile as JSON
             }
         }
