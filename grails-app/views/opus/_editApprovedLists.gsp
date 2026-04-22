@@ -13,7 +13,7 @@
 
                 <ul>
                     <li ng-repeat="approvedList in opusCtrl.opus.approvedLists">
-                        <a href="${grailsApplication.config.lists.base.url}/speciesListItem/list/{{approvedList}}">{{(opusCtrl.allSpeciesLists | filter: approvedList)[0].listName | default:'Loading...'}}</a>
+                        <a href="${grailsApplication.config.lists.ui.url}/speciesListItem/list/{{approvedList}}">{{(opusCtrl.allSpeciesLists | filter: approvedList)[0].listName | default:'Loading...'}}</a>
                         <a class="btn btn-mini btn-link" title="Remove this resource"
                            ng-click="opusCtrl.removeApprovedList($index, 'existing', ListForm)">
                             <i class="fa fa-trash-o color--red"></i>
