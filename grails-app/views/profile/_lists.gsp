@@ -70,7 +70,7 @@
                 <div class="row section-no-para padding-bottom-1" ng-show="list.metadata">
                     <div class="col-md-12">
                         <span class="citation">
-                            From the <a ng-href="${grailsApplication.config.ala.lists.ui.url}/speciesListItem/list/{{ list.metadata.dataResourceUid }}">{{ list.metadata.listName }}</a> species list, created by {{ list.metadata.fullName }} on {{ list.metadata.dateCreated | date }}.
+                            From the <a ng-href="${grailsApplication.config.lists.ui.url}/speciesListItem/list/{{ list.metadata.dataResourceUid }}">{{ list.metadata.listName }}</a> species list, created by {{ list.metadata.fullName }} on {{ list.metadata.dateCreated | date }}.
                         </span>
                     </div>
                 </div>
