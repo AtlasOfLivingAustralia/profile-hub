@@ -16,7 +16,7 @@
                 <div class="col-md-12">
                     <ul>
                         <li ng-repeat="list in listCtrl.lists">
-                            <a href="${grailsApplication.config.lists.base.url}/speciesListItem/list/{{ list.dataResourceUid }}">{{ list.list.listName }}</a>
+                            <a href="${grailsApplication.config.lists.ui.url}/speciesListItem/list/{{ list.dataResourceUid }}">{{ list.list.listName }}</a>
                         </li>
                     </ul>
                 </div>
@@ -70,7 +70,7 @@
                 <div class="row section-no-para padding-bottom-1" ng-show="list.metadata">
                     <div class="col-md-12">
                         <span class="citation">
-                            From the <a ng-href="${grailsApplication.config.ala.lists.base.url}/speciesListItem/list/{{ list.metadata.dataResourceUid }}">{{ list.metadata.listName }}</a> species list, created by {{ list.metadata.fullName }} on {{ list.metadata.dateCreated | date }}.
+                            From the <a ng-href="${grailsApplication.config.lists.ui.url}/speciesListItem/list/{{ list.metadata.dataResourceUid }}">{{ list.metadata.listName }}</a> species list, created by {{ list.metadata.fullName }} on {{ list.metadata.dateCreated | date }}.
                         </span>
                     </div>
                 </div>
