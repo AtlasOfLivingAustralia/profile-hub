@@ -94,10 +94,7 @@ class OpusController extends OpusBaseController {
             if (!lists || !(lists.statusCode in 200..299)) {
                 response.sendError(SC_BAD_GATEWAY, "lists service unavailable")
             } else {
-                def filteredLists = lists.resp.lists?.findAll {
-                    it.listType?.equalsIgnoreCase(listType)
-                }
-                render(view: 'filter', model: model + [lists: filteredLists])
+                render(view: 'filter', model: model + [lists: lists.resp.lists])
             }
         }
     }
