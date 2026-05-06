@@ -9,7 +9,8 @@ class SpeciesListService {
     WebService webService
 
     def getListsForGuid(String guid) {
-        webService.get("${grailsApplication.config.lists.base.url}/ws/species/${guid}")
+        def path = grailsApplication.config.getProperty('lists.species.path', String, '/ws/species')
+        webService.get("${grailsApplication.config.lists.base.url}${path}/${guid}")
     }
 
     def getAllLists() {
