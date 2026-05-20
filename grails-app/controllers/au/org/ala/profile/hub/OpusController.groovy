@@ -85,7 +85,11 @@ class OpusController extends OpusBaseController {
         } else {
             def model = commonViewModelParams(opus, 'filter')
             def listType = grailsApplication.config.lists.masterlist.type ?: 'PROFILE'
-            def lists = webService.get(grailsApplication.config.lists.base.url + '/ws/speciesList', [ 'listType': 'eq:' + listType , max: -1, user: authService.userId ])
+            def speciesListPath = grailsApplication.config.lists.speciesList.path ?: '/ws/speciesList'
+            def lists = webService.get(
+                grailsApplication.config.lists.base.url + speciesListPath,
+                [listType: 'eq:' + listType, max: 1000, user: authService.userId]
+            )
 
             if (!lists || !(lists.statusCode in 200..299)) {
                 response.sendError(SC_BAD_GATEWAY, "lists service unavailable")

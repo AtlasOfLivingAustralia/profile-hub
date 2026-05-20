@@ -132,11 +132,13 @@ class ProfileService {
     }
 
     def getListMetadata(String drid) {
-        webService.get("${grailsApplication.config.lists.base.url}/ws/speciesList/${drid}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())?.resp
+        def path = grailsApplication.config.getProperty('lists.speciesList.path', String, '/ws/speciesList')
+        webService.get("${grailsApplication.config.lists.base.url}${path}/${drid}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())?.resp
     }
 
     def getListItems(String drid) {
-        webService.get("${grailsApplication.config.lists.base.url}/ws/speciesListItems/${drid}?includeKVP=true", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())?.resp
+        def path = grailsApplication.config.getProperty('lists.speciesListItems.path', String, '/ws/speciesListItems')
+        webService.get("${grailsApplication.config.lists.base.url}${path}/${drid}?includeKVP=true", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())?.resp
     }
 
     def getPublications(String pubId) {
