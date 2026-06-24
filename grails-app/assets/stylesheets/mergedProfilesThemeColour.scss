@@ -457,33 +457,71 @@ li.divider {
 ================================= */
 /* $call-to-action-colour (Blue) is the primary theme colour. Change this colour to change the theme look. */
 /* $call-to-action-hover-colour (blue hover) */
+/* Navbar */
 #primary-nav.navbar {
   margin-bottom: 0;
-  min-height: 70px;
-  padding-top: 10px;
+  min-height: 50px;
+  padding-top: 0;
   border-bottom: 2px solid;
   border-radius: 0;
+  background-color: #fff;
+  border-color: transparent;
 }
 
-.navbar li, .navbar p {
-  font-size: 14px;
-}
-
-.navbar-default .navbar-nav.bold a{
+#primary-nav .navbar-nav a {
   font-weight: bold;
 }
 
-.navbar-default .navbar-nav > .active > a{
+#primary-nav .navbar-nav .active > a {
   background-color: #fff;
 }
 
-.navbar-default .navbar-nav>.active>a:hover{
-  background-color: #fff;
+.navbar-right {
+  margin-left: auto;
 }
 
-.navbar-default {
+/* Bootstrap 3 compatibility classes still used by legacy templates */
+.btn-default {
   background-color: #fff;
-  border-color: transparent;
+  border-color: #ccc;
+}
+
+.btn-default:hover {
+  font-weight: bold;
+}
+
+.thumbnail {
+  margin-bottom: 0;
+}
+
+.collection-thumbnail {
+  width: 160px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.collection-tile {
+  min-height: 170px;
+  height: 170px;
+  margin-bottom: 25px;
+}
+
+.collection-title {
+  width: 160px;
+  margin: 8px auto 0;
+}
+
+.collection-grid {
+  margin-bottom: 60px;
+}
+
+/* Bootstrap 3 float compatibility */
+.pull-right {
+  float: right !important;
+}
+
+.pull-left {
+  float: left !important;
 }
 
 /* Btn (Button)
@@ -491,10 +529,6 @@ li.divider {
 
 .btn, .form-control, .panel, .list-group, .well, .span10X {
   border-radius: 3px; /*box-shadow:0 0 0;*/
-}
-
-.btn-default {
-  background-color: #fff;
 }
 
 .btn-primary {
@@ -1100,11 +1134,6 @@ li .soc-bell:hover {
   font-style: normal;
 }
 
-.collection-thumbnail {
-  width: 160px;
-  height: 100px
-}
-
 accordion > div.panel-group > div.panel > div.panel-heading, .panel-title > a > a {
   /*color: #e9004a;*/
 }
@@ -1470,10 +1499,6 @@ hr.comment-divider {
 
 .upload-image-preview, .upload-image-preview img {
   height: 100px;
-}
-
-.thumbnail {
-  margin-bottom: 0;
 }
 
 .caption {
@@ -2372,10 +2397,6 @@ h4, h5, h6 {
 
 .btn-primary {
   color: #FFFFFF;
-}
-
-.btn-default:hover {
-  font-weight: bold;
 }
 
 .nav-tabs > li.active > a {
