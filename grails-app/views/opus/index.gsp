@@ -37,14 +37,14 @@
         </div>
 
         <div ng-repeat="opus in opusCtrl.opusList | orderBy: 'title'"
-             class="col-6 col-sm-4 col-md-2 text-center collection-tile div-centre">
+             class="col-6 col-sm-4 col-md-3 col-lg-2 text-center collection-tile">
             <a href="${request.contextPath}/opus/{{opus.shortName ? opus.shortName : opus.uuid}}"
                target="_self">
                 <img class="img-fluid collection-thumbnail img-thumbnail" src=""
                      ng-src="{{opus.thumbnailUrl | default:'${asset.assetPath(src: "generic_flower.png")}' }}"
                      alt="{{opus.title}} logo" title="{{opus.title}}">
             </a>
-            <h4 class="font-xxsmall collection-title">
+            <h4 class="collection-title">
                 <a href="${request.contextPath}/opus/{{opus.shortName ? opus.shortName : opus.uuid}}"
                    target="_self"><strong>{{opus.title}}</strong></a>
             </h4>

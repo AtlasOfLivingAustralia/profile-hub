@@ -52,5 +52,9 @@
 </li>
 </g:if>
 <g:else>
-    <li><a href="${authService.loginUrl(request)}"><span class="fa fa-sign-in">&nbsp;&nbsp;</span>Login</a></li>
+    <li class="nav-item">
+        <a class="nav-link" href="${authService.loginUrl(request)}">
+            <span class="fa fa-sign-in">&nbsp;&nbsp;</span>Login
+        </a>
+    </li>
 </g:else>
