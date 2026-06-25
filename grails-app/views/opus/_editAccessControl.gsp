@@ -28,7 +28,7 @@
                             <div class="small padding-left-1" ng-show="userCtrl.opus.privateCollection">
                                 When the collection is 'private' only people who have been added to the collection with at least the 'User' role will be allowed to view the profiles within the collection.
                                 <p class="bg-info alert alert-danger">
-                                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                    <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
                                     <span class="sr-only">Error:</span>When you change collection private to public, existing all users who have USER ROLE will be deleted.
                                 </p>
                             </div>

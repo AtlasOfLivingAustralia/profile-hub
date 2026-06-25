@@ -156,8 +156,8 @@ h4
 }
 
 /* Header text colour */
-input.form-control:focus + ul.dropdown-menu + span.input-group-btn > .btn-outline-secondary
-, input.form-control:focus + span.input-group-btn > .btn-outline-secondary
+input.form-control:focus + ul.dropdown-menu + .btn-outline-secondary
+, input.form-control:focus + .btn-outline-secondary
 , .header-control .dropdown-toggle
 , .header-control .dropdown-toggle:hover
 , .header-control input

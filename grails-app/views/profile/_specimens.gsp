@@ -29,13 +29,8 @@
                         <label>URL</label>
                         <div class="input-group">
                             <input type="text" class="form-control" ng-model="specimen.url"/><br/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-success" type="button"
-                                        ng-click="specCtrl.checkAddedSpecimen($index, specimen.url)">
-                                    <span class="fa fa-check color--white"></span></button>
-                            </span>
+                                <button class="btn btn-success" type="button" ng-click="specCtrl.checkAddedSpecimen($index, specimen.url)"><span class="fa fa-check color--white"></span></button>
                         </div>
-
                         <alert type="danger" ng-if="specimen.error">{{ specimen.error }}</alert>
                     </div>
                 </div>
