@@ -38,7 +38,7 @@
                        ng-href="${request.contextPath}/opus/{{doiCtrl.opus.shortName || doiCtrl.opus.uuid }}/profile/{{doiCtrl.profileId}}/publication/{{doiCtrl.selectedPublication.uuid}}/file"
                        ng-click="doiCtrl.trackDownload('${request.contextPath}', doiCtrl.opus.uuid, doiCtrl.profileId, doiCtrl.selectedPublication.uuid)"
                        target="_blank"><span class="glyphicon glyphicon-download"></span> Download PDF</a>
-                <a class="btn btn-default"
+                <a class="btn btn-outline-secondary"
                        href="${request.contextPath}/opus/{{doiCtrl.opus.shortName ? doiCtrl.opus.shortName : doiCtrl.opus.uuid}}/profile/{{doiCtrl.profile.scientificName}}" target="_blank">View Profile</a>
             </div>
         </div>

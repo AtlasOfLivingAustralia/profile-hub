@@ -2,14 +2,14 @@
 <div class="btn-group" ng-show="profileCtrl.opus">
     <div class="col-md-6" ng-show="!profileCtrl.readonly()">
         <a href="${request.contextPath}/opus/{{profileCtrl.opusId}}/profile/{{profileCtrl.profile.scientificName}}"
-           target="_self" class="btn btn-default std-width-btn"><i
+           target="_self" class="btn btn-outline-secondary std-width-btn"><i
                 class="fa fa-eye"></i> Public View</a>
     </div>
 
     <div class="btn-group col-md-6">
         <div class="dropdown">
-            <button class="btn btn-default dropdown-toggle std-width-btn" type="button" id="dropdownMenu1"
-                    data-toggle="dropdown" aria-expanded="true">
+            <button class="btn btn-outline-secondary dropdown-toggle std-width-btn" type="button" id="dropdownMenu1"
+                    data-bs-toggle="dropdown" aria-expanded="true">
                 <span class="fa fa-cog"></span>
                 Options
                 <span class="fa fa-angle-double-down"></span>

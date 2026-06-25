@@ -137,7 +137,7 @@
                     <button class="btn btn-danger" ng-click="adminCtrl.deleteTag($index)">Delete</button>
                 </div>
             </div>
-            <button class="btn btn-default" ng-click="adminCtrl.addTag()">Add tag</button>
+            <button class="btn btn-outline-secondary" ng-click="adminCtrl.addTag()">Add tag</button>
 
         </div>
         <hr/>

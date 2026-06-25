@@ -25,7 +25,7 @@
                     <div class="form-group">
                         <label for="file">.CSV file input</label>
                         <br/>
-                        <span class="btn btn-default btn-file">
+                        <span class="btn btn-outline-secondary btn-file">
                             Choose file
                             <input type="file" name="csvFile" id="file" ng-model="glossaryCtrl.newFile"
                                    ngf-select="" required/>
@@ -39,7 +39,7 @@
         <div class="panel-footer">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right">Upload</button>
+                    <button class="btn btn-primary float-end">Upload</button>
                 </div>
             </div>
         </div>

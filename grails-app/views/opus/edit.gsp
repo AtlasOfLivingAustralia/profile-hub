@@ -26,9 +26,9 @@
         </div>
 
         <div class="col-md-6">
-            <div class="padding-bottom-1 pull-right">
+            <div class="padding-bottom-1 float-end">
                     <a href="${request.contextPath}/opus/{{opusCtrl.opus.shortName ? opusCtrl.opus.shortName : opusCtrl.opus.uuid}}"
-                       class="btn btn-default" target="_self" ng-show="opusCtrl.opus.uuid"><i
+                       class="btn btn-outline-secondary" target="_self" ng-show="opusCtrl.opus.uuid"><i
                             class="fa fa-eye"></i> Public View</a>
             </div>
         </div>

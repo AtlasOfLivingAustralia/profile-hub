@@ -24,7 +24,7 @@
     <div class="panel-footer" ng-if="!profileCtrl.readonly()">
         <div class="row">
             <div class="col-md-12">
-                <div class="pull-right">
+                <div class="float-end">
                     <save-button ng-click="profileCtrl.saveProfile(NomenclatureForm)" form="NomenclatureForm"></save-button>
                 </div>
             </div>

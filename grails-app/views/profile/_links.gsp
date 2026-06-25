@@ -40,7 +40,7 @@
                             <label>Description</label>
                             <textarea ng-model="link.description" ckeditor="richTextSimpleToolbar"></textarea>
                         </div>
-                        <button class="btn btn-danger pull-right"
+                        <button class="btn btn-danger float-end"
                                 ng-click="linkCtrl.deleteLink($index, LinkForm)">Delete</button>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
     <div class="panel-footer" ng-show="!linkCtrl.readonly">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" ng-click="linkCtrl.addLink(LinkForm)"><i
+                <button class="btn btn-outline-secondary" ng-click="linkCtrl.addLink(LinkForm)"><i
                         class="fa fa-plus"></i> Add new link
                 </button>
                 <save-button ng-click="linkCtrl.saveLinks(LinkForm)" form="LinkForm"></save-button>

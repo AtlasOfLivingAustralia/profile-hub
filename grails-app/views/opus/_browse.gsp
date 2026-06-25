@@ -16,7 +16,7 @@
                         &emsp;<a ng-href="#" title="{{ taxon.help }}"
                                  ng-click="browseCtrl.searchByTaxonLevel(taxon.key)">{{taxon.name}} ({{browseCtrl.taxonLevels[taxon.key] ? browseCtrl.taxonLevels[taxon.key] : '0'}})
                             <span ng-if="taxon.help" class="fa fa-question-circle small superscript"></span>
-                            <span class="caret pull-right"></span></a>
+                            <span class="caret float-end"></span></a>
                         </accordion-heading>
 
                         <div class="form-group">
@@ -64,7 +64,7 @@
                                                autocomplete="off"
                                                ng-enter="browseCtrl.selectSingleResult()"
                                                ng-model="browseCtrl.searchTerm"></div>
-                                    <button type="submit" class="btn btn-default ">
+                                    <button type="submit" class="btn btn-outline-secondary ">
                                         <span class="fa fa-search"></span>
                                     </button>
                                 </form>
@@ -80,7 +80,7 @@
     <div class="col-lg-9 col-md-8 col-xs-12" ng-cloak>
         <div ng-show="!browseCtrl.selectedTaxon.name && !browseCtrl.searchTerm">
             <p>
-                Browse the taxonomic hierarchy using the navigation pane <span class="hidden-xs hidden-sm">to the left</span><span class="hidden-md hidden-lg">above</span>. You can also jump to a particular taxon in the hierarchy by typing the beginning of the name into the ‘Quick browse’ option at the bottom of the pane.
+                Browse the taxonomic hierarchy using the navigation pane <span class="d-none d-md-inline">to the left</span><span class="d-inline d-md-none">above</span>. You can also jump to a particular taxon in the hierarchy by typing the beginning of the name into the ‘Quick browse’ option at the bottom of the pane.
             </p>
             <p>
                 Alternatively, you can select the ‘Search’ navigator at the top of this page and perform a text or name-based search.
@@ -114,7 +114,7 @@
                 </h4>
             </div>
             <div class="col-md-6">
-                <div class="pull-right padding-top-1">
+                <div class="float-end padding-top-1">
                     <label for="sort" class="compact-label small">Sort by</label>
                     <select id="sort" ng-options="sort for sort in browseCtrl.sortOptions" ng-change="browseCtrl.changeSortOrder()"
                             ng-model="browseCtrl.sortOption" class="ignore-save-warning">

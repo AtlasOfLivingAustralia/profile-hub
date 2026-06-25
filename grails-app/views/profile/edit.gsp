@@ -120,10 +120,10 @@
                         <div class="col-md-12" ng-cloak>
                             <label class="padding-left-1 small" for="nameFormatting">Profile Name Format:</label>
                             <div id="nameFormatting" class="btn-group">
-                                <label class="btn btn-xs" ng-class="profileCtrl.autoFormatProfileName ? 'btn-success' : 'btn-default'"
+                                <label class="btn btn-xs" ng-class="profileCtrl.autoFormatProfileName ? 'btn-success' : 'btn-outline-secondary'"
                                        ng-model="profileCtrl.autoFormatProfileName" ng-change="profileCtrl.toggleFormatName(true, FormatNameForm)" ng-value="true"
                                        btn-radio="true" ng-disabled="profileCtrl.showNameEditControls">Auto</label>
-                                <label class="btn btn-xs" ng-class="profileCtrl.autoFormatProfileName ? 'btn-default' : 'btn-danger'"
+                                <label class="btn btn-xs" ng-class="profileCtrl.autoFormatProfileName ? 'btn-outline-secondary' : 'btn-danger'"
                                        ng-model="profileCtrl.autoFormatProfileName" ng-change="profileCtrl.toggleFormatName(false, FormatNameForm)" ng-value="false" ng-click="profileCtrl.formatNameEdit()"
                                        btn-radio="false" ng-disabled="profileCtrl.showNameEditControls">Manual</label>
                             </div>
@@ -206,7 +206,7 @@
 
                 <div class="row margin-top-1" ng-show="!profileCtrl.readonly()">
                     <div class="col-md-12 padding-top-1">
-                        <save-all class="pull-right"></save-all>
+                        <save-all class="float-end"></save-all>
                     </div>
                 </div>
 

@@ -102,7 +102,7 @@
     <div class="panel-footer" ng-show="!bhlCtrl.readonly">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" ng-click="bhlCtrl.addLink(BhlForm)"><i
+                <button class="btn btn-outline-secondary" ng-click="bhlCtrl.addLink(BhlForm)"><i
                         class="fa fa-plus"></i> Add new reference
                 </button>
                 <save-button ng-click="bhlCtrl.saveLinks(BhlForm)" form="BhlForm"></save-button>

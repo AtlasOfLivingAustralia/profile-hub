@@ -53,7 +53,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
-                            <button class="btn btn-danger pull-right"
+                            <button class="btn btn-danger float-end"
                                     ng-click="profileCtrl.deleteAuthorship($index, AuthorForm)"
                                     ng-if="authorship.category != 'Author'" style="margin-bottom: 10px">Delete</button>
                         </div>
@@ -67,7 +67,7 @@
     <div class="panel-footer" ng-if="!profileCtrl.readonly()">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" ng-click="profileCtrl.addAuthorship(AuthorForm)"><i
+                <button class="btn btn-outline-secondary" ng-click="profileCtrl.addAuthorship(AuthorForm)"><i
                         class="fa fa-plus"></i> Add section</button>
                 <save-button ng-click="profileCtrl.saveAuthorship(AuthorForm)" form="AuthorForm"></save-button>
             </div>

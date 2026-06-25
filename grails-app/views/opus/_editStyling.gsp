@@ -12,7 +12,7 @@
                 <div class="form-group">
                     <label>Banner image for collection pages</label>
                     <input type="text" class="form-control" name="bannerUrl" ng-model="opusCtrl.opus.brandingConfig.opusBannerUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.opusBanner" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.opusBanner" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.opusBanner" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.opusBannerUploaded"
                                 url="{{opusCtrl.imageUploadUrl + 'opusBanner'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label>Banner image for profile pages</label>
                     <input type="text" class="form-control" name="bannerUrl" ng-model="opusCtrl.opus.brandingConfig.profileBannerUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.profileBanner" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.profileBanner" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.profileBanner" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.profileBannerUploaded"
                                       url="{{opusCtrl.imageUploadUrl + 'profileBanner'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label>Banner image for export cover</label>
                     <input type="text" class="form-control" name="pdfBannerUrl" ng-model="opusCtrl.opus.brandingConfig.pdfBannerUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.pdfBanner" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.pdfBanner" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.pdfBanner" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.pdfBannerUploaded"
                                       url="{{opusCtrl.imageUploadUrl + 'pdfBanner'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -53,7 +53,7 @@
                 <div class="form-group">
                     <label>Banner image for export back cover</label>
                     <input type="text" class="form-control" name="pdfBackBannerUrl" ng-model="opusCtrl.opus.brandingConfig.pdfBackBannerUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.pdfBackBanner" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.pdfBackBanner" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.pdfBackBanner" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.pdfBackBannerUploaded"
                                       url="{{opusCtrl.imageUploadUrl + 'pdfBackBanner'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -96,8 +96,8 @@
                         <tfoot>
                         <tr>
                             <td colspan="2">
-                                <button class="btn btn-sm btn-default margin-top-1 margin-bottom-1" ng-click="opusCtrl.addAnEmptyLogo()" ><i class="fa fa-plus"></i> Add a logo from link</button>
-                                <button class="btn btn-sm btn-default margin-top-1 margin-bottom-1 ignore-save-warning" ng-model="opusCtrl.showUpload.logo" btn-checkbox >Upload a file</button>
+                                <button class="btn btn-sm btn-outline-secondary margin-top-1 margin-bottom-1" ng-click="opusCtrl.addAnEmptyLogo()" ><i class="fa fa-plus"></i> Add a logo from link</button>
+                                <button class="btn btn-sm btn-outline-secondary margin-top-1 margin-bottom-1 ignore-save-warning" ng-model="opusCtrl.showUpload.logo" btn-checkbox >Upload a file</button>
                                 <div ng-if="opusCtrl.showUpload.logo" class="clearfix">
                                     <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.logoUploaded"
                                                   url-generator="opusCtrl.generateFileUploadUrl" show-metadata="false" disable-source="true"></image-upload>
@@ -112,7 +112,7 @@
                 <div class="form-group">
                     <label>Thumbnail</label>
                     <input type="text" class="form-control" name="thumbnailUrl" ng-model="opusCtrl.opus.brandingConfig.thumbnailUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.thumbnail" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.thumbnail" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.thumbnail" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.thumbnailUploaded"
                                       url="{{opusCtrl.imageUploadUrl + 'thumbnail'}}" show-metadata="false" disable-source="true"></image-upload>

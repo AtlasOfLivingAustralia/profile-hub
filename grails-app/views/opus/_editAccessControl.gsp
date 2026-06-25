@@ -122,15 +122,15 @@
         <div class="row">
             <div class="col-md-12" ng-show="userCtrl.accessControlTab == 'user'">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="userCtrl.addUser(UserForm)">
+                    <button class="btn btn-outline-secondary" ng-click="userCtrl.addUser(UserForm)">
                         <i class="fa fa-plus"></i>  Add user</button>
-                    <button class="btn btn-default" ng-click="userCtrl.reset(UserForm)">Reset</button>
+                    <button class="btn btn-outline-secondary" ng-click="userCtrl.reset(UserForm)">Reset</button>
                 </div>
                 <save-button ng-click="userCtrl.save(UserForm)" form="UserForm"></save-button>
             </div>
 
             <div class="col-md-12" ng-show="userCtrl.accessControlTab == 'service'">
-                <div class="pull-right">
+                <div class="float-end">
                     <button class="btn btn-danger" ng-show="userCtrl.opus.accessToken" ng-click="userCtrl.revokeAccessToken()"><span class="fa fa-trash-o">&nbsp;</span>Revoke access token</button>
                     <button class="btn btn-primary" ng-show="!userCtrl.opus.accessToken" ng-click="userCtrl.generateAccessToken()"><span class="fa fa-key">&nbsp;</span>Create access token</button>
                 </div>

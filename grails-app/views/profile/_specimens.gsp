@@ -68,7 +68,7 @@
     <div class="panel-footer" ng-if="!specCtrl.readonly()">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" ng-click="specCtrl.addSpecimen(SpecimenForm)"><i
+                <button class="btn btn-outline-secondary" ng-click="specCtrl.addSpecimen(SpecimenForm)"><i
                         class="fa fa-plus"></i> Add Specimen</button>
                 <save-button ng-click="specCtrl.save(SpecimenForm)" form="SpecimenForm"
                         disabled="!specCtrl.isValid()"></save-button>

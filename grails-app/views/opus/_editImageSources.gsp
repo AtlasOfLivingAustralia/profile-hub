@@ -90,7 +90,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="opusCtrl.resetImageSources()">Reset</button>
+                    <button class="btn btn-outline-secondary" ng-click="opusCtrl.resetImageSources()">Reset</button>
                 </div>
                 <save-button ng-click="opusCtrl.saveOpus(ImageForm)" disabled="!opusCtrl.isImageSourceSelectionValid()" form="ImageForm"></save-button>
             </div>

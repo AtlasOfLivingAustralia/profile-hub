@@ -108,7 +108,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="opusCtrl.addSupportingOpus()"><i
+                    <button class="btn btn-outline-secondary" ng-click="opusCtrl.addSupportingOpus()"><i
                             class="fa fa-plus"></i>  Add collection</button>
                 </div>
                 <save-button ng-click="opusCtrl.saveSupportingOpuses(OpusForm)" form="OpusForm"></save-button>
