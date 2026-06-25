@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="small">
-                <span class="pull-right"><i class="fa fa-info-circle">&nbsp;</i>Click the symbols to view additional information</span>
+                <span class="float-end"><i class="fa fa-info-circle">&nbsp;</i>Click the symbols to view additional information</span>
             </div>
         </div>
     </div>

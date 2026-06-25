@@ -47,7 +47,7 @@
     <div class="panel-footer" ng-if="!profileCtrl.readonly()">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" ng-click="profileCtrl.addBibliography(BiblioForm)"><i
+                <button class="btn btn-outline-secondary" ng-click="profileCtrl.addBibliography(BiblioForm)"><i
                         class="fa fa-plus"></i> Add bibliography</button>
                 <save-button ng-click="profileCtrl.saveProfile()" dirty="profileCtrl.isDirty()"></save-button>
             </div>

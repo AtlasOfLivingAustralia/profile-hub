@@ -63,7 +63,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="opusCtrl.addFeatureList()"><i
+                    <button class="btn btn-outline-secondary" ng-click="opusCtrl.addFeatureList()"><i
                             class="fa fa-plus"></i>  Add list</button>
                 </div>
                 <save-button ng-click="opusCtrl.saveFeatureLists(FeatureForm)" form="FeatureForm"></save-button>

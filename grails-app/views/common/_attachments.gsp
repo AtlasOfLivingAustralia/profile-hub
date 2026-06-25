@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="pull-right" ng-show="attachment.downloadUrl">
+                    <div class="float-end" ng-show="attachment.downloadUrl">
                         <a ng-href="{{attachment.downloadUrl}}" target="_blank"><span
                                 class="fa fa-download color--green">&nbsp;Download</span></a>
                         <span class="padding-left-1"><img src="" ng-src="{{attachment.licenceIcon}}"
@@ -40,7 +40,7 @@
                         </span>
                     </div>
                     <g:if test="${profile ? (edit ? params.isOpusAuthor : false) : params.isOpusAdmin}">
-                        <div class="pull-right padding-top-1">
+                        <div class="float-end padding-top-1">
                             <a href="" ng-click="attachmentCtrl.editAttachment(attachment)" class="padding-left-1"><span
                                     class="fa fa-edit">&nbsp;Edit</span></a>
                             <a href="" ng-click="attachmentCtrl.deleteAttachment(attachment.uuid)"
@@ -63,7 +63,7 @@
         <div class="panel-footer">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-default pull-right" ng-click="attachmentCtrl.uploadAttachment()"><i
+                    <button class="btn btn-outline-secondary float-end" ng-click="attachmentCtrl.uploadAttachment()"><i
                             class="fa fa-plus"></i>&nbsp;Add attachment</button>
                 </div>
             </div>

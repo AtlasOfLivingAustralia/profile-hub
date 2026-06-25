@@ -50,8 +50,8 @@
                         <tfoot>
                         <tr>
                             <td colspan="2">
-                                <button class="btn btn-sm btn-default margin-top-1 margin-bottom-1" ng-click="opusCtrl.addAnEmptyImage()" ><i class="fa fa-plus"></i> Add an external image</button>
-                                <button class="btn btn-sm btn-default margin-top-1 margin-bottom-1 ignore-save-warning" ng-model="opusCtrl.showUpload.imageSlider" btn-checkbox >Upload a file</button>
+                                <button class="btn btn-sm btn-outline-secondary margin-top-1 margin-bottom-1" ng-click="opusCtrl.addAnEmptyImage()" ><i class="fa fa-plus"></i> Add an external image</button>
+                                <button class="btn btn-sm btn-outline-secondary margin-top-1 margin-bottom-1 ignore-save-warning" ng-model="opusCtrl.showUpload.imageSlider" btn-checkbox >Upload a file</button>
                                 <div ng-if="opusCtrl.showUpload.imageSlider" class="clearfix">
                                     <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.imageUploaded"
                                                   url-generator="opusCtrl.generateFileUploadUrl" show-metadata="false" disable-source="true"></image-upload>

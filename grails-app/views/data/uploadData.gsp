@@ -51,7 +51,7 @@
                     <g:if test="${!params.fn}">
                         <h2>1. Select your data file</h2>
                         <div class="padding-bottom-1">
-                            <span class="btn btn-default btn-file">
+                            <span class="btn btn-outline-secondary btn-file">
                                 Choose file
                                 <input id="file" type="file" ngf-select="" ng-model="dataCtrl.files" name="file"
                                        alt="Data file" title="Data file">

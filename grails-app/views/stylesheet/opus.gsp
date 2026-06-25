@@ -9,8 +9,8 @@ body
 , accordion > div.panel-group > div.panel > div.panel-collapse > div.panel-body
 , .nav > li > a:focus
 , .nav > li > a:hover
-, .btn-default
-, .btn-default:hover
+, .btn-outline-secondary
+, .btn-outline-secondary:hover
 , .dropdown-toggle
 , .banner::before
 , .banner .banner-container .bg-item
@@ -72,7 +72,7 @@ h4
   color: ${callToActionColour};
 }
 
-.btn-default
+.btn-outline-secondary
 , .btn-mini
 , .btn-primary
 , .dropdown-toggle
@@ -125,7 +125,7 @@ h4
   background-color: ${callToActionHoverColour};
 }
 
-.btn-default:hover
+.btn-outline-secondary:hover
 , .btn-primary:hover
 , .btn-primary.focus
 , .btn-primary.active
@@ -142,7 +142,7 @@ h4
 .color-venice-blue
 , a:hover
 , a:focus
-, .btn-default:hover
+, .btn-outline-secondary:hover
 , .navbar-default .navbar-nav > .active > a
 , .navbar-default .navbar-nav > li > a:hover
 , .navbar-default .navbar-brand:hover
@@ -156,8 +156,8 @@ h4
 }
 
 /* Header text colour */
-input.form-control:focus + ul.dropdown-menu + span.input-group-btn > .btn-default
-, input.form-control:focus + span.input-group-btn > .btn-default
+input.form-control:focus + ul.dropdown-menu + span.input-group-btn > .btn-outline-secondary
+, input.form-control:focus + span.input-group-btn > .btn-outline-secondary
 , .header-control .dropdown-toggle
 , .header-control .dropdown-toggle:hover
 , .header-control input
@@ -165,7 +165,7 @@ input.form-control:focus + ul.dropdown-menu + span.input-group-btn > .btn-defaul
 {
   border-color: ${headerTextColour};
 }
-.btn-default
+.btn-outline-secondary
 , .dropdown-toggle
 , .navbar-default .navbar-nav a
 , .navbar-default .navbar-nav > li > a

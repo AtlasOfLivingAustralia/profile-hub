@@ -5,7 +5,7 @@
 
         <div class="input-group">
             <div class="input-group-btn">
-                <button type="button" class="btn btn-default dropdown-toggle btn-lg search-type-control" data-toggle="dropdown"
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle btn-lg search-type-control" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                     {{ searchCtrl.isScientificName() ? 'by scientific name' : searchCtrl.isCommonName() ? 'by common name' : 'containing text' }} <span class="caret"></span>
                 </button>
@@ -26,8 +26,8 @@
                    typeahead="profile.scientificName as profile.scientificName for profile in searchCtrl.autoCompleteSearchByScientificName($viewValue) | filter:$viewValue | limitTo:10" />
             <span class="input-group-btn">
                 <button class="btn btn-primary btn-lg search-buttons-responsive-large-screen" type="button" ng-click="searchCtrl.search()">Search</button>
-                <button class="btn btn-default btn-lg search-buttons-responsive-large-screen" type="button" ng-click="searchCtrl.clearSearch()" title="Clear search"><span class="fa fa-trash"></span></button>
-                <button class="btn btn-default btn-lg search-buttons-responsive-small-screen" type="button" ng-click="searchCtrl.search()" title="Clear search"><span class="fa fa-search"></span></button>
+                <button class="btn btn-outline-secondary btn-lg search-buttons-responsive-large-screen" type="button" ng-click="searchCtrl.clearSearch()" title="Clear search"><span class="fa fa-trash"></span></button>
+                <button class="btn btn-outline-secondary btn-lg search-buttons-responsive-small-screen" type="button" ng-click="searchCtrl.search()" title="Clear search"><span class="fa fa-search"></span></button>
             </span>
         </div>
         <div class="well margin-top-1">

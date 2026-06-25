@@ -17,7 +17,7 @@
 
             <g:if test="${params.isOpusAdmin}">
                 <div class="col-md-2">
-                    <button class="btn btn-default pull-right margin-top-1" ng-click="glossaryCtrl.addGlossaryItem($index)"><i
+                    <button class="btn btn-outline-secondary float-end margin-top-1" ng-click="glossaryCtrl.addGlossaryItem($index)"><i
                             class="fa fa-plus"></i> Add item</button>
                 </div>
             </g:if>

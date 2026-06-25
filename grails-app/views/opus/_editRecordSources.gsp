@@ -93,7 +93,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="opusCtrl.resetRecordSources()">Reset</button>
+                    <button class="btn btn-outline-secondary" ng-click="opusCtrl.resetRecordSources()">Reset</button>
                 </div>
                 <save-button ng-click="opusCtrl.saveOpus(RecordForm)" disabled="!opusCtrl.isRecordSourceSelectionValid()" form="RecordForm"></save-button>
             </div>
