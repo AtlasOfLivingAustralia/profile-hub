@@ -72,7 +72,7 @@
             </ul>
         </div>
 
-        <div class="col-lg-9 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-md-8 col-12">
             <g:include controller="opus" action="editOpusDetailsPanel" params="[opusId: params.opusId]"/>
 
             <g:if test="${params.opusId}">

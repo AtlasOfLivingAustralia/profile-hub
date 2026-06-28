@@ -1,11 +1,11 @@
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-12">
         <h3 class="heading-medium">Browse by category</h3>
     </div>
 </div>
 <div class="padding-top-1 row" ng-controller="BrowseController as browseCtrl" ng-init="browseCtrl.getTaxonLevels()" ng-cloak>
     <a name="browseTop"></a>
-    <div class="col-lg-3 col-md-4 col-xs-12">
+    <div class="col-lg-3 col-md-4 col-12">
         <!-- Side menu -->
         <div class="side-menu">
             <nav class="navbar navbar-default" role="navigation">
@@ -77,7 +77,7 @@
     </div>
 
 
-    <div class="col-lg-9 col-md-8 col-xs-12" ng-cloak>
+    <div class="col-lg-9 col-md-8 col-12" ng-cloak>
         <div ng-show="!browseCtrl.selectedTaxon.name && !browseCtrl.searchTerm">
             <p>
                 Browse the taxonomic hierarchy using the navigation pane <span class="d-none d-md-inline">to the left</span><span class="d-inline d-md-none">above</span>. You can also jump to a particular taxon in the hierarchy by typing the beginning of the name into the ‘Quick browse’ option at the bottom of the pane.

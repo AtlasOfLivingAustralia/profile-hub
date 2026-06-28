@@ -14,7 +14,7 @@
 
         <g:include controller="opus" action="opusSummaryPanel" params="[opusId: params.opusId]"/>
         <div class="row">
-            <div class="col-lg-12 col-md-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-12">
                 <h3 class="heading-medium">Identify via keys
                     <i class="fa fa-question-circle" aria-hidden="true"
                                                                             aria-label="At each step, select the attribute that best matches the plant you wish to identify. Matching taxa will be displayed on the right. The path you have chosen will be displayed underneath; click within the path to step back."

@@ -11,7 +11,7 @@
     <g:render template="banner" model="[opus: opus]"/>
     <div class="container">
         <div class="row">
-            <div class="col-sm-4 col-xs-12">
+            <div class="col-sm-4 col-12">
                 <g:link uri="/opus/${opus.shortName ?: opus.uuid}/search" class="btn btn-outline-secondary btn-lg btn-block " tooltip="${opus.opusLayoutConfig.helpTextSearch}" tooltip-placement="right" tooltip-append-to-body="true">Search</g:link>
                 <g:link uri="/opus/${opus.shortName ?: opus.uuid}/browse" class="btn btn-outline-secondary btn-lg btn-block " tooltip="${opus.opusLayoutConfig.helpTextBrowse}" tooltip-placement="right" tooltip-append-to-body="true">Browse</g:link>
                 <g:if test="${opus.keybaseProjectId != null}">
@@ -20,9 +20,9 @@
                 <g:link uri="/opus/${opus.shortName ?: opus.uuid}/filter" class="btn btn-outline-secondary btn-lg btn-block" tooltip="${opus.opusLayoutConfig.helpTextFilter}" tooltip-placement="right" tooltip-append-to-body="true">Filter</g:link>
                 <g:link uri="/opus/${opus.shortName ?: opus.uuid}/documents" class="btn btn-outline-secondary btn-lg btn-block" tooltip="${opus.opusLayoutConfig.helpTextDocuments}" tooltip-placement="right" tooltip-append-to-body="true">Library</g:link>
             </div>  <!-- /col-sm-4 -->
-            <div class="col-sm-4 col-xs-12" ng-bind-html="opusCtrl.opus.opusLayoutConfig.explanatoryText">
+            <div class="col-sm-4 col-12" ng-bind-html="opusCtrl.opus.opusLayoutConfig.explanatoryText">
             </div>  <!-- /col-sm-4 -->
-            <div class="col-sm-4 col-xs-12">
+            <div class="col-sm-4 col-12">
                 <div ng-show="opusCtrl.opus.opusLayoutConfig.updatesSection" ng-cloak>
                     <h4>Updates</h4>
                     <div ng-bind-html="opusCtrl.opus.opusLayoutConfig.updatesSection">
