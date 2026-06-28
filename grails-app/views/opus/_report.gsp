@@ -10,7 +10,7 @@
             </ul>
         </div>
 
-        <div class="col-lg-9 col-md-8 col-xs-12" ng-cloak>
+        <div class="col-lg-9 col-md-8 col-12" ng-cloak>
             <div ng-show="!reportCtrl.selectedReport">
                 <p>
                     Select the report to display from the menu to the left
