@@ -32,11 +32,11 @@
                                     <img class="img-thumbnail" ng-src="{{image.imageUrl}}">
                                 </div>
                                 <div class="input-group margin-bottom-1">
-                                    <span class="input-group-addon">Image URL</span>
+                                    <span class="input-group-text">Image URL</span>
                                     <input type="text" class="form-control" name="imageUrl" ng-model="image.imageUrl"/>
                                 </div>
                                 <div class="input-group">
-                                    <span class="input-group-addon">Credit</span>
+                                    <span class="input-group-text">Credit</span>
                                     <input type="text" class="form-control" name="credit" ng-model="image.credit"/>
                                 </div>
                             </td>
@@ -67,9 +67,9 @@
                     <div>
                         <label for="duration">Time duration</label>
                         <div class="input-group">
-                            <span class="input-group-addon">Duration</span>
+                            <span class="input-group-text">Duration</span>
                             <input id="duration" type="number" class="form-control"  name="duration" ng-model="opusCtrl.opus.opusLayoutConfig.duration" min="1"/>
-                            <span class="input-group-addon">ms</span>
+                            <span class="input-group-text">ms</span>
                         </div>
                         <div class="small">
                             The time duration spent by the image slider on an image in milli-seconds.

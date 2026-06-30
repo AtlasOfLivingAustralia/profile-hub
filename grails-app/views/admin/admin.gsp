@@ -130,7 +130,7 @@
                         <div class="input-group">
                             <input id="colour{{$index}}" class="form-control" ng-model="tag.colour" colorpicker
                                    colorpicker-close-on-select>
-                            <span class="input-group-addon" ng-style="{background: tag.colour}"></span>
+                            <span class="input-group-text" ng-style="{background: tag.colour}"></span>
                         </div>
                     </div>
                     <button class="btn btn-primary" ng-click="adminCtrl.saveTag($index)">Save</button>

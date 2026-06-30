@@ -77,11 +77,11 @@
                                         <img class="img-thumbnail" ng-src="{{logo.logoUrl}}">
                                     </div>
                                     <div class="input-group margin-bottom-1">
-                                        <span class="input-group-addon">Logo URL</span>
+                                        <span class="input-group-text">Logo URL</span>
                                         <input type="text" class="form-control" name="logoUrl" ng-model="logo.logoUrl"/>
                                     </div>
                                     <div class="input-group">
-                                        <span class="input-group-addon">Link</span>
+                                        <span class="input-group-text">Link</span>
                                         <input type="text" class="form-control" name="hyperlink" ng-model="logo.hyperlink"/>
                                     </div>
                                     <div class="small">e.g. https://www.ala.org.au. The logo will link to the URL entered here. If left blank, no link will be added.</div>
@@ -155,7 +155,7 @@
                     <label for="copyright">Copyright statement</label>
 
                     <div class="input-group">
-                        <span class="input-group-addon">&copy;</span>
+                        <span class="input-group-text">&copy;</span>
                         <input id="copyright" type="text" class="form-control" name="copyright" ng-model="opusCtrl.opus.copyrightText"/> <br/>
                     </div>
                     <span class="small">e.g. &copy; {{opusCtrl.opus.title}}, 2015. To be displayed at the bottom of each profile page</span>
