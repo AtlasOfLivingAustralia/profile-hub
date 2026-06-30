@@ -54,8 +54,8 @@
                         </div>
 
                         <!-- Search body -->
-                        <div id="search" class="panel">
-                            <div class="panel-body">
+                        <div id="search" class="card">
+                            <div class="card-body">
                                 <form class="navbar-form" role="search">
                                     <div class="form-group">
                                         <input type="text" class="form-control ignore-save-warning" placeholder="e.g. Acacia binervata"

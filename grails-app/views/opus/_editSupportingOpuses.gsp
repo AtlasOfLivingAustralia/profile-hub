@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="OpusForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="OpusForm" ng-cloak>
+    <div class="card-header">
         <a name="supportingCollections">
             <h4 class="section-panel-heading">Supporting Collections</h4>
             <p:help help-id="opus.edit.supportingCollections"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
         <div class="col-md-12">
             <h5>Sharing data with other collections</h5>
@@ -104,7 +104,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">

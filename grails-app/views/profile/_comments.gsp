@@ -2,8 +2,8 @@
 <div ng-controller="CommentController as commentCtrl" class="comments-panel">
     <navigation-anchor anchor-name="{{commentCtrl.readonly() ? 'view_' : 'edit_'}}comments" title="Comments"></navigation-anchor>
 
-    <div class="panel panel-default" ng-cloak>
-        <div class="panel-heading">
+    <div class="card" ng-cloak>
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading inline">Comments</h4>
@@ -12,7 +12,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-sm-12">
                     <div ng-repeat="comment in commentCtrl.comments | orderBy:'dateCreated'"
@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="panel-footer">
+        <div class="card-footer">
             <div class="row">
                 <div class="col-md-12">
                     <button class="btn btn-outline-secondary" ng-click="commentCtrl.addComment()"><i

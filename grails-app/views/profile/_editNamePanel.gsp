@@ -10,8 +10,8 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
                     <p>
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="panel-footer">
+        <div class="card-footer">
             <div class="row">
                 <div class="col-md-12">
                     <div class="float-end">

@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="MapForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="MapForm" ng-cloak>
+    <div class="card-header">
         <a name="map">
             <h4 class="section-panel-heading">Map configuration</h4>
             <p:help help-id="opus.edit.map"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -96,7 +96,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <save-button ng-click="opusCtrl.saveOpus(MapForm)" form="MapForm"></save-button>

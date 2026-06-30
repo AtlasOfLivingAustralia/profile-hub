@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="ImageForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="ImageForm" ng-cloak>
+    <div class="card-header">
         <a name="imageSources">
             <h4 class="section-panel-heading">Image options</h4>
         </a>
         <p:help help-id="opus.edit.images"/>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
 
             <div class="col-sm-12">
@@ -86,7 +86,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">

@@ -1,7 +1,7 @@
 <div class="row profile-audit" ng-cloak>
     <div class="col-md-12">
-        <div class="panel panel-default" ng-show="profileCtrl.showProfileAudit" ng-cloak>
-            <div class="panel-body">
+        <div class="card" ng-show="profileCtrl.showProfileAudit" ng-cloak>
+            <div class="card-body">
                 <div ng-if="profileCtrl.loading"><span class="fa fa-spin fa-spinner"></span>&nbsp;Loading...</div>
                 <div class="table-responsive" ng-if="!profileCtrl.loading">
                     <table class="table table-striped">
@@ -22,7 +22,7 @@
                     </table>
                 </div>
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 <div class="row">
                     <div class="col-md-12">
                         <pagination total-items="profileCtrl.audit.total"

@@ -1,8 +1,8 @@
-<div class="panel panel-default" ng-controller="SpecimenController as specCtrl" ng-cloak ng-form="SpecimenForm"
+<div class="card" ng-controller="SpecimenController as specCtrl" ng-cloak ng-form="SpecimenForm"
      ng-show="specCtrl.specimens.length > 0 || !specCtrl.readonly()">
     <navigation-anchor anchor-name="{{profileCtrl.readonly() ? 'view_' : 'edit_'}}specimens" title="Specimens" condition="profileCtrl.profile.specimenIds && profileCtrl.profile.specimenIds.length > 0 || !profileCtrl.readonly()"></navigation-anchor>
 
-    <div class="panel-heading">
+    <div class="card-header">
         <div class="row">
             <div class="col-sm-12">
                 <h4 class="section-panel-heading">Specimens</h4>
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12" ng-if="!specCtrl.readonly()">
                 <p>
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div class="panel-footer" ng-if="!specCtrl.readonly()">
+    <div class="card-footer" ng-if="!specCtrl.readonly()">
         <div class="row">
             <div class="col-md-12">
                 <button class="btn btn-outline-secondary" ng-click="specCtrl.addSpecimen(SpecimenForm)"><i

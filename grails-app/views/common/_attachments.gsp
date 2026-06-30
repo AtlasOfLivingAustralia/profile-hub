@@ -1,7 +1,7 @@
-<div class="panel panel-default ${edit?'':'panel-override'}" ng-controller="AttachmentController as attachmentCtrl" ng-cloak
+<div class="card ${edit?'':'panel-override'}" ng-controller="AttachmentController as attachmentCtrl" ng-cloak
      ng-show="attachmentCtrl.attachments.length > 0 || !profileCtrl.readonly()">
     <navigation-anchor anchor-name="{{profileCtrl.readonly() ? 'view_' : 'edit_'}}Documents" title="Documents" condition="!attachmentCtrl.readonly || attachmentCtrl.attachments.length > 0"></navigation-anchor>
-    <div class="panel-heading" ng-show="${!hideHeading}">
+    <div class="card-header" ng-show="${!hideHeading}">
         <div class="row">
             <div class="col-sm-12">
                 <h4 class="section-panel-heading">Documents</h4>
@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div ng-show="!attachmentCtrl.attachments || attachmentCtrl.attachments.length == 0">No documents have been attached to this {{ attachmentCtrl.profileId ? 'profile' : 'collection' }}.</div>
         <div class="" ng-repeat="attachment in attachmentCtrl.attachments">
             <div class="row">
@@ -60,7 +60,7 @@
     </div>
 
     <g:if test="${profile ? (edit ? params.isOpusAuthor : false) : params.isOpusAdmin}">
-        <div class="panel-footer">
+        <div class="card-footer">
             <div class="row">
                 <div class="col-md-12">
                     <button class="btn btn-outline-secondary float-end" ng-click="attachmentCtrl.uploadAttachment()"><i

@@ -1,10 +1,10 @@
-<div class="panel panel-default" ng-controller="PublicationController as pubCtrl"
+<div class="card" ng-controller="PublicationController as pubCtrl"
      ng-cloak id="browse_lists"
      ng-show="pubCtrl.publications.length > 0 || !pubCtrl.readonly()"
      ng-form="PubForm">
     <navigation-anchor anchor-name="{{pubCtrl.readonly() ? 'view_' : 'edit_'}}publications" title="Versions" condition="pubCtrl.publications.length > 0 || !pubCtrl.readonly()"></navigation-anchor>
 
-    <div class="panel-heading">
+    <div class="card-header">
         <div class="row">
             <div class="col-sm-12">
                 <h4 class="section-panel-heading">Versions</h4>

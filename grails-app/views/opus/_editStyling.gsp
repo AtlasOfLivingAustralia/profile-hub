@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="opusCtrl.StyleForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="opusCtrl.StyleForm" ng-cloak>
+    <div class="card-header">
         <a name="branding">
             <h4 class="section-panel-heading">Branding</h4>
             <p:help help-id="opus.edit.branding"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -195,7 +195,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <save-button ng-click="opusCtrl.saveOpus(opusCtrl.StyleForm)" form="opusCtrl.StyleForm"></save-button>

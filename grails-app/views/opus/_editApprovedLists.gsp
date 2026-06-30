@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="ListForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="ListForm" ng-cloak>
+    <div class="card-header">
         <a name="lists">
             <h4 class="section-panel-heading">Approved Lists</h4>
             <p:help help-id="opus.edit.lists"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <p>Configure the species lists to be included in your profile pages.</p>
@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
