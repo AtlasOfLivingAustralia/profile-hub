@@ -1,8 +1,8 @@
-<div class="panel panel-default" ng-controller="ProfileController as profileCtrl" ng-init="profileCtrl.loadProfile()"
+<div class="card" ng-controller="ProfileController as profileCtrl" ng-init="profileCtrl.loadProfile()"
      ng-form="AuthorForm" ng-cloak ng-if="!profileCtrl.readonly() || profileCtrl.authorshipCount > 1">
     <navigation-anchor anchor-name="{{profileCtrl.readonly() ? 'view_' : 'edit_'}}authorship" title="{{profileCtrl.acknowledgementsSectionTitle}}" condition="!profileCtrl.readonly() || profileCtrl.authorshipCount > 0"></navigation-anchor>
 
-    <div class="panel-heading">
+    <div class="card-header">
         <div class="row">
             <div class="col-sm-12">
                 <h4 class="section-panel-heading">{{profileCtrl.acknowledgementsSectionTitle}}</h4>
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <div class="row section-no-para"
@@ -64,7 +64,7 @@
         </div>
     </div>
 
-    <div class="panel-footer" ng-if="!profileCtrl.readonly()">
+    <div class="card-footer" ng-if="!profileCtrl.readonly()">
         <div class="row">
             <div class="col-md-12">
                 <button class="btn btn-outline-secondary" ng-click="profileCtrl.addAuthorship(AuthorForm)"><i

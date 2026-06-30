@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-controller="UserAccessController as userCtrl" ng-form="UserForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-controller="UserAccessController as userCtrl" ng-form="UserForm" ng-cloak>
+    <div class="card-header">
         <a name="accessControl">
             <h4 class="section-panel-heading">Access control</h4>
             <p:help help-id="opus.edit.accessControl"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
 
         <tabset>
             <tab heading="User access" select="userCtrl.accessControlTabChanged('user')">
@@ -118,7 +118,7 @@
     </div>
 
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12" ng-show="userCtrl.accessControlTab == 'user'">
                 <div class="btn-group">

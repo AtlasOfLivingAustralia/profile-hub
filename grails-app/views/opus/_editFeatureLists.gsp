@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="FeatureForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="FeatureForm" ng-cloak>
+    <div class="card-header">
         <a name="featureLists">
             <h4 class="section-panel-heading">Feature Lists</h4>
             <p:help help-id="opus.edit.featureLists"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <p>Configure the list(s) to be used to retrieve additional features for your profiles from the Atlas of Living Australia's List Tool. These lists can include such information as naturalised status, pest status, characters, traits, and so on.</p>
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">

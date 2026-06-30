@@ -1,9 +1,9 @@
-<div class="panel panel-default ${edit?'':'panel-override'}" ng-controller="ImagesController as imageCtrl" ng-init="imageCtrl.init('${edit}')">
+<div class="card ${edit?'':'panel-override'}" ng-controller="ImagesController as imageCtrl" ng-init="imageCtrl.init('${edit}')">
     <div ng-if="imageCtrl.images.length >= 0 && imageCtrl.readonly" ng-cloak>
         <navigation-anchor anchor-name="view_images" title="Images"
                            condition="imageCtrl.images.length > 0"></navigation-anchor>
 
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading">Images <span class="caption">({{imageCtrl.availableImagesCount}})</span>
@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-sm-12">
                     <div ng-repeat-start="image in imageCtrl.images" class="col-md-6 col-sm-6 margin-bottom-2"
@@ -65,7 +65,7 @@
     <div ng-form="ImageForm" ng-if="!imageCtrl.readonly" ng-cloak>
         <navigation-anchor anchor-name="edit_images" title="Images"></navigation-anchor>
 
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading">Images <span class="caption">({{imageCtrl.availableImagesCount}})</span>
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="col-sm-12">
                 <div class="row section-no-para" ng-if="imageCtrl.images.length > 0">
                     <div class="row">
@@ -211,7 +211,7 @@
             </div>
         </div>
 
-        <div class="panel-footer" ng-show="!imageCtrl.readonly">
+        <div class="card-footer" ng-show="!imageCtrl.readonly">
             <div class="row">
                 <div class="col-md-12">
                     <g:if test="${grailsApplication.config.feature.imageUpload == 'true'}">

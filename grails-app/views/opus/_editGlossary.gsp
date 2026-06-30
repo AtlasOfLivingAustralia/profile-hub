@@ -1,13 +1,13 @@
-<div class="panel panel-default" ng-controller="GlossaryController as glossaryCtrl" ng-cloak>
+<div class="card" ng-controller="GlossaryController as glossaryCtrl" ng-cloak>
     <form ng-submit="glossaryCtrl.upload()" role="form">
-        <div class="panel-heading">
+        <div class="card-header">
             <a name="glossary">
                 <h4 class="section-panel-heading">Glossary</h4>
                 <p:help help-id="opus.edit.glossary"/>
             </a>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-sm-12">
                     <p>
@@ -36,7 +36,7 @@
             </div>
         </div>
 
-        <div class="panel-footer">
+        <div class="card-footer">
             <div class="row">
                 <div class="col-md-12">
                     <button class="btn btn-primary float-end">Upload</button>

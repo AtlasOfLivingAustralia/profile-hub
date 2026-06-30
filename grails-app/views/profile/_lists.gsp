@@ -1,8 +1,8 @@
 <div ng-controller="ListsEditor as listCtrl" ng-init="listCtrl.init('${edit}')">
     <navigation-anchor anchor-name="{{listCtrl.readonly ? 'view_' : 'edit_'}}lists" title="Conservation & Sensitivity Lists" condition="listCtrl.lists.length > 0"></navigation-anchor>
 
-    <div class="panel panel-default ${edit?'':'panel-override'}" ng-show="listCtrl.lists.length > 0">
-        <div class="panel-heading">
+    <div class="card ${edit?'':'panel-override'}" ng-show="listCtrl.lists.length > 0">
+        <div class="card-header">
             <div class="row">
                 <div class="col-md-12">
                     <h4 class="section-panel-heading">Conservation & sensitivity lists</h4>
@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
                     <ul>
@@ -24,9 +24,9 @@
         </div>
     </div>
 
-    <div class="panel panel-default ${edit?'':'panel-override'}" ng-show="listCtrl.conservationStatuses.length > 0">
+    <div class="card ${edit?'':'panel-override'}" ng-show="listCtrl.conservationStatuses.length > 0">
         <navigation-anchor anchor-name="{{listCtrl.readonly ? 'view_' : 'edit_'}}conservationStatus" title="Conservation Status" condition="listCtrl.conservationStatuses.length > 0"></navigation-anchor>
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-md-12">
                     <h4 class="section-panel-heading">Conservation status</h4>
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row section-no-para" ng-repeat="status in listCtrl.conservationStatuses">
                 <div class="col-md-4">
                     <a href="${grailsApplication.config.collectory.base.url}/public/showDataResource/{{listCtrl.statusRegions[status.region].id}}"
@@ -54,9 +54,9 @@
         </div>
     </div>
 
-    <div class="panel panel-default ${edit?'':'panel-override'}" ng-show="listCtrl.hasFeatures">
+    <div class="card ${edit?'':'panel-override'}" ng-show="listCtrl.hasFeatures">
         <navigation-anchor anchor-name="{{listCtrl.readonly ? 'view_' : 'edit_'}}features" title="{{listCtrl.opus.featureListSectionName || 'Feature List'}}" condition="listCtrl.hasFeatures"></navigation-anchor>
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-md-12">
                     <h4 class="section-panel-heading">{{ listCtrl.opus.featureListSectionName | default:'Feature List' }}</h4>
@@ -65,7 +65,7 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div ng-repeat="list in listCtrl.featureLists" ng-show="list.items.length > 0">
                 <div class="row section-no-para padding-bottom-1" ng-show="list.metadata">
                     <div class="col-md-12">

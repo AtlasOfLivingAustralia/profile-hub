@@ -5,8 +5,8 @@
                ng-show="!profileCtrl.readonly()"><span class="fa fa-close">&nbsp;</span>Close</a>
         </div>
      </div>
-    <div class="panel panel-default"  >
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-body">
 
            <div class="row">
                 <div class="col-md-12">
@@ -15,7 +15,7 @@
            </div>
         </div>
 
-       <div class="panel-footer">
+       <div class="card-footer">
             <div class="row">
                 <div class="col-md-12">
                     <div class="float-end">
