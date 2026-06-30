@@ -20,7 +20,7 @@
                            ng-model="addUserCtrl.searchTerm"
                            name="searchTerm" ng-enter="addUserCtrl.userSearch()">
                     <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"
+                            <button class="btn btn-outline-secondary" type="button"
                                     ng-click="addUserCtrl.userSearch()">Search for user</button>
                         </span>
                 </div>
@@ -66,5 +66,5 @@
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="addUserCtrl.ok()"
             ng-disabled="!addUserCtrl.user.userId || !addUserCtrl.user.role">OK</button>
-    <button class="btn btn-default" ng-click="addUserCtrl.cancel()">Cancel</button>
+    <button class="btn btn-outline-secondary" ng-click="addUserCtrl.cancel()">Cancel</button>
 </div>

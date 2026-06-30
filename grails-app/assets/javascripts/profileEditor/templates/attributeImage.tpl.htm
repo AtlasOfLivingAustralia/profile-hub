@@ -6,9 +6,9 @@
 
     <div class="modal-body">
         <div class="btn-group-sm padding-bottom-1">
-            <label class="btn btn-default ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'select'">Use
+            <label class="btn btn-outline-secondary ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'select'">Use
                 existing image</label>
-            <label class="btn btn-default ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'upload'">Upload a
+            <label class="btn btn-outline-secondary ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'upload'">Upload a
                 new image</label>
         </div>
 
@@ -100,6 +100,6 @@
                 ng-disabled="(attrImgCtrl.mode == 'select' && attrImgCtrl.images.length == 0) || (attrImgCtrl.mode == 'upload' && InsertImageForm.$invalid)">
             OK
         </button>
-        <button class="btn btn-default" ng-click="attrImgCtrl.cancel()">Cancel</button>
+        <button class="btn btn-outline-secondary" ng-click="attrImgCtrl.cancel()">Cancel</button>
     </div>
 </div>

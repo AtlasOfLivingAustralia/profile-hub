@@ -15,15 +15,15 @@
     <div class="row" ng-show="keyplayer.hasKey">
         <div class="col-md-12">
             <div class="btn-group pull-right">
-                <button class="btn btn-sm {{ keyplayer.format == 'player' ? 'btn-info': 'btn-default' }}"
+                <button class="btn btn-sm {{ keyplayer.format == 'player' ? 'btn-info': 'btn-outline-secondary' }}"
                         ng-click="keyplayer.setFormat('player')"><img src=""
                         ng-src="{{contextPath}}assets/ala-keyplayer/media/tab_icon_player.png" alt="">&nbsp;Interactive
                 </button>
-                <button class="btn btn-sm {{ keyplayer.format == 'bracketed' ? 'btn-info': 'btn-default' }}"
+                <button class="btn btn-sm {{ keyplayer.format == 'bracketed' ? 'btn-info': 'btn-outline-secondary' }}"
                         ng-click="keyplayer.setFormat('bracketed')"><img src=""
                         ng-src="{{contextPath}}assets/ala-keyplayer/media/tab_icon_bracketed.png" alt="">&nbsp;Bracketed
                 </button>
-                <button class="btn btn-sm {{ keyplayer.format == 'indented' ? 'btn-info': 'btn-default' }}"
+                <button class="btn btn-sm {{ keyplayer.format == 'indented' ? 'btn-info': 'btn-outline-secondary' }}"
                         ng-click="keyplayer.setFormat('indented')"><img src=""
                         ng-src="{{contextPath}}assets/ala-keyplayer/media/tab_icon_indented.png" alt="">&nbsp;Indented
                 </button>

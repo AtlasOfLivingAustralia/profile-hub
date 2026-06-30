@@ -30,7 +30,7 @@
                     <button class="btn btn-danger" ng-click="attrCtrl.removeNumber(attribute, AttributeForm, $index)">Remove</button>
                 </div>
             </div>
-            <button class="btn btn-default" ng-click="attrCtrl.addNumber(attribute)">Add number</button>
+            <button class="btn btn-outline-secondary" ng-click="attrCtrl.addNumber(attribute)">Add number</button>
         </div>
         <div ng-if="attribute.titleTerm.dataType == 'range'">
             <div class="form-horizontal" ng-if="attribute.numberRange">
@@ -63,7 +63,7 @@
             </div>
             <div class="form-group">
                 <div class="col-12">
-                    <button ng-if="!attribute.numberRange" ng-click="attrCtrl.addNumberRange(attribute, AttributeForm)" class="btn btn-default">Add range</button>
+                    <button ng-if="!attribute.numberRange" ng-click="attrCtrl.addNumberRange(attribute, AttributeForm)" class="btn btn-outline-secondary">Add range</button>
                     <button ng-if="attribute.numberRange" ng-click="attrCtrl.removeNumberRange(attribute, AttributeForm)" class="btn btn-danger">Remove range</button>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                         </td>
                         <td>{{ auditItem.userDisplayName }}</td>
                         <td>{{ auditItem.date | date:'dd/MM/yyyy h:mm a' }}</td>
-                        <td><button class="btn btn-default" title="Revert to this version"
+                        <td><button class="btn btn-outline-secondary" title="Revert to this version"
                                     ng-click="attrCtrl.revertAttribute($parent.$index, $index, AttributeForm)">Revert</button>
                         </td>
                     </tr>
@@ -189,7 +189,7 @@
     <div class="panel-footer" ng-show="!attrCtrl.readonly">
         <div class="row">
             <span class="col-md-12">
-                <button class="btn btn-default" ng-click="attrCtrl.deleteAttribute($index)">Delete attribute</button>
+                <button class="btn btn-outline-secondary" ng-click="attrCtrl.deleteAttribute($index)">Delete attribute</button>
                 <save-button ng-click="attrCtrl.saveAttribute($index, AttributeForm)"
                              disabled="!AttributeForm.$dirty || !attrCtrl.isValid(attribute.title) || !attrCtrl.isContentValid(attribute, AttributeForm)"
                              dirty="AttributeForm.$dirty || !attribute.uuid"
