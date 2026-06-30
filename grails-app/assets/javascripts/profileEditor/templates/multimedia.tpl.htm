@@ -21,7 +21,7 @@
                                     ng-repeat="doc in mmCtrl.profile.documents track by doc.documentId | orderBy:type"
                                     ng-class="{ 'active': doc == mmCtrl.selectedMultimedia }"
                                     ng-click="mmCtrl.play(doc)" >
-                                <span class="pull-right">
+                                <span class="float-end">
                                     <i class="fa fa-2x" title="{{doc.type}}" ng-class="mmCtrl.icon(doc)"></i>
                                 </span>
                                 {{doc.name}}

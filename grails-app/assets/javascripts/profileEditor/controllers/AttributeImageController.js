@@ -9,7 +9,7 @@ profileEditor.controller('AttributeImageController', function ($scope, profileSe
     self.showExcluded = false;
 
     self.images = [];
-    self.position = "pull-right";
+    self.position = "float-end";
     self.size = "small";
 
     self.image = null;

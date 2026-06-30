@@ -14,7 +14,7 @@
 <div class="col-md-12" ng-cloak>
     <div class="row" ng-show="keyplayer.hasKey">
         <div class="col-md-12">
-            <div class="btn-group pull-right">
+            <div class="btn-group float-end">
                 <button class="btn btn-sm {{ keyplayer.format == 'player' ? 'btn-info': 'btn-outline-secondary' }}"
                         ng-click="keyplayer.setFormat('player')"><img src=""
                         ng-src="{{contextPath}}assets/ala-keyplayer/media/tab_icon_player.png" alt="">&nbsp;Interactive
@@ -57,7 +57,7 @@
 
     <div class="row" ng-show="!keyplayer.loading && keyplayer.hasKey">
         <div class="col-md-12 small">
-            <a ng-href="{{keybaseWebUrl}}" target="_blank" class="pull-right">
+            <a ng-href="{{keybaseWebUrl}}" target="_blank" class="float-end">
                 <div class="keybase-logo">
                     <img src="" ng-src="{{contextPath}}assets/keybase-logo-80.png" alt="Keybase logo">
                 </div>

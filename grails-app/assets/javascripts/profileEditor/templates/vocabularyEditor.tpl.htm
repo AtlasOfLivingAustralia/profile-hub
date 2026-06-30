@@ -1,7 +1,7 @@
 <div class="panel panel-default" ng-form="VocabForm" ng-cloak>
     <div class="panel-heading">
         <h4 class="section-panel-heading">{{ vocabName }}</h4>
-        <div class="pull-right text-right padding-left-1" ng-show="helpUrl">
+        <div class="float-end text-right padding-left-1" ng-show="helpUrl">
             <a ng-href="{{helpUrl}}" class="help-icon" title="Click to view help content" target="_blank">
                 <span class="fa fa-question-circle"></span>
             </a>
@@ -151,7 +151,7 @@
 
                         <div class="row" ng-if="allowReordering">
                             <div class="col-md-12">
-                                <button class="btn btn-link pull-right small"
+                                <button class="btn btn-link float-end small"
                                         ng-click="sortAlphabetically(VocabForm)">Sort alphabetically
                                 </button>
                             </div>

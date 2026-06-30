@@ -90,11 +90,11 @@
     </div>
 
     <div class="modal-footer">
-        <div class="pull-left">
-                <a class="pull-right"
+        <div class="float-start">
+                <a class="float-end"
                    ng-href="{{config.imageServiceUrl}}/image/details?imageId={{imageMetadataCtrl.image.imageId}}"
                    target="_blank" ng-if="imageMetadataCtrl.image.type.name == 'OPEN'">View the image in the ALA&nbsp;<span class="fa fa-external-link superscript small"></span></a><br/>
-                <a class="pull-right padding-top-1"
+                <a class="float-end padding-top-1"
                    ng-href="{{config.biocacheRecordUrl}}{{imageMetadataCtrl.image.occurrenceId}}"
                    target="_blank" ng-if="imageMetadataCtrl.image.type.name == 'OPEN'">View the record in the ALA&nbsp;<span class="fa fa-external-link superscript small"></span></a>
             </div>
