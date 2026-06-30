@@ -33,7 +33,7 @@
                     <div class="input-group">
                         <input id="pointColour" type="text" class="form-control" colorpicker colorpicker-close-on-select
                                ng-model="opusCtrl.opus.mapConfig.mapPointColour">
-                        <span class="input-group-addon" ng-style="{background: opusCtrl.opus.mapConfig.mapPointColour}"></span>
+                        <span class="input-group-text" ng-style="{background: opusCtrl.opus.mapConfig.mapPointColour}"></span>
                     </div>
                 </div>
 

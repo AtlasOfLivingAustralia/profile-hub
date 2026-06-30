@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label for="filter" class="screen-reader-label">Filter by name starting with...</label>
                             <input id="filter" type="text"
-                                   class="form-control input-sm ignore-save-warning"
+                                   class="form-control form-control-sm ignore-save-warning"
                                    placeholder="Name starting with..."
                                    ng-change="browseCtrl.searchByTaxonLevel(taxon.key)"
                                    name="filter"
