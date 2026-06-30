@@ -2,7 +2,7 @@
     <label class="control-label">Show comments from:</label>
 
     <div class="btn-group" role="group" aria-label="List the most recent comments with the following options.">
-        <button type="button" class="btn btn-default btn-sm" ng-repeat="period in reportCtrl.periods"
+        <button type="button" class="btn btn-outline-secondary btn-sm" ng-repeat="period in reportCtrl.periods"
                 ng-click="reportCtrl.setPeriod(period)"
                 ng-class="{active: reportCtrl.selectedPeriod.id == period.id}">{{ period.name }}</button>
     </div>
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="button" class="btn btn-default btn-sm"
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
                             ng-disabled="!reportCtrl.checkFormValid()"
                             ng-click="reportCtrl.loadCustomDateReport()">
                         <i class="glyphicon glyphicon-search"></i> Run report

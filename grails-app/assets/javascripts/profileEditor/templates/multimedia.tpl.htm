@@ -54,7 +54,7 @@
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-xs" role="group" aria-label="Tools">
-                                        <button class="btn btn-default " aria-label="Edit" ng-click="mmCtrl.edit(doc)"><i class="fa fa-edit"></i></button>
+                                        <button class="btn btn-outline-secondary " aria-label="Edit" ng-click="mmCtrl.edit(doc)"><i class="fa fa-edit"></i></button>
                                         <button class="btn btn-danger " aria-label="Delete" ng-click="mmCtrl.delete(doc)"><i class="fa fa-trash"></i></button>
                                     </div>
                                 </td>
@@ -71,7 +71,7 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="doc in mmCtrl.profile.documents | filter:{type:'audio'} track by doc.documentId" ng-class="{ info: doc.documentId == mmCtrl.selectedMultimedia.documentId }">
-                                <td class="clickable" ng-click="mmCtrl.play(doc)" ng-bind="doc.name"></td> <!-- <button class="btn btn-default btn-xs" aria-label="Show" ng-click="mmCtrl.play(doc)"><i class="fa fa-play"></i></button> -->
+                                <td class="clickable" ng-click="mmCtrl.play(doc)" ng-bind="doc.name"></td> <!-- <button class="btn btn-outline-secondary btn-xs" aria-label="Show" ng-click="mmCtrl.play(doc)"><i class="fa fa-play"></i></button> -->
                                 <td>
                                     <div class="radio">
                                         <label>
@@ -84,7 +84,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <button class="btn btn-default btn-xs" aria-label="Edit" ng-click="mmCtrl.edit(doc)"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-outline-secondary btn-xs" aria-label="Edit" ng-click="mmCtrl.edit(doc)"><i class="fa fa-edit"></i></button>
                                     <button class="btn btn-danger btn-xs" aria-label="Delete" ng-click="mmCtrl.delete(doc)"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -102,9 +102,9 @@
         <div class="panel-footer" ng-if="mmCtrl.isEdittable">
             <div class="row">
                 <div class="col-sm-12">
-                    <button class="btn btn-default" ng-click="mmCtrl.add()"><i class="fa fa-plus"></i> Add multimedia</button>
-                    <button class="btn btn-default" ng-disabled="!mmCtrl.profile.primaryVideo" ng-click="mmCtrl.clearPrimaryVideo()">Unset Primary Video</button>
-                    <button class="btn btn-default" ng-disabled="!mmCtrl.profile.primaryAudio" ng-click="mmCtrl.clearPrimaryAudio()">Unset Primary Audio</button>
+                    <button class="btn btn-outline-secondary" ng-click="mmCtrl.add()"><i class="fa fa-plus"></i> Add multimedia</button>
+                    <button class="btn btn-outline-secondary" ng-disabled="!mmCtrl.profile.primaryVideo" ng-click="mmCtrl.clearPrimaryVideo()">Unset Primary Video</button>
+                    <button class="btn btn-outline-secondary" ng-disabled="!mmCtrl.profile.primaryAudio" ng-click="mmCtrl.clearPrimaryAudio()">Unset Primary Audio</button>
                     <save-button form="mmCtrl.MultimediaForm" ng-click="mmCtrl.savePrimaryMultimedia()"></save-button>
                 </div>
             </div>

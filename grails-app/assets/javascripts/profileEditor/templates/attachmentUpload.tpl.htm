@@ -27,7 +27,7 @@
                 <label for="file" class="col-sm-3 control-label">Document (pdf) *</label>
 
                 <div class="col-sm-9" ng-show="!attachmentUploadCtrl.metadata.uuid">
-                        <span class="btn btn-default btn-file">
+                        <span class="btn btn-outline-secondary btn-file">
                             Choose file
                             <input id="file" type="file" ngf-select="" ng-model="attachmentUploadCtrl.files" name="file"
                                    accept="application/pdf" required="{{!attachmentUploadCtrl.metadata.uuid}}"
@@ -159,6 +159,6 @@
     <div class="modal-footer">
         <button class="btn btn-primary" ng-click="attachmentUploadCtrl.ok()"
                 ng-disabled="UploadForm.$invalid">OK</button>
-        <button class="btn btn-default" ng-click="attachmentUploadCtrl.cancel()">Cancel</button>
+        <button class="btn btn-outline-secondary" ng-click="attachmentUploadCtrl.cancel()">Cancel</button>
     </div>
 </div>
