@@ -1,10 +1,10 @@
-<div class="panel panel-default" ng-show="mmCtrl.profile.documents.length > 0 || mmCtrl.isEdittable" ng-cloak>
+<div class="card" ng-show="mmCtrl.profile.documents.length > 0 || mmCtrl.isEdittable" ng-cloak>
     <div>
         <navigation-anchor anchor-name="view_multimedia" title="Multimedia"
                            condition="mmCtrl.profile.documents.length > 0 && mmCtrl.isReadOnly" ></navigation-anchor>
         <navigation-anchor anchor-name="edit_multimedia" title="Multimedia"
                            condition="mmCtrl.isEdittable" ></navigation-anchor>
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading">Multimedia</h4>
@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <div id="multimediaPanelBody" class="panel-body">
+        <div id="multimediaPanelBody" class="card-body">
             <div class="row">
                 <div ng-class="{ 'col-md-6': mmCtrl.isEdittable, 'col-md-4': mmCtrl.isReadOnly }">
                     <div ng-if="mmCtrl.isReadOnly">
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-footer" ng-if="mmCtrl.isEdittable">
+        <div class="card-footer" ng-if="mmCtrl.isEdittable">
             <div class="row">
                 <div class="col-sm-12">
                     <button class="btn btn-outline-secondary" ng-click="mmCtrl.add()"><i class="fa fa-plus"></i> Add multimedia</button>
