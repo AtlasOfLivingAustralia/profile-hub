@@ -4,8 +4,8 @@
     <ng-include src="'/profileEditor/showEditableAttribute.htm'" ng-if="!attribute.fromCollection"></ng-include>
 
     <div ng-if="attrCtrl.showAttribute(attribute)">
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-sm-2"><strong>{{attribute.title}}</strong></div>
 
@@ -14,7 +14,7 @@
                     </div>
                 </div>
 
-                <div class="panel-footer" ng-show="attrCtrl.opus.allowCopyFromLinkedOpus && !attrCtrl.readonly">
+                <div class="card-footer" ng-show="attrCtrl.opus.allowCopyFromLinkedOpus && !attrCtrl.readonly">
                     <div class="row">
                         <span class="col-md-12">
                             <span class="float-end">
