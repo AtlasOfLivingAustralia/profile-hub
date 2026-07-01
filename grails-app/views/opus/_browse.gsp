@@ -8,7 +8,7 @@
     <div class="col-lg-3 col-md-4 col-12">
         <!-- Side menu -->
         <div class="side-menu">
-            <nav class="navbar navbar-default" role="navigation">
+            <nav class="navbar navbar-light bg-light" role="navigation">
                 <accordion close-others="true">
                     <accordion-group ng-repeat="taxon in browseCtrl.orderedTaxonLevels | orderBy:order" ng-if="browseCtrl.taxonLevels[taxon.key] > 0">
                         <accordion-heading>
@@ -43,7 +43,7 @@
                 </accordion>
             </nav>
 
-            <nav class="navbar navbar-default" role="navigation">
+            <nav class="navbar navbar-light bg-light" role="navigation">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <div class="brand-wrapper">

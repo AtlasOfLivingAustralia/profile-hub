@@ -9,13 +9,13 @@
                     <g:each in="${logos?:[[logoUrl:asset.assetPath(src: "ala-logo-2016-inline.png")]]}" var="logo">
                         <g:if test="${logo.hyperlink}">
                             <a href="${logo.hyperlink}" target="_blank">
-                                <img class="col-12 col-sm-6 col-md-4 img-responsive customizable-logo-img"
+                                <img class="col-12 col-sm-6 col-md-4 img-fluid customizable-logo-img"
                                      src="${logo.logoUrl}"
                                      alt="logo"/>
                             </a>
                         </g:if>
                         <g:else>
-                            <img class="col-12 col-sm-6 col-md-4 img-responsive customizable-logo-img"
+                            <img class="col-12 col-sm-6 col-md-4 img-fluid customizable-logo-img"
                                  src="${logo.logoUrl}"
                                  alt="logo"/>
                         </g:else>

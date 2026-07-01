@@ -195,7 +195,7 @@
                                 ng-change="imageCtrl.loadImages((imageCtrl.page - 1) * imageCtrl.itemsPerPage, imageCtrl.itemsPerPage)"></pagination>
                 </div>
 
-                <div class="small margin-top-1 well" ng-show="!imageCtrl.readonly">
+                <div class="card card-body small margin-top-1" ng-show="!imageCtrl.readonly">
                     <i class="fa fa-info-circle color--medium-blue margin-bottom-1"></i>
 
                     <p>

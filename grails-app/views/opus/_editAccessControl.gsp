@@ -101,9 +101,9 @@
 
                         <div ng-show="userCtrl.opus.accessToken">
                             <p>Your access token is:</p>
-                            <div class="well">{{ userCtrl.opus.accessToken }}</div>
+                            <div class="card card-body">{{ userCtrl.opus.accessToken }}</div>
                             <p>Your collection identifier (opusId) is:</p>
-                            <div class="well">{{ userCtrl.opus.uuid }}</div>
+                            <div class="card card-body">{{ userCtrl.opus.uuid }}</div>
                         </div>
 
                         <div ng-show="!userCtrl.opus.accessToken">

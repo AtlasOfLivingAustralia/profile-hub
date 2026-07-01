@@ -1,7 +1,7 @@
 <%@ page contentType="text/css;charset=UTF-8" defaultCodec="none" %>
 body
 , .backgroundcolor--pale-sky
-, .navbar-default .navbar-nav a
+, .navbar-light bg-light .navbar-nav a
 , .nav-tabs > li.active > a
 , .nav-tabs > li.active > a:hover
 , .nav-tabs > li.active > a:focus
@@ -63,7 +63,7 @@ h4
 , .embedded-sandbox .btn
 , .embedded-sandbox h1
 , footer p.lead
-, .navbar-default .navbar-brand
+, .navbar-light bg-light .navbar-brand
 , .pagination > li > a
 , .pagination > li > span
 , .profile-contributor-text
@@ -143,9 +143,9 @@ h4
 , a:hover
 , a:focus
 , .btn-outline-secondary:hover
-, .navbar-default .navbar-nav > .active > a
-, .navbar-default .navbar-nav > li > a:hover
-, .navbar-default .navbar-brand:hover
+, .navbar-light bg-light .navbar-nav > .active > a
+, .navbar-light bg-light .navbar-nav > li > a:hover
+, .navbar-light bg-light .navbar-brand:hover
 , .nav-tabs > li.active > a
 , .pagination > li > a:hover
 , .pagination > li > a:focus
@@ -167,8 +167,8 @@ input.form-control:focus + ul.dropdown-menu + .btn-outline-secondary
 }
 .btn-outline-secondary
 , .dropdown-toggle
-, .navbar-default .navbar-nav a
-, .navbar-default .navbar-nav > li > a
+, .navbar-light bg-light .navbar-nav a
+, .navbar-light bg-light .navbar-nav > li > a
 {
   color: ${headerTextColour};
 }
