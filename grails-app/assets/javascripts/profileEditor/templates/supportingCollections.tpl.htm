@@ -8,9 +8,9 @@
     <alert type="info"
            ng-show="!attrModalCtrl.supporting || attrModalCtrl.supporting.length == 0">This attribute is not used in the supporting collection(s).</alert>
 
-    <div class="panel panel-default" ng-repeat="attribute in attrModalCtrl.supporting"
+    <div class="card" ng-repeat="attribute in attrModalCtrl.supporting"
          data-content="{{ attribute.opusTitle }}" ng-show="attrModalCtrl.supporting.length > 0">
-        <div class="panel-body">
+        <div class="card-body">
             <div class="col-sm-2"><strong>{{attribute.opusTitle}}</strong></div>
 
             <div class="col-sm-10">
