@@ -26,7 +26,7 @@
             <button class="btn btn-outline-secondary btn-lg search-buttons-responsive-large-screen" type="button" ng-click="searchCtrl.clearSearch()" title="Clear search"><span class="fa fa-trash"></span></button>
             <button class="btn btn-outline-secondary btn-lg search-buttons-responsive-small-screen" type="button" ng-click="searchCtrl.search()" title="Search"><span class="fa fa-search"></span></button>
         </div>
-        <div class="well margin-top-1">
+        <div class="card card-body margin-top-1">
             <div class="checkbox inline-block padding-right-1" ng-hide="searchCtrl.searchOptions.nameOnly">
                 <label for="matchAll" class="inline-label">
                     <input id="matchAll" type="checkbox" name="matchAll" class="ignore-save-warning"
