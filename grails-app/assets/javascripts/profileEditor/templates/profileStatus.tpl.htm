@@ -1,15 +1,15 @@
-<div class="panel panel-default" ng-show="$ctrl.isEdittable" ng-cloak>
+<div class="card" ng-show="$ctrl.isEdittable" ng-cloak>
     <div>
         <navigation-anchor anchor-name="edit_status" title="Status"
                            condition="$ctrl.isEdittable" ></navigation-anchor>
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading">Status</h4>
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div ng-form="$ctrl.StatusForm">
                 <div class="row">
                     <div class="col-sm-4">
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-footer" ng-if="$ctrl.isEdittable">
+        <div class="card-footer" ng-if="$ctrl.isEdittable">
             <div class="row">
                 <div class="col-sm-12">
                     <save-button form="$ctrl.StatusForm" ng-click="$ctrl.saveStatus()"></save-button>
