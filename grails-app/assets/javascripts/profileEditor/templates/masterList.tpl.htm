@@ -1,7 +1,7 @@
-<div class="panel panel-default" ng-show="$ctrl.isEdittable" ng-cloak>
+<div class="card" ng-show="$ctrl.isEdittable" ng-cloak>
     <div>
         <a name="edit_master_list"></a>
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading">Master List</h4>
@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <alert ng-show="$ctrl.isMasterListSyncing"  ng-cloak>The master list is currently being updated for this collection.</alert>
             <p>The master list prevents any taxa not on the list from being available in the collection.</p>
             <div ng-form="$ctrl.MasterListForm">
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-footer" ng-if="$ctrl.isEdittable">
+        <div class="card-footer" ng-if="$ctrl.isEdittable">
             <div class="row">
                 <div class="col-sm-12 margin-bottom-1">
                     <button class="btn btn-outline-secondary" ng-disabled="!$ctrl.masterListUid || $ctrl.isMasterListSyncing" ng-click="$ctrl.clearMasterList()">Clear master list</button>
