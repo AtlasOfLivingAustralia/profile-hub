@@ -6,7 +6,7 @@
         <div class="form-group" show-errors>
             <label for="url">URL</label>
             <input type="url" class="form-control" id="url" name="url" placeholder="https://youtu.be/ZXCVASDF" ng-model="mmDlgCtrl.doc.url" ng-model-options="{ updateOn: 'default blur', debounce: { 'default': 1000, 'blur': 0 } }" ng-change="mmDlgCtrl.urlUpdated()" required oembed="mmDlgCtrl.description">
-            <p class="help-block">Enter the URL for an embeddable multimedia object here (only the URL, not an embeddable iframe).  Supported services: Sound Cloud, YouTube, Vimeo, TED Talks, Wistia.</p>
+            <p class="form-text">Enter the URL for an embeddable multimedia object here (only the URL, not an embeddable iframe).  Supported services: Sound Cloud, YouTube, Vimeo, TED Talks, Wistia.</p>
             <span ng-show="mmDlgCtrl.form.url.$pending.description"><i class="fa fa-cog fa-spin"></i> Checking URL...</span>
             <span ng-show="mmDlgCtrl.form.url.$error.description">Couldn't retrieve information for URL, please check the URL and try again.</span>
         </div>

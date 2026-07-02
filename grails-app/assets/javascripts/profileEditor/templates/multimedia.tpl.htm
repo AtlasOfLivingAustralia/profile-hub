@@ -71,7 +71,7 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="doc in mmCtrl.profile.documents | filter:{type:'audio'} track by doc.documentId" ng-class="{ info: doc.documentId == mmCtrl.selectedMultimedia.documentId }">
-                                <td class="clickable" ng-click="mmCtrl.play(doc)" ng-bind="doc.name"></td> <!-- <button class="btn btn-outline-secondary btn-xs" aria-label="Show" ng-click="mmCtrl.play(doc)"><i class="fa fa-play"></i></button> -->
+                                <td class="clickable" ng-click="mmCtrl.play(doc)" ng-bind="doc.name"></td> <!-- <button class="btn btn-outline-secondary btn-sm" aria-label="Show" ng-click="mmCtrl.play(doc)"><i class="fa fa-play"></i></button> -->
                                 <td>
                                     <div class="radio">
                                         <label>
@@ -84,8 +84,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <button class="btn btn-outline-secondary btn-xs" aria-label="Edit" ng-click="mmCtrl.edit(doc)"><i class="fa fa-edit"></i></button>
-                                    <button class="btn btn-danger btn-xs" aria-label="Delete" ng-click="mmCtrl.delete(doc)"><i class="fa fa-trash"></i></button>
+                                    <button class="btn btn-outline-secondary btn-sm" aria-label="Edit" ng-click="mmCtrl.edit(doc)"><i class="fa fa-edit"></i></button>
+                                    <button class="btn btn-danger btn-sm" aria-label="Delete" ng-click="mmCtrl.delete(doc)"><i class="fa fa-trash"></i></button>
                                 </td>
                             </tr>
                             </tbody>
