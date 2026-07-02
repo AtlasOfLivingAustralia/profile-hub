@@ -128,17 +128,17 @@
                                     </td>
                                     <td>
                                         <div class="inline-block">
-                                            <button class="btn btn-link btn-xs fa fa-edit"
+                                            <button class="btn btn-link btn-sm fa fa-edit"
                                                     title="Edit the {{ term.name }} term"
                                                     ng-click="editVocabTerm($index, VocabForm)"></button>
-                                            <button class="btn btn-link btn-xs fa fa-trash-o color--red"
+                                            <button class="btn btn-link btn-sm fa fa-trash-o color--red"
                                                     title="Delete the {{ term.name }} term"
                                                     ng-click="removeVocabTerm($index, VocabForm)"></button>
-                                            <button class="btn btn-link btn-xs fa fa-arrow-down"
+                                            <button class="btn btn-link btn-sm fa fa-arrow-down"
                                                     ng-if="!$last && allowReordering"
                                                     ng-click="moveTermDown($index, VocabForm)"
                                                     title="Move this term down"></button>
-                                            <button class="btn btn-link btn-xs fa fa-arrow-up"
+                                            <button class="btn btn-link btn-sm fa fa-arrow-up"
                                                     ng-if="!$first && allowReordering"
                                                     ng-click="moveTermUp($index, VocabForm)"
                                                     title="Move this term up"></button>
