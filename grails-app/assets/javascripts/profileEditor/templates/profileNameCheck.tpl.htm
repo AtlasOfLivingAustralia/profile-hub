@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label for="scientificName" class="control-label">Profile Name</label>
+    <label for="scientificName" class="col-form-label">Profile Name</label>
 
     <div class="input-group">
         <input id="scientificName" type="text" ng-model="name"
@@ -79,7 +79,7 @@
 
 <div class="col-md-12 padding-left-1" ng-show="showManualMatch">
     <div class="form-group">
-        <label for="manualName" class="control-label">Search for the name you wish to match to</label>
+        <label for="manualName" class="col-form-label">Search for the name you wish to match to</label>
 
         <div class="form-group">
             <input id="manualName" type="text"
@@ -99,7 +99,7 @@
 
 <div class="col-md-12 padding-left-1" ng-show="showManualHierarchy">
     <div class="form-group" ng-repeat="ancestor in manualHierarchy">
-        <label for="manualHierarchy" class="control-label" ng-hide="$first">Select the parent profile/taxon for {{ manualHierarchy[$index - 1].name }}</label>
+        <label for="manualHierarchy" class="col-form-label" ng-hide="$first">Select the parent profile/taxon for {{ manualHierarchy[$index - 1].name }}</label>
         <div ng-class="$first ? 'form-group' : 'input-group'">
             <input id="manualHierarchy" type="text"
                    class="form-control ignore-save-warning"
