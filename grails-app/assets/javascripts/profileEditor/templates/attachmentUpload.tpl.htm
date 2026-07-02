@@ -9,7 +9,7 @@
 
         <div class="form-horizontal" ng-show="!attachmentUploadCtrl.metadata.uuid">
             <div class="form-group">
-                <label for="type" class="col-sm-3 control-label" required>Type *</label>
+                <label for="type" class="col-sm-3 col-form-label" required>Type *</label>
 
                 <div class="col-sm-9">
                     <select id="type"
@@ -24,7 +24,7 @@
 
         <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
             <div class="form-group">
-                <label for="file" class="col-sm-3 control-label">Document (pdf) *</label>
+                <label for="file" class="col-sm-3 col-form-label">Document (pdf) *</label>
 
                 <div class="col-sm-9" ng-show="!attachmentUploadCtrl.metadata.uuid">
                         <span class="btn btn-outline-secondary btn-file">
@@ -44,7 +44,7 @@
 
         <div class="form-horizontal" ng-show="attachmentUploadCtrl.type == 'URL'">
             <div class="form-group">
-                <label for="url" class="col-sm-3 control-label">URL *</label>
+                <label for="url" class="col-sm-3 col-form-label">URL *</label>
 
                 <div class="col-sm-9">
                     <input id="url" type="text" ng-model="attachmentUploadCtrl.metadata.url"
@@ -56,7 +56,7 @@
 
         <div class="form-horizontal">
             <div class="form-group">
-                <label for="title" class="col-sm-3 control-label">Title *</label>
+                <label for="title" class="col-sm-3 col-form-label">Title *</label>
 
                 <div class="col-sm-9">
                     <input id="title" type="text" ng-model="attachmentUploadCtrl.metadata.title"
@@ -68,7 +68,7 @@
 
         <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
             <div class="form-group">
-                <label for="createdDate" class="col-sm-3 control-label">Date created</label>
+                <label for="createdDate" class="col-sm-3 col-form-label">Date created</label>
 
                 <div class="col-sm-9">
                     <fallback-date-picker field-id="createdDate"
@@ -79,7 +79,7 @@
 
         <div class="form-horizontal">
             <div class="form-group">
-                <label for="category" class="col-sm-3 control-label">Category</label>
+                <label for="category" class="col-sm-3 col-form-label">Category</label>
 
                 <div class="col-sm-9">
                     <select id="category" ng-model="attachmentUploadCtrl.metadata.category" class="form-control">
@@ -93,7 +93,7 @@
 
         <div class="form-horizontal">
             <div class="form-group">
-                <label for="description" class="col-sm-3 control-label">Description</label>
+                <label for="description" class="col-sm-3 col-form-label">Description</label>
 
                 <div class="col-sm-9">
                         <textarea id="description" ng-model="attachmentUploadCtrl.metadata.description"
@@ -104,7 +104,7 @@
 
         <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
             <div class="form-group">
-                <label for="owner" class="col-sm-3 control-label" required>Author</label>
+                <label for="owner" class="col-sm-3 col-form-label" required>Author</label>
 
                 <div class="col-sm-9">
                     <input id="owner" type="text" ng-model="attachmentUploadCtrl.metadata.creator"
@@ -115,7 +115,7 @@
 
         <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
             <div class="form-group">
-                <label for="rights" class="col-sm-3 control-label" required>Rights</label>
+                <label for="rights" class="col-sm-3 col-form-label" required>Rights</label>
 
                 <div class="col-sm-9">
                     <input id="rights" type="text" ng-model="attachmentUploadCtrl.metadata.rights"
@@ -126,7 +126,7 @@
 
         <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
             <div class="form-group">
-                <label for="rightsHolder" class="col-sm-3 control-label" required>Rights Holder</label>
+                <label for="rightsHolder" class="col-sm-3 col-form-label" required>Rights Holder</label>
 
                 <div class="col-sm-9">
                     <input id="rightsHolder" type="text" ng-model="attachmentUploadCtrl.metadata.rightsHolder"
@@ -137,7 +137,7 @@
 
         <div class="form-horizontal" ng-hide="attachmentUploadCtrl.type == 'URL'">
             <div class="form-group">
-                <label for="licence" class="col-sm-3 control-label" required>Licence *</label>
+                <label for="licence" class="col-sm-3 col-form-label" required>Licence *</label>
 
                 <div class="col-sm-9">
                     <select id="licence"
