@@ -13,10 +13,10 @@
                     <accordion-group ng-repeat="taxon in browseCtrl.orderedTaxonLevels | orderBy:order" ng-if="browseCtrl.taxonLevels[taxon.key] > 0">
                         <accordion-heading>
                             <i class="fa fa-circle-thin"></i>
-                        &emsp;<a ng-href="#" title="{{ taxon.help }}"
+                        &emsp;<span class="accordion-heading-link" title="{{ taxon.help }}"
                                  ng-click="browseCtrl.searchByTaxonLevel(taxon.key)">{{taxon.name}} ({{browseCtrl.taxonLevels[taxon.key] ? browseCtrl.taxonLevels[taxon.key] : '0'}})
                             <span ng-if="taxon.help" class="fa fa-question-circle small superscript"></span>
-                            <span class="caret float-end"></span></a>
+                            <span class="caret float-end"></span></span>
                         </accordion-heading>
 
                         <div class="form-group">

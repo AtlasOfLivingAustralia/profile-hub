@@ -577,6 +577,26 @@ li.divider {
   margin-left: 10px;
 }
 
+/* Compatibility for Angular UI Bootstrap accordion/collapse */
+.collapse.in {
+  display: block;
+}
+
+/* Match old Bootstrap 3 accordion look while using Bootstrap 5 */
+accordion .accordion-heading-link {
+  cursor: pointer;
+}
+
+/* Bootstrap 5 adds underline styling to the Angular UI Bootstrap accordion
+ * generated <a class="accordion-toggle">. Restore the Bootstrap 3 appearance.
+ */
+accordion .accordion-toggle,
+accordion .accordion-toggle:hover,
+accordion .accordion-toggle:focus,
+accordion .accordion-toggle:active {
+  text-decoration: none !important;
+}
+
 /* Bootstrap 3 compatibility while migrating to Bootstrap 5 */
 .col-xs-12 {
   flex: 0 0 auto;
