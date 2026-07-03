@@ -600,6 +600,15 @@ li.divider {
   z-index: 1040 !important;
 }
 
+.modal-header {
+  display: flex;
+  align-items: center;
+}
+
+.modal-header close-modal {
+  margin-left: auto;
+}
+
 /* Restore Bootstrap 5 modal body spacing for Angular UI Bootstrap modals */
 .modal-body {
   padding: 1rem 1.5rem;
