@@ -21,7 +21,7 @@
                     </li>
 
                     <li ng-repeat="approvedList in opusCtrl.newApprovedLists">
-                        <div class="form-inline">
+                        <div class="d-flex align-items-center gap-2">
                             <div class="form-group">
                                 <input placeholder="List name..."
                                        ng-model="approvedList.list"
