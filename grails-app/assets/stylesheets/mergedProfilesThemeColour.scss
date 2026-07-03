@@ -577,9 +577,27 @@ li.divider {
   margin-left: 10px;
 }
 
-/* Compatibility for Angular UI Bootstrap accordion/collapse */
-.collapse.in {
-  display: block;
+/* Compatibility for Angular UI Bootstrap modals while using Bootstrap 5 */
+.modal.in {
+  display: block !important;
+  opacity: 1 !important;
+  z-index: 1050 !important;
+}
+
+.modal.in .modal-dialog {
+  margin: 30px auto !important;
+  transform: none !important;
+}
+
+.modal.in .modal-content {
+  background-color: #fff !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+.modal-backdrop.in {
+  opacity: 0.5 !important;
+  z-index: 1040 !important;
 }
 
 /* Match old Bootstrap 3 accordion look while using Bootstrap 5 */
