@@ -38,7 +38,7 @@
                     </li>
 
                     <li ng-repeat="feature in opusCtrl.newFeatureLists">
-                        <div class="form-inline">
+                        <div class="d-flex align-items-center gap-2">
                             <div class="form-group">
                                 <input placeholder="List name..."
                                        ng-model="feature.list"

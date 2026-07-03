@@ -24,7 +24,7 @@
         <div ng-show="attribute.matchedAsName" class="small padding-bottom-1"><i class="fa fa-info-circle">&nbsp;</i>This attribute will be displayed below the profile name. Any formatting, images, links, etc will be ignored.</div>
         <textarea id="attributeContent" ng-if="!attribute.titleTerm.dataType || attribute.titleTerm.dataType == 'text'" ng-model="attribute.text" name="attribute" ckeditor="richTextFullToolbar"></textarea>
         <div ng-if="attribute.titleTerm.dataType == 'number'">
-            <div class="form-inline margin-bottom-1" ng-repeat="number in attribute.numbers track by $index">
+            <div class="d-flex align-items-center gap-2 margin-bottom-1" ng-repeat="number in attribute.numbers track by $index">
                 <div class="form-group">
                     <input class="form-control" type="number" ng-model="attribute.numbers[$index]">
                     <button class="btn btn-danger" ng-click="attrCtrl.removeNumber(attribute, AttributeForm, $index)">Remove</button>
@@ -103,7 +103,7 @@
             </div>
 
             <div class="col-md-9" ng-if="attribute.significantEdit">
-                <div class="form-inline">
+                <div class="d-flex align-items-center gap-2">
                     <div class="form-group float-end">
                         <label for="attributeTo" class="inline-label">Attribute To:</label>
                         <input id="attributeTo" type="text"
@@ -117,7 +117,7 @@
 
         <div class="row padding-top-1">
             <div class="col-md-12">
-                <div class="form-inline">
+                <div class="d-flex align-items-center gap-2">
                     <div class="form-group">
                         <label for="source" class="inline-label">Source:</label>
                         <input id="source" type="text"

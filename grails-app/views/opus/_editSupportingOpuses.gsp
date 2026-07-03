@@ -83,7 +83,7 @@
                 </li>
 
                 <li ng-repeat="opus in opusCtrl.newSupportingOpuses">
-                    <div class="form-inline">
+                    <div class="d-flex align-items-center gap-2">
                         <div class="form-group">
                             <input placeholder="Collection name..."
                                    ng-model="opus.opus"

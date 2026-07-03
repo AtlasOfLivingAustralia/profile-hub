@@ -113,19 +113,19 @@
             <div ng-show="adminCtrl.loadingTags"><span class="fa fa-spin fa-spinner">&nbsp;</span>Loading...</div>
 
             <div class="row" ng-repeat="tag in adminCtrl.tags" ng-hide="adminCtrl.loadingTags">
-                <div class="col-md-12 form-inline padding-bottom-1">
+                <div class="col-md-12 d-flex flex-wrap align-items-center gap-2 padding-bottom-1">
                     <div class="form-group">
-                        <label for="abbrev{{$index}}" class="control-label">Abbrev.</label>
+                        <label for="abbrev{{$index}}" class="col-form-label">Abbrev.</label>
                         <input id="abbrev{{$index}}" class="form-control" ng-model="tag.abbrev">
                     </div>
 
                     <div class="form-group">
-                        <label for="name{{$index}}" class="control-label">Name.</label>
+                        <label for="name{{$index}}" class="col-form-label">Name.</label>
                         <input id="name{{$index}}" class="form-control" ng-model="tag.name">
                     </div>
 
                     <div class="form-group">
-                        <label for="colour{{$index}}" class="control-label">Colour.</label>
+                        <label for="colour{{$index}}" class="col-form-label">Colour.</label>
 
                         <div class="input-group">
                             <input id="colour{{$index}}" class="form-control" ng-model="tag.colour" colorpicker
