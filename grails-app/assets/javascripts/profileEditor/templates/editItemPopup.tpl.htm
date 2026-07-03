@@ -6,27 +6,22 @@
 <div class="modal-body">
     <alert class="alert-danger" ng-show="glossaryModalCtrl.error">{{ glossaryModalCtrl.error }}</alert>
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label for="term" class="col-sm-3 col-form-label">Term</label>
-
-            <div class="col-sm-8">
-                <input id="term" type="text" ng-model="glossaryModalCtrl.item.term" class="form-control"
-                       ng-enter="glossaryModalCtrl.ok()" ng-disabled="glossaryModalCtrl.item.uuid"/>
-            </div>
-        </div>
+    <div class="mb-3">
+        <label for="term" class="form-label">Term</label>
+        <input id="term" type="text"
+               ng-model="glossaryModalCtrl.item.term"
+               class="form-control"
+               ng-enter="glossaryModalCtrl.ok()"
+               ng-disabled="glossaryModalCtrl.item.uuid"/>
     </div>
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label for="description" class="col-sm-3 col-form-label">Description</label>
-
-            <div class="col-sm-8">
-                    <textarea id="description" type="text" ng-model="glossaryModalCtrl.item.description"
-                              class="form-control"
-                              ng-enter="glossaryModalCtrl.ok()" rows="6"></textarea>
-            </div>
-        </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description"
+                  ng-model="glossaryModalCtrl.item.description"
+                  class="form-control"
+                  ng-enter="glossaryModalCtrl.ok()"
+                  rows="6"></textarea>
     </div>
 </div>
 
