@@ -30,7 +30,7 @@
                     <h4 class="font-xxsmall heading-underlined"><strong>Glossary index</strong></h4>
 
                     <li ng-repeat="prefix in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']">
-                        <a href="" class="font-xxsmall" ng-model="glossaryCtrl.page" btn-radio="prefix"
+                        <a href="" class="font-xxsmall d-block mb-3" ng-model="glossaryCtrl.page" btn-radio="prefix"
                            ng-click="glossaryCtrl.loadGlossary(prefix)">{{ prefix }}</a></li>
                 </ul>
             </div>
@@ -53,10 +53,21 @@
                             <td><span ng-bind-html="item.description | sanitizeHtml"></span></td>
                             <g:if test="${params.isOpusAdmin}">
                                 <td class="edits">
-                                    <button class="btn-link fa fa-edit" ng-click="glossaryCtrl.editGlossaryItem($index)"
-                                            title="Edit glossary item"></button>
-                                    <button class="btn-link fa fa-trash-o color--red" ng-click="glossaryCtrl.deleteGlossaryItem($index)"
-                                            title="Delete glossary item"></button>
+                                    <button type="button"
+                                            class="btn btn-sm btn-link p-0 me-2"
+                                            ng-click="glossaryCtrl.editGlossaryItem($index)"
+                                            title="Edit glossary item"
+                                            aria-label="Edit glossary item">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-link p-0 text-danger"
+                                            ng-click="glossaryCtrl.deleteGlossaryItem($index)"
+                                            title="Delete glossary item"
+                                            aria-label="Delete glossary item">
+                                        <i class="fa fa-trash-o"></i>
+                                    </button>
                                 </td>
                             </g:if>
                         </tr>
