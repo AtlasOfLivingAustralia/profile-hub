@@ -57,7 +57,7 @@
                         <div id="search" class="card">
                             <div class="card-body">
                                 <form class="navbar-form" role="search">
-                                    <div class="form-group">
+                                    <div class="input-group">
                                         <input type="text" class="form-control ignore-save-warning" placeholder="e.g. Acacia binervata"
                                                ng-change="browseCtrl.searchByScientificName()"
                                                name="searchTerm"

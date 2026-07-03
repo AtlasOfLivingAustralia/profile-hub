@@ -577,6 +577,40 @@ li.divider {
   margin-left: 10px;
 }
 
+/* Compatibility for Angular UI Bootstrap accordion/collapse */
+.collapse.in {
+  display: block !important;
+}
+
+/* Match old Bootstrap 3 accordion look while using Bootstrap 5 */
+accordion .accordion-heading-link {
+  cursor: pointer;
+}
+
+.side-menu accordion .panel-title {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* Bootstrap 5 adds underline styling to the Angular UI Bootstrap accordion generated link */
+accordion .accordion-toggle,
+accordion .accordion-toggle:hover,
+accordion .accordion-toggle:focus,
+accordion .accordion-toggle:active {
+  text-decoration: none !important;
+}
+
+accordion .caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin: 9px 5px 0;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
 /* Compatibility for Angular UI Bootstrap modals while using Bootstrap 5 */
 .modal.in {
   display: block !important;
@@ -627,21 +661,6 @@ li.divider {
   display: block;
   margin-bottom: 1rem;
   text-decoration: none;
-}
-
-/* Match old Bootstrap 3 accordion look while using Bootstrap 5 */
-accordion .accordion-heading-link {
-  cursor: pointer;
-}
-
-/* Bootstrap 5 adds underline styling to the Angular UI Bootstrap accordion
- * generated <a class="accordion-toggle">. Restore the Bootstrap 3 appearance.
- */
-accordion .accordion-toggle,
-accordion .accordion-toggle:hover,
-accordion .accordion-toggle:focus,
-accordion .accordion-toggle:active {
-  text-decoration: none !important;
 }
 
 /* Bootstrap 3 compatibility while migrating to Bootstrap 5 */
@@ -930,6 +949,15 @@ accordion .accordion-toggle:active {
   top: 0;
   right: 0;
   padding: 15px 18px;
+}
+
+.brand-name-wrapper {
+  padding: 1rem;
+  padding-bottom: 0;
+}
+
+.brand-name-wrapper h4 {
+  margin: 0;
 }
 
 /*magnifying glass*/
