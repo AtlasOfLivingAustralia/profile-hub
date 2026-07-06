@@ -54,17 +54,17 @@
                         </div>
 
                         <!-- Search body -->
-                        <div id="search" class="card">
-                            <div class="card-body">
-                                <form class="navbar-form" role="search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control ignore-save-warning" placeholder="e.g. Acacia binervata"
-                                               ng-change="browseCtrl.searchByScientificName()"
-                                               name="searchTerm"
-                                               autocomplete="off"
-                                               ng-enter="browseCtrl.selectSingleResult()"
-                                               ng-model="browseCtrl.searchTerm"></div>
-                                    <button type="submit" class="btn btn-outline-secondary ">
+                        <div id="search">
+                            <div class="panel-body">
+                                <form class="quick-browse-form" role="search">
+                                    <input type="text" class="form-control ignore-save-warning" placeholder="e.g. Acacia binervata"
+                                           ng-change="browseCtrl.searchByScientificName()"
+                                           name="searchTerm"
+                                           autocomplete="off"
+                                           ng-enter="browseCtrl.selectSingleResult()"
+                                           ng-model="browseCtrl.searchTerm">
+
+                                    <button type="submit" class="btn btn-default">
                                         <span class="fa fa-search"></span>
                                     </button>
                                 </form>

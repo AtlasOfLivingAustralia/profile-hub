@@ -709,7 +709,12 @@ accordion .caret {
 ================================= */
 
 .btn, .form-control, .panel, .list-group, .well, .span10X {
-  border-radius: 3px; /*box-shadow:0 0 0;*/
+  border-radius: 3px;
+}
+
+.side-menu #search .quick-browse-form .form-control,
+.side-menu #search .quick-browse-form .btn {
+  border-radius: 0;
 }
 
 .btn-primary {
@@ -874,6 +879,13 @@ accordion .caret {
   border: none;
 }
 
+/* Bootstrap 5 navbar is flex-based, but this legacy side menu expects the Bootstrap 3 block layout. */
+.side-menu > nav.navbar {
+  display: block;
+  width: 100%;
+  padding: 0;
+}
+
 .side-menu .navbar-header {
   width: 100%;
   border-bottom: 1px solid #e7e7e7;
@@ -968,42 +980,43 @@ accordion .caret {
 /*Keeps magnifying glass in place when triggered*/
 /*.side-menu .brand-name-wrapper .navbar-brand {display: block;}*/
 /*.side-menu #search {position:relative;z-index:1000;}*/
+
+.side-menu #search {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .side-menu #search .panel-body {
   padding: 0;
 }
 
-.side-menu #search .panel-body .navbar-form {
+.side-menu #search .quick-browse-form {
+  display: flex;
+  width: 100%;
+  margin: 0;
   padding: 0;
-  padding-right: 50px;
-  width: 100%;
-  margin: 0;
-  position: relative;
-  border-top: 1px solid #e7e7e7;
-  border-bottom: 0;
 }
 
-.side-menu #search .panel-body .navbar-form .form-group {
-  width: 100%;
-  position: relative;
-  margin: 0;
-}
-
-.side-menu #search .panel-body .navbar-form input {
+.side-menu #search .quick-browse-form > .form-control {
+  flex: 1 1 auto;
+  height: 50px;
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  width: 100%;
-  height: 50px;
 }
 
-.side-menu #search .panel-body .navbar-form .btn {
-  position: absolute;
-  right: 0;
-  top: 0;
+.side-menu #search .quick-browse-form > .btn {
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  margin: 0;
+  padding: 0;
   border: 0;
   border-radius: 0;
-  background-color: #f3f3f3;
-  padding: 15px 18px;
+  line-height: 50px;
+  background-color: #f3f3f3 !important;
 }
 
 /*Search button tick*/
