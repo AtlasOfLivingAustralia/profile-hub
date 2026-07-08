@@ -9,9 +9,9 @@
                 {{ searchCtrl.isScientificName() ? 'by scientific name' : searchCtrl.isCommonName() ? 'by common name' : 'containing text' }} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a ng-click="searchCtrl.setSearchOption('scientificname')">by scientific name</a></li>
-                <li><a ng-click="searchCtrl.setSearchOption('commonname')">by common name</a></li>
-                <li><a ng-click="searchCtrl.setSearchOption('text')">containing text</a></li>
+                <li><a class="dropdown-item" href="" ng-click="searchCtrl.setSearchOption('scientificname')">by scientific name</a></li>
+                <li><a class="dropdown-item" href="" ng-click="searchCtrl.setSearchOption('commonname')">by common name</a></li>
+                <li><a class="dropdown-item" href="" ng-click="searchCtrl.setSearchOption('text')">containing text</a></li>
             </ul>
             <input id="searchTerm"
                    ng-model="searchCtrl.searchTerm"
