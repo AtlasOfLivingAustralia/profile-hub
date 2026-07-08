@@ -5,7 +5,7 @@
         <span class="d-none d-sm-inline fa fa-bars {{ userCtrl.user.role.colour }}"></span>
         <span class="d-inline d-sm-none"><span class="float-end caret"></span>Settings</span>
     </a>
-    <ul class="dropdown-menu" role="menu" ng-controller="ProfileController as profileCtrl" ng-init="profileCtrl.loadProfile()">
+    <ul class="dropdown-menu" ng-controller="ProfileController as profileCtrl" ng-init="profileCtrl.loadProfile()">
         <li class="padding-bottom-1">
             <span class="dropdown-item-text no-icon-menu-item">Role: {{ userCtrl.user.role.name }}</span>
         </li>
