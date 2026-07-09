@@ -604,6 +604,13 @@ li.divider {
   text-decoration: none;
 }
 
+/* Bootstrap 5 compatibility for profile table of contents */
+ul.nav.flex-column > li > a {
+  display: block;
+  padding: 0.25rem 0;
+  line-height: 1.5;
+}
+
 /* Compatibility for Angular UI Bootstrap accordion/collapse */
 .collapse.in {
   display: block !important;
@@ -2339,7 +2346,7 @@ ol.breadcrumb > span:before {
 }
 
 .std-width-btn {
-  width: 125px;
+  width: 130px;
 }
 
 .inline-attribute-image.pull-left {
