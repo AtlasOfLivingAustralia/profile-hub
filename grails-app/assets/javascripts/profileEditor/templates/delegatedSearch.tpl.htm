@@ -1,28 +1,30 @@
 <div class="{{ delSearchCtrl.layout == 'large' ? '' : 'd-flex align-items-center header-control' }}">
     <div class="input-group">
-        <button class="dropdown-toggle btn {{ delSearchCtrl.layout == 'large' ? 'btn-lg' : 'btn-sm' }} btn-outline-secondary search-dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                data-bs-toggle="dropdown"
-                title="Select the search type"
-                type="button"
-                ng-click="delSearchCtrl.search()">
+        <div class="dropdown">
+            <button class="dropdown-toggle btn {{ delSearchCtrl.layout == 'large' ? 'btn-lg' : 'btn-sm' }} btn-outline-secondary search-dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    data-bs-toggle="dropdown"
+                    title="Select the search type"
+                    type="button">
             <span ng-show="delSearchCtrl.isScientificName()">
                 {{ delSearchCtrl.layout == 'large' ? 'by name' : 'SN' }}
             </span>
-            <span ng-show="delSearchCtrl.isCommonName()">
+                <span ng-show="delSearchCtrl.isCommonName()">
                 {{ delSearchCtrl.layout == 'large' ? 'by name' : 'CN' }}
             </span>
-            <span ng-show="delSearchCtrl.isContainingText()">
+                <span ng-show="delSearchCtrl.isContainingText()">
                 {{ delSearchCtrl.layout == 'large' ? 'containing text' : 'T' }}
             </span>
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a ng-click="delSearchCtrl.setSearchOption('scientificname')">{{ delSearchCtrl.layout == 'large' ? 'by scientific name' : 'Search for profiles by scientific name' }}</a></li>
-            <li><a ng-click="delSearchCtrl.setSearchOption('commonname')">{{ delSearchCtrl.layout == 'large' ? 'by common name' : 'Search for profiles by common name' }}</a></li>
-            <li><a ng-click="delSearchCtrl.setSearchOption('text')">{{ delSearchCtrl.layout == 'large' ? 'containing text' : 'Search for profiles containing text' }}</a></li>
-        </ul>
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="" ng-click="delSearchCtrl.setSearchOption('scientificname')">{{ delSearchCtrl.layout == 'large' ? 'by scientific name' : 'Search for profiles by scientific name' }}</a></li>
+                <li><a class="dropdown-item" href="" ng-click="delSearchCtrl.setSearchOption('commonname')">{{ delSearchCtrl.layout == 'large' ? 'by common name' : 'Search for profiles by common name' }}</a></li>
+                <li><a class="dropdown-item" href="" ng-click="delSearchCtrl.setSearchOption('text')">{{ delSearchCtrl.layout == 'large' ? 'containing text' : 'Search for profiles containing text' }}</a></li>
+            </ul>
+        </div>
+
         <input id="searchTerm"
                ng-model="delSearchCtrl.searchTerm"
                ng-enter="delSearchCtrl.search()"
