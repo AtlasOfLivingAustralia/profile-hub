@@ -2159,12 +2159,22 @@ input.form-control:focus + span.input-group-btn > .btn-default {
 }
 
 ul.breadcrumb {
-  display: inline;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-left: 0;
+  margin-bottom: 1rem;
+  list-style: none;
 }
 
-ul.breadcrumb li:before {
+ul.breadcrumb li {
+  display: inline-flex;
+  align-items: center;
+}
+
+ul.breadcrumb li + li:before {
   padding-left: 10px;
-  padding-right: 5px;
+  padding-right: 10px;
   color: #ccc;
   content: "/\00a0";
 }
@@ -2184,6 +2194,33 @@ span.breadcrumb-dropdown {
 .breadcrumb > li + li:before {
   padding-left: 10px;
   padding-right: 5px;
+}
+
+ol.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+ol.breadcrumb > li,
+ol.breadcrumb > span,
+ol.breadcrumb taxonomy,
+ol.breadcrumb taxonomy > ul.breadcrumb,
+ol.breadcrumb taxonomy > ul.breadcrumb > li {
+  display: inline-flex;
+  align-items: center;
+}
+
+ol.breadcrumb taxonomy > ul.breadcrumb {
+  margin: 0;
+  padding: 0;
+}
+
+ol.breadcrumb > span:before {
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #ccc;
+  content: "/\00a0";
 }
 
 .vertical-centre-fixed {
@@ -2302,7 +2339,7 @@ span.breadcrumb-dropdown {
 }
 
 .std-width-btn {
-  width: 115px;
+  width: 125px;
 }
 
 .inline-attribute-image.pull-left {
