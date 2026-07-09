@@ -531,31 +531,28 @@ li.divider {
 
 #primary-nav .navbar-right > li,
 #primary-nav .navbar-nav.ms-auto > li,
-#primary-nav .nav-item {
-  display: flex;
-  align-items: center;
-}
-
+#primary-nav .nav-item,
 #primary-nav delegated-search {
   display: flex;
   align-items: center;
 }
 
-#primary-nav .header-control,
-#primary-nav .input-group {
+#primary-nav .header-control {
   display: flex;
   align-items: center;
+  height: 30px;
   margin: 0;
   padding-top: 0;
 }
 
-#primary-nav delegated-search .header-control {
-  height: 30px;
-}
-
 #primary-nav delegated-search .input-group {
+  display: flex;
   flex-wrap: nowrap;
+  align-items: stretch;
   width: auto;
+  margin: 0;
+  padding-top: 0;
+  border-bottom: 1px solid #2E4453;
 }
 
 #primary-nav delegated-search .dropdown-toggle,
@@ -563,6 +560,9 @@ li.divider {
 #primary-nav delegated-search .input-group > .btn {
   height: 30px;
   line-height: 1;
+  border-radius: 0;
+  border-top: 0;
+  border-bottom: 0;
 }
 
 #primary-nav delegated-search .delegated-search-control {
@@ -570,11 +570,38 @@ li.divider {
   min-width: 120px;
   padding-top: 2px;
   padding-bottom: 2px;
+  border-left: 0;
 }
 
-#primary-nav .navbar-nav.ms-auto > li {
-  height: 30px;
-  margin-left: 10px;
+#primary-nav delegated-search .dropdown {
+  position: relative;
+}
+
+#primary-nav delegated-search .dropdown-menu {
+  right: 50px !important;
+  left: auto !important;
+  min-width: 250px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#primary-nav delegated-search .dropdown-menu > li > .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1rem;
+  margin: 0;
+  line-height: 1.5;
+  white-space: nowrap;
+  font-weight: normal;
+}
+
+#primary-nav delegated-search .dropdown-menu > li > .dropdown-item:hover,
+#primary-nav delegated-search .dropdown-menu > li > .dropdown-item:focus,
+#primary-nav .dropdown-menu > li > .dropdown-item:hover,
+#primary-nav .dropdown-menu > li > .dropdown-item:focus {
+  background-color: #f5f5f5;
+  color: #005082;
+  text-decoration: none;
 }
 
 /* Compatibility for Angular UI Bootstrap accordion/collapse */
@@ -2223,7 +2250,7 @@ span.breadcrumb-dropdown {
 .header-control .dropdown-toggle:hover {
   border-right: none;
   background: transparent !important;
-  margin-left: -30px !important;
+  margin-left: 0 !important;
   z-index: 99;
 }
 
