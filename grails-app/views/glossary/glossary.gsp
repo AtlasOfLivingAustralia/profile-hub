@@ -26,7 +26,7 @@
         <div class="row" ng-cloak>
 
             <div class="col-md-2 margin-bottom-1">
-                <ul class="nav nav-stacked" id="sidebar">
+                <ul class="nav flex-column" id="sidebar">
                     <h4 class="font-xxsmall heading-underlined"><strong>Glossary index</strong></h4>
 
                     <li ng-repeat="prefix in ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']">
