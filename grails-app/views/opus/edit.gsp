@@ -19,18 +19,18 @@
     <a name="top"></a>
 
     <div class="row" ng-cloak>
-        <div class="col-md-6">
+        <div class="col-md-3"></div>
+
+        <div class="col-lg-9 col-md-8 col-12 d-flex justify-content-between align-items-start">
             <p class="lead">
                 Configure your profile collection
             </p>
-        </div>
-
-        <div class="col-md-6">
-            <div class="padding-bottom-1 float-end">
-                    <a href="${request.contextPath}/opus/{{opusCtrl.opus.shortName ? opusCtrl.opus.shortName : opusCtrl.opus.uuid}}"
-                       class="btn btn-outline-secondary" target="_self" ng-show="opusCtrl.opus.uuid"><i
-                            class="fa fa-eye"></i> Public View</a>
-            </div>
+            <a href="${request.contextPath}/opus/{{opusCtrl.opus.shortName ? opusCtrl.opus.shortName : opusCtrl.opus.uuid}}"
+               class="btn btn-outline-secondary"
+               target="_self"
+               ng-show="opusCtrl.opus.uuid">
+                <i class="fa fa-eye"></i> Public Views
+            </a>
         </div>
     </div>
 

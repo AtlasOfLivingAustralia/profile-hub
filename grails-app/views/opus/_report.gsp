@@ -1,5 +1,4 @@
 <div class="padding-top-1" ng-controller="ReportController as reportCtrl" ng-cloak>
-    <p:help help-id="opus.reports" show="${params.isOpusEditor}"/>
     <div class="row" ng-cloak>
         <div class="col-md-3 margin-bottom-1 stay-on-screen">
             <ul class="nav flex-column" id="sidebar">
@@ -11,6 +10,7 @@
         </div>
 
         <div class="col-lg-9 col-md-8 col-12" ng-cloak>
+            <p:help help-id="opus.reports" show="${params.isOpusEditor}"/>
             <div ng-show="!reportCtrl.selectedReport">
                 <p>
                     Select the report to display from the menu to the left
