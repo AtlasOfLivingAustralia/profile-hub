@@ -36,7 +36,7 @@
 
     <div class="row" ng-cloak>
         <div class="col-md-3 margin-bottom-1 stay-on-screen">
-            <ul class="nav nav-stacked" id="sidebar">
+            <ul class="nav flex-column" id="sidebar">
                 <h4 class="font-xxsmall heading-underlined"><strong>Page index</strong></h4>
                 <g:if test="${!params.opusId}">
                     <li><a href="#overview" du-smooth-scroll target="_self" class="font-xxsmall">Site overview</a></li>

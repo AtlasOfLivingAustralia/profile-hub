@@ -2,7 +2,7 @@
     <p:help help-id="opus.reports" show="${params.isOpusEditor}"/>
     <div class="row" ng-cloak>
         <div class="col-md-3 margin-bottom-1 stay-on-screen">
-            <ul class="nav nav-stacked" id="sidebar">
+            <ul class="nav flex-column" id="sidebar">
                 <h4 class="font-xxsmall heading-underlined"><strong>Reports</strong></h4>
                 <li ng-repeat="report in reportCtrl.reports | orderBy:'name'">
                     <a href="" class="font-xxsmall" ng-click="reportCtrl.loadReport(report.id, 0)">{{report.name}}</a>

@@ -675,21 +675,6 @@ accordion .caret {
   padding: 1rem 1.5rem;
 }
 
-/* Restore Bootstrap 3 nav-stacked layout for glossary index */
-#sidebar.nav-stacked {
-  display: block;
-}
-
-#sidebar.nav-stacked > li {
-  display: block;
-}
-
-#sidebar.nav-stacked > li > a {
-  display: block;
-  margin-bottom: 1rem;
-  text-decoration: none;
-}
-
 /* Bootstrap 3 compatibility while migrating to Bootstrap 5 */
 .col-xs-12 {
   flex: 0 0 auto;
