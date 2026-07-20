@@ -6,10 +6,10 @@ import { PAGE_CONTEXT } from "../page-context";
 
 export type { Glossary, GlossaryItem } from "../models/glossary.model";
 
-/** Base URL for Profiles Hub API requests (no trailing slash). Derived from the current host. */
+/** Base URL for Profiles Hub API requests (no trailing slash). From Grails page context. */
 export const API_BASE_URL = new InjectionToken<string>("API_BASE_URL", {
 	providedIn: "root",
-	factory: () => globalThis.location.origin,
+	factory: () => inject(PAGE_CONTEXT).apiBaseUrl,
 });
 
 @Service()

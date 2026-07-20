@@ -1,5 +1,41 @@
-.page-root {
+.glossary {
   padding: 1rem;
-  border-left: 4px solid #2e7d32;
-  background: #f1f8e9;
+}
+
+.glossary-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 1rem 0;
+}
+
+.glossary-index .prefix {
+  min-width: 2rem;
+  text-transform: uppercase;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+.glossary-index .prefix.active {
+  background: #1565c0;
+  border-color: #1565c0;
+  color: #fff;
+}
+
+.glossary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.glossary-table th,
+.glossary-table td {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.status.error {
+  color: #c62828;
 }

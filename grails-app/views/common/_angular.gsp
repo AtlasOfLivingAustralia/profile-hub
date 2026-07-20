@@ -4,8 +4,17 @@
   Built by: ./gradlew copyAngularAssets
 --}%
 <%@ page import="groovy.json.JsonOutput" %>
+<%
+    def serverURL = (grailsApplication.config.grails.serverURL ?: '').toString().replaceAll(/\/+$/, '')
+    def ctx = (request.contextPath ?: '').toString()
+    if (ctx == '/') {
+        ctx = ''
+    }
+    def apiBaseUrl = serverURL + ctx
+%>
 <script type="text/javascript">
     window.profilesAngular = ${raw(JsonOutput.toJson([
+            apiBaseUrl    : apiBaseUrl,
             contextPath   : request.contextPath ?: '',
             opusId        : (params.opusId ?: opus?.shortName ?: opus?.uuid ?: '') as String,
             opusUuid      : (opus?.uuid ?: '') as String,

@@ -4,6 +4,7 @@ import type { PageContext } from "./models/page-context.model";
 export type { PageContext } from "./models/page-context.model";
 
 const EMPTY_PAGE_CONTEXT: PageContext = {
+	apiBaseUrl: "",
 	contextPath: "",
 	opusId: "",
 	opusUuid: "",

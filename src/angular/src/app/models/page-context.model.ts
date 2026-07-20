@@ -1,5 +1,7 @@
 /** Page context injected by Grails via window.profilesAngular (see _angular.gsp). */
 export interface PageContext {
+	/** Hub API origin + context path (no trailing slash), from grails.serverURL. */
+	apiBaseUrl: string;
 	contextPath: string;
 	/** Opus id from the URL (shortName or uuid), suitable for API paths. */
 	opusId: string;

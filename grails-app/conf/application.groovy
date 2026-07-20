@@ -70,6 +70,14 @@ environments {
                 port = 1025
                 props = ["mail.debug": "true"]
             }
+            // TEMPORARY: allow Angular ng serve (localhost:4200) to call the hub API locally.
+            // Remove or disable before deploying.
+            cors {
+                enabled = true
+                allowedOrigins = ['http://localhost:4200']
+                allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+                allowedHeaders = ['*']
+            }
         }
         security.cas.appServerName='http://devt.ala.org.au:8080'
     }
