@@ -8,7 +8,26 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <!-- Host tags that Grails GSPs will render. Comment out either to test selective bootstrap. -->
+  <!-- Stub page context (normally set by grails-app/views/common/_angular.gsp). -->
+  <script>
+    window.profilesAngular = {
+      contextPath: '',
+      opusId: 'foa',
+      opusUuid: '',
+      opusShortName: 'foa',
+      profileId: '',
+      pageName: 'glossary',
+      edit: false,
+      isOpusAdmin: false,
+      isOpusEditor: false,
+      isOpusAuthor: false,
+      isOpusReviewer: false,
+      isALAAdmin: false,
+      currentUser: '',
+      currentUserId: ''
+    };
+  </script>
+  <!-- Host tags that Grails GSPs will render. -->
   <profile-glossary></profile-glossary>
 </body>
 </html>
