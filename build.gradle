@@ -192,16 +192,77 @@ assets {
     minifyJs = false
     minifyCss = true
     minifyOptions = [
-        excludes : ["**/*.min.js", "ckeditor5/build/ckeditor.js", "webjars/swagger-ui/4.5.2/swagger-ui-bundle.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js']
+        excludes : ["**/*.min.js", "ckeditor5/build/ckeditor.js", "webjars/swagger-ui/4.5.2/swagger-ui-bundle.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js', "profiles-angular/**/*.js"]
     ]
     excludes = ["webjars/leaflet/0.7.7/**/*.*",  "ckeditor5/node_modules/**/*.*", "ckeditor5/src/**/*.*", "ckeditor5/build/ckeditor.js", "ckeditor5/webpack.config.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js']
     includes = ["webjars/leaflet/0.7.7/dist/*.*"]
+}
+
+def angularDir = file("${project.projectDir}/src/angular")
+def angularDistDir = file("${angularDir}/dist/profiles-angular")
+def angularAssetsDir = file("${project.projectDir}/grails-app/assets/javascripts/profiles-angular")
+
+tasks.register('npmInstallAngular', Exec) {
+    group = 'angular'
+    description = 'Install dependencies for the Angular workspace'
+    workingDir angularDir
+    if (file("${angularDir}/pnpm-lock.yaml").exists()) {
+        commandLine 'pnpm', 'install', '--frozen-lockfile'
+        inputs.files(
+            file("${angularDir}/package.json"),
+            file("${angularDir}/pnpm-lock.yaml")
+        )
+    } else if (file("${angularDir}/package-lock.json").exists()) {
+        commandLine 'npm', 'ci'
+        inputs.files(
+            file("${angularDir}/package.json"),
+            file("${angularDir}/package-lock.json")
+        )
+    } else {
+        commandLine 'npm', 'install'
+        inputs.file(file("${angularDir}/package.json"))
+    }
+    outputs.dir(file("${angularDir}/node_modules"))
+}
+
+tasks.register('buildAngular', Exec) {
+    group = 'angular'
+    description = 'Build the Angular app for Grails asset-pipeline consumption'
+    dependsOn npmInstallAngular
+    workingDir angularDir
+    if (file("${angularDir}/pnpm-lock.yaml").exists()) {
+        commandLine 'pnpm', 'run', 'build:grails'
+    } else {
+        commandLine 'npm', 'run', 'build:grails'
+    }
+    inputs.dir(file("${angularDir}/src"))
+    inputs.files(
+        file("${angularDir}/angular.json"),
+        file("${angularDir}/package.json"),
+        file("${angularDir}/tsconfig.json"),
+        file("${angularDir}/tsconfig.app.json")
+    )
+    outputs.dir(angularDistDir)
+}
+
+tasks.register('copyAngularAssets', Copy) {
+    group = 'angular'
+    description = 'Copy Angular build output into Grails assets'
+    dependsOn buildAngular
+    from angularDistDir
+    include 'main.js', 'styles.css'
+    into angularAssetsDir
+}
+
+tasks.named('assetCompile').configure {
+    dependsOn copyAngularAssets
 }
 
 bootJar {
     enabled = true
     classifier = 'exec'
     launchScript()
+    dependsOn copyAngularAssets
 }
 
 tasks.withType(Test) {

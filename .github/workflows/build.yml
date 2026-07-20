@@ -24,12 +24,26 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Install nodejs
-        uses: actions/setup-node@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          node-version: 16
+          version: 9
 
-      - run: npm install
+      - name: Install nodejs
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: src/angular/pnpm-lock.yaml
+
+      - name: Install root Karma dependencies
+        run: npm install
+
+      - name: Install and build Angular for Grails
+        working-directory: src/angular
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build:grails
 
       - name: Read the profile-hub version from the gradle.properties file
         id: read_property

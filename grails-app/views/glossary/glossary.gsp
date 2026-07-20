@@ -3,10 +3,11 @@
 <head>
     <meta name="layout" content="${grailsApplication.config.layout + '-nocontainer'}"/>
     <title>${pageTitle} Glossary</title>
+    <g:render template="/common/angular"/>
 </head>
 
 <body>
-
+<profile-glossary></profile-glossary>
 <div ng-controller="GlossaryController as glossaryCtrl" ng-init="glossaryCtrl.loadGlossary()">
     <profile-header opus="glossaryCtrl.opus" is-profile="false"></profile-header>
     <div class="container">

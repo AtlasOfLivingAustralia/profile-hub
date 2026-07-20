@@ -12,3 +12,6 @@ out/
 .classpath
 /node_modules/
 /coverage/
+src/angular/dist/
+src/angular/node_modules/
+grails-app/assets/javascripts/profiles-angular/
