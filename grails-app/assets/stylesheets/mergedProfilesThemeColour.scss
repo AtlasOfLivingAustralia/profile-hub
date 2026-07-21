@@ -2277,22 +2277,30 @@ ol.breadcrumb > span:before {
   content: "/\00a0";
 }
 
-.vertical-centre-fixed {
-  position: fixed;
-  top: 45%;
-  width: 45px;
-}
-
-.vertical-centre-fixed button {
-  margin-bottom: 5px;
-  width: 40px;
-  height: 40px;
-}
-
 .min-col {
   padding-left: 0;
   margin-left: 0;
   max-width: 40px;
+  position: relative;
+}
+
+profile-side-bar,
+profile-side-bar > div {
+  display: block;
+  height: 100%;
+}
+
+.vertical-centre-fixed {
+  position: sticky;
+  top: 35vh;
+  width: 45px;
+}
+
+.vertical-centre-fixed button {
+  display: block;
+  margin-bottom: 5px;
+  width: 40px;
+  height: 40px;
 }
 
 .navbar-nav > li > div {

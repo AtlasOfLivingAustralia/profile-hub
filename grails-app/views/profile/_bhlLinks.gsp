@@ -78,7 +78,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-2 margin-bottom-1 text-right" ng-show="link.thumbnailUrl">
+                <div class="col-md-2 margin-bottom-1 text-end" ng-show="link.thumbnailUrl">
                     <a ng-href="{{link.url}}" target="_blank">
                         <img ng-model="link.thumbnailUrl" ng-src="{{link.thumbnailUrl}}"
                              style="max-height:150px;" alt="{{link.title}}" class="img-rounded"/>
@@ -87,7 +87,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12 text-right">
+                <div class="col-md-12 text-end">
                     <button class="btn btn-danger" ng-if="!bhlCtrl.readonly"
                             ng-click="bhlCtrl.deleteLink($index, BhlForm)">Delete</button>
                     <hr ng-show="!$last"/>
