@@ -55,7 +55,7 @@
 
                         <!-- Search body -->
                         <div id="search">
-                            <div class="panel-body">
+                            <div class="quick-browse-body">
                                 <form class="quick-browse-form" role="search">
                                     <input type="text" class="form-control ignore-save-warning" placeholder="e.g. Acacia binervata"
                                            ng-change="browseCtrl.searchByScientificName()"

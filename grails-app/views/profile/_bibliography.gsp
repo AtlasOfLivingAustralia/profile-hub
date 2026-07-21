@@ -1,4 +1,4 @@
-<div class="card ${edit?'':'panel-override'}""  ng-controller="ProfileController as profileCtrl" ng-cloak ng-form="BiblioForm"
+<div class="card ${edit?'':'panel-override'}"  ng-controller="ProfileController as profileCtrl" ng-cloak ng-form="BiblioForm"
      ng-init="profileCtrl.loadProfile()"
      ng-show="profileCtrl.profile.bibliography.length > 0 || !profileCtrl.readonly()">
     <navigation-anchor anchor-name="{{profileCtrl.readonly() ? 'view_' : 'edit_'}}bibliography" title="Bibliography" condition="profileCtrl.profile.bibliography && profileCtrl.profile.bibliography.length > 0 || !profileCtrl.readonly()"></navigation-anchor>
