@@ -1,20 +1,27 @@
-<div class="container py-4">
-  <div class="row margin-top-2 padding-bottom-2">
-    <div class="col-md-12">
+<div class="container pt-3 pb-4">
+  <div class="row mt-2 pb-5">
+    <div class="col-md-10">
       <h2 class="heading-large inline">Glossary</h2>
     </div>
+    @if (context.isOpusAdmin) {
+      <div class="col-md-2">
+        <button type="button" class="btn btn-outline-secondary float-end">
+          <i class="fa fa-plus"></i> Add item
+        </button>
+      </div>
+    }
   </div>
   <div class="row">
     <div class="col-md-2">
       <h4 class="font-xxsmall heading-underlined">
         Glossary index
       </h4>
-      <ul class="nav nav-stacked">
+      <ul class="nav flex-column">
         @for (letter of prefixes; track letter) {
           <li>
             <a
               href=""
-              class="font-xxsmall"
+              class="font-xxsmall d-block py-2"
               (click)="loadGlossary(letter)"
             >
               {{ letter }}
@@ -27,7 +34,11 @@
       <h4 class="font-xxsmall">Glossary entry: {{ prefix().toUpperCase() }}</h4>
 
       @if (loading()) {
-        <p class="text">Loading...</p>
+        <div class="d-flex justify-content-center align-items-center py-4">
+          <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
       } @else if (error()) {
         <p class="text">{{ error() }}</p>
       } @else if (items().length === 0) {
@@ -38,6 +49,9 @@
             <tr>
               <th>Name</th>
               <th>Details</th>
+              @if (context.isOpusAdmin) {
+                <th></th>
+              }
             </tr>
           </thead>
           <tbody>
@@ -45,6 +59,16 @@
               <tr>
                 <td>{{ item.term }}</td>
                 <td [innerHTML]="item.description"></td>
+                @if (context.isOpusAdmin) {
+                  <td class="edits">
+                    <button type="button" class="btn btn-sm btn-link p-0 me-2" title="Edit glossary item" aria-label="Edit glossary item">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-link p-0 text-danger" title="Delete glossary item" aria-label="Delete glossary item">
+                      <i class="fa fa-trash-o"></i>
+                    </button>
+                  </td>
+                }
               </tr>
             }
           </tbody>

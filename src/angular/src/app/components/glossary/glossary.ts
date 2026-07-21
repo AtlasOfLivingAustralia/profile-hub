@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import type { GlossaryItem } from "../../models/glossary.model";
 import { OpusService } from "../../services/opus.service";
+import { PAGE_CONTEXT } from "../../page-context";
 
 @Component({
 	selector: "profile-glossary",
@@ -11,6 +12,7 @@ import { OpusService } from "../../services/opus.service";
 export class ProfileGlossary {
 	private readonly opus = inject(OpusService);
 	private readonly destroyRef = inject(DestroyRef);
+	protected readonly context = inject(PAGE_CONTEXT);
 
 	protected readonly prefixes = "abcdefghijklmnopqrstuvwxyz".split("");
 	protected readonly prefix = signal("a");
@@ -28,7 +30,7 @@ export class ProfileGlossary {
 		this.error.set(null);
 
 		this.opus
-			.getGlossary(this.opus.opusId, prefix)
+			.getGlossary(this.context.opusId, prefix)
 			.pipe(takeUntilDestroyed(this.destroyRef))
 			.subscribe({
 				next: (glossary) => {
