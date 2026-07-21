@@ -64,7 +64,7 @@
                                            ng-enter="browseCtrl.selectSingleResult()"
                                            ng-model="browseCtrl.searchTerm">
 
-                                    <button type="submit" class="btn btn-default">
+                                    <button type="submit" class="btn btn-outline-secondary">
                                         <span class="fa fa-search"></span>
                                     </button>
                                 </form>
