@@ -9,9 +9,7 @@ const components: { [key: string]: Type<unknown> } = {
 };
 
 for (const component of Object.keys(components)) {
-	console.log("Searching", component);
 	if (document.querySelector(component)) {
-		console.log(`[Angular] Found ${component}!`);
 		createApplication(appConfig)
 			.then((appRef) => {
 				appRef.bootstrap(components[component]);
@@ -19,5 +17,3 @@ for (const component of Object.keys(components)) {
 			.catch((err) => console.error(err));
 	}
 }
-
-console.log("HELLO WORLD ANGULAR");

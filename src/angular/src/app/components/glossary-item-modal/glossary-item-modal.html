@@ -1,0 +1,49 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-glossary-item-title">Glossary Item</h4>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="cancel()"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="mb-3">
+    <label class="form-label" for="glossary-item-term">Term</label>
+    <input
+      id="glossary-item-term"
+      type="text"
+      class="form-control"
+      name="term"
+      [(ngModel)]="form.term"
+      [disabled]="termDisabled"
+    />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="glossary-item-description">Description</label>
+    <textarea
+      id="glossary-item-description"
+      class="form-control"
+      name="description"
+      rows="6"
+      [(ngModel)]="form.description"
+    ></textarea>
+  </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-primary"
+    ngbAutofocus
+    (click)="ok()"
+  >
+    OK
+  </button>
+  <button
+    type="button"
+    class="btn btn-outline-secondary"
+    (click)="cancel()"
+  >
+    Cancel
+  </button>
+</div>

@@ -5,7 +5,11 @@
     </div>
     @if (context.isOpusAdmin) {
       <div class="col-md-2">
-        <button type="button" class="btn btn-outline-secondary float-end">
+        <button
+          type="button"
+          class="btn btn-outline-secondary float-end"
+          (click)="addItem()"
+        >
           <i class="fa fa-plus"></i> Add item
         </button>
       </div>
@@ -61,10 +65,22 @@
                 <td [innerHTML]="item.description"></td>
                 @if (context.isOpusAdmin) {
                   <td class="edits">
-                    <button type="button" class="btn btn-sm btn-link p-0 me-2" title="Edit glossary item" aria-label="Edit glossary item">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-link p-0 me-2"
+                      title="Edit glossary item"
+                      aria-label="Edit glossary item"
+                      (click)="editItem(item)"
+                    >
                       <i class="fa fa-edit"></i>
                     </button>
-                    <button type="button" class="btn btn-sm btn-link p-0 text-danger" title="Delete glossary item" aria-label="Delete glossary item">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-link p-0 text-danger"
+                      title="Delete glossary item"
+                      aria-label="Delete glossary item"
+                      (click)="confirmDelete(item)"
+                    >
                       <i class="fa fa-trash-o"></i>
                     </button>
                   </td>
