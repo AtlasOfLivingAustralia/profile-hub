@@ -50,7 +50,7 @@
                         href="${grailsApplication.config.biocache.base.url}/occurrences/{{specimen.id}}"
                         target="_blank">View specimen record</a></div>
             </div>
-            <div class="col-sm-2 text-right" ng-if="!specCtrl.readonly()">
+            <div class="col-sm-2 text-end" ng-if="!specCtrl.readonly()">
                 <button class="btn btn-danger"
                         ng-click="specCtrl.deleteSpecimen($index, SpecimenForm)">Delete</button>
             </div>

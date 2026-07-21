@@ -87,7 +87,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-5 col-md-offset-7">
+                    <div class="col-12 col-md-5 ms-md-auto">
                         <div class="row">
                             <div class="col-12">
                                 <a href="${createLink(uri: '/')}">Other collections</a>
