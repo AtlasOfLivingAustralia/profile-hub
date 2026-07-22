@@ -75,7 +75,7 @@ export class ProfileGlossary {
 		modalRef.componentInstance.termDisabled = false;
 
 		modalRef.result.then(
-			(form: GlossaryItemForm) => this.saveGlossaryItem(null, form),
+			(form: GlossaryItemForm) => this.createGlossaryItem(form),
 			() => undefined,
 		);
 	}
@@ -90,19 +90,77 @@ export class ProfileGlossary {
 		modalRef.componentInstance.termDisabled = true;
 
 		modalRef.result.then(
-			(form: GlossaryItemForm) => this.saveGlossaryItem(item, form),
+			(form: GlossaryItemForm) => this.updateGlossaryItem(item, form),
 			() => undefined,
 		);
 	}
 
-	private deleteGlossaryItem(_item: GlossaryItem): void {
-		console.log("delete", _item);
+	private deleteGlossaryItem(item: GlossaryItem): void {
+		this.opus
+			.deleteGlossaryItem(item.uuid, this.context.opusId)
+			.pipe(takeUntilDestroyed(this.destroyRef))
+			.subscribe({
+				next: () => {
+					this.items.update((list) =>
+						list.filter((entry) => entry.uuid !== item.uuid),
+					);
+				},
+				error: () => {
+					this.error.set("Failed to delete glossary item.");
+				},
+			});
 	}
 
-	private saveGlossaryItem(
-		_item: GlossaryItem | null,
-		_form: GlossaryItemForm,
+	private updateGlossaryItem(
+		item: GlossaryItem,
+		form: GlossaryItemForm,
 	): void {
-		console.log("save", _item, _form);
+		const payload: GlossaryItem = {
+			...item,
+			term: form.term,
+			description: form.description,
+		};
+
+		this.opus
+			.updateGlossaryItem(payload, this.context.opusId)
+			.pipe(takeUntilDestroyed(this.destroyRef))
+			.subscribe({
+				next: () => {
+					this.items.update((list) =>
+						list.map((entry) =>
+							entry.uuid === item.uuid ? payload : entry,
+						),
+					);
+				},
+				error: () => {
+					this.error.set("Failed to update glossary item.");
+				},
+			});
+	}
+
+	private createGlossaryItem(form: GlossaryItemForm): void {
+		this.opus
+			.createGlossaryItem(
+				{
+					term: form.term,
+					description: form.description,
+					uuid: null,
+				},
+				this.context.opusId,
+			)
+			.pipe(takeUntilDestroyed(this.destroyRef))
+			.subscribe({
+				next: () => {
+					const letter = form.term.trim().charAt(0).toLowerCase();
+					const prefix =
+						letter && this.prefixes.includes(letter)
+							? letter
+							: this.prefix();
+					this.loadGlossary(prefix);
+				},
+				error: () => {
+					this.error.set("Failed to create glossary item.");
+				},
+			});
 	}
 }
