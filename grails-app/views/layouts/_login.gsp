@@ -1,6 +1,6 @@
 <g:set var="authService" bean="authService"/>
 <g:if test="${params.currentUser}">
-<li class="dropdown font-xsmall" ng-controller="UserDetailController as userCtrl">
+<li class="dropdown font-xsmall settings-menu" ng-controller="UserDetailController as userCtrl">
     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" title="Settings" aria-label="Settings">
         <span class="d-none d-sm-inline fa fa-bars {{ userCtrl.user.role.colour }}"></span>
         <span class="d-inline d-sm-none"><span class="float-end caret"></span>Settings</span>
