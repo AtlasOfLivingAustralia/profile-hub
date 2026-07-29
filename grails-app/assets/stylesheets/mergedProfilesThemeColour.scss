@@ -830,6 +830,11 @@ accordion .caret {
   #primary-nav .delegated-search-control {
     flex: 1 1 auto;
     min-width: 0;
+    background-color: transparent !important;
+  }
+
+  #primary-nav .header-control .btn-inside-input {
+    background-color: transparent !important;
   }
 
   /* Render Settings as part of the normal mobile navbar flow. */
@@ -875,6 +880,57 @@ accordion .caret {
     white-space: normal;
     background-color: transparent;
   }
+}
+
+/* Desktop navbar actions */
+@media (min-width:768px) {
+
+  #primary-nav {
+    padding-top:0;
+    padding-bottom:0;
+  }
+
+  #primary-nav > .container,
+  #primary-nav .navbar-collapse,
+  #primary-nav .navbar-nav.ms-auto {
+    align-items:stretch;
+  }
+
+  #primary-nav .settings-menu {
+    display:flex;
+    position:relative;
+  }
+
+  #primary-nav .settings-menu > .dropdown-toggle {
+    display:flex;
+    align-items:center;
+    padding:0 18px;
+    background:transparent;
+  }
+
+  #primary-nav delegated-search,
+  #primary-nav delegated-search .header-control,
+  #primary-nav delegated-search .input-group {
+    display:flex;
+    align-items:center;
+    height:100%;
+    background:transparent;
+  }
+
+  #primary-nav delegated-search .header-control,
+  #primary-nav delegated-search .input-group,
+  #primary-nav delegated-search .input-group > * {
+    background:transparent;
+  }
+
+}
+
+#primary-nav .search-dropdown,
+#primary-nav .search-dropdown:hover,
+#primary-nav .search-dropdown:focus,
+#primary-nav .search-dropdown:active,
+#primary-nav .search-dropdown.show {
+  background-color: transparent !important;
 }
 
 // Angular UI Bootstrap 0.14 alert close button compatibility
