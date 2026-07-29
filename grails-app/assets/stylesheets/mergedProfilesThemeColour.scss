@@ -472,8 +472,11 @@ li.divider {
   font-weight: bold;
 }
 
-#primary-nav .navbar-nav .active > a {
-  background-color: #fff;
+#primary-nav.navbar-light.bg-light .navbar-nav > .nav-item > .nav-link,
+#primary-nav.navbar-light.bg-light .navbar-nav > .nav-item > .nav-link:hover,
+#primary-nav.navbar-light.bg-light .navbar-nav > .nav-item > .nav-link:focus,
+#primary-nav.navbar-light.bg-light .navbar-nav > .nav-item.active > .nav-link {
+  background-color: transparent;
 }
 
 .navbar-right {
