@@ -27,17 +27,16 @@
             <button class="btn btn-outline-secondary btn-lg search-buttons-responsive-small-screen" type="button" ng-click="searchCtrl.search()" title="Search"><span class="fa fa-search"></span></button>
         </div>
         <div class="card card-body margin-top-1">
-            <div class="checkbox inline-block padding-right-1" ng-hide="searchCtrl.searchOptions.nameOnly">
-                <label for="matchAll" class="inline-label">
-                    <input id="matchAll" type="checkbox" name="matchAll" class="ignore-save-warning"
-                           ng-model="searchCtrl.searchOptions.matchAll" ng-false-value="false">
+            <div class="form-check" ng-hide="searchCtrl.searchOptions.nameOnly">
+                <input id="matchAll" type="checkbox" name="matchAll" class="form-check-input ignore-save-warning" ng-model="searchCtrl.searchOptions.matchAll" ng-false-value="false">
+                <label for="matchAll" class="form-check-label">
                     Must contain all terms
                 </label>
             </div>
-            <div class="checkbox inline-block padding-right-1">
-                <label for="hideStubs" class="inline-label">
-                    <input id="hideStubs" type="checkbox" name="hideStubs" class="ignore-save-warning"
-                           ng-model="searchCtrl.searchOptions.hideStubs" ng-false-value="false">
+
+            <div class="form-check">
+                <input id="hideStubs" type="checkbox" name="hideStubs" class="form-check-input ignore-save-warning" ng-model="searchCtrl.searchOptions.hideStubs" ng-false-value="false">
+                <label for="hideStubs" class="form-check-label">
                     Hide empty profile
                 </label>
             </div>
