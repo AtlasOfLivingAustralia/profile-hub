@@ -26,19 +26,21 @@
             <button class="btn btn-outline-secondary btn-lg search-buttons-responsive-large-screen" type="button" ng-click="searchCtrl.clearSearch()" title="Clear search"><span class="fa fa-trash"></span></button>
             <button class="btn btn-outline-secondary btn-lg search-buttons-responsive-small-screen" type="button" ng-click="searchCtrl.search()" title="Search"><span class="fa fa-search"></span></button>
         </div>
-        <div class="card card-body margin-top-1">
-            <div class="form-check" ng-hide="searchCtrl.searchOptions.nameOnly">
-                <input id="matchAll" type="checkbox" name="matchAll" class="form-check-input ignore-save-warning" ng-model="searchCtrl.searchOptions.matchAll" ng-false-value="false">
-                <label for="matchAll" class="form-check-label">
-                    Must contain all terms
-                </label>
-            </div>
+        <div class="card card-body bg-light margin-top-1">
+            <div class="d-flex flex-wrap gap-4">
+                <div class="form-check" ng-hide="searchCtrl.searchOptions.nameOnly">
+                    <input id="matchAll" type="checkbox" name="matchAll" class="form-check-input ignore-save-warning" ng-model="searchCtrl.searchOptions.matchAll" ng-false-value="false">
+                    <label for="matchAll" class="form-check-label">
+                        Must contain all terms
+                    </label>
+                </div>
 
-            <div class="form-check">
-                <input id="hideStubs" type="checkbox" name="hideStubs" class="form-check-input ignore-save-warning" ng-model="searchCtrl.searchOptions.hideStubs" ng-false-value="false">
-                <label for="hideStubs" class="form-check-label">
-                    Hide empty profile
-                </label>
+                <div class="form-check">
+                    <input id="hideStubs" type="checkbox" name="hideStubs" class="form-check-input ignore-save-warning" ng-model="searchCtrl.searchOptions.hideStubs" ng-false-value="false">
+                    <label for="hideStubs" class="form-check-label">
+                        Hide empty profile
+                    </label>
+                </div>
             </div>
         </div>
     </div>
