@@ -44,7 +44,7 @@
                      ng-src="{{opus.thumbnailUrl | default:'${asset.assetPath(src: "generic_flower.png")}' }}"
                      alt="{{opus.title}} logo" title="{{opus.title}}">
             </a>
-            <h4 class="collection-title">
+            <h4 class="collection-title mt-2">
                 <a href="${request.contextPath}/opus/{{opus.shortName ? opus.shortName : opus.uuid}}"
                    target="_self"><strong>{{opus.title}}</strong></a>
             </h4>
