@@ -1,5 +1,5 @@
 // Authentication
-import { User } from "oidc-client-ts";
+import type { User } from "oidc-client-ts";
 import { AuthProvider } from "react-oidc-context";
 import { ALAProvider } from "./helpers/context/ALAProvider";
 

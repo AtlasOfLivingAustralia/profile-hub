@@ -2,4 +2,4 @@ import { useContext } from "react";
 import ALAContext, { type ALAContextProps } from "./ALAContext";
 
 export const useALA = (): ALAContextProps =>
-	useContext(ALAContext) as ALAContextProps;
+  useContext(ALAContext) as ALAContextProps;

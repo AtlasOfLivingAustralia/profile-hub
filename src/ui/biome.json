@@ -10,7 +10,7 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+		"indentStyle": "space"
 	},
 	"linter": {
 		"enabled": true,
@@ -98,13 +98,6 @@
 						"noUselessRegexBackrefs": "error",
 						"noWith": "error",
 						"useGetterReturn": "error"
-					},
-					"assist": {
-						"actions": {
-							"source": {
-								"organizeImports": "off"
-							}
-						}
 					}
 				}
 			}

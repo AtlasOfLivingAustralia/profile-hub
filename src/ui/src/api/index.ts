@@ -1,1 +1,5 @@
-export { default as rest } from "./rest";
+import { default as opus } from "./opus";
+
+export default {
+  opus,
+};
