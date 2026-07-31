@@ -24,6 +24,28 @@ const router = createBrowserRouter([
       {
         path: "opus/:slug",
         lazy: () => import("./views/Collection"),
+        children: [
+          {
+            index: true,
+            lazy: () => import("./views/CollectionHome"),
+          },
+          {
+            path: "browse",
+            lazy: () => import("./views/Browse"),
+          },
+          {
+            path: "filter",
+            lazy: () => import("./views/Filter"),
+          },
+          {
+            path: "glossary",
+            lazy: () => import("./views/Glossary"),
+          },
+          {
+            path: "about",
+            lazy: () => import("./views/About"),
+          },
+        ],
       },
       {
         path: "*",
