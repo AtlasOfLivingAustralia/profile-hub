@@ -5,13 +5,30 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "dev:clean": "vite --force",
+    "build:production": "tsc && vite build",
+    "build:staging": "tsc && vite build --mode staging",
+    "build:testing": "tsc && vite build --mode testing",
+    "build:development": "tsc && vite build --mode development",
+    "lint": "biome lint --write ./src",
+    "format": "biome format --write ./src",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.3.1",
+    "@fortawesome/free-brands-svg-icons": "^7.3.1",
+    "@fortawesome/free-solid-svg-icons": "^7.3.1",
+    "@fortawesome/react-fontawesome": "^3.5.0",
+    "bootstrap": "^5.3.8",
+    "jwt-decode": "^4.0.0",
+    "nuqs": "^2.9.3",
+    "oidc-client-ts": "^3.5.0",
     "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.2.7",
+    "react-intl": "^10.1.18",
+    "react-oidc-context": "^3.3.1",
+    "react-router": "^8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
