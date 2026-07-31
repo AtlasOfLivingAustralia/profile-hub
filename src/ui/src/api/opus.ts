@@ -3,4 +3,6 @@ import type { Collection } from "./types";
 
 export default {
   list: async (): Promise<Collection[]> => request("/list", "GET", null),
+  get: async (slug: string): Promise<Collection> =>
+    request(`/${encodeURIComponent(slug)}/json`, "GET", null),
 };

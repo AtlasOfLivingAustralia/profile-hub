@@ -1,0 +1,75 @@
+.banner {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.carousel,
+.carousel :global(.carousel-inner),
+.carousel :global(.carousel-item) {
+  height: 100%;
+}
+
+.slide {
+  background-color: var(--bs-secondary-bg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.overlay {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  margin-inline: auto;
+  max-width: var(--bs-breakpoint-xl, 1140px);
+  padding-inline: 1rem;
+}
+
+.title {
+  color: var(--bs-body-color);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+  max-width: 32rem;
+}
+
+@media (min-width: 576px) {
+  .banner {
+    height: 220px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .banner {
+    height: 275px;
+  }
+
+  .content {
+    padding-inline: 1.5rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+}

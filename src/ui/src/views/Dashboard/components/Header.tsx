@@ -1,11 +1,12 @@
 import handleSignout from "#/helpers/auth/handleSignout";
+import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { NavLink, useParams } from "react-router";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -18,26 +19,46 @@ import {
 
 import { useAuth } from "react-oidc-context";
 
+const COLLECTION_NAV_ITEMS = [
+  { label: "Home", path: "", end: true },
+  { label: "Browse", path: "/browse" },
+  { label: "Filter", path: "/filter" },
+  { label: "Glossary", path: "/glossary" },
+  { label: "About", path: "/about" },
+] as const;
+
 export function Header() {
   const auth = useAuth();
+  const { slug } = useParams<{ slug?: string }>();
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         <Navbar.Brand href="#home"></Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse
-          id="user-menu-dropdown"
-          className="justify-content-end"
-        >
-          <div className="d-flex gap-3">
+        <Navbar.Toggle aria-controls="primary-navbar-nav" />
+        <Navbar.Collapse id="primary-navbar-nav">
+          {slug && (
+            <Nav className="me-auto">
+              {COLLECTION_NAV_ITEMS.map((item) => (
+                <Nav.Link
+                  key={item.label}
+                  as={NavLink}
+                  to={`/opus/${slug}${item.path}`}
+                  end={"end" in item ? item.end : false}
+                >
+                  {item.label}
+                </Nav.Link>
+              ))}
+            </Nav>
+          )}
+          <div className="d-flex gap-3 ms-auto">
             <Form>
               <Row>
                 <Col xs="auto">
                   <Form.Control
                     type="text"
                     placeholder="Search"
-                    className=" mr-sm-2"
+                    className="mr-sm-2"
                   />
                 </Col>
               </Row>
