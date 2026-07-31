@@ -1,0 +1,73 @@
+.link {
+	color: inherit;
+	display: block;
+	height: 100%;
+	text-decoration: none;
+}
+
+.link:hover {
+	color: inherit;
+	text-decoration: none;
+}
+
+.link:hover .card {
+	box-shadow: var(--bs-box-shadow) !important;
+	transform: translateY(-4px);
+}
+
+.link:hover .thumbnail,
+.link:hover .placeholder {
+	transform: scale(1.04);
+}
+
+.link:focus-visible .card {
+	box-shadow: var(--bs-box-shadow) !important;
+	outline: 2px solid var(--bs-focus-ring-color);
+	outline-offset: 2px;
+	transform: translateY(-4px);
+}
+
+.card {
+	min-height: 305px;
+	overflow: hidden;
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
+}
+
+.thumbnail {
+	height: 140px;
+	object-fit: cover;
+	transition: transform 0.3s ease;
+	width: 100%;
+}
+
+.skeletonImage {
+	display: block;
+	height: 140px;
+	width: 100%;
+}
+
+.placeholder {
+	align-items: center;
+	background-color: var(--bs-secondary-bg);
+	display: flex;
+	height: 140px;
+	justify-content: center;
+	transition: transform 0.3s ease;
+	width: 100%;
+}
+
+.placeholderLogo {
+	filter: grayscale(1);
+	height: 48px;
+	opacity: 0.45;
+	width: 48px;
+}
+
+.description {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
+}

@@ -7,8 +7,6 @@ import Home from "./views/Home";
 // Page loader & error components
 import PageError from "./components/PageError";
 
-import api from "#/api";
-
 const notFoundLoader = () => {
   throw new Response("Not Found", { status: 404 });
 };
@@ -22,13 +20,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
-        loader: async () => {
-          try {
-            return await api.opus.list();
-          } catch (_) {
-            return [];
-          }
-        },
+      },
+      {
+        path: "opus/:slug",
+        lazy: () => import("./views/Collection"),
       },
       {
         path: "*",
