@@ -1,3 +1,3 @@
 export function Component() {
-	return <h2>Browse</h2>;
+  return <h2>Browse</h2>;
 }
