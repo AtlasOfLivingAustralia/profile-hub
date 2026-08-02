@@ -8,7 +8,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { NavLink, useParams } from "react-router";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faBars,
   faCheck,
@@ -21,7 +21,7 @@ import {
   faSun,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useAuth } from "react-oidc-context";
 
@@ -146,7 +146,7 @@ export function Header() {
           to="/"
           end
           aria-label="Profile collections home"
-          className="d-inline-flex align-items-center px-2"
+          className={`d-inline-flex align-items-center px-2 ${styles.homeLink}`}
         >
           <FontAwesomeIcon icon={faHouse} />
         </Navbar.Brand>
