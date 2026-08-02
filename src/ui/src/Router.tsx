@@ -44,6 +44,10 @@ const router = createBrowserRouter([
             path: "about",
             lazy: () => import("./views/About"),
           },
+          {
+            path: "profile/:nameOrId",
+            lazy: () => import("./views/Profile"),
+          },
         ],
       },
       {

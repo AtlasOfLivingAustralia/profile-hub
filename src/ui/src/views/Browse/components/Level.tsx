@@ -1,15 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Spinner from "react-bootstrap/Spinner";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import api from "#/api";
 import type { TaxonCounts } from "#/api/types";
-import PageLoader from "#/components/PageLoader";
+import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
-import styles from "../index.module.css";
+import styles from "./Level.module.css";
+import { PaginationBar } from "./PaginationBar";
+import { SubLevel } from "./SubLevel";
+import { TaxaSkeleton } from "./TaxaSkeleton";
 
 const PAGE_SIZE = 25;
 const numberFormatter = new Intl.NumberFormat();
@@ -21,168 +23,196 @@ type LevelProps = {
   totalCount: number;
 };
 
+type SelectedTaxon = {
+  name: string;
+  count: number;
+};
+
 export function Level({ slug, level, label, totalCount }: LevelProps) {
   const intl = useIntl();
   const [taxa, setTaxa] = useState<TaxonCounts>({});
   const [filter, setFilter] = useState("");
+  const [appliedFilter, setAppliedFilter] = useState("");
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState(false);
+  const [selected, setSelected] = useState<SelectedTaxon | null>(null);
+  const [pageIsFull, setPageIsFull] = useState(false);
   const requestId = useRef(0);
-  const taxaCount = Object.keys(taxa).length;
 
-  async function loadTaxa(
-    options: { append?: boolean; filter?: string; offset?: number } = {},
-  ) {
-    const append = options.append ?? false;
-    const activeFilter = options.filter ?? filter;
-    const offset = options.offset ?? (append ? taxaCount : 0);
-    const currentRequest = ++requestId.current;
-
-    setLoading(true);
-    setError(false);
-
-    try {
-      const data = await api.search.taxonLevel(slug, level, {
-        filter: activeFilter.trim() || undefined,
-        max: PAGE_SIZE,
-        offset,
-      });
-
-      if (currentRequest !== requestId.current) return;
-
-      setTaxa((current) => (append ? { ...current, ...data } : data));
-      setHasMore(Object.keys(data).length === PAGE_SIZE);
-    } catch (_) {
-      if (currentRequest === requestId.current) {
-        setError(true);
-      }
-    } finally {
-      if (currentRequest === requestId.current) setLoading(false);
-    }
-  }
+  const filtered = appliedFilter.length > 0;
+  const totalPages = filtered
+    ? Math.max(1, pageIsFull ? page + 1 : page)
+    : Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const skeletonCount = filtered
+    ? PAGE_SIZE
+    : estimatePageItemCount(totalCount, page, PAGE_SIZE);
 
   useEffect(() => {
     let cancelled = false;
     const currentRequest = ++requestId.current;
+    const offset = (page - 1) * PAGE_SIZE;
 
-    setTaxa({});
-    setFilter("");
-    setHasMore(false);
-    setError(false);
     setLoading(true);
+    setError(false);
 
-    api.search
-      .taxonLevel(slug, level, {
-        max: PAGE_SIZE,
-        offset: 0,
-      })
-      .then((data) => {
+    async function load() {
+      try {
+        const data = await api.search.taxonLevel(slug, level, {
+          filter: appliedFilter || undefined,
+          max: PAGE_SIZE,
+          offset,
+        });
         if (cancelled || currentRequest !== requestId.current) return;
         setTaxa(data);
-        setHasMore(Object.keys(data).length === PAGE_SIZE);
-      })
-      .catch(() => {
+        setPageIsFull(Object.keys(data).length === PAGE_SIZE);
+      } catch (_) {
         if (cancelled || currentRequest !== requestId.current) return;
         setError(true);
-      })
-      .finally(() => {
+        setTaxa({});
+        setPageIsFull(false);
+      } finally {
         if (!cancelled && currentRequest === requestId.current) {
           setLoading(false);
         }
-      });
+      }
+    }
+
+    load();
 
     return () => {
       cancelled = true;
     };
+  }, [slug, level, page, appliedFilter]);
+
+  // Reset list state when switching taxonomic level or collection.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: slug/level are intentional reset triggers
+  useEffect(() => {
+    setFilter("");
+    setAppliedFilter("");
+    setPage(1);
+    setSelected(null);
+    setPageIsFull(false);
   }, [slug, level]);
 
+  function applyFilter(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const nextFilter = filter.trim();
+    setSelected(null);
+    setPage(1);
+    setAppliedFilter(nextFilter);
+  }
+
   const taxaEntries = Object.entries(taxa);
+  const showingChildren = selected !== null;
 
   return (
     <section className="pt-3" aria-live="polite">
       <div className={styles.resultsHeader}>
         <div>
-          <h3 className="mb-1">{label}</h3>
+          <h3 className="mb-1">
+            {selected ? (
+              <nav
+                className={styles.breadcrumb}
+                aria-label={intl.formatMessage({
+                  id: "view.browse.level.breadcrumb.ariaLabel",
+                })}
+              >
+                <button
+                  type="button"
+                  className={styles.breadcrumbLink}
+                  onClick={() => setSelected(null)}
+                >
+                  {label}
+                </button>
+                <span className={styles.breadcrumbSeparator} aria-hidden="true">
+                  &gt;
+                </span>
+                <span className={styles.breadcrumbCurrent}>
+                  {selected.name}
+                </span>
+              </nav>
+            ) : (
+              label
+            )}
+          </h3>
           <p className="text-body-secondary mb-0">
             {intl.formatMessage(
               { id: "view.browse.level.namesCount" },
-              { count: totalCount },
+              {
+                count: showingChildren ? selected.count : totalCount,
+              },
             )}
           </p>
         </div>
 
-        <Form
-          className={styles.filter}
-          role="search"
-          onSubmit={(event) => {
-            event.preventDefault();
-            loadTaxa({ offset: 0 });
-          }}
-        >
-          <Form.Label htmlFor={`taxon-filter-${level}`} visuallyHidden>
-            <FormattedMessage id="view.browse.level.filter.label" />
-          </Form.Label>
-          <Form.Control
-            id={`taxon-filter-${level}`}
-            type="search"
-            value={filter}
-            placeholder={intl.formatMessage({
-              id: "view.browse.level.filter.placeholder",
-            })}
-            autoComplete="off"
-            onChange={(event) => setFilter(event.target.value)}
-          />
-          <Button type="submit" variant="primary">
-            <FormattedMessage id="view.browse.level.filter.submit" />
-          </Button>
-        </Form>
+        {!showingChildren && (
+          <Form className={styles.filter} role="search" onSubmit={applyFilter}>
+            <Form.Label htmlFor={`taxon-filter-${level}`} visuallyHidden>
+              <FormattedMessage id="view.browse.level.filter.label" />
+            </Form.Label>
+            <Form.Control
+              id={`taxon-filter-${level}`}
+              type="search"
+              value={filter}
+              placeholder={intl.formatMessage({
+                id: "view.browse.level.filter.placeholder",
+              })}
+              autoComplete="off"
+              onChange={(event) => setFilter(event.target.value)}
+            />
+            <Button type="submit" variant="primary">
+              <FormattedMessage id="view.browse.level.filter.submit" />
+            </Button>
+          </Form>
+        )}
       </div>
 
-      {error && (
+      {error && !showingChildren && (
         <div className="alert alert-danger" role="alert">
           <FormattedMessage id="view.browse.level.error.loadFailed" />
         </div>
       )}
 
-      {loading && taxaEntries.length === 0 ? (
-        <div className="py-5">
-          <PageLoader />
-        </div>
+      {showingChildren ? (
+        <SubLevel
+          key={selected.name}
+          slug={slug}
+          level={level}
+          scientificName={selected.name}
+          totalCount={selected.count}
+        />
+      ) : loading && taxaEntries.length === 0 ? (
+        <TaxaSkeleton count={skeletonCount} />
       ) : taxaEntries.length === 0 ? (
         <p className="text-body-secondary mb-0 py-4">
           <FormattedMessage id="view.browse.level.empty" />
         </p>
       ) : (
         <>
-          <ul className={styles.taxa}>
+          <div className={styles.taxa} aria-busy={loading}>
             {taxaEntries.map(([name, count]) => (
-              <li key={name} className={styles.taxon}>
+              <button
+                key={name}
+                type="button"
+                className={styles.taxon}
+                onClick={() => setSelected({ name, count })}
+              >
                 <span>{name}</span>
                 <Badge bg="secondary" pill>
                   {numberFormatter.format(count)}
                 </Badge>
-              </li>
+              </button>
             ))}
-          </ul>
+          </div>
 
-          {hasMore && (
-            <Button
-              variant="outline-primary"
-              disabled={loading}
-              onClick={() => loadTaxa({ append: true })}
-            >
-              {loading && (
-                <Spinner
-                  animation="border"
-                  size="sm"
-                  className="me-2"
-                  aria-hidden="true"
-                />
-              )}
-              <FormattedMessage id="view.browse.level.viewMore" />
-            </Button>
-          )}
+          <PaginationBar
+            page={page}
+            totalPages={totalPages}
+            loading={loading}
+            disableLast={filtered}
+            onPageChange={setPage}
+          />
         </>
       )}
     </section>
