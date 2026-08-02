@@ -76,7 +76,7 @@ export function Component() {
 
   return (
     <Row className="g-4">
-      <Col md={12} lg="auto">
+      <Col md={12} lg={3}>
         <div className={styles.panel}>
           <h2 className={styles.heading}>Explore this collection</h2>
           <div className="vstack gap-3">
@@ -117,7 +117,7 @@ export function Component() {
           </div>
         </div>
       </Col>
-      <Col md={12} lg={8}>
+      <Col md={12} lg={9}>
         <section className="px-2 px-md-4 pt-3">
           <h2 className="mb-4 text-body-secondary">About</h2>
           <RichText html={collection.aboutHtml} />

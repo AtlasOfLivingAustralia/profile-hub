@@ -87,7 +87,7 @@ export function Component() {
               </div>
             ) : !glossary || glossary.items.length === 0 ? (
               <p className="text-body-secondary mb-0 p-4">
-                No glossary entries for this letter.
+                No glossary entries for <b>{letter.toUpperCase()}</b>
               </p>
             ) : (
               <Table responsive striped hover className="mb-0">

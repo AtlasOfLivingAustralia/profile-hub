@@ -227,3 +227,5 @@ export interface GlossaryItem {
   term: string;
   uuid: string;
 }
+
+export type TaxonCounts = Record<string, number>;

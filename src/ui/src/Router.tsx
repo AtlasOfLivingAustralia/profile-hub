@@ -24,6 +24,7 @@ const router = createBrowserRouter([
       {
         path: "opus/:slug",
         lazy: () => import("./views/Collection"),
+        errorElement: <PageError />,
         children: [
           {
             index: true,
@@ -50,7 +51,6 @@ const router = createBrowserRouter([
       {
         path: "*",
         loader: notFoundLoader,
-        errorElement: <PageError />,
       },
     ],
   },

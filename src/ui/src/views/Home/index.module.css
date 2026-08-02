@@ -1,0 +1,32 @@
+.hero {
+  position: relative;
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+}
+
+.heroInner {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.title {
+  max-width: 14ch;
+  margin: 0 0 1rem;
+  font-size: clamp(2.4rem, 6vw, 3.5rem);
+  font-weight: 650;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--bs-emphasis-color);
+}
+
+.lede {
+  max-width: 38rem;
+  margin: 0;
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  line-height: 1.55;
+  color: var(--bs-secondary-color);
+}
+
+.count {
+  font-weight: 550;
+  color: var(--bs-body-color);
+}

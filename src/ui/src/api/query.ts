@@ -1,6 +1,16 @@
 import { getAccessToken } from "#/helpers/utils/getAccessToken";
 // import { getCsrfToken } from "./csrf"; // Adjust path as needed
 
+export class ApiError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
 export const request = async <T>(
   input: RequestInfo | URL,
   method?: "GET" | "PUT" | "POST" | "DELETE",
@@ -30,7 +40,7 @@ export const request = async <T>(
   }
 
   // Perform the request
-  const resp = await fetch(import.meta.env.VITE_API_OPUS + input, {
+  const resp = await fetch(import.meta.env.VITE_API_BASE + input, {
     method,
     body:
       body && !isFormData && typeof body === "object"
@@ -51,5 +61,8 @@ export const request = async <T>(
     }
   }
 
-  throw new Error(text);
+  throw new ApiError(
+    text || resp.statusText || `Request failed with status ${resp.status}`,
+    resp.status,
+  );
 };

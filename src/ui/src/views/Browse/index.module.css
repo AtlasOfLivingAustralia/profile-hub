@@ -1,0 +1,120 @@
+.panel {
+  padding: 1rem;
+  overflow: hidden;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color-translucent);
+  border-radius: var(--bs-border-radius-xl);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 6%);
+}
+
+.placeholder {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--bs-border-color-translucent);
+  border-radius: var(--bs-border-radius-xl);
+}
+
+.levels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.levelButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  color: var(--bs-body-color);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--bs-border-radius-xl);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.levelButton:hover {
+  color: var(--bs-primary);
+  background: var(--bs-tertiary-bg);
+}
+
+.levelButton[data-active="true"] {
+  color: #fff;
+  background: var(--bs-primary);
+}
+
+.levelButton[data-active="true"] :global(.badge) {
+  color: var(--bs-primary);
+  background: #fff !important;
+}
+
+.emptyState {
+  display: flex;
+  min-height: 18rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.resultsHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+.filter {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.taxa {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: 0;
+  margin: 0 0 1.25rem;
+  list-style: none;
+  border-top: 1px solid var(--bs-border-color-translucent);
+}
+
+.taxon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  padding: 0.8rem 0.25rem;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+}
+
+.taxon > span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 992px) {
+  .resultsHeader {
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  .filter {
+    width: min(100%, 24rem);
+  }
+
+  .taxa {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+  }
+}
