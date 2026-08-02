@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type ReactNode, useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useOutletContext, useParams } from "react-router";
 
 import api from "#/api";
@@ -33,7 +34,7 @@ function Section({
   children,
   id,
 }: {
-  title: string;
+  title: ReactNode;
   children: ReactNode;
   id?: string;
 }) {
@@ -52,13 +53,14 @@ function Section({
 }
 
 export function Component() {
+  const intl = useIntl();
   const { slug } = useParams<{ slug: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
   const [about, setAbout] = useState<OpusAboutResponse | null>(null);
   const [statistics, setStatistics] = useState<CollectionStatistic[] | null>(
     null,
   );
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -67,7 +69,7 @@ export function Component() {
     let cancelled = false;
 
     async function load() {
-      setError(null);
+      setError(false);
       try {
         const [aboutData, statsData] = await Promise.all([
           api.opus.about(opusSlug),
@@ -80,7 +82,7 @@ export function Component() {
         if (!cancelled) {
           setAbout(null);
           setStatistics(null);
-          setError("The about page could not be loaded.");
+          setError(true);
         }
       }
     }
@@ -91,13 +93,18 @@ export function Component() {
     };
   }, [slug]);
 
+  const documentTitle = intl.formatMessage(
+    { id: "view.about.documentTitle" },
+    { name: about?.opus.title || collection.title },
+  );
+
   if (!about || !statistics) {
     return (
       <div className="vstack gap-4">
-        <title>{`About ${collection.title} | Profile collections`}</title>
+        <title>{documentTitle}</title>
         {error ? (
           <div className="alert alert-danger mb-0" role="alert">
-            {error}
+            <FormattedMessage id="view.about.error.loadFailed" />
           </div>
         ) : (
           <div className="py-5">
@@ -121,15 +128,20 @@ export function Component() {
 
   return (
     <article className="vstack gap-4">
-      <title>{`About ${opus.title || collection.title} | Profile collections`}</title>
+      <title>{documentTitle}</title>
 
       <header className={styles.header}>
-        <h1 className={styles.title}>About {opus.title || collection.title}</h1>
+        <h1 className={styles.title}>
+          <FormattedMessage
+            id="view.about.title"
+            values={{ name: opus.title || collection.title }}
+          />
+        </h1>
       </header>
 
       {error && (
         <div className="alert alert-danger mb-0" role="alert">
-          {error}
+          <FormattedMessage id="view.about.error.loadFailed" />
         </div>
       )}
 
@@ -138,38 +150,47 @@ export function Component() {
           <RichText html={opus.aboutHtml} />
         ) : (
           <p className="text-body-secondary mb-0">
-            No about information has been provided for this collection.
+            <FormattedMessage id="view.about.empty" />
           </p>
         )}
       </section>
 
       {hasCitation && (
-        <Section title="Citations">
+        <Section title={<FormattedMessage id="view.about.section.citations" />}>
           <div className={styles.panel}>
-            <p className={styles.lead}>This collection should be cited as:</p>
+            <p className={styles.lead}>
+              <FormattedMessage id="view.about.citation.collectionIntro" />
+            </p>
             <blockquote className={styles.citation}>
               <RichText html={citationHtml} />
             </blockquote>
 
             <p className={styles.lead}>
-              The taxon profiles in this collection should be cited as per the
-              following example:
+              <FormattedMessage id="view.about.citation.profileIntro" />
             </p>
             <blockquote className={styles.citation}>
               <p className="mb-0">
-                Conn, B.J. ({opus.year}) Loganiaceae. In:{" "}
-                <span
-                  className={styles.inlineHtml}
-                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Citation HTML comes from the collection about API
-                  dangerouslySetInnerHTML={{ __html: citationHtml || '' }}
+                <FormattedMessage
+                  id="view.about.citation.example"
+                  values={{
+                    year: opus.year,
+                    date: opus.date,
+                    citation: (
+                      <span
+                        className={styles.inlineHtml}
+                        // biome-ignore lint/security/noDangerouslySetInnerHtml: Citation HTML comes from the collection about API
+                        dangerouslySetInnerHTML={{
+                          __html: citationHtml || "",
+                        }}
+                      />
+                    ),
+                    url: citationUrl ? (
+                      <a href={citationUrl} rel="noreferrer">
+                        {citationUrl}
+                      </a>
+                    ) : null,
+                  }}
                 />
-                .{" "}
-                {citationUrl && (
-                  <a href={citationUrl} rel="noreferrer">
-                    {citationUrl}
-                  </a>
-                )}
-                . {opus.date}
               </p>
             </blockquote>
           </div>
@@ -177,9 +198,13 @@ export function Component() {
       )}
 
       {administrators.length > 0 && (
-        <Section title="Collection administration">
+        <Section
+          title={<FormattedMessage id="view.about.section.administration" />}
+        >
           <div className={styles.panel}>
-            <p className={styles.lead}>This collection is administered by:</p>
+            <p className={styles.lead}>
+              <FormattedMessage id="view.about.administration.intro" />
+            </p>
             <ul className={styles.adminList}>
               {administrators.map((admin) => (
                 <li key={`${admin.name}-${admin.email ?? "no-email"}`}>
@@ -196,7 +221,9 @@ export function Component() {
       )}
 
       {statistics.length > 0 && (
-        <Section title="Collection statistics">
+        <Section
+          title={<FormattedMessage id="view.about.section.statistics" />}
+        >
           <Row className="g-3">
             {statistics.map((stat) => (
               <Col key={stat.id} xs={12} sm={6} lg={4}>
@@ -219,7 +246,10 @@ export function Component() {
         </Section>
       )}
 
-      <Section title="Copyright" id="copyright">
+      <Section
+        title={<FormattedMessage id="view.about.section.copyright" />}
+        id="copyright"
+      >
         <div className={styles.panel}>
           {opus.copyrightText && (
             <p className={styles.copyrightOwner}>&copy; {opus.copyrightText}</p>

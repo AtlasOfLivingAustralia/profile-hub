@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 import {
-  type ThemePreference,
   applyTheme,
   getPreferredTheme,
   setStoredTheme,
+  type ThemePreference,
 } from "./theme";
 
 export function useColorMode() {

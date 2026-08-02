@@ -3,6 +3,7 @@ import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
+import { FormattedMessage, useIntl } from "react-intl";
 
 import api from "#/api";
 import type { TaxonCounts } from "#/api/types";
@@ -21,11 +22,12 @@ type LevelProps = {
 };
 
 export function Level({ slug, level, label, totalCount }: LevelProps) {
+  const intl = useIntl();
   const [taxa, setTaxa] = useState<TaxonCounts>({});
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
   const requestId = useRef(0);
   const taxaCount = Object.keys(taxa).length;
 
@@ -38,7 +40,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     const currentRequest = ++requestId.current;
 
     setLoading(true);
-    setError(null);
+    setError(false);
 
     try {
       const data = await api.search.taxonLevel(slug, level, {
@@ -53,7 +55,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
       setHasMore(Object.keys(data).length === PAGE_SIZE);
     } catch (_) {
       if (currentRequest === requestId.current) {
-        setError("The taxa for this category could not be loaded.");
+        setError(true);
       }
     } finally {
       if (currentRequest === requestId.current) setLoading(false);
@@ -67,7 +69,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     setTaxa({});
     setFilter("");
     setHasMore(false);
-    setError(null);
+    setError(false);
     setLoading(true);
 
     api.search
@@ -82,7 +84,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
       })
       .catch(() => {
         if (cancelled || currentRequest !== requestId.current) return;
-        setError("The taxa for this category could not be loaded.");
+        setError(true);
       })
       .finally(() => {
         if (!cancelled && currentRequest === requestId.current) {
@@ -103,7 +105,10 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
         <div>
           <h3 className="mb-1">{label}</h3>
           <p className="text-body-secondary mb-0">
-            {numberFormatter.format(totalCount)} names
+            {intl.formatMessage(
+              { id: "view.browse.level.namesCount" },
+              { count: totalCount },
+            )}
           </p>
         </div>
 
@@ -116,25 +121,27 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
           }}
         >
           <Form.Label htmlFor={`taxon-filter-${level}`} visuallyHidden>
-            Filter names
+            <FormattedMessage id="view.browse.level.filter.label" />
           </Form.Label>
           <Form.Control
             id={`taxon-filter-${level}`}
             type="search"
             value={filter}
-            placeholder="Name starting with…"
+            placeholder={intl.formatMessage({
+              id: "view.browse.level.filter.placeholder",
+            })}
             autoComplete="off"
             onChange={(event) => setFilter(event.target.value)}
           />
           <Button type="submit" variant="primary">
-            Filter
+            <FormattedMessage id="view.browse.level.filter.submit" />
           </Button>
         </Form>
       </div>
 
       {error && (
         <div className="alert alert-danger" role="alert">
-          {error}
+          <FormattedMessage id="view.browse.level.error.loadFailed" />
         </div>
       )}
 
@@ -144,7 +151,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
         </div>
       ) : taxaEntries.length === 0 ? (
         <p className="text-body-secondary mb-0 py-4">
-          No names match this category and filter.
+          <FormattedMessage id="view.browse.level.empty" />
         </p>
       ) : (
         <>
@@ -173,7 +180,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
                   aria-hidden="true"
                 />
               )}
-              View more
+              <FormattedMessage id="view.browse.level.viewMore" />
             </Button>
           )}
         </>

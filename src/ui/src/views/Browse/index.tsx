@@ -3,6 +3,7 @@ import Badge from "react-bootstrap/Badge";
 import Col from "react-bootstrap/Col";
 import Placeholder from "react-bootstrap/Placeholder";
 import Row from "react-bootstrap/Row";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useParams } from "react-router";
 
 import api from "#/api";
@@ -13,32 +14,33 @@ import styles from "./index.module.css";
 
 interface TaxonLevel {
   key: string;
-  label: string;
-  help?: string;
+  labelId: string;
+  helpId?: string;
 }
 
-const TAXON_LEVELS = [
-  { key: "kingdom", label: "Kingdom" },
-  { key: "phylum", label: "Phylum" },
-  { key: "class", label: "Class" },
-  { key: "subclass", label: "Subclass" },
-  { key: "order", label: "Order" },
-  { key: "family", label: "Family" },
-  { key: "genus", label: "Genus" },
+const TAXON_LEVELS: TaxonLevel[] = [
+  { key: "kingdom", labelId: "classification.kingdom" },
+  { key: "phylum", labelId: "classification.phylum" },
+  { key: "class", labelId: "classification.classs" },
+  { key: "subclass", labelId: "classification.subclass" },
+  { key: "order", labelId: "classification.order" },
+  { key: "family", labelId: "classification.family" },
+  { key: "genus", labelId: "classification.genus" },
   {
     key: "unknown",
-    label: "Unknown rank",
-    help: "Profiles that do not have a matched name",
+    labelId: "classification.unknownRank",
+    helpId: "classification.unknownRank.help",
   },
-] as TaxonLevel[];
+];
 
 const numberFormatter = new Intl.NumberFormat();
 
 export function Component() {
+  const intl = useIntl();
   const { slug } = useParams<{ slug: string }>();
   const [levels, setLevels] = useState<TaxonCounts | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -46,7 +48,7 @@ export function Component() {
     let cancelled = false;
     setLevels(null);
     setSelectedLevel(null);
-    setError(null);
+    setError(false);
 
     api.search
       .taxonLevels(slug)
@@ -56,7 +58,7 @@ export function Component() {
       .catch(() => {
         if (!cancelled) {
           setLevels({});
-          setError("The taxonomic categories could not be loaded.");
+          setError(true);
         }
       });
 
@@ -70,21 +72,28 @@ export function Component() {
   return (
     <div className="vstack gap-4">
       <div>
-        <h2>Browse by category</h2>
+        <h2>
+          <FormattedMessage id="view.browse.title" />
+        </h2>
         <p className="text-body-secondary mb-0">
-          Explore profiles through their taxonomic classification.
+          <FormattedMessage id="view.browse.subtitle" />
         </p>
       </div>
 
       {error && (
         <div className="alert alert-danger mb-0" role="alert">
-          {error}
+          <FormattedMessage id="view.browse.error.categoriesLoadFailed" />
         </div>
       )}
 
       <Row className="g-4">
         <Col xs={12} md={4} lg={3}>
-          <nav className={styles.panel} aria-label="Taxonomic categories">
+          <nav
+            className={styles.panel}
+            aria-label={intl.formatMessage({
+              id: "view.browse.categories.ariaLabel",
+            })}
+          >
             {!levels ? (
               <div className={styles.levels} aria-hidden="true">
                 {TAXON_LEVELS.map(({ key }) => (
@@ -110,17 +119,21 @@ export function Component() {
             ) : (
               <div className={styles.levels}>
                 {TAXON_LEVELS.filter(({ key }) => (levels[key] ?? 0) > 0).map(
-                  ({ key, label, help }) => (
+                  ({ key, labelId, helpId }) => (
                     <button
                       key={key}
                       type="button"
                       className={styles.levelButton}
                       data-active={selectedLevel === key}
                       aria-pressed={selectedLevel === key}
-                      title={help}
+                      title={
+                        helpId ? intl.formatMessage({ id: helpId }) : undefined
+                      }
                       onClick={() => setSelectedLevel(key)}
                     >
-                      <span>{label}</span>
+                      <span>
+                        <FormattedMessage id={labelId} />
+                      </span>
                       <Badge bg="secondary" pill>
                         {numberFormatter.format(levels[key])}
                       </Badge>
@@ -136,10 +149,11 @@ export function Component() {
           {!selectedLevel || !selected || !slug ? (
             <section className={styles.placeholder}>
               <div className={styles.emptyState}>
-                <h3>Choose a category</h3>
+                <h3>
+                  <FormattedMessage id="view.browse.empty.title" />
+                </h3>
                 <p className="text-body-secondary mb-0">
-                  Select a taxonomic rank to see the names available in this
-                  collection.
+                  <FormattedMessage id="view.browse.empty.description" />
                 </p>
               </div>
             </section>
@@ -148,7 +162,7 @@ export function Component() {
               key={selectedLevel}
               slug={slug}
               level={selectedLevel}
-              label={selected.label}
+              label={intl.formatMessage({ id: selected.labelId })}
               totalCount={levels?.[selectedLevel] ?? 0}
             />
           )}

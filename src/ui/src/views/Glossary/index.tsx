@@ -3,7 +3,8 @@ import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
-import { NavLink, Navigate, useParams } from "react-router";
+import { FormattedMessage, useIntl } from "react-intl";
+import { Navigate, NavLink, useParams } from "react-router";
 
 import api from "#/api";
 import type { Glossary } from "#/api/types";
@@ -19,6 +20,7 @@ function GlossaryDescription({ html }: { html: string }) {
 }
 
 export function Component() {
+  const intl = useIntl();
   const { slug, letter: letterParam } = useParams<{
     slug: string;
     letter?: string;
@@ -62,11 +64,18 @@ export function Component() {
 
   return (
     <div className="vstack gap-4">
-      <h2>Glossary</h2>
+      <h2>
+        <FormattedMessage id="view.glossary.title" />
+      </h2>
 
       <Row className="g-4">
         <Col xs={12} md="auto">
-          <nav aria-label="Glossary index" className={styles.panel}>
+          <nav
+            aria-label={intl.formatMessage({
+              id: "view.glossary.index.ariaLabel",
+            })}
+            className={styles.panel}
+          >
             <Nav className={styles.index} variant="pills">
               {LETTERS.map((item) => (
                 <Nav.Item key={item}>
@@ -87,17 +96,22 @@ export function Component() {
               </div>
             ) : !glossary || glossary.items.length === 0 ? (
               <p className="text-body-secondary mb-0 p-4">
-                No glossary entries for <b>{letter.toUpperCase()}</b>
+                <FormattedMessage
+                  id="view.glossary.empty"
+                  values={{
+                    letter: <b>{letter.toUpperCase()}</b>,
+                  }}
+                />
               </p>
             ) : (
               <Table responsive striped hover className="mb-0">
                 <thead>
                   <tr>
                     <th className="p-3" scope="col">
-                      Name
+                      <FormattedMessage id="view.glossary.table.name" />
                     </th>
                     <th className="p-3" scope="col">
-                      Details
+                      <FormattedMessage id="view.glossary.table.details" />
                     </th>
                   </tr>
                 </thead>

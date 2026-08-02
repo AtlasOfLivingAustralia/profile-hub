@@ -1,13 +1,3 @@
-import handleSignout from "#/helpers/auth/handleSignout";
-import type { ThemePreference } from "#/helpers/theme";
-import { useColorMode } from "#/helpers/useColorMode";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { NavLink, useParams } from "react-router";
-
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import {
   faBars,
@@ -15,6 +5,7 @@ import {
   faCircleHalfStroke,
   faCog,
   faHouse,
+  faLanguage,
   faMoon,
   faSignIn,
   faSignOut,
@@ -22,27 +13,38 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import Container from "react-bootstrap/Container";
+import Form from "react-bootstrap/Form";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useAuth } from "react-oidc-context";
+import { NavLink, useParams } from "react-router";
+import handleSignout from "#/helpers/auth/handleSignout";
+import { useLocale } from "#/helpers/context/useLocale";
+import { APP_LOCALES, type AppLocale, LOCALE_LABELS } from "#/helpers/locale";
+import type { ThemePreference } from "#/helpers/theme";
+import { useColorMode } from "#/helpers/useColorMode";
 
 import styles from "./Header.module.css";
 
 const COLLECTION_NAV_ITEMS = [
-  { label: "Home", path: "", end: true },
-  { label: "Browse", path: "/browse" },
-  { label: "Filter", path: "/filter" },
-  { label: "Glossary", path: "/glossary" },
-  { label: "About", path: "/about" },
+  { messageId: "nav.collection.home", path: "", end: true },
+  { messageId: "nav.collection.browse", path: "/browse" },
+  { messageId: "nav.collection.filter", path: "/filter" },
+  { messageId: "nav.collection.glossary", path: "/glossary" },
+  { messageId: "nav.collection.about", path: "/about" },
 ] as const;
 
 const THEME_OPTIONS: {
   value: ThemePreference;
-  label: string;
+  messageId: string;
   icon: IconDefinition;
 }[] = [
-  { value: "light", label: "Light", icon: faSun },
-  { value: "dark", label: "Dark", icon: faMoon },
-  { value: "auto", label: "Auto", icon: faCircleHalfStroke },
+  { value: "light", messageId: "theme.light", icon: faSun },
+  { value: "dark", messageId: "theme.dark", icon: faMoon },
+  { value: "auto", messageId: "theme.auto", icon: faCircleHalfStroke },
 ];
 
 function ThemeMenuItems({
@@ -54,7 +56,7 @@ function ThemeMenuItems({
 }) {
   return (
     <>
-      {THEME_OPTIONS.map(({ value, label, icon }) => {
+      {THEME_OPTIONS.map(({ value, messageId, icon }) => {
         const active = theme === value;
         return (
           <NavDropdown.Item
@@ -66,7 +68,7 @@ function ThemeMenuItems({
             onClick={() => setTheme(value)}
           >
             <FontAwesomeIcon icon={icon} fixedWidth />
-            {label}
+            <FormattedMessage id={messageId} />
             {active && <FontAwesomeIcon icon={faCheck} className="ms-auto" />}
           </NavDropdown.Item>
         );
@@ -84,7 +86,7 @@ function ThemeNavLinks({
 }) {
   return (
     <>
-      {THEME_OPTIONS.map(({ value, label, icon }) => {
+      {THEME_OPTIONS.map(({ value, messageId, icon }) => {
         const active = theme === value;
         return (
           <Nav.Link
@@ -96,7 +98,7 @@ function ThemeNavLinks({
             onClick={() => setTheme(value)}
           >
             <FontAwesomeIcon icon={icon} fixedWidth />
-            {label}
+            <FormattedMessage id={messageId} />
             {active && <FontAwesomeIcon icon={faCheck} className="ms-auto" />}
           </Nav.Link>
         );
@@ -105,27 +107,82 @@ function ThemeNavLinks({
   );
 }
 
+function LanguageMenuItems({
+  locale,
+  setLocale,
+}: {
+  locale: AppLocale;
+  setLocale: (locale: AppLocale) => void;
+}) {
+  return (
+    <>
+      {APP_LOCALES.map((value) => {
+        const active = locale === value;
+        return (
+          <NavDropdown.Item
+            key={value}
+            active={active}
+            aria-pressed={active}
+            lang={value}
+            className="d-flex align-items-center gap-2"
+            onClick={() => setLocale(value)}
+          >
+            {LOCALE_LABELS[value]}
+            {active && <FontAwesomeIcon icon={faCheck} className="ms-auto" />}
+          </NavDropdown.Item>
+        );
+      })}
+    </>
+  );
+}
+
+function LanguageDropdown({
+  locale,
+  setLocale,
+  className,
+}: {
+  locale: AppLocale;
+  setLocale: (locale: AppLocale) => void;
+  className?: string;
+}) {
+  const intl = useIntl();
+
+  return (
+    <NavDropdown
+      align="end"
+      id="language-menu-dropdown"
+      className={`${styles.hideCaret} ${className ?? ""}`}
+      title={<FontAwesomeIcon icon={faLanguage} />}
+      aria-label={intl.formatMessage({ id: "nav.language.header" })}
+    >
+      <LanguageMenuItems locale={locale} setLocale={setLocale} />
+    </NavDropdown>
+  );
+}
+
 export function Header() {
   const auth = useAuth();
+  const intl = useIntl();
   const { slug } = useParams<{ slug?: string }>();
   const { theme, setTheme } = useColorMode();
+  const { locale, setLocale } = useLocale();
 
   const userNavItems = auth.isAuthenticated ? (
     <>
       <Nav.Link className="d-flex align-items-center gap-2">
         <FontAwesomeIcon icon={faUser} />
-        My Profile
+        <FormattedMessage id="nav.user.myProfile" />
       </Nav.Link>
       <Nav.Link className="d-flex align-items-center gap-2">
         <FontAwesomeIcon icon={faCog} />
-        Admin
+        <FormattedMessage id="nav.user.admin" />
       </Nav.Link>
       <Nav.Link
         className="d-flex align-items-center gap-2"
         onClick={() => handleSignout(auth)}
       >
         <FontAwesomeIcon icon={faSignOut} />
-        Logout
+        <FormattedMessage id="nav.user.logout" />
       </Nav.Link>
     </>
   ) : (
@@ -134,7 +191,7 @@ export function Header() {
       onClick={() => auth.signinRedirect()}
     >
       <FontAwesomeIcon icon={faSignIn} />
-      Sign in
+      <FormattedMessage id="nav.user.signIn" />
     </Nav.Link>
   );
 
@@ -145,7 +202,7 @@ export function Header() {
           as={NavLink}
           to="/"
           end
-          aria-label="Profile collections home"
+          aria-label={intl.formatMessage({ id: "nav.home.ariaLabel" })}
           className={`d-inline-flex align-items-center px-2 ${styles.homeLink}`}
         >
           <FontAwesomeIcon icon={faHouse} />
@@ -156,12 +213,12 @@ export function Header() {
             <Nav className="me-auto">
               {COLLECTION_NAV_ITEMS.map((item) => (
                 <Nav.Link
-                  key={item.label}
+                  key={item.messageId}
                   as={NavLink}
                   to={`/opus/${slug}${item.path}`}
                   end={"end" in item ? item.end : false}
                 >
-                  {item.label}
+                  <FormattedMessage id={item.messageId} />
                 </Nav.Link>
               ))}
             </Nav>
@@ -171,40 +228,57 @@ export function Header() {
           {slug && <hr className={`d-lg-none ${styles.separator}`} />}
           <Nav className="d-lg-none flex-column">
             <Form className="py-2">
-              <Form.Control type="text" placeholder="Search" />
+              <Form.Control
+                type="text"
+                placeholder={intl.formatMessage({
+                  id: "nav.search.placeholder",
+                })}
+              />
             </Form>
             {userNavItems}
             <hr className={styles.separator} />
+            <LanguageDropdown locale={locale} setLocale={setLocale} />
+            <hr className={styles.separator} />
+            <Nav.Link disabled className="text-body-secondary py-1">
+              <FormattedMessage id="nav.theme.header" />
+            </Nav.Link>
             <ThemeNavLinks theme={theme} setTheme={setTheme} />
           </Nav>
 
-          {/* Desktop: search + hamburger dropdown */}
+          {/* Desktop: search + language + hamburger dropdown */}
           <div className="d-none d-lg-flex align-items-center gap-3 ms-auto">
             <Form>
-              <Form.Control type="text" placeholder="Search" />
+              <Form.Control
+                type="text"
+                placeholder={intl.formatMessage({
+                  id: "nav.search.placeholder",
+                })}
+              />
             </Form>
             <Nav>
+              <LanguageDropdown locale={locale} setLocale={setLocale} />
               <NavDropdown
                 align="end"
                 id="user-menu-dropdown"
+                className={styles.hideCaret}
                 title={<FontAwesomeIcon icon={faBars} />}
               >
                 {auth.isAuthenticated ? (
                   <>
                     <NavDropdown.Item className="d-flex align-items-center gap-2">
                       <FontAwesomeIcon icon={faUser} />
-                      My Profile
+                      <FormattedMessage id="nav.user.myProfile" />
                     </NavDropdown.Item>
                     <NavDropdown.Item className="d-flex align-items-center gap-2">
                       <FontAwesomeIcon icon={faCog} />
-                      Admin
+                      <FormattedMessage id="nav.user.admin" />
                     </NavDropdown.Item>
                     <NavDropdown.Item
                       className="d-flex align-items-center gap-2"
                       onClick={() => handleSignout(auth)}
                     >
                       <FontAwesomeIcon icon={faSignOut} />
-                      Logout
+                      <FormattedMessage id="nav.user.logout" />
                     </NavDropdown.Item>
                   </>
                 ) : (
@@ -213,11 +287,13 @@ export function Header() {
                     onClick={() => auth.signinRedirect()}
                   >
                     <FontAwesomeIcon icon={faSignIn} />
-                    Sign in
+                    <FormattedMessage id="nav.user.signIn" />
                   </NavDropdown.Item>
                 )}
                 <NavDropdown.Divider />
-                <NavDropdown.Header>Theme</NavDropdown.Header>
+                <NavDropdown.Header>
+                  <FormattedMessage id="nav.theme.header" />
+                </NavDropdown.Header>
                 <ThemeMenuItems theme={theme} setTheme={setTheme} />
               </NavDropdown>
             </Nav>
