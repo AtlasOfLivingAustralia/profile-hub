@@ -99,17 +99,13 @@ export function Component() {
                 {TAXON_LEVELS.map(({ key }) => (
                   <div key={key} className={styles.levelButton}>
                     <Placeholder animation="glow" className="w-100">
-                      <span
-                        style={{ height: 24 }}
-                        className="d-flex align-items-center justify-content-between gap-3"
-                      >
+                      <span className={styles.levelSkeleton}>
                         <Placeholder
                           className="rounded-pill"
                           xs={key === "unknown" ? 7 : 5}
                         />
                         <Placeholder
-                          className="rounded-pill"
-                          style={{ width: "2.25rem" }}
+                          className={`rounded-pill ${styles.levelSkeletonBadge}`}
                         />
                       </span>
                     </Placeholder>

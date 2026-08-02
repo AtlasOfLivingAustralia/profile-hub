@@ -1,7 +1,9 @@
 import { request } from "./query";
-import type { TaxonCounts } from "./types";
+import type { TaxonCounts, TaxonNameResult } from "./types";
 
-function queryString(params: Record<string, number | string | undefined>) {
+function queryString(
+  params: Record<string, number | string | boolean | undefined>,
+) {
   const query = new URLSearchParams();
 
   for (const [key, value] of Object.entries(params)) {
@@ -33,6 +35,33 @@ export default {
         filter: options.filter,
         max: options.max ?? 25,
         offset: options.offset ?? 0,
+      })}`,
+      "GET",
+      null,
+    ),
+
+  taxonName: async (
+    opusId: string,
+    options: {
+      scientificName: string;
+      taxon: string;
+      max?: number;
+      offset?: number;
+      countChildren?: boolean;
+      immediateChildrenOnly?: boolean;
+      sortBy?: string;
+    },
+  ): Promise<TaxonNameResult[]> =>
+    request(
+      `/profile/search/taxon/name?${queryString({
+        opusId,
+        scientificName: options.scientificName,
+        taxon: options.taxon,
+        max: options.max ?? 25,
+        offset: options.offset ?? 0,
+        countChildren: options.countChildren ?? false,
+        immediateChildrenOnly: options.immediateChildrenOnly ?? false,
+        sortBy: options.sortBy ?? "taxonomy",
       })}`,
       "GET",
       null,

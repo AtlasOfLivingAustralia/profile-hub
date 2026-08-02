@@ -83,9 +83,52 @@ export function buildCollectionThemeCss(theme: Theme): string {
 
   if (!rootVars) return "";
 
+  const buttonRules = callToAction
+    ? `
+.btn-primary {
+  --bs-btn-color: var(--opus-cta-text, #fff);
+  --bs-btn-bg: var(--opus-cta);
+  --bs-btn-border-color: var(--opus-cta);
+  --bs-btn-hover-color: var(--opus-cta-text, #fff);
+  --bs-btn-hover-bg: var(--opus-cta-hover, var(--opus-cta));
+  --bs-btn-hover-border-color: var(--opus-cta-hover, var(--opus-cta));
+  --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+  --bs-btn-active-color: var(--opus-cta-text, #fff);
+  --bs-btn-active-bg: var(--opus-cta-hover, var(--opus-cta));
+  --bs-btn-active-border-color: var(--opus-cta-hover, var(--opus-cta));
+  --bs-btn-disabled-color: var(--opus-cta-text, #fff);
+  --bs-btn-disabled-bg: var(--opus-cta);
+  --bs-btn-disabled-border-color: var(--opus-cta);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--opus-cta);
+  --bs-btn-border-color: var(--opus-cta);
+  --bs-btn-hover-color: var(--opus-cta-text, #fff);
+  --bs-btn-hover-bg: var(--opus-cta);
+  --bs-btn-hover-border-color: var(--opus-cta);
+  --bs-btn-focus-shadow-rgb: var(--bs-primary-rgb);
+  --bs-btn-active-color: var(--opus-cta-text, #fff);
+  --bs-btn-active-bg: var(--opus-cta);
+  --bs-btn-active-border-color: var(--opus-cta);
+  --bs-btn-disabled-color: var(--opus-cta);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--opus-cta);
+}
+
+.pagination {
+  --bs-pagination-active-color: var(--opus-cta-text, #fff);
+  --bs-pagination-active-bg: var(--opus-cta);
+  --bs-pagination-active-border-color: var(--opus-cta);
+  --bs-pagination-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+`.trim()
+    : "";
+
   return `
 :root {
 ${rootVars}
 }
+${buttonRules}
 `.trim();
 }
