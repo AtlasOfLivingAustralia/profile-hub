@@ -24,4 +24,5 @@ h5,
 h6,
 .h6 {
   font-family: "Google Sans", var(--bs-font-sans-serif);
+  letter-spacing: -0.02em;
 }

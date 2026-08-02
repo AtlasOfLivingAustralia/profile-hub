@@ -14,7 +14,6 @@
   font-size: clamp(2.4rem, 6vw, 3.5rem);
   font-weight: 650;
   line-height: 1.05;
-  letter-spacing: -0.03em;
   color: var(--bs-emphasis-color);
 }
 

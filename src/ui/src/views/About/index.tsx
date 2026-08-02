@@ -1,6 +1,6 @@
-import { useEffect, useState, type ReactNode } from "react";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type ReactNode, useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useOutletContext, useParams } from "react-router";
@@ -161,7 +161,7 @@ export function Component() {
                 <span
                   className={styles.inlineHtml}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Citation HTML comes from the collection about API
-                  dangerouslySetInnerHTML={{ __html: citationHtml }}
+                  dangerouslySetInnerHTML={{ __html: citationHtml || '' }}
                 />
                 .{" "}
                 {citationUrl && (
