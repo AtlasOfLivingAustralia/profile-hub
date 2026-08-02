@@ -108,7 +108,6 @@
   "view.home.collectionCount": "{count, plural, one {# 件のコレクション} other {# 件のコレクション}}が利用可能",
   "view.home.lede": "厳選された動植物の信頼できる種プロファイルを見つけましょう。",
   "view.home.title": "プロファイルコレクション",
-
   "view.profile.action.backToCollection": "コレクションに戻る",
   "view.profile.error.loadFailed": "プロファイルを読み込めませんでした。",
   "view.profile.error.notFound": "このプロファイルは見つかりませんでした。",

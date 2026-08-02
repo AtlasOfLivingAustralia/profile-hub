@@ -19,7 +19,7 @@ function Home() {
     async function fetchCollections() {
       try {
         setCollections(await api.opus.list());
-      } catch (_) {}
+      } catch (_) { }
     }
 
     fetchCollections();
@@ -60,15 +60,15 @@ function Home() {
           <Row xs={1} sm={2} md={3} lg={4} className="g-4">
             {collections
               ? collections.map((collection) => (
-                  <Col key={collection.uuid}>
-                    <CollectionCard collection={collection} />
-                  </Col>
-                ))
+                <Col key={collection.uuid}>
+                  <CollectionCard collection={collection} />
+                </Col>
+              ))
               : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((tempKey) => (
-                  <Col key={tempKey}>
-                    <CollectionCard collection={null} />
-                  </Col>
-                ))}
+                <Col key={tempKey}>
+                  <CollectionCard collection={null} />
+                </Col>
+              ))}
           </Row>
         </div>
       </Container>

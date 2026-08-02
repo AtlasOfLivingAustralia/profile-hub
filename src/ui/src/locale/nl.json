@@ -108,7 +108,6 @@
   "view.home.collectionCount": "{count, plural, one {# collectie} other {# collecties}} beschikbaar",
   "view.home.lede": "Ontdek gezaghebbende soortprofielen van gecureerde flora en fauna.",
   "view.home.title": "Profielcollecties",
-
   "view.profile.action.backToCollection": "Terug naar collectie",
   "view.profile.error.loadFailed": "Het profiel kon niet worden geladen.",
   "view.profile.error.notFound": "Dit profiel is niet gevonden.",

@@ -108,7 +108,6 @@
   "view.home.collectionCount": "{count, plural, one {# Sammlung} other {# Sammlungen}} verfügbar",
   "view.home.lede": "Entdecken Sie maßgebliche Artenprofile aus kuratierter Flora und Fauna.",
   "view.home.title": "Profilsammlungen",
-
   "view.profile.action.backToCollection": "Zurück zur Sammlung",
   "view.profile.error.loadFailed": "Das Profil konnte nicht geladen werden.",
   "view.profile.error.notFound": "Dieses Profil wurde nicht gefunden.",
