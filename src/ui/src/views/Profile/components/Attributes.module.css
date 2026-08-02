@@ -1,0 +1,15 @@
+.attributeList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  margin: 0;
+}
+
+.attribute dt {
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.attribute dd {
+  margin: 0;
+}

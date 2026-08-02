@@ -1,0 +1,14 @@
+.linkList {
+  padding-left: 1.15rem;
+  margin: 0;
+}
+
+.linkList li + li {
+  margin-top: 0.65rem;
+}
+
+.linkDescription {
+  margin: 0.25rem 0 0;
+  color: var(--bs-secondary-color);
+  font-size: 0.92rem;
+}
