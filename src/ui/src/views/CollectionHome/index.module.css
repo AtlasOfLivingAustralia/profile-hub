@@ -25,7 +25,7 @@
   cursor: pointer;
   background: rgba(var(--bs-tertiary-bg-rgb), 1);
   border: 1px solid transparent;
-  border-radius: 0.75rem;
+  border-radius: var(--bs-border-radius-xl);
   transition:
     background-color 150ms ease,
     border-color 150ms ease,

@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
-import { Outlet, useParams } from "react-router";
+import {
+  type LoaderFunctionArgs,
+  Outlet,
+  useLoaderData,
+  useParams,
+} from "react-router";
 
 import api from "#/api";
+import { ApiError } from "#/api/query";
 import type { Collection } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
 import {
@@ -14,6 +19,10 @@ import { Banner } from "./components/Banner";
 import { CollectionTheme } from "./components/CollectionTheme";
 
 export type CollectionOutletContext = {
+  collection: Collection;
+};
+
+export type CollectionLoaderData = {
   collection: Collection;
 };
 
@@ -33,49 +42,56 @@ function bannerImagesFor(collection: Collection): string[] {
   return bannerImages;
 }
 
-export function Component() {
-  const { slug } = useParams<{ slug: string }>();
-  const [collection, setCollection] = useState<Collection | null>(null);
-  const theme =
-    collection?.theme ?? (slug ? readCachedCollectionTheme(slug) : null);
+export async function loader({
+  params,
+}: LoaderFunctionArgs): Promise<CollectionLoaderData> {
+  const slug = params.slug;
+  if (!slug) {
+    throw new Response("Collection not found", { status: 404 });
+  }
 
-  useEffect(() => {
-    if (!slug) return;
-    const collectionSlug = slug;
-
-    async function fetchCollection() {
-      try {
-        const next = await api.opus.get(collectionSlug);
-        setCollection(next);
-        cacheCollectionTheme(collectionSlug, next.theme);
-      } catch (_) {
-        setCollection(null);
-      }
+  try {
+    const collection = await api.opus.get(slug);
+    cacheCollectionTheme(slug, collection.theme);
+    return { collection };
+  } catch (error) {
+    if (error instanceof ApiError) {
+      throw new Response(error.message || "Collection not found", {
+        status: error.status,
+      });
     }
+    throw error;
+  }
+}
 
-    fetchCollection();
-  }, [slug]);
+export function HydrateFallback() {
+  const { slug } = useParams<{ slug: string }>();
+  const theme = slug ? readCachedCollectionTheme(slug) : null;
 
   return (
     <>
       {theme && <CollectionTheme theme={theme} />}
-      {!collection ? (
-        <PageLoader />
-      ) : (
-        <>
-          <Banner
-            title={collection.title}
-            bannerOverlay={collection.opusLayoutConfig.bannerOverlayText}
-            imageUrls={bannerImagesFor(collection)}
-            interval={collection.opusLayoutConfig?.duration}
-          />
-          <Container className="py-5">
-            <Outlet
-              context={{ collection } satisfies CollectionOutletContext}
-            />
-          </Container>
-        </>
-      )}
+      <PageLoader fullPage />
+    </>
+  );
+}
+
+export function Component() {
+  const { collection } = useLoaderData<typeof loader>();
+
+  return (
+    <>
+      <title>{`${collection.title} | Profile collections`}</title>
+      <CollectionTheme theme={collection.theme} />
+      <Banner
+        title={collection.title}
+        bannerOverlay={collection.opusLayoutConfig.bannerOverlayText}
+        imageUrls={bannerImagesFor(collection)}
+        interval={collection.opusLayoutConfig?.duration}
+      />
+      <Container className="py-5">
+        <Outlet context={{ collection } satisfies CollectionOutletContext} />
+      </Container>
     </>
   );
 }

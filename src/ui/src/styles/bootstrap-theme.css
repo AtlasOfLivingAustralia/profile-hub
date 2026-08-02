@@ -6,6 +6,11 @@
   --bs-body-font-family: var(--bs-font-sans-serif);
 }
 
+[data-bs-theme="light"] {
+  --bs-tertiary-bg: #f5f6f8;
+  --bs-tertiary-bg-rgb: 245, 246, 248;
+}
+
 h1,
 .h1,
 h2,

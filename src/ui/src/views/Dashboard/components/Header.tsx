@@ -14,6 +14,7 @@ import {
   faCheck,
   faCircleHalfStroke,
   faCog,
+  faHouse,
   faMoon,
   faSignIn,
   faSignOut,
@@ -140,7 +141,15 @@ export function Header() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container className="px-0">
-        {/* <Navbar.Brand href="#home"></Navbar.Brand> */}
+        <Navbar.Brand
+          as={NavLink}
+          to="/"
+          end
+          aria-label="Profile collections home"
+          className="d-inline-flex align-items-center px-2"
+        >
+          <FontAwesomeIcon icon={faHouse} />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="primary-navbar-nav" />
         <Navbar.Collapse id="primary-navbar-nav">
           {slug && (

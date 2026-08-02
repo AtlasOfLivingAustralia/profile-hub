@@ -8,8 +8,8 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 
 export const SearchOptions = {
-  scientificName: "By Scientific Name",
-  commonName: "By Common Name",
+  scientificName: "Scientific Name",
+  commonName: "Common Name",
   containingText: "Containing Text",
 } as const;
 
@@ -33,10 +33,10 @@ export function Search() {
   );
 
   return (
-    <Form.Group className="mb-3">
+    <Form.Group className="mb-0">
       <InputGroup>
         <DropdownButton
-          variant="outline-secondary"
+          variant="secondary"
           title={searchOption}
           id="search-option-dropdown"
           onSelect={(eventKey) => {
