@@ -1,3 +1,10 @@
 .hideCaret::after {
-  display: none !important;
+	display: none !important;
+}
+
+.separator {
+	border-color: var(--bs-border-color);
+	margin: 0.5rem 0;
+	opacity: 1;
+	width: 100%;
 }

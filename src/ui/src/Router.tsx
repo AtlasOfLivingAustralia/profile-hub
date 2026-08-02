@@ -38,7 +38,7 @@ const router = createBrowserRouter([
             lazy: () => import("./views/Filter"),
           },
           {
-            path: "glossary",
+            path: "glossary/:letter?",
             lazy: () => import("./views/Glossary"),
           },
           {

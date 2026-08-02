@@ -18,12 +18,12 @@ export function CollectionCard({
         </Placeholder>
         <Card.Body className="mt-2">
           <Placeholder as={Card.Title} animation="wave">
-            <Placeholder xs={8} />
+            <Placeholder className="rounded-pill" xs={8} />
           </Placeholder>
           <Placeholder as={Card.Text} animation="wave">
-            <Placeholder xs={12} size="sm" />
-            <Placeholder xs={10} size="sm" />
-            <Placeholder xs={7} size="sm" />
+            <Placeholder className="rounded-pill" xs={12} size="sm" />
+            <Placeholder className="rounded-pill" xs={10} size="sm" />
+            <Placeholder className="rounded-pill" xs={7} size="sm" />
           </Placeholder>
         </Card.Body>
       </Card>

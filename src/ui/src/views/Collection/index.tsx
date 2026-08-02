@@ -18,10 +18,11 @@ export function Component() {
 
 	useEffect(() => {
 		if (!slug) return;
+		const collectionSlug = slug;
 
 		async function fetchCollection() {
 			try {
-				setCollection(await api.opus.get(slug!));
+				setCollection(await api.opus.get(collectionSlug));
 			} catch (_) {
 				setCollection(null);
 			}
@@ -50,6 +51,7 @@ export function Component() {
 		<>
 			<Banner
 				title={collection.title}
+				bannerOverlay={collection.opusLayoutConfig.bannerOverlayText}
 				imageUrls={bannerImages}
 				interval={collection.opusLayoutConfig?.duration}
 			/>
