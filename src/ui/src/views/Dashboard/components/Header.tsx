@@ -196,7 +196,7 @@ export function Header() {
   );
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" sticky="top" className="bg-body-tertiary">
       <Container className="px-0">
         <Navbar.Brand
           as={NavLink}

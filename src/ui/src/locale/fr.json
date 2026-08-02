@@ -108,7 +108,6 @@
   "view.home.collectionCount": "{count, plural, one {# collection} other {# collections}} disponibles",
   "view.home.lede": "Découvrez des profils d'espèces faisant autorité parmi la flore et la faune sélectionnées.",
   "view.home.title": "Collections de profils",
-
   "view.profile.action.backToCollection": "Retour à la collection",
   "view.profile.error.loadFailed": "Le profil n'a pas pu être chargé.",
   "view.profile.error.notFound": "Ce profil est introuvable.",

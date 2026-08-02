@@ -108,7 +108,6 @@
   "view.home.collectionCount": "{count, plural, one {# collection} other {# collections}} available",
   "view.home.lede": "Discover authoritative species profiles across curated flora and fauna.",
   "view.home.title": "Profile Collections",
-
   "view.profile.action.backToCollection": "Back to collection",
   "view.profile.error.loadFailed": "The profile could not be loaded.",
   "view.profile.error.notFound": "This profile could not be found.",
