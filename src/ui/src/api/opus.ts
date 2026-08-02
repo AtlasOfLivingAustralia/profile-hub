@@ -1,5 +1,10 @@
 import { request } from "./query";
-import type { Collection, Glossary } from "./types";
+import type {
+  Collection,
+  CollectionStatistic,
+  Glossary,
+  OpusAboutResponse,
+} from "./types";
 
 export default {
   list: async (): Promise<Collection[]> => request("/opus/list", "GET", null),
@@ -11,4 +16,8 @@ export default {
       "GET",
       null,
     ),
+  about: async (slug: string): Promise<OpusAboutResponse> =>
+    request(`/opus/${encodeURIComponent(slug)}/about/json`, "GET", null),
+  statistics: async (slug: string): Promise<CollectionStatistic[]> =>
+    request(`/opus/${encodeURIComponent(slug)}/statistics`, "GET", null),
 };

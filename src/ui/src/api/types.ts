@@ -229,3 +229,29 @@ export interface GlossaryItem {
 }
 
 export type TaxonCounts = Record<string, number>;
+
+export interface OpusAboutAdministrator {
+  name: string;
+  email?: string | null;
+}
+
+export interface OpusAboutDetails extends Collection {
+  date?: string;
+  year?: string;
+  opusUrl?: string;
+  genericCopyrightHtml?: string;
+}
+
+export interface OpusAboutResponse {
+  opusId: string;
+  opus: OpusAboutDetails;
+  administrators: (OpusAboutAdministrator | null)[];
+}
+
+export interface CollectionStatistic {
+  id: string;
+  name: string;
+  value: string | number;
+  tooltip?: string;
+  caveat?: string;
+}
