@@ -1,17 +1,39 @@
+import type { IntlShape } from "react-intl";
 import { type ErrorResponse, isRouteErrorResponse } from "react-router";
 
-// TODO: add i18n support
-function getErrorMessage(error: unknown): string {
+function getErrorMessage(error: unknown, intl: IntlShape): string {
   if (error instanceof Error) {
-    if (error.message === "Failed to fetch")
-      return `We can't access the ALA servers right now, please try again later.`;
-    else if (error.message) return error.message;
-    else return error.toString();
-  } else if (isRouteErrorResponse(error)) {
-    return (error as ErrorResponse).data;
-  } else if (typeof error === "string") {
+    if (error.message === "Failed to fetch") {
+      return intl.formatMessage({ id: "error.network.unavailable" });
+    }
+    if (error.message) {
+      if (error.message in intl.messages) {
+        return intl.formatMessage({ id: error.message });
+      }
+      return error.message;
+    }
+    return error.toString();
+  }
+
+  if (isRouteErrorResponse(error)) {
+    const data = (error as ErrorResponse).data;
+    if (typeof data === "string") {
+      if (data in intl.messages) {
+        return intl.formatMessage({ id: data });
+      }
+      return data;
+    }
+    return intl.formatMessage({ id: "error.unknown" });
+  }
+
+  if (typeof error === "string") {
+    if (error in intl.messages) {
+      return intl.formatMessage({ id: error });
+    }
     return error;
-  } else return "An unknown error occurred";
+  }
+
+  return intl.formatMessage({ id: "error.unknown" });
 }
 
 export default getErrorMessage;

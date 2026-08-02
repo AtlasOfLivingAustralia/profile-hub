@@ -1,4 +1,5 @@
 import Container from "react-bootstrap/Container";
+import { useIntl } from "react-intl";
 import {
   type LoaderFunctionArgs,
   Outlet,
@@ -47,7 +48,7 @@ export async function loader({
 }: LoaderFunctionArgs): Promise<CollectionLoaderData> {
   const slug = params.slug;
   if (!slug) {
-    throw new Response("Collection not found", { status: 404 });
+    throw new Response("error.collection.notFound", { status: 404 });
   }
 
   try {
@@ -56,7 +57,7 @@ export async function loader({
     return { collection };
   } catch (error) {
     if (error instanceof ApiError) {
-      throw new Response(error.message || "Collection not found", {
+      throw new Response(error.message || "error.collection.notFound", {
         status: error.status,
       });
     }
@@ -77,11 +78,17 @@ export function HydrateFallback() {
 }
 
 export function Component() {
+  const intl = useIntl();
   const { collection } = useLoaderData<typeof loader>();
 
   return (
     <>
-      <title>{`${collection.title} | Profile collections`}</title>
+      <title>
+        {intl.formatMessage(
+          { id: "app.documentTitle" },
+          { title: collection.title },
+        )}
+      </title>
       <CollectionTheme theme={collection.theme} />
       <Banner
         title={collection.title}

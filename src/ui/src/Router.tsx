@@ -1,14 +1,12 @@
 import { createBrowserRouter } from "react-router";
-
+// Page loader & error components
+import PageError from "./components/PageError";
 // Views
 import Dashboard from "./views/Dashboard";
 import Home from "./views/Home";
 
-// Page loader & error components
-import PageError from "./components/PageError";
-
 const notFoundLoader = () => {
-  throw new Response("Not Found", { status: 404 });
+  throw new Response("error.notFound.short", { status: 404 });
 };
 
 const router = createBrowserRouter([

@@ -7,19 +7,22 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMemo } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { FormattedMessage } from "react-intl";
 import { Link, useOutletContext, useParams } from "react-router";
 
 import type { CollectionOutletContext } from "../Collection";
 
 import styles from "./index.module.css";
-import { useMemo } from "react";
 
 function RichText({ html }: { html?: string }) {
   if (!html) {
     return (
-      <p className="text-body-secondary mb-0">No information available.</p>
+      <p className="text-body-secondary mb-0">
+        <FormattedMessage id="view.collectionHome.noInformation" />
+      </p>
     );
   }
 
@@ -36,16 +39,15 @@ export function Component() {
   const { slug } = useParams<{ slug: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
 
-  // Memoize actions
   const actions = useMemo(
     () => [
       {
-        label: "Search",
+        messageId: "view.collectionHome.action.search",
         icon: faSearch,
         helpText: collection.opusLayoutConfig.helpTextSearch,
       },
       {
-        label: "Browse",
+        messageId: "view.collectionHome.action.browse",
         icon: faBinoculars,
         helpText: collection.opusLayoutConfig.helpTextBrowse,
         to: `/opus/${slug}/browse`,
@@ -53,20 +55,20 @@ export function Component() {
       ...(collection.keybaseProjectId
         ? [
             {
-              label: "Identify",
+              messageId: "view.collectionHome.action.identify",
               icon: faFingerprint,
               helpText: collection.opusLayoutConfig.helpTextIdentify,
             },
           ]
         : []),
       {
-        label: "Filter",
+        messageId: "view.collectionHome.action.filter",
         icon: faFilter,
         helpText: collection.opusLayoutConfig.helpTextFilter,
         to: `/opus/${slug}/filter`,
       },
       {
-        label: "Library",
+        messageId: "view.collectionHome.action.library",
         icon: faBookOpen,
         helpText: collection.opusLayoutConfig.helpTextDocuments,
       },
@@ -78,15 +80,19 @@ export function Component() {
     <Row className="g-4">
       <Col md={12} lg={3}>
         <div className={styles.panel}>
-          <h2 className={styles.heading}>Explore this collection</h2>
+          <h2 className={styles.heading}>
+            <FormattedMessage id="view.collectionHome.exploreHeading" />
+          </h2>
           <div className="vstack gap-3">
-            {actions.map(({ label, icon, helpText, to }) => {
+            {actions.map(({ messageId, icon, helpText, to }) => {
               const content = (
                 <>
                   <span className={styles.actionIcon}>
                     <FontAwesomeIcon icon={icon} />
                   </span>
-                  <span>{label}</span>
+                  <span>
+                    <FormattedMessage id={messageId} />
+                  </span>
                   <FontAwesomeIcon
                     icon={faChevronRight}
                     className={styles.actionArrow}
@@ -96,7 +102,7 @@ export function Component() {
 
               return to ? (
                 <Link
-                  key={label}
+                  key={messageId}
                   to={to}
                   className={styles.actionButton}
                   title={helpText}
@@ -105,7 +111,7 @@ export function Component() {
                 </Link>
               ) : (
                 <button
-                  key={label}
+                  key={messageId}
                   type="button"
                   className={styles.actionButton}
                   title={helpText}
@@ -119,10 +125,12 @@ export function Component() {
       </Col>
       <Col md={12} lg={9}>
         <section className="px-2 px-md-4 pt-3">
-          <h2 className="mb-4 text-body-secondary">About</h2>
+          <h2 className="mb-4 text-body-secondary">
+            <FormattedMessage id="view.collectionHome.aboutHeading" />
+          </h2>
           <RichText html={collection.aboutHtml} />
           <h2 className="mb-4 mt-5 text-body-secondary">
-            Collection information
+            <FormattedMessage id="view.collectionHome.informationHeading" />
           </h2>
           <RichText html={collection.opusLayoutConfig.explanatoryText} />
         </section>

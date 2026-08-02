@@ -1,5 +1,6 @@
 import Card from "react-bootstrap/Card";
 import Placeholder from "react-bootstrap/Placeholder";
+import { FormattedMessage } from "react-intl";
 import { Link } from "react-router";
 
 import type { Collection } from "#/api/types";
@@ -49,7 +50,9 @@ export function CollectionCard({
         <Card.Body className="mt-2">
           <Card.Title>{collection.title}</Card.Title>
           <Card.Text className={`${styles.description} small text-muted`}>
-            {collection.description || "No description provided"}
+            {collection.description || (
+              <FormattedMessage id="component.collectionCard.noDescription" />
+            )}
           </Card.Text>
         </Card.Body>
       </Card>

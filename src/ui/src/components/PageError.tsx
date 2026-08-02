@@ -7,6 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
+import { FormattedMessage, useIntl } from "react-intl";
 import {
   isRouteErrorResponse,
   Link,
@@ -35,18 +36,23 @@ function getStatus(error: unknown): number | undefined {
 }
 
 export default function PageError() {
+  const intl = useIntl();
   const error = useRouteError();
   const location = useLocation();
   const status = getStatus(error);
   const notFound = status === 404;
-  const title = notFound ? "Page not found" : "Something went wrong";
+  const title = notFound
+    ? intl.formatMessage({ id: "error.notFound.title" })
+    : intl.formatMessage({ id: "error.generic.title" });
   const description = notFound
-    ? "The page may have moved, the collection may no longer exist, or the address may be incorrect."
-    : getErrorMessage(error);
+    ? intl.formatMessage({ id: "error.notFound.description" })
+    : getErrorMessage(error, intl);
 
   return (
     <main className={styles.page}>
-      <title>{title} | Profile collections</title>
+      <title>
+        {intl.formatMessage({ id: "app.documentTitle" }, { title })}
+      </title>
 
       <Container className={styles.container}>
         <section className="text-center" aria-labelledby="error-title">
@@ -62,7 +68,9 @@ export default function PageError() {
           </div>
 
           <p className={styles.eyebrow}>
-            {status ? `Error ${status}` : "Unexpected error"}
+            {status
+              ? intl.formatMessage({ id: "error.statusLabel" }, { status })
+              : intl.formatMessage({ id: "error.unexpected.label" })}
           </p>
           <h1 id="error-title" className={styles.title}>
             {title}
@@ -74,7 +82,7 @@ export default function PageError() {
           <div className={styles.actions}>
             <Link to="/" className="btn btn-primary">
               <FontAwesomeIcon icon={faHouse} className="me-2" />
-              Back to homepage
+              <FormattedMessage id="error.action.backToHome" />
             </Link>
 
             {!notFound && (
@@ -84,7 +92,7 @@ export default function PageError() {
                 onClick={() => window.location.reload()}
               >
                 <FontAwesomeIcon icon={faArrowRotateRight} className="me-2" />
-                Try again
+                <FormattedMessage id="error.action.tryAgain" />
               </Button>
             )}
           </div>

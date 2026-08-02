@@ -1,10 +1,8 @@
 import { useEffect } from "react";
-
-// Routing
-import { RouterProvider } from "react-router/dom";
-
 // Authentication
 import { useAuth } from "react-oidc-context";
+// Routing
+import { RouterProvider } from "react-router/dom";
 
 // Local components
 import PageLoader from "./components/PageLoader";
