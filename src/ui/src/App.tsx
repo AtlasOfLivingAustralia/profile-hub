@@ -13,6 +13,7 @@ import handleRefresh from "./helpers/auth/handleRefresh";
 import routes from "./Router";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles/bootstrap-theme.css";
 
 function App() {
   const auth = useAuth();
