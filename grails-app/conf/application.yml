@@ -3,9 +3,6 @@ grails:
     profile: web
     codegen:
         defaultPackage: au.org.ala.profile.hub
-    cache:
-        ehcache:
-            ehcacheXmlLocation: 'classpath:profile-ehcache.xml'
     gorm:
         reactor:
             # Whether to translate GORM events into Reactor events
@@ -21,6 +18,9 @@ spring:
         unique-names: true
     main:
         banner-mode: "off"
+    cache:
+        jcache:
+            config: classpath:profile-ehcache.xml
     groovy:
         template:
             check-template-location: false
@@ -37,6 +37,11 @@ spring:
 management:
     endpoints:
         enabled-by-default: false
+
+server:
+    tomcat:
+        # Tomcat 10.1 defaults to 10 parts per multipart request which breaks large multipart forms
+        max-part-count: 100
 
 ---
 grails:
@@ -97,6 +102,7 @@ server:
         port-header: 'X-Forwarded-Port'
         protocol-header: 'X-Forwarded-Proto'
         remote-ip-header: 'X-Forwarded-For'
+        max-part-count: 100
 ---
 
 grails:

@@ -6,15 +6,17 @@ import au.org.ala.ws.service.WebService
 import org.apache.http.HttpStatus
 import org.apache.http.entity.ContentType
 import org.springframework.cache.Cache
+import org.springframework.cache.CacheManager
 
-import javax.validation.constraints.NotNull
+import jakarta.validation.constraints.NotNull
 import static groovy.io.FileType.DIRECTORIES
-import org.grails.plugin.cache.GrailsCacheManager
+
 class AdminController extends BaseController {
 
     WebService webService
     ProfileService profileService
-    GrailsCacheManager grailsCacheManager
+    CacheManager grailsCacheManager
+
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def index() {
         render view: "admin.gsp"
@@ -27,14 +29,14 @@ class AdminController extends BaseController {
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def reindex() {
-        def response = webService.post("${grailsApplication.config.profile.service.url}/admin/search/reindex", [:], [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/admin/search/reindex", [:], [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def rematchNames() {
-        def response = webService.post("${grailsApplication.config.profile.service.url}/admin/rematchNames", [opusIds: request.getJSON()?.opusIds?.split(",")], [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/admin/rematchNames", [opusIds: request.getJSON()?.opusIds?.split(",")], [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
@@ -53,56 +55,56 @@ class AdminController extends BaseController {
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def backupCollections() {
-        def response = webService.post("${grailsApplication.config.profile.service.url}/admin/backupCollections", [opusUuids: request.getJSON()?.opusUuids?.split(","), backupFolder: getBackupRestoreDir(), backupName: request.getJSON()?.backupName],[:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/admin/backupCollections", [opusUuids: request.getJSON()?.opusUuids?.split(","), backupFolder: getBackupRestoreDir(), backupName: request.getJSON()?.backupName],[:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def restoreCollections() {
-        def response = webService.post("${grailsApplication.config.profile.service.url}/admin/restoreCollections", [backupFolder: getBackupRestoreDir(), backupNames: request.getJSON()?.backupNames?.split(","), restoreDB: request.getJSON()?.restoreDB],[:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/admin/restoreCollections", [backupFolder: getBackupRestoreDir(), backupNames: request.getJSON()?.backupNames?.split(","), restoreDB: request.getJSON()?.restoreDB],[:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def listPendingJobs() {
-        def response = webService.get("${grailsApplication.config.profile.service.url}/job", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.get("${grailsApplication.config.getProperty('profile.service.url')}/job", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def deleteJob(@NotNull String jobType, @NotNull String jobId) {
-        def response = webService.delete("${grailsApplication.config.profile.service.url}/job/${jobType}/${jobId}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.delete("${grailsApplication.config.getProperty('profile.service.url')}/job/${jobType}/${jobId}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def createTag() {
-        def response = webService.put("${grailsApplication.config.profile.service.url}/admin/tag/", request.getJSON(), [:], ContentType.APPLICATION_JSON, true, false)
+        def response = webService.put("${grailsApplication.config.getProperty('profile.service.url')}/admin/tag/", request.getJSON(), [:], ContentType.APPLICATION_JSON, true, false)
 
         handle response
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def updateTag(@NotNull String tagId) {
-        def response = webService.post("${grailsApplication.config.profile.service.url}/admin/tag/${tagId}", request.getJSON(), [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/admin/tag/${tagId}", request.getJSON(), [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def deleteTag(@NotNull String tagId) {
-        def response = webService.delete("${grailsApplication.config.profile.service.url}/admin/tag/${tagId}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.delete("${grailsApplication.config.getProperty('profile.service.url')}/admin/tag/${tagId}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)
     def getTag(String tagId) {
-        def response = webService.get("${grailsApplication.config.profile.service.url}/admin/tag/${tagId ?: ""}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
+        def response = webService.get("${grailsApplication.config.getProperty('profile.service.url')}/admin/tag/${tagId ?: ""}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())
 
         handle response
     }
@@ -117,7 +119,7 @@ class AdminController extends BaseController {
     }
 
     private String getBackupRestoreDir() {
-        return grailsApplication.config.backupRestoreDir?: '/data/profile-service/backup/db'
+        return grailsApplication.config.getProperty('backupRestoreDir')?: '/data/profile-service/backup/db'
     }
 
     @Secured(role = Role.ROLE_ADMIN, opusSpecific = false)

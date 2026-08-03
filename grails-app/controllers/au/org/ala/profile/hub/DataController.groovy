@@ -5,7 +5,7 @@ import au.org.ala.profile.security.Secured
 import au.org.ala.web.AuthService
 import grails.converters.JSON
 
-import javax.validation.constraints.NotNull
+import jakarta.validation.constraints.NotNull
 
 import static au.org.ala.profile.hub.util.HubConstants.DEFAULT_OPUS_BANNER_URL
 import static au.org.ala.profile.hub.util.HubConstants.DEFAULT_OPUS_LOGOS

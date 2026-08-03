@@ -1,6 +1,6 @@
 package au.org.ala.profile.hub
 
-import au.com.bytecode.opencsv.CSVWriter
+import com.opencsv.CSVWriter
 import au.org.ala.profile.security.Role
 import au.org.ala.profile.security.Secured
 import grails.converters.JSON
@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import org.springframework.web.multipart.commons.CommonsMultipartFile
+import org.springframework.web.multipart.MultipartFile
 import static au.org.ala.profile.hub.Utils.enc
 import au.org.ala.web.AuthService
 import au.org.ala.ws.service.WebService
@@ -61,17 +61,17 @@ class SandboxProxyController extends BaseController {
     }
 
     def uploadFile() {
-        CommonsMultipartFile file = request.getFile('file')
+        MultipartFile file = request.getFile('file')
 
         long fileId = System.currentTimeMillis()
-        String uploadDirPath = "${grailsApplication.config.sandbox.upload.directory}/${fileId}"
+        String uploadDirPath = "${grailsApplication.config.getProperty('sandbox.upload.directory')}/${fileId}"
         log.debug "Creating upload directory " + uploadDirPath
 
         File uploadDir = new File(uploadDirPath)
         FileUtils.forceMkdir(uploadDir)
 
         log.debug "Transferring file to directory...."
-        File newFile = new File("${uploadDirPath}${File.separatorChar}${file.getFileItem().getName()}")
+        File newFile = new File("${uploadDirPath}${File.separatorChar}${file.originalFilename}")
         file.transferTo(newFile)
 
         log.debug "Detecting file formats...."
@@ -143,12 +143,12 @@ class SandboxProxyController extends BaseController {
                 alaId              : authService.getUserId()
         ]
 
-        Map result = webService.post("${grailsApplication.config.sandbox.biocache.service.url}/upload/",
+        Map result = webService.post("${grailsApplication.config.getProperty('sandbox.biocache.service.url')}/upload/",
                 data, [:], ContentType.APPLICATION_FORM_URLENCODED, true, true,
                 [Accept: ContentType.APPLICATION_JSON.toString()])
 
         // refresh the biocache data cache
-        webService.get("${grailsApplication.config.sandbox.biocache.service.url}/cache/refresh")
+        webService.get("${grailsApplication.config.getProperty('sandbox.biocache.service.url')}/cache/refresh")
 
         handleFileUploadResponse(result, params.opusId)
     }
@@ -165,12 +165,12 @@ class SandboxProxyController extends BaseController {
                 alaId              : authService.getUserId()
         ]
 
-        Map result = webService.post("${grailsApplication.config.sandbox.biocache.service.url}/upload/",
+        Map result = webService.post("${grailsApplication.config.getProperty('sandbox.biocache.service.url')}/upload/",
                 data, [:], ContentType.APPLICATION_FORM_URLENCODED, true, true,
                 [Accept: ContentType.APPLICATION_JSON.toString()])
 
         // refresh the biocache data cache
-        webService.get("${grailsApplication.config.sandbox.biocache.service.url}/cache/refresh")
+        webService.get("${grailsApplication.config.getProperty('sandbox.biocache.service.url')}/cache/refresh")
 
         handleFileUploadResponse(result, params.opusId)
     }
@@ -204,7 +204,7 @@ class SandboxProxyController extends BaseController {
     }
 
     private String getSandboxPath() {
-        String path = "${grailsApplication.config.sandbox.base.url}${grailsApplication.config.sandbox.context.path}"
+        String path = "${grailsApplication.config.getProperty('sandbox.base.url')}${grailsApplication.config.getProperty('sandbox.context.path')}"
 
         if (!path.endsWith("/")) {
             path += "/"

@@ -214,13 +214,13 @@
         <div class="panel-footer" ng-show="!imageCtrl.readonly">
             <div class="row">
                 <div class="col-md-12">
-                    <g:if test="${grailsApplication.config.feature.imageUpload == 'true'}">
+                    <g:if test="${grailsApplication.config.getProperty('feature.imageUpload') == 'true'}">
                         <button class="btn btn-default" ng-click="imageCtrl.uploadImage()"><i
                                 class="fa fa-plus"></i>&nbsp;Add Image</button>
                     </g:if>
                     <g:elseif
-                            test="${grailsApplication.config.deployment_env.toLowerCase() != 'prod' && grailsApplication.config.deployment_env.toLowerCase() != 'production'}">
-                        <span class="small">Image uploads are not available in ${grailsApplication.config.deployment_env}</span>
+                            test="${grailsApplication.config.getProperty('deployment_env.toLowerCase')() != 'prod' && grailsApplication.config.getProperty('deployment_env.toLowerCase')() != 'production'}">
+                        <span class="small">Image uploads are not available in ${grailsApplication.config.getProperty('deployment_env')}</span>
                     </g:elseif>
 
                     <save-button ng-click="imageCtrl.saveProfile(ImageForm)" form="ImageForm"></save-button>

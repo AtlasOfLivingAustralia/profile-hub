@@ -7,7 +7,7 @@ class HubConstants {
     static final String DEFAULT_OPUS_TITLE = "Profile Collections"
     static final String DEFAULT_OPUS_VOCAB = "Not specified"
     static final List DEFAULT_OPUS_LOGOS = []
-    static final String DEFAULT_OPUS_BANNER_URL = "${Holders.config.images.service.url}/store/7/4/4/e/a08a52f2-7bbe-40d9-8f1a-fe8acb28e447/original"
+    static final String DEFAULT_OPUS_BANNER_URL = "${Holders.config.getProperty('images.service.url')}/store/7/4/4/e/a08a52f2-7bbe-40d9-8f1a-fe8acb28e447/original"
     static final String ALA_FOOTER_TEXT = "ALA Profiles provides a central location to gather collections of species profiles."
     static final String ALA_CONTACT_EMAIL = "http://www.ala.org.au/about-the-atlas/contact-us/"
     static final String ALA_CONTACT_FACEBOOK = "https://www.facebook.com/atlasoflivingaustralia"

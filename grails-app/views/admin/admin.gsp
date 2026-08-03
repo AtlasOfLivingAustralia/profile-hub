@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="${grailsApplication.config.layout}"/>
+    <meta name="layout" content="${grailsApplication.config.getProperty('layout')}"/>
     <title>Profile Admin</title>
 </head>
 
@@ -50,7 +50,7 @@
         </div>
 
         <div class="panel-body">
-            <p>This clears the cache of help file URL mappings, allowing the mapping file (${grailsApplication.config.help.mapping.file}) to be updated without restarting the application.</p>
+            <p>This clears the cache of help file URL mappings, allowing the mapping file (${grailsApplication.config.getProperty('help.mapping.file')}) to be updated without restarting the application.</p>
 
             <button class="btn btn-primary" ng-click="adminCtrl.reloadHelpUrls()">Reload help urls</button>
         </div>

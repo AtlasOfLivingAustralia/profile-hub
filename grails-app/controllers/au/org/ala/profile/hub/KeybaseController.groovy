@@ -11,7 +11,7 @@ class KeybaseController extends BaseController {
 
     /** Acts as a proxy to the keybase server as it doesn't currently support https  */
     def keyLookup() {
-        webService.proxyGetRequest(response, "${grailsApplication.config.keybase.key.lookup}?${request.queryString}", false, false)
+        webService.proxyGetRequest(response, "${grailsApplication.config.getProperty('keybase.key.lookup')}?${request.queryString}", false, false)
     }
 
     def findKey() {
