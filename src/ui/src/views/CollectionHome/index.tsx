@@ -71,6 +71,7 @@ export function Component() {
         messageId: "view.collectionHome.action.library",
         icon: faBookOpen,
         helpText: collection.opusLayoutConfig.helpTextDocuments,
+        to: `/opus/${slug}/documents`,
       },
     ],
     [collection, slug],

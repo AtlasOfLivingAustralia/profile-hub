@@ -30,19 +30,22 @@ export function Banner({
     setReady(false);
     let cancelled = false;
 
-    Promise.all(
-      preloadKey.split("\0").map(
-        (url) =>
-          new Promise<void>((resolve) => {
-            const image = new Image();
-            image.onload = () => resolve();
-            image.onerror = () => resolve();
-            image.src = url;
-          }),
-      ),
-    ).then(() => {
+    async function preload() {
+      await Promise.all(
+        preloadKey.split("\0").map(
+          (url) =>
+            new Promise<void>((resolve) => {
+              const image = new Image();
+              image.onload = () => resolve();
+              image.onerror = () => resolve();
+              image.src = url;
+            }),
+        ),
+      );
       if (!cancelled) setReady(true);
-    });
+    }
+
+    preload();
 
     return () => {
       cancelled = true;
@@ -79,9 +82,7 @@ export function Banner({
             className={styles.title}
             // biome-ignore lint/security/noDangerouslySetInnerHtml: Legacy HTML styling
             dangerouslySetInnerHTML={{
-              __html: (bannerOverlay || title)
-                .replace("font-weight:bold;", "")
-                .replace("<BR>", " "),
+              __html: (bannerOverlay || title).replace("font-weight:bold;", ""),
             }}
           />
         </Container>

@@ -1,5 +1,6 @@
 import { request } from "./query";
 import type {
+  Attachment,
   Collection,
   CollectionStatistic,
   Glossary,
@@ -20,4 +21,6 @@ export default {
     request(`/opus/${encodeURIComponent(slug)}/about/json`, "GET", null),
   statistics: async (slug: string): Promise<CollectionStatistic[]> =>
     request(`/opus/${encodeURIComponent(slug)}/statistics`, "GET", null),
+  attachments: async (slug: string): Promise<Attachment[]> =>
+    request(`/opus/${encodeURIComponent(slug)}/attachment/`, "GET", null),
 };
