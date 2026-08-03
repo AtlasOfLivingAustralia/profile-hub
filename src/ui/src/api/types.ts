@@ -120,7 +120,7 @@ export interface Attachment {
   rights?: string;
   category?: string;
   contentType?: string;
-  licenceIcon: string;
+  licenceIcon?: string;
 }
 
 export interface RequestedSupportingOpuse {

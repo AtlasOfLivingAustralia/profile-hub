@@ -24,7 +24,10 @@ export function ClassificationList({
           <li key={node.guid}>
             {node.rank && (
               <span className={styles.rank}>
-                <FormattedMessage id={`classification.${node.rank}`} defaultMessage={node.rank} />
+                <FormattedMessage
+                  id={`classification.${node.rank}`}
+                  defaultMessage={node.rank}
+                />
               </span>
             )}
             {node.profileId || node.profileName ? (

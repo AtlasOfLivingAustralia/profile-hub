@@ -119,13 +119,13 @@ export function Component() {
 
   const documentTitle = profile
     ? intl.formatMessage(
-      { id: "app.documentTitle" },
-      { title: formatProfileName(profile) },
-    )
+        { id: "app.documentTitle" },
+        { title: formatProfileName(profile) },
+      )
     : intl.formatMessage(
-      { id: "app.documentTitle" },
-      { title: collection.title },
-    );
+        { id: "app.documentTitle" },
+        { title: collection.title },
+      );
 
   if (loading) {
     return (

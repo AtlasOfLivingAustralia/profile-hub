@@ -50,17 +50,19 @@ export function Component() {
     setSelectedLevel(null);
     setError(false);
 
-    api.search
-      .taxonLevels(slug)
-      .then((data) => {
+    async function load() {
+      try {
+        const data = await api.search.taxonLevels(slug!);
         if (!cancelled) setLevels(data);
-      })
-      .catch(() => {
+      } catch {
         if (!cancelled) {
           setLevels({});
           setError(true);
         }
-      });
+      }
+    }
+
+    load();
 
     return () => {
       cancelled = true;

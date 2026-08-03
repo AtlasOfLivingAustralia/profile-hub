@@ -45,6 +45,10 @@ const router = createBrowserRouter([
             lazy: () => import("./views/About"),
           },
           {
+            path: "documents",
+            lazy: () => import("./views/Documents"),
+          },
+          {
             path: "profile/:nameOrId",
             lazy: () => import("./views/Profile"),
           },
