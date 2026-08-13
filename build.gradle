@@ -139,7 +139,6 @@ dependencies {
     }
     testImplementation "au.org.ala:userdetails-service-client:$alaSecurityLibsVersion"
 
-    implementation 'org.grails.plugins:csv:1.0.1'
     implementation 'com.opencsv:opencsv:5.7.0'
     implementation 'au.org.ala.grails:interceptor-annotation-matcher:1.0.0'
 
