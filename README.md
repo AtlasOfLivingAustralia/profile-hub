@@ -3,6 +3,10 @@ Master: [![Build Status](https://travis-ci.org/AtlasOfLivingAustralia/profile-hu
 
 Dev: [![Build Status](https://travis-ci.org/AtlasOfLivingAustralia/profile-hub.svg?branch=dev)](https://travis-ci.org/AtlasOfLivingAustralia/profile-hub)
 
+# React UI
+
+The React frontend lives in [`src/ui`](src/ui/). See the [UI README](src/ui/README.md) for local setup, environment configuration, and the CI/CD pipeline.
+
 # Design notes and setup instructions
 
 See the [project wiki](https://github.com/AtlasOfLivingAustralia/profile-hub/wiki/).
