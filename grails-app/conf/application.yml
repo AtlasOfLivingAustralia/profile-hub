@@ -119,9 +119,13 @@ security:
             - '/openapi.*'
             - '/webjars/.*'
             - '/api/.*'
-        uriFilterPattern:
-        authenticateOnlyIfCookieFilterPattern: '*'
-        authenticateOnlyIfLoggedInFilterPattern:
+        uriFilterPattern: []
+        # Do NOT use '*' here. With credentials:include, a present ALA-Auth cookie makes
+        # every fetch/XHR hit Pac4j's interactive OIDC SecurityFilter and 302 to Cognito
+        # (CORS failure). Public APIs stay anonymous; JWT Bearer is handled separately.
+        # Interactive login remains available via /login and @SSO for browser pages.
+        authenticateOnlyIfCookieFilterPattern: []
+        authenticateOnlyIfLoggedInFilterPattern: []
     oidc:
         enabled: true
         discoveryUri: https://auth.ala.org.au/cas/oidc/.well-known
@@ -133,6 +137,12 @@ security:
         enabled: true
         discoveryUri: https://auth.ala.org.au/cas/oidc/.well-known
         fallbackToLegacyBehaviour: true
+        # Cognito access tokens omit some CAS-oriented claims; keep validation workable.
+        requiredClaims:
+            - sub
+            - iat
+            - exp
+            - iss
 
 ---
 webservice:
