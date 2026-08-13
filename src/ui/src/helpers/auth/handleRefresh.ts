@@ -1,4 +1,5 @@
-import { type AuthContextProps } from "react-oidc-context";
+import type { User } from "oidc-client-ts";
+import type { AuthContextProps } from "react-oidc-context";
 import { userManager } from ".";
 import handleSignout from "./handleSignout";
 
@@ -10,22 +11,21 @@ interface TokenRefreshPayload {
   token_type: string;
 }
 
-export default async function handleRefresh(auth: AuthContextProps) {
-  // Ensure the user exists
-  const existing = auth.user;
-  if (!existing) {
-    await handleSignout(auth);
-    return;
+/**
+ * Refresh Cognito/OIDC tokens using the refresh_token grant and persist to sessionStorage.
+ * Returns the updated user, or null if refresh failed.
+ */
+export async function refreshUserTokens(existing: User): Promise<User | null> {
+  if (!existing.refresh_token) {
+    return null;
   }
 
-  // Construct the form data for the request
   const params = new URLSearchParams({
     grant_type: "refresh_token",
     client_id: import.meta.env.VITE_AUTH_CLIENT_ID,
-    refresh_token: auth.user?.refresh_token || "",
+    refresh_token: existing.refresh_token,
   });
 
-  // Make the token refresh request
   const tokenEndpoint = await userManager.metadataService.getTokenEndpoint();
   const resp = await fetch(tokenEndpoint || "", {
     method: "POST",
@@ -35,28 +35,37 @@ export default async function handleRefresh(auth: AuthContextProps) {
     body: params.toString(),
   });
 
-  // If we couldn't get the token okay, sign out
   if (!resp.ok) {
-    await handleSignout(auth);
-    return;
+    return null;
   }
 
-  // Extract the token payload data
   const { access_token, expires_in, refresh_token, id_token } =
     (await resp.json()) as TokenRefreshPayload;
 
-  // Update the existing user
   existing.access_token = access_token;
   existing.expires_in = expires_in;
   existing.expires_at = Math.floor(Date.now() / 1000) + expires_in;
 
-  // Apply the new refresh_token if the IdP issued one (e.g. rotating refresh tokens)
   if (refresh_token) existing.refresh_token = refresh_token;
-
-  // Apply the new id_token if returned
   if (id_token) existing.id_token = id_token;
 
-  // Trigger the user event to propagate changes & persist to sessionStorage
-  await auth.events.load(existing, true);
   await userManager.storeUser(existing);
+  return existing;
+}
+
+export default async function handleRefresh(auth: AuthContextProps) {
+  const existing = auth.user;
+  if (!existing) {
+    await handleSignout(auth);
+    return;
+  }
+
+  const refreshed = await refreshUserTokens(existing);
+  if (!refreshed) {
+    await handleSignout(auth);
+    return;
+  }
+
+  // Propagate to react-oidc-context subscribers
+  await auth.events.load(refreshed, true);
 }
