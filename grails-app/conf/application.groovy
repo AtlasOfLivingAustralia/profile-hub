@@ -59,6 +59,21 @@ skin.fluidLayout = true
 app.http.header.userId = "X-ALA-userId"
 app.view.nocache = true
 
+// Grails 6.2.x: prefer Groovy CORS config — YAML mappings/list binding is unreliable,
+// and allowedOriginPatterns is not applied (apache/grails-core#13633).
+grails.cors.enabled = true
+grails.cors.mappings = [
+    '/**': [
+        allowedOrigins: [
+            'https://profiles-react-ui-rebuild.dev.ala.org.au',
+            'https://profiles.dev.ala.org.au',
+        ],
+        allowedMethods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowedHeaders: ['*'],
+        allowCredentials: true,
+        maxAge: 3600,
+    ]
+]
 
 environments {
     development {

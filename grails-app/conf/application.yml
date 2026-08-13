@@ -92,23 +92,6 @@ grails:
                 scriptlet: html
                 taglib: none
                 staticparts: none
-    cors:
-        enabled: true
-        mappings:
-            '[/**]':
-                allowedOriginPatterns:
-                    - 'https://*.ala.org.au'
-                allowedMethods:
-                    - GET
-                    - HEAD
-                    - POST
-                    - PUT
-                    - DELETE
-                    - OPTIONS
-                allowedHeaders:
-                    - '*'
-                allowCredentials: true
-                maxAge: 3600
 
 server:
     forward-headers-strategy: native
