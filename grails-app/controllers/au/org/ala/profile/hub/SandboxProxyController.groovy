@@ -71,7 +71,13 @@ class SandboxProxyController extends BaseController {
         FileUtils.forceMkdir(uploadDir)
 
         log.debug "Transferring file to directory...."
-        File newFile = new File("${uploadDirPath}${File.separatorChar}${file.originalFilename}")
+        String originalFilename = file.originalFilename?.replace('\\', '/')
+        String filename = originalFilename?.tokenize('/')?.last()
+        if (!filename || filename in ['.', '..']) {
+            response.sendError(400, 'Invalid filename')
+            return
+        }
+        File newFile = new File(uploadDir, filename)
         file.transferTo(newFile)
 
         log.debug "Detecting file formats...."
