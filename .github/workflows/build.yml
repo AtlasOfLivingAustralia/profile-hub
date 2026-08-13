@@ -41,18 +41,15 @@ jobs:
           path: './gradle.properties'
           properties: 'profileHubVersion'
 
-      - name: Get the package id for the version read from the properties file
-        uses: castlabs/get-package-version-id-action@v2.2
-        id: versions
-        with:
-          version:  ${{steps.read_property.outputs.profileHubVersion}}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Delete the github package with the id we just retrieved (all SNAPSHOT versions are considered part of the same package)
+      - name: Delete the github package versions for this SNAPSHOT
         uses: actions/delete-package-versions@v5
-        if: ${{ steps.versions.outputs.ids != '' }}
+        continue-on-error: true
         with:
-          package-version-ids: "${{ steps.versions.outputs.ids }}"
+          owner: ${{ github.repository_owner }}
+          package-name: au.org.ala.profile-hub
+          package-type: maven
+          min-versions-to-keep: 0
+          ignore-versions: '^(?!${{ steps.read_property.outputs.profileHubVersion }}$).*$'
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Gradle
