@@ -219,7 +219,7 @@
                                 class="fa fa-plus"></i>&nbsp;Add Image</button>
                     </g:if>
                     <g:elseif
-                            test="${grailsApplication.config.getProperty('deployment_env.toLowerCase')() != 'prod' && grailsApplication.config.getProperty('deployment_env.toLowerCase')() != 'production'}">
+                            test="${!(grailsApplication.config.getProperty('deployment_env')?.toLowerCase() in ['prod', 'production'])}">
                         <span class="small">Image uploads are not available in ${grailsApplication.config.getProperty('deployment_env')}</span>
                     </g:elseif>
 
