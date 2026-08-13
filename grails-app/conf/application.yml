@@ -11,12 +11,19 @@ grails:
             # Whether to translate GORM events into Reactor events
             # Disabled by default for performance reasons
             events: false
+
 info:
     app:
         name: '@info.app.name@'
         version: '@info.app.version@'
         grailsVersion: '@info.app.grailsVersion@'
+
 spring:
+    config:
+        import:
+            - optional:file:/data/profile-hub/config/profile-hub-config.properties
+            - optional:file:/data/profile-hub/config/profile-hub-config.yml
+            - optional:file:/data/profile-hub/config/profile-hub-config.groovy
     jmx:
         unique-names: true
     main:
@@ -34,9 +41,12 @@ spring:
                 - 'logback.groovy'
                 - 'grails-app/conf/logback.groovy'
                 - '*.properties'
+
 management:
     endpoints:
         enabled-by-default: false
+        jmx:
+            unique-names: true
 
 ---
 grails:
@@ -87,24 +97,31 @@ grails:
                 scriptlet: html
                 taglib: none
                 staticparts: none
-management:
-    endpoints:
-        jmx:
-            unique-names: true
+    cors:
+        enabled: true
+        mappings:
+            '[/**]':
+                allowedOriginPatterns:
+                    - 'https://*.ala.org.au'
+                allowedMethods:
+                    - GET
+                    - HEAD
+                    - POST
+                    - PUT
+                    - DELETE
+                    - OPTIONS
+                allowedHeaders:
+                    - '*'
+                allowCredentials: true
+                maxAge: 3600
 
 server:
+    forward-headers-strategy: native
     tomcat:
-        port-header: 'X-Forwarded-Port'
-        protocol-header: 'X-Forwarded-Proto'
-        remote-ip-header: 'X-Forwarded-For'
----
-
-grails:
-    config:
-        locations:
-            - file:/data/profile-hub/config/profile-hub-config.properties
-            - file:/data/profile-hub/config/profile-hub-config.yml
-            - file:/data/profile-hub/config/profile-hub-config.groovy
+        remoteip:
+            port-header: 'X-Forwarded-Port'
+            protocol-header: 'X-Forwarded-Proto'
+            remote-ip-header: 'X-Forwarded-For'
 
 ---
 security:
@@ -132,7 +149,6 @@ security:
         fallbackToLegacyBehaviour: true
 
 ---
-
 webservice:
     jwt: true
     jwt-include-legacy-headers: true
@@ -154,7 +170,6 @@ app:
         profileid: cd4
 
 ---
-
 openapi:
     title: Profiles APIs
     description: APIs to query a collection in profiles

@@ -29,6 +29,10 @@ class AccessControlInterceptor {
     }
 
     boolean  before () {
+        if (request.method == 'OPTIONS') {
+            return true
+        }
+
         params.currentUserId = authService.userId
         params.currentUser = authService.getDisplayName()
         List<String> usersRoles = delegateService?.getUserRoles()?.asList()
