@@ -19,11 +19,6 @@ info:
         grailsVersion: '@info.app.grailsVersion@'
 
 spring:
-    config:
-        import:
-            - optional:file:/data/profile-hub/config/profile-hub-config.properties
-            - optional:file:/data/profile-hub/config/profile-hub-config.yml
-            - optional:file:/data/profile-hub/config/profile-hub-config.groovy
     jmx:
         unique-names: true
     main:
@@ -122,6 +117,14 @@ server:
             port-header: 'X-Forwarded-Port'
             protocol-header: 'X-Forwarded-Proto'
             remote-ip-header: 'X-Forwarded-For'
+
+---
+grails:
+    config:
+        locations:
+            - file:/data/profile-hub/config/profile-hub-config.properties
+            - file:/data/profile-hub/config/profile-hub-config.yml
+            - file:/data/profile-hub/config/profile-hub-config.groovy
 
 ---
 security:
