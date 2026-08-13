@@ -67,6 +67,8 @@ grails.cors.mappings = [
         allowedOrigins: [
             'https://profiles-react-ui-rebuild.dev.ala.org.au',
             'https://profiles.dev.ala.org.au',
+            'https://profile-staging.ala.org.au',
+            'https://profiles.ala.org.au',
         ],
         allowedMethods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['*'],
