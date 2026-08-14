@@ -140,7 +140,10 @@ dependencies {
     testImplementation "au.org.ala:userdetails-service-client:$alaSecurityLibsVersion"
 
     implementation 'com.opencsv:opencsv:5.7.0'
-    implementation 'au.org.ala.grails:interceptor-annotation-matcher:1.0.0'
+    // 2.0.0 is the Grails 7 build. 1.0.0 pulls org.grails:grails-plugin-*:4.0.13 onto the
+    // classpath; Grails 7 plugin discovery then livelocks in loadDelayedPlugins / isValidVersion,
+    // so bootRun hangs at "> Task :bootRun" with no logs.
+    implementation 'au.org.ala.grails:interceptor-annotation-matcher:2.0.0'
 
     implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
     implementation "org.grails.plugins:ala-admin-plugin:3.0.0-SNAPSHOT"
