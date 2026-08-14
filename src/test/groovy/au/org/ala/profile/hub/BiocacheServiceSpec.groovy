@@ -14,7 +14,7 @@ class BiocacheServiceSpec extends Specification implements ServiceUnitTest<Bioca
     WebService webService
 
     def setup() {
-        grailsApplication.config.biocache.base.url = "http://biocache.base"
+        grailsApplication.config.biocache.ws.url = "http://biocache.base"
         grailsApplication.config.sandbox.biocache.service.url = "http://sandbox.biocache.base"
 
         webService = Mock(WebService)

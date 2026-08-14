@@ -23,9 +23,9 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
             path += "/"
         }
         grailsApplication.config.image.staging.dir = "${path}${testId}"
-        new File("${grailsApplication.config.image.staging.dir}").mkdir()
+        new File("${grailsApplication.config.getProperty('image.staging.dir')}").mkdir()
 
-        println "Test files will be written to ${grailsApplication.config.image.staging.dir}"
+        println "Test files will be written to ${grailsApplication.config.getProperty('image.staging.dir')}"
 
         biocacheService = Mock(BiocacheService)
         profileService = Mock(ProfileService)
@@ -41,8 +41,8 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
     }
 
     def cleanup() {
-        println "Deleting test directory ${grailsApplication.config.image.staging.dir}"
-        boolean deleted = new File("${grailsApplication.config.image.staging.dir}").delete()
+        println "Deleting test directory ${grailsApplication.config.getProperty('image.staging.dir')}"
+        boolean deleted = new File("${grailsApplication.config.getProperty('image.staging.dir')}").delete()
         println deleted ? "Succeded" : "Failed"
     }
 
@@ -85,15 +85,15 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
     def "deleteStagedImage should delete the image file, and invoke profileService.recordStagedImage"() {
         setup:
         profileService.getProfile(_, _, _) >> [profile: [uuid: "profile1", stagedImages: [[imageId: "image1", originalFileName: "image1.jpg"], [imageId: "image2", originalFileName: "image2.jpg"]]]]
-        File stagedDir = new File("${grailsApplication.config.image.staging.dir}/profile1")
+        File stagedDir = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1")
         stagedDir.mkdir()
-        File stagedFile1 = new File("${grailsApplication.config.image.staging.dir}/profile1/image1.jpg")
-        File stagedFile2 = new File("${grailsApplication.config.image.staging.dir}/profile1/image2.jpg")
+        File stagedFile1 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image1.jpg")
+        File stagedFile2 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image2.jpg")
         stagedFile1.createNewFile()
         stagedFile2.createNewFile()
 
         expect:
-        new File("${grailsApplication.config.image.staging.dir}/profile1").list().size() == 2
+        new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1").list().size() == 2
 
         when:
         boolean deleted = imageService.deleteStagedImage("opusId", "profileId", "image1")
@@ -101,19 +101,19 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
         then:
         deleted == true
         1 * profileService.recordStagedImage(_, _, _)
-        new File("${grailsApplication.config.image.staging.dir}/profile1").list().size() == 1
+        new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1").list().size() == 1
     }
 
     def "deleteStagedImage should delete the profile's temp dir if there are no more staged images"() {
         setup:
         profileService.getProfile(_, _, _) >> [profile: [uuid: "profile1", stagedImages: [[imageId: "image1", originalFileName: "image1.jpg"]]]]
-        File stagedDir = new File("${grailsApplication.config.image.staging.dir}/profile1")
+        File stagedDir = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1")
         stagedDir.mkdir()
-        File stagedFile1 = new File("${grailsApplication.config.image.staging.dir}/profile1/image1.jpg")
+        File stagedFile1 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image1.jpg")
         stagedFile1.createNewFile()
 
         expect:
-        new File("${grailsApplication.config.image.staging.dir}/profile1").list().size() == 1
+        new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1").list().size() == 1
 
         when:
         boolean deleted = imageService.deleteStagedImage("opusId", "profileId", "image1")
@@ -121,7 +121,7 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
         then:
         deleted == true
         1 * profileService.recordStagedImage(_, _, _)
-        new File("${grailsApplication.config.image.staging.dir}/profile1").exists() == false
+        new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1").exists() == false
     }
 
     def "retrieveImages should fetch images from the biocache"() {
@@ -425,15 +425,15 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
                 [imageId: "image2", originalFileName: "image2.jpg"]
         ]]]
 
-        File stagedDir = new File("${grailsApplication.config.image.staging.dir}/profile1")
+        File stagedDir = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1")
         stagedDir.mkdir()
-        File stagedFile1 = new File("${grailsApplication.config.image.staging.dir}/profile1/image1.jpg")
-        File stagedFile2 = new File("${grailsApplication.config.image.staging.dir}/profile1/image2.jpg")
+        File stagedFile1 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image1.jpg")
+        File stagedFile2 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image2.jpg")
         stagedFile1.createNewFile()
         stagedFile2.createNewFile()
 
         expect:
-        new File("${grailsApplication.config.image.staging.dir}/profile1").list().size() == 2
+        new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1").list().size() == 2
 
         when:
         imageService.publishStagedImages("opusId", "profile1")
@@ -441,7 +441,7 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
         then:
         imageService.biocacheService.uploadImage(_,_,_,_,_,_) >> [statusCode: 201, resp: ['images':'123']]
         2 * profileService.recordStagedImage(_, _, _)
-        TestCase.assertFalse ("Staged images were not removed after upload",new File("${grailsApplication.config.image.staging.dir}/profile1").exists())
+        TestCase.assertFalse ("Staged images were not removed after upload",new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1").exists())
     }
 
     def "publishImages should replace the staged id with a permanent id for the primary image if it was a staged image"() {
@@ -450,10 +450,10 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
                 [imageId: "image1", originalFileName: "image1.jpg"],
                 [imageId: "image2", originalFileName: "image2.jpg"]
         ], primaryImage                                                                      : "image1"]]
-        File stagedDir = new File("${grailsApplication.config.image.staging.dir}/profile1")
+        File stagedDir = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1")
         stagedDir.mkdir()
-        File stagedFile1 = new File("${grailsApplication.config.image.staging.dir}/profile1/image1.jpg")
-        File stagedFile2 = new File("${grailsApplication.config.image.staging.dir}/profile1/image2.jpg")
+        File stagedFile1 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image1.jpg")
+        File stagedFile2 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image2.jpg")
         stagedFile1.createNewFile()
         stagedFile2.createNewFile()
 
@@ -461,7 +461,7 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
         biocacheService.uploadImage(_, _, _, stagedFile2, _, _) >> [statusCode: 201,resp: [images: ["permId2"]]]
 
         expect:
-        new File("${grailsApplication.config.image.staging.dir}/profile1").list().size() == 2
+        new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1").list().size() == 2
 
         Map expectedUpdates = [primaryImage: "permId1"]
 
@@ -478,15 +478,15 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
         profileService.getProfile(_, _, _) >> [opus: [dataResourceUid: "dr1", usePrivateRecordData:false], profile: [uuid: "profile1", stagedImages: [
                 [imageId: "image2", originalFileName: "image2.jpg"]
         ]]]
-        File stagedDir = new File("${grailsApplication.config.image.staging.dir}/profile1")
+        File stagedDir = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1")
         stagedDir.mkdir()
-        File stagedFile1 = new File("${grailsApplication.config.image.staging.dir}/profile1/image1.jpg")
-        File stagedFile2 = new File("${grailsApplication.config.image.staging.dir}/profile1/image2.jpg")
+        File stagedFile1 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image1.jpg")
+        File stagedFile2 = new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image2.jpg")
         stagedFile1.createNewFile()
         stagedFile2.createNewFile()
 
         expect:
-        new File("${grailsApplication.config.image.staging.dir}/profile1").list().size() == 2
+        new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1").list().size() == 2
 
         when:
         imageService.publishStagedImages("opusId", "profile1")
@@ -494,6 +494,6 @@ class ImageServiceSpec extends Specification implements ServiceUnitTest<ImageSer
         then:
         imageService.biocacheService.uploadImage(_,_,_,_,_,_) >> [statusCode: 201, resp: ['images':['123']]]
         1 * profileService.recordStagedImage(_, _, _)
-        TestCase.assertFalse("Something went wrong when an image has no metadata",new File("${grailsApplication.config.image.staging.dir}/profile1/image2.jpg").exists())
+        TestCase.assertFalse("Something went wrong when an image has no metadata",new File("${grailsApplication.config.getProperty('image.staging.dir')}/profile1/image2.jpg").exists())
   }
 }

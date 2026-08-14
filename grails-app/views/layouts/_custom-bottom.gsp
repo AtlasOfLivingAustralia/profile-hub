@@ -115,31 +115,31 @@
         readonly: ${!edit},
         currentUser: '${params.currentUser}',
         currentUserId: '${params.currentUserId}',
-        profileServiceUrl: '${grailsApplication.config.profile.service.url}',
-        keybaseProjectUrl: '${grailsApplication.config.keybase.project.lookup}',
-        imageServiceUrl: '${grailsApplication.config.images.service.url}',
-        bieServiceUrl: '${grailsApplication.config.bie.ws.url}',
+        profileServiceUrl: '${grailsApplication.config.getProperty('profile.service.url')}',
+        keybaseProjectUrl: '${grailsApplication.config.getProperty('keybase.project.lookup')}',
+        imageServiceUrl: '${grailsApplication.config.getProperty('images.service.url')}',
+        bieServiceUrl: '${grailsApplication.config.getProperty('bie.ws.url')}',
         biocacheServiceUrl: '${opus && opus.usePrivateRecordData ? "${request.contextPath}${request.contextPath.endsWith("/") ? '' : '/'}opus/${opus.uuid}" : grailsApplication.config.getProperty('biocache.ws.url')}',
-        biocacheRecordUrl: '${grailsApplication.config.biocache.base.url}${grailsApplication.config.biocache.occurrence.record.path}',
-        nslNameUrl: '${grailsApplication.config.nsl.name.url.prefix}',
+        biocacheRecordUrl: '${grailsApplication.config.getProperty('biocache.base.url')}${grailsApplication.config.getProperty('biocache.occurrence.record.path')}',
+        nslNameUrl: '${grailsApplication.config.getProperty('nsl.name.url.prefix')}',
         isOpusReviewer: ${!!params.isOpusReviewer},
         isOpusAuthor: ${!!params.isOpusAuthor},
         isOpusEditor: ${!!params.isOpusEditor},
         isOpusAdmin: ${!!params.isOpusAdmin},
         isALAAdmin: ${!!params.isALAAdmin},
-        listServiceUrl: '${grailsApplication.config.lists.base.url}',
-        masterListType: '${grailsApplication.config.lists.masterlist.type ?: 'PROFILE' }',
-        nslServiceUrlPrefix: '${grailsApplication.config.nsl.service.url.prefix}',
-        nslNameUrlPrefix: '${grailsApplication.config.nsl.name.url.prefix}',
-        nslServiceApniConceptSuffix: '${grailsApplication.config.nsl.service.apni.concept.suffix}',
-        features: {publications: '${grailsApplication.config.feature.publications}',
-                   imageUpload:'${grailsApplication.config.feature.feature.imageUpload}'},
-        map: {mapId: '${grailsApplication.config.map.id}',
-              accessKey: '${grailsApplication.config.map.access.key}'},
+        listServiceUrl: '${grailsApplication.config.getProperty('lists.base.url')}',
+        masterListType: '${grailsApplication.config.getProperty('lists.masterlist.type') ?: 'PROFILE' }',
+        nslServiceUrlPrefix: '${grailsApplication.config.getProperty('nsl.service.url.prefix')}',
+        nslNameUrlPrefix: '${grailsApplication.config.getProperty('nsl.name.url.prefix')}',
+        nslServiceApniConceptSuffix: '${grailsApplication.config.getProperty('nsl.service.apni.concept.suffix')}',
+        features: {publications: '${grailsApplication.config.getProperty('feature.publications')}',
+                   imageUpload:'${grailsApplication.config.getProperty('feature.feature.imageUpload')}'},
+        map: {mapId: '${grailsApplication.config.getProperty('map.id')}',
+              accessKey: '${grailsApplication.config.getProperty('map.access.key')}'},
         bootstrapCssFile: '${assetPath(src: "/bootstrap/css/bootstrap3.3.4.min.css")}',
         imageLoadErrorUrl: '${assetPath(src: "not-available.png")}',
         development: ${Environment.current == Environment.DEVELOPMENT},
-        pdfHighThresholdLimit :  '${grailsApplication.config.pdf.highThresholdLimit?:50}',
+        pdfHighThresholdLimit :  '${grailsApplication.config.getProperty('pdf.highThresholdLimit')?:50}',
         facetGroupUrl: '${g.createLink(controller: 'resource', action: 'facets')}'
     });
 </asset:script>
@@ -151,7 +151,7 @@
 
 </body>
 <script type='text/javascript'>
-  <g:if test="${!excludeBugherd && !grailsApplication.config.bugherd.disabled}">
+  <g:if test="${!excludeBugherd && !grailsApplication.config.getProperty('bugherd.disabled')}">
   (function (d, t) {
     var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
     bh.type = 'text/javascript';

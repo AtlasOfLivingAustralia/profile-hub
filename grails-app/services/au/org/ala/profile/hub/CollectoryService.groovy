@@ -11,7 +11,7 @@ class CollectoryService {
         Map dataResources = [:]
 
         try {
-            Map resources = webService.get("${grailsApplication.config.collectory.base.url}/ws/dataResource")
+            Map resources = webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataResource")
             resources?.resp?.each {
                 dataResources.put(it.uid, it.name)
             }
@@ -26,7 +26,7 @@ class CollectoryService {
         Map dataHubs = [:]
 
         try {
-            Map hubs = webService.get("${grailsApplication.config.collectory.base.url}/ws/dataHub")
+            Map hubs = webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataHub")
             hubs?.resp?.each {
                 dataHubs.put(it.uid, it.name)
             }
@@ -38,14 +38,14 @@ class CollectoryService {
     }
 
     def getDataResource(String dataResourceUid) {
-        webService.get("${grailsApplication.config.collectory.base.url}/ws/dataResource/${dataResourceUid}")
+        webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataResource/${dataResourceUid}")
     }
 
     def getDataHub(String dataHubUid) {
-        webService.get("${grailsApplication.config.collectory.base.url}/ws/dataHub/${dataHubUid}")
+        webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataHub/${dataHubUid}")
     }
 
     def getLicences() {
-        webService.get("${grailsApplication.config.collectory.base.url}/ws/licence")
+        webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/licence")
     }
 }

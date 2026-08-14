@@ -5,8 +5,8 @@ import grails.converters.JSON
 import org.grails.web.json.JSONObject
 import grails.web.mapping.LinkGenerator
 
-import javax.servlet.http.Cookie
-import javax.servlet.http.HttpServletRequest
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
 
 import static au.org.ala.profile.hub.WebServiceWrapperService.FLORULA_COOKIE
 

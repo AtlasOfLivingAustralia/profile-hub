@@ -10,10 +10,10 @@ class SpeciesListService {
 
     def getListsForGuid(String guid) {
         def path = grailsApplication.config.getProperty('lists.species.path', String, '/ws/species')
-        webService.get("${grailsApplication.config.lists.base.url}${path}/${guid}")
+        webService.get("${grailsApplication.config.getProperty('lists.base.url')}${path}/${guid}")
     }
 
     def getAllLists() {
-        webService.get("${grailsApplication.config.lists.base.url}/ws/speciesList?max=1000")
+        webService.get("${grailsApplication.config.getProperty('lists.base.url')}/ws/speciesList?max=1000")
     }
 }
