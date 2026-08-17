@@ -58,21 +58,3 @@
   font-size: 0.8rem;
   color: var(--bs-secondary-color);
 }
-
-.richText {
-  line-height: 1.7;
-  overflow-wrap: anywhere;
-}
-
-.richText > :last-child {
-  margin-bottom: 0;
-}
-
-.richText img {
-  max-width: 100%;
-  height: auto;
-}
-
-.richText iframe {
-  max-width: 100%;
-}

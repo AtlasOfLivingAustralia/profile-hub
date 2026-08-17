@@ -13,21 +13,10 @@ import type {
   OpusAboutResponse,
 } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
+import { RichText } from "#/components/RichText";
 
 import type { CollectionOutletContext } from "../Collection";
 import styles from "./index.module.css";
-
-function RichText({ html }: { html?: string | null }) {
-  if (!html?.trim()) return null;
-
-  return (
-    <div
-      className={styles.richText}
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: About content is stored as rich HTML by the API
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-  );
-}
 
 function Section({
   title,
@@ -176,12 +165,10 @@ export function Component() {
                     year: opus.year,
                     date: opus.date,
                     citation: (
-                      <span
+                      <RichText
+                        as="span"
                         className={styles.inlineHtml}
-                        // biome-ignore lint/security/noDangerouslySetInnerHtml: Citation HTML comes from the collection about API
-                        dangerouslySetInnerHTML={{
-                          __html: citationHtml || "",
-                        }}
+                        html={citationHtml}
                       />
                     ),
                     url: citationUrl ? (

@@ -3,9 +3,10 @@ import Row from "react-bootstrap/Row";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import type { ProfileImage } from "#/api/types";
+import { RichText } from "#/components/RichText";
 import { resolveMediaUrl } from "#/helpers/utils/resolveMediaUrl";
+
 import styles from "./ProfileMedia.module.css";
-import { RichText } from "./RichText";
 
 export function ProfileMedia({
   mapSnapshot,

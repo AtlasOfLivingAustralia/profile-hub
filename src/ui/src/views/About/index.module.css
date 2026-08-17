@@ -96,21 +96,3 @@
   margin-bottom: 0.85rem;
   font-weight: 600;
 }
-
-.richText {
-  line-height: 1.7;
-  overflow-wrap: anywhere;
-}
-
-.richText > :last-child {
-  margin-bottom: 0;
-}
-
-.richText img {
-  max-width: 100%;
-  height: auto;
-}
-
-.richText iframe {
-  max-width: 100%;
-}

@@ -1,8 +1,9 @@
 import { FormattedMessage } from "react-intl";
 
 import type { ProfileAttribute } from "#/api/types";
+import { RichText } from "#/components/RichText";
+
 import styles from "./Attributes.module.css";
-import { RichText } from "./RichText";
 import { Section } from "./Section";
 
 export function Attributes({ attributes }: { attributes: ProfileAttribute[] }) {

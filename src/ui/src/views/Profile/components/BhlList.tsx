@@ -1,7 +1,9 @@
 import { FormattedMessage } from "react-intl";
 
 import type { BhlLink } from "#/api/types";
+import { RichText } from "#/components/RichText";
 import { resolveMediaUrl } from "#/helpers/utils/resolveMediaUrl";
+
 import styles from "./BhlList.module.css";
 import { Section } from "./Section";
 
@@ -25,13 +27,19 @@ export function BhlList({ items }: { items: BhlLink[] }) {
               <div>
                 {item.url ? (
                   <a href={item.url} target="_blank" rel="noreferrer">
-                    {item.title || item.fullTitle || item.url}
+                    {item.title || item.fullTitle ? (
+                      <RichText as="span" html={item.title || item.fullTitle} />
+                    ) : (
+                      item.url
+                    )}
                   </a>
                 ) : (
-                  <span>{item.title || item.fullTitle}</span>
+                  <RichText as="span" html={item.title || item.fullTitle} />
                 )}
                 {item.description && (
-                  <p className={styles.linkDescription}>{item.description}</p>
+                  <p className={styles.linkDescription}>
+                    <RichText as="span" html={item.description} />
+                  </p>
                 )}
               </div>
             </li>
