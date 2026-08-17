@@ -110,6 +110,16 @@ grails:
             - file:/data/profile-hub/config/profile-hub-config.groovy
 
 ---
+# Used by CorsFilter (built-in grails.cors is disabled). Override in external config:
+# YAML list, Groovy list, or comma-separated string in .properties.
+cors:
+    allowedOrigins:
+        - https://profiles-react-ui-rebuild.dev.ala.org.au
+        - https://profiles.dev.ala.org.au
+        - https://profile-staging.ala.org.au
+        - https://profiles.ala.org.au
+
+---
 security:
     cas:
         enabled: false

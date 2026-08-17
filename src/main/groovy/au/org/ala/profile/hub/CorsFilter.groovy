@@ -13,27 +13,59 @@ import java.io.IOException
  * Explicit CORS filter. Grails 6.2.x built-in CORS config does not reliably apply
  * allowedOrigins from application config, which yields "Invalid CORS request" on
  * preflight and omits Access-Control-Allow-Origin on actual responses.
+ *
+ * Allowed origins are read from {@code cors.allowedOrigins} (YAML list, Groovy list,
+ * or comma-separated string) so they can be overridden in external config.
  */
 @CompileStatic
 class CorsFilter extends OncePerRequestFilter {
 
-    private static final List<String> ALLOWED_ORIGINS = [
-            'https://profiles-react-ui-rebuild.dev.ala.org.au',
-            'https://profiles.dev.ala.org.au',
-            'https://profile-staging.ala.org.au',
-            'https://profiles.ala.org.au',
-            'http://localhost:5173',
-    ].asImmutable()
-
     private static final String ALLOWED_METHODS = 'GET, HEAD, POST, PUT, DELETE, OPTIONS'
     private static final String ALLOWED_HEADERS = 'Authorization, Content-Type, Accept, Accept-Version, Origin, X-Requested-With'
+
+    private final List<String> allowedOrigins
+
+    CorsFilter(Object allowedOriginsConfig) {
+        this.allowedOrigins = parseOrigins(allowedOriginsConfig)
+    }
+
+    static List<String> parseOrigins(Object raw) {
+        if (raw == null) {
+            return Collections.emptyList()
+        }
+        if (raw instanceof Collection) {
+            List<String> result = new ArrayList<>()
+            for (Object item : (Collection) raw) {
+                if (item == null) {
+                    continue
+                }
+                String origin = item.toString().trim()
+                if (origin) {
+                    result.add(origin)
+                }
+            }
+            return Collections.unmodifiableList(result)
+        }
+        String asString = raw.toString().trim()
+        if (!asString) {
+            return Collections.emptyList()
+        }
+        List<String> result = new ArrayList<>()
+        for (String part : asString.split(',')) {
+            String origin = part.trim()
+            if (origin) {
+                result.add(origin)
+            }
+        }
+        return Collections.unmodifiableList(result)
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String origin = request.getHeader('Origin')
-        boolean allowed = origin != null && ALLOWED_ORIGINS.contains(origin)
+        boolean allowed = origin != null && allowedOrigins.contains(origin)
 
         if (allowed) {
             response.setHeader('Access-Control-Allow-Origin', origin)
