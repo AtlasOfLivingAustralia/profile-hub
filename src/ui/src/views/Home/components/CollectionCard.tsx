@@ -40,6 +40,7 @@ export function CollectionCard({
           <Card.Img
             variant="top"
             src={collection.brandingConfig.thumbnailUrl}
+            alt={`${collection.shortName ?? "Collection"} thumbnail image`}
             className={`${styles.thumbnail} rounded-top-4`}
           />
         ) : (
