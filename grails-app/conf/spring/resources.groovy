@@ -6,8 +6,9 @@ import org.springframework.core.Ordered
 beans = {
     // Register only via FilterRegistrationBean so Spring Boot does not also
     // auto-register the Filter bean (which would run CORS handling twice).
+    def corsOrigins = application.config.getProperty('cors.allowedOrigins')
     corsFilterRegistration(FilterRegistrationBean) {
-        filter = new CorsFilter()
+        filter = new CorsFilter(corsOrigins)
         urlPatterns = ['/*']
         order = Ordered.HIGHEST_PRECEDENCE
     }
