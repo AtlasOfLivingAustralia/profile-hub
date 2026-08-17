@@ -3,8 +3,9 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router";
 
 import type { ClassificationNode, Profile } from "#/api/types";
+import { RichText } from "#/components/RichText";
+
 import styles from "./ProfileHeader.module.css";
-import { RichText } from "./RichText";
 
 export function ProfileHeader({
   profile,
@@ -70,10 +71,10 @@ export function ProfileHeader({
           <h1 className={styles.title}>
             <em>{profile.scientificName}</em>
             {profile.nameAuthor ? (
-              <span
+              <RichText
+                as="span"
                 className={styles.author}
-                // biome-ignore lint/security/noDangerouslySetInnerHtml: The nameAuthor field contains rich text
-                dangerouslySetInnerHTML={{ __html: profile.nameAuthor }}
+                html={profile.nameAuthor}
               />
             ) : null}
           </h1>

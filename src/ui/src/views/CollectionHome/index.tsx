@@ -13,27 +13,11 @@ import Row from "react-bootstrap/Row";
 import { FormattedMessage } from "react-intl";
 import { Link, useOutletContext, useParams } from "react-router";
 
+import { RichText } from "#/components/RichText";
+
 import type { CollectionOutletContext } from "../Collection";
 
 import styles from "./index.module.css";
-
-function RichText({ html }: { html?: string }) {
-  if (!html) {
-    return (
-      <p className="text-body-secondary mb-0">
-        <FormattedMessage id="view.collectionHome.noInformation" />
-      </p>
-    );
-  }
-
-  return (
-    <div
-      className={styles.richText}
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: Collection content is stored as rich HTML by the API
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-  );
-}
 
 export function Component() {
   const { slug } = useParams<{ slug: string }>();
@@ -129,11 +113,23 @@ export function Component() {
           <h2 className="mb-4 text-body-secondary">
             <FormattedMessage id="view.collectionHome.aboutHeading" />
           </h2>
-          <RichText html={collection.aboutHtml} />
+          {collection.aboutHtml?.trim() ? (
+            <RichText html={collection.aboutHtml} />
+          ) : (
+            <p className="text-body-secondary mb-0">
+              <FormattedMessage id="view.collectionHome.noInformation" />
+            </p>
+          )}
           <h2 className="mb-4 mt-5 text-body-secondary">
             <FormattedMessage id="view.collectionHome.informationHeading" />
           </h2>
-          <RichText html={collection.opusLayoutConfig.explanatoryText} />
+          {collection.opusLayoutConfig.explanatoryText?.trim() ? (
+            <RichText html={collection.opusLayoutConfig.explanatoryText} />
+          ) : (
+            <p className="text-body-secondary mb-0">
+              <FormattedMessage id="view.collectionHome.noInformation" />
+            </p>
+          )}
         </section>
       </Col>
     </Row>

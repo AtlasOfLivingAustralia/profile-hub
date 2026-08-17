@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import Container from "react-bootstrap/Container";
 
+import { RichText } from "#/components/RichText";
+
 import styles from "./Banner.module.css";
 
 type BannerProps = {
@@ -52,8 +54,6 @@ export function Banner({
     };
   }, [preloadKey]);
 
-  console.log(bannerOverlay);
-
   return (
     <section className={styles.banner} aria-label={title}>
       <Carousel
@@ -78,13 +78,12 @@ export function Banner({
 
       <div className={styles.overlay}>
         <Container className={styles.content}>
-          <h1
-            className={styles.title}
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: Legacy HTML styling
-            dangerouslySetInnerHTML={{
-              __html: (bannerOverlay || title).replace("font-weight:bold;", ""),
-            }}
-          />
+          <h1 className={styles.title}>
+            <RichText
+              as="span"
+              html={(bannerOverlay || title).replace("font-weight:bold;", "")}
+            />
+          </h1>
         </Container>
       </div>
     </section>

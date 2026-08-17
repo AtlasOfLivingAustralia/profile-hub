@@ -1,6 +1,8 @@
 import { FormattedMessage } from "react-intl";
 
 import type { ProfileLink } from "#/api/types";
+import { RichText } from "#/components/RichText";
+
 import styles from "./LinkList.module.css";
 import { Section } from "./Section";
 
@@ -17,13 +19,19 @@ export function LinkList({ links }: { links: ProfileLink[] }) {
           <li key={link.uuid || `${link.url}-${index}`}>
             {link.url ? (
               <a href={link.url} target="_blank" rel="noreferrer">
-                {link.title || link.url}
+                {link.title ? (
+                  <RichText as="span" html={link.title} />
+                ) : (
+                  link.url
+                )}
               </a>
             ) : (
-              <span>{link.title}</span>
+              <RichText as="span" html={link.title} />
             )}
             {link.description && (
-              <p className={styles.linkDescription}>{link.description}</p>
+              <p className={styles.linkDescription}>
+                <RichText as="span" html={link.description} />
+              </p>
             )}
           </li>
         ))}

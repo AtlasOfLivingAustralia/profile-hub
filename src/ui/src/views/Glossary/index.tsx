@@ -9,15 +9,11 @@ import { Navigate, NavLink, useParams } from "react-router";
 import api from "#/api";
 import type { Glossary } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
+import { RichText } from "#/components/RichText";
 
 import styles from "./index.module.css";
 
 const LETTERS = "abcdefghijklmnopqrstuvwxyz".split("");
-
-function GlossaryDescription({ html }: { html: string }) {
-  // biome-ignore lint/security/noDangerouslySetInnerHtml: Glossary descriptions include inline HTML formatting from the API
-  return <span dangerouslySetInnerHTML={{ __html: html }} />;
-}
 
 export function Component() {
   const intl = useIntl();
@@ -122,7 +118,7 @@ export function Component() {
                         <b>{item.term}</b>
                       </td>
                       <td className="px-3">
-                        <GlossaryDescription html={item.description} />
+                        <RichText as="span" html={item.description} />
                       </td>
                     </tr>
                   ))}
