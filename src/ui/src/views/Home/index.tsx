@@ -54,9 +54,9 @@ function Home() {
 
       <Container className="pb-5">
         <div className="vstack gap-3">
-          <h3 className="text-body-secondary">
+          <h2 className="text-body-secondary">
             <FormattedMessage id="view.home.browseByCollection" />
-          </h3>
+          </h2>
           <Row xs={1} sm={2} md={3} lg={4} className="g-4">
             {collections
               ? collections.map((collection) => (
