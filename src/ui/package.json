@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "vite",
     "dev:clean": "vite --force",
-    "build:production": "tsc && vite build",
-    "build:staging": "tsc && vite build --mode staging",
-    "build:testing": "tsc && vite build --mode testing",
-    "build:development": "tsc && vite build --mode development",
+    "build:production": "tsc -b && vite build",
+    "build:staging": "tsc -b && vite build --mode staging",
+    "build:testing": "tsc -b && vite build --mode testing",
+    "build:development": "tsc -b && vite build --mode development",
     "lint": "biome lint --write ./src",
     "format": "biome format --write ./src",
     "preview": "vite preview"
