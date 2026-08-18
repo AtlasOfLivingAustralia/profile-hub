@@ -59,11 +59,6 @@ skin.fluidLayout = true
 app.http.header.userId = "X-ALA-userId"
 app.view.nocache = true
 
-// Disable built-in Grails CORS — it rejects preflights as "Invalid CORS request"
-// even when allowedOrigins are configured (Grails 6.2.x). See CorsFilter + resources.groovy.
-// Allowed origins are configured via cors.allowedOrigins (application.yml / external config).
-grails.cors.enabled = false
-
 environments {
     development {
         grails.logging.jul.usebridge = true
