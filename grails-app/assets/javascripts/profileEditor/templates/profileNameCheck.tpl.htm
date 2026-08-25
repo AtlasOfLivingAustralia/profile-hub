@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label for="scientificName" class="control-label">Profile Name</label>
+    <label for="scientificName" class="col-form-label">Profile Name</label>
 
     <div class="input-group">
         <input id="scientificName" type="text" ng-model="name"
@@ -79,7 +79,7 @@
 
 <div class="col-md-12 padding-left-1" ng-show="showManualMatch">
     <div class="form-group">
-        <label for="manualName" class="control-label">Search for the name you wish to match to</label>
+        <label for="manualName" class="col-form-label">Search for the name you wish to match to</label>
 
         <div class="form-group">
             <input id="manualName" type="text"
@@ -99,7 +99,7 @@
 
 <div class="col-md-12 padding-left-1" ng-show="showManualHierarchy">
     <div class="form-group" ng-repeat="ancestor in manualHierarchy">
-        <label for="manualHierarchy" class="control-label" ng-hide="$first">Select the parent profile/taxon for {{ manualHierarchy[$index - 1].name }}</label>
+        <label for="manualHierarchy" class="col-form-label" ng-hide="$first">Select the parent profile/taxon for {{ manualHierarchy[$index - 1].name }}</label>
         <div ng-class="$first ? 'form-group' : 'input-group'">
             <input id="manualHierarchy" type="text"
                    class="form-control ignore-save-warning"
@@ -114,7 +114,7 @@
                         ng-click="onSelectManualHierarchy($index)"
                         ng-disabled="!ancestor.name || ancestor.guid != null">Check name
                 </button>
-                <button class="btn btn-default input-append" title="Remove {{ ancestor.name }}"
+                <button class="btn btn-outline-secondary input-append" title="Remove {{ ancestor.name }}"
                         ng-click="trimManualHierarchy($index)"><span class="fa fa-trash-o"></span>
                 </button>
             </span>
@@ -123,18 +123,18 @@
         <div ng-show="manualHierarchy[$index].checked">
             <div ng-show="$first || !manualHierarchy[$index].guid">
                 <div ng-hide="$first">
-                    <span class="pull-right">
+                    <span class="float-end">
                         <span ng-hide="$first" class="fa fa-exclamation-triangle orange">&nbsp;&nbsp;</span>{{ manualHierarchy[$index].name }} is not a recognised profile or taxon.
                     </span>
                 </div>
                 <div ng-hide="$first" class="clearfix"></div>
-                <div class="form-inline {{ $first ? '' : 'inline-block'">
+                <div class="d-flex align-items-center gap-2 {{ $first ? '' : 'inline-block' }}">
                     <label for="rank">{{ $first ? 'Specify the taxonomic rank for ' + name : 'Rank' }} *</label>
                     <select id="rank"
                             ng-options="rank for rank in ranks"
                             ng-model="manualHierarchy[$index].rank"
                             ng-disabled="manualHierarchy[$index].guid && !editMode"
-                            class="form-control input-sm">
+                            class="form-control form-control-sm">
                         <option label="Select one..."></option>
                     </select>
                 </div>

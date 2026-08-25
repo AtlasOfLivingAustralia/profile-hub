@@ -1,0 +1,81 @@
+.panel {
+  padding: 1rem;
+  overflow: hidden;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color-translucent);
+  border-radius: var(--bs-border-radius-xl);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 6%);
+}
+
+.placeholder {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--bs-border-color-translucent);
+  border-radius: var(--bs-border-radius-xl);
+}
+
+.levels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.levelButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  color: var(--bs-body-color);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--bs-border-radius-xl);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.levelButton:hover {
+  color: var(--bs-primary);
+  background: var(--bs-tertiary-bg);
+}
+
+.levelButton[data-active="true"] {
+  color: #fff;
+  background: var(--bs-primary);
+}
+
+.levelButton[data-active="true"] :global(.badge) {
+  color: var(--bs-primary);
+  background: #fff !important;
+}
+
+.levelSkeleton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  /* Match body text line box so skeleton row height equals loaded buttons. */
+  height: calc(var(--bs-body-font-size) * var(--bs-body-line-height));
+}
+
+.levelSkeletonBadge {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: calc(0.75em * (1 + 2 * 0.35));
+}
+
+.emptyState {
+  display: flex;
+  min-height: 18rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}

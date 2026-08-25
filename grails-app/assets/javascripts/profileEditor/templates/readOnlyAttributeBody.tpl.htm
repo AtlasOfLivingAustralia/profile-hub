@@ -34,9 +34,9 @@
             </span>
         </div>
 
-        <div class="col-md-6 pull-right" ng-show="attribute.fromCollection">
-            <span class="pull-right">
-                <span class="pull-right">
+        <div class="col-md-6 float-end" ng-show="attribute.fromCollection">
+            <span class="float-end">
+                <span class="float-end">
                     <!-- TODO context path -->
                     From Collection: <a
                         ng-href="{{ config.contextPath }}/opus/{{attribute.fromCollection.opusShortName ? attribute.fromCollection.opusShortName : attribute.fromCollection.opusId}}/profile/{{attribute.fromCollection.profileId}}"
@@ -44,8 +44,8 @@
                 </span>
             </span>
         </div>
-        <div class="col-md-6 pull-right" ng-show="attrCtrl.readonly && !attribute.fromCollection && attrCtrl.opus.showLinkedOpusAttributes && $last">
-            <div class="pull-right">
+        <div class="col-md-6 float-end" ng-show="attrCtrl.readonly && !attribute.fromCollection && attrCtrl.opus.showLinkedOpusAttributes && $last">
+            <div class="float-end">
                 <a href=""
                    ng-click="attrCtrl.viewInOtherCollections(attribute.title)">Show {{attribute.title}} in other collections</a>
             </div>

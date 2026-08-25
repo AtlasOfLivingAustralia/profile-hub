@@ -1,0 +1,21 @@
+.hideCaret::after {
+  display: none !important;
+}
+
+.separator {
+  border-color: var(--bs-border-color);
+  margin: 0.5rem 0;
+  opacity: 1;
+  width: 100%;
+}
+
+.homeLink {
+  font-size: 0.98rem !important;
+  color: var(--bs-secondary-color) !important;
+  transition: color 150ms ease;
+}
+
+.homeLink:hover,
+.homeLink:focus-visible {
+  color: var(--bs-primary) !important;
+}

@@ -457,44 +457,545 @@ li.divider {
 ================================= */
 /* $call-to-action-colour (Blue) is the primary theme colour. Change this colour to change the theme look. */
 /* $call-to-action-hover-colour (blue hover) */
+/* Navbar */
 #primary-nav.navbar {
   margin-bottom: 0;
-  min-height: 70px;
-  padding-top: 10px;
+  min-height: 50px;
+  padding-top: 0;
   border-bottom: 2px solid;
   border-radius: 0;
+  background-color: #fff;
+  border-color: transparent;
 }
 
-.navbar li, .navbar p {
-  font-size: 14px;
-}
-
-.navbar-default .navbar-nav.bold a{
+#primary-nav .navbar-nav a {
   font-weight: bold;
 }
 
-.navbar-default .navbar-nav > .active > a{
-  background-color: #fff;
+#primary-nav.navbar-light.bg-light .navbar-nav > .nav-item > .nav-link,
+#primary-nav.navbar-light.bg-light .navbar-nav > .nav-item > .nav-link:hover,
+#primary-nav.navbar-light.bg-light .navbar-nav > .nav-item > .nav-link:focus,
+#primary-nav.navbar-light.bg-light .navbar-nav > .nav-item.active > .nav-link {
+  background-color: transparent;
 }
 
-.navbar-default .navbar-nav>.active>a:hover{
-  background-color: #fff;
+.navbar-right {
+  margin-left: auto;
 }
 
-.navbar-default {
+/* Bootstrap 3 compatibility classes still used by legacy templates */
+.thumbnail {
+  margin-bottom: 0;
+}
+
+.collection-grid {
+  margin-bottom: 40px;
+}
+
+.collection-tile {
+  height: 150px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.collection-thumbnail {
+  width: 140px;
+  height: 85px;
+  object-fit: cover;
+  display: block;
+}
+
+.collection-title {
+  width: 140px;
+  margin: 6px auto 0;
+  font-size: 13px;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+/* Angular UI Bootstrap 0.14 generates Bootstrap 3 tab markup.
+ * Apply the equivalent Bootstrap 5 tab presentation.
+ */
+tabset > .nav-tabs,
+.nav-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.nav-tabs > li {
+  margin-bottom: -1px;
+}
+
+.nav-tabs > li > a {
+  display: block;
+  padding: 0.5rem 1rem;
+  margin-bottom: -1px;
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid transparent;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+}
+
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+  border-color: #e9ecef #e9ecef #dee2e6;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
   background-color: #fff;
-  border-color: transparent;
+  border-color: #dee2e6 #dee2e6 #fff;
+}
+
+/* Header search Bootstrap 5 compatibility */
+#primary-nav .navbar-right,
+#primary-nav .navbar-nav.ms-auto {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+#primary-nav .navbar-right > li,
+#primary-nav .navbar-nav.ms-auto > li,
+#primary-nav .nav-item,
+#primary-nav delegated-search {
+  display: flex;
+  align-items: center;
+}
+
+#primary-nav .header-control {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  margin: 0;
+  padding-top: 0;
+}
+
+#primary-nav delegated-search .input-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  width: auto;
+  margin: 0;
+  padding-top: 0;
+  border-bottom: 1px solid #2E4453;
+}
+
+#primary-nav delegated-search .dropdown-toggle,
+#primary-nav delegated-search .delegated-search-control,
+#primary-nav delegated-search .input-group > .btn {
+  height: 30px;
+  line-height: 1;
+  border-radius: 0;
+  border-top: 0;
+  border-bottom: 0;
+}
+
+#primary-nav delegated-search .delegated-search-control {
+  width: 120px;
+  min-width: 120px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-left: 0;
+}
+
+#primary-nav delegated-search .dropdown {
+  position: relative;
+}
+
+#primary-nav delegated-search .dropdown-menu {
+  right: 50px !important;
+  left: auto !important;
+  min-width: 250px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+#primary-nav delegated-search .dropdown-menu > li > .dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1rem;
+  margin: 0;
+  line-height: 1.5;
+  white-space: nowrap;
+  font-weight: normal;
+}
+
+#primary-nav delegated-search .dropdown-menu > li > .dropdown-item:hover,
+#primary-nav delegated-search .dropdown-menu > li > .dropdown-item:focus,
+#primary-nav .dropdown-menu > li > .dropdown-item:hover,
+#primary-nav .dropdown-menu > li > .dropdown-item:focus {
+  background-color: #f5f5f5;
+  color: #005082;
+  text-decoration: none;
+}
+
+/* Bootstrap 5 compatibility for profile table of contents */
+ul.nav.flex-column > li > a {
+  display: block;
+  padding: 0.25rem 0;
+  line-height: 1.5;
+}
+
+/* Compatibility for Angular UI Bootstrap accordion/collapse */
+.collapse.in {
+  display: block !important;
+}
+
+/* Match old Bootstrap 3 accordion look while using Bootstrap 5 */
+accordion .accordion-heading-link {
+  cursor: pointer;
+}
+
+.side-menu accordion .panel-title {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* Bootstrap 5 adds underline styling to the Angular UI Bootstrap accordion generated link */
+accordion .accordion-toggle,
+accordion .accordion-toggle:hover,
+accordion .accordion-toggle:focus,
+accordion .accordion-toggle:active {
+  text-decoration: none !important;
+}
+
+accordion .caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin: 9px 5px 0;
+  vertical-align: middle;
+  border-top: 4px dashed;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+
+/* Compatibility for Angular UI Bootstrap modals while using Bootstrap 5 */
+.modal.in {
+  display: block !important;
+  opacity: 1 !important;
+  z-index: 1050 !important;
+}
+
+.modal.in .modal-dialog {
+  margin: 30px auto !important;
+  transform: none !important;
+}
+
+.modal.in .modal-content {
+  background-color: #fff !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+.modal-backdrop.in {
+  opacity: 0.5 !important;
+  z-index: 1040 !important;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+}
+
+.modal-header close-modal {
+  margin-left: auto;
+}
+
+/* Restore Bootstrap 5 modal body spacing for Angular UI Bootstrap modals */
+.modal-body {
+  padding: 1rem 1.5rem;
+}
+
+/*
+   Bootstrap 3 compatibility
+   Temporary compatibility rules for legacy Bootstrap 3 classes that remain
+   in older GSPs and AngularJS templates while Profiles runs on BS5.
+*/
+.col-xs-12 {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+/* Bootstrap 3 sm breakpoint */
+@media (min-width: 768px) {
+  .col-sm-6,
+  .col-sm-12 {
+    flex: 0 0 auto;
+  }
+
+  .col-sm-6 {
+    width: 50%;
+  }
+
+  .col-sm-12 {
+    width: 100%;
+  }
+}
+
+/* Bootstrap 3 md breakpoint */
+@media (min-width: 992px) {
+  .col-md-4,
+  .col-md-5,
+  .col-md-7,
+  .col-md-8 {
+    flex: 0 0 auto;
+  }
+
+  .col-md-4 {
+    width: 33.33333333%;
+  }
+
+  .col-md-5 {
+    width: 41.66666667%;
+  }
+
+  .col-md-7 {
+    width: 58.33333333%;
+  }
+
+  .col-md-8 {
+    width: 66.66666667%;
+  }
+
+  .col-md-offset-7 {
+    margin-left: 58.33333333%;
+  }
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
+/*
+   Bootstrap 5 mobile navigation compatibility
+   Makes the Settings dropdown render as part of the
+   expanded mobile navbar instead of behaving like a desktop floating menu
+*/
+@media (max-width: 767.98px) {
+  /* Stack both navbar groups vertically on mobile. */
+  #primary-nav .navbar-collapse .navbar-nav {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Cancel desktop right alignment for Search / Settings / Help. */
+  #primary-nav .navbar-collapse > .navbar-nav.ms-auto {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  #primary-nav .navbar-collapse > .navbar-nav.ms-auto > .nav-item {
+    width: 100%;
+  }
+
+  /* Give primary navigation links a clean full-width mobile row. */
+  #primary-nav .navbar-nav .nav-link {
+    display: block;
+    width: 100%;
+    padding: 12px 18px;
+    background-color: transparent;
+  }
+
+  /* Make delegated search fill the available mobile width. */
+  #primary-nav .header-control {
+    display: block !important;
+    width: 100%;
+    max-width: none;
+    margin: 0 !important;
+    padding: 0 18px;
+  }
+
+  #primary-nav .header-control > .input-group {
+    display: flex;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  #primary-nav .delegated-search-control {
+    flex: 1 1 auto;
+    min-width: 0;
+    background-color: transparent !important;
+  }
+
+  #primary-nav .header-control .btn-inside-input {
+    background-color: transparent !important;
+  }
+
+  /* Render Settings as part of the normal mobile navbar flow. */
+  #primary-nav .settings-menu {
+    display: block !important;
+    position: static !important;
+    width: 100%;
+    flex: 0 0 100%;
+  }
+
+  #primary-nav .settings-menu > .dropdown-toggle {
+    display: block;
+    width: 100%;
+    padding: 12px 18px;
+    text-align: left;
+    background-color: transparent;
+  }
+
+  #primary-nav .settings-menu > .dropdown-menu {
+    position: static !important;
+    inset: auto !important;
+    display: none;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0 0 8px;
+    transform: none !important;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+
+  #primary-nav .settings-menu > .dropdown-menu.show {
+    display: block;
+  }
+
+  #primary-nav .settings-menu .dropdown-item,
+  #primary-nav .settings-menu .dropdown-item-text {
+    display: block;
+    width: 100%;
+    padding: 10px 28px;
+    white-space: normal;
+    background-color: transparent;
+  }
+}
+
+/* Desktop navbar actions */
+@media (min-width:768px) {
+
+  #primary-nav {
+    padding-top:0;
+    padding-bottom:0;
+  }
+
+  #primary-nav > .container,
+  #primary-nav .navbar-collapse,
+  #primary-nav .navbar-nav.ms-auto {
+    align-items:stretch;
+  }
+
+  #primary-nav .settings-menu {
+    display:flex;
+    position:relative;
+  }
+
+  #primary-nav .settings-menu > .dropdown-toggle {
+    display:flex;
+    align-items:center;
+    padding:0 18px;
+    background:transparent;
+  }
+
+  #primary-nav delegated-search,
+  #primary-nav delegated-search .header-control,
+  #primary-nav delegated-search .input-group {
+    display:flex;
+    align-items:center;
+    height:100%;
+    background:transparent;
+  }
+
+  #primary-nav delegated-search .header-control,
+  #primary-nav delegated-search .input-group,
+  #primary-nav delegated-search .input-group > * {
+    background:transparent;
+  }
+
+}
+
+#primary-nav .search-dropdown,
+#primary-nav .search-dropdown:hover,
+#primary-nav .search-dropdown:focus,
+#primary-nav .search-dropdown:active,
+#primary-nav .search-dropdown.show {
+  background-color: transparent !important;
+}
+
+// Angular UI Bootstrap 0.14 alert close button compatibility
+.alert-dismissible {
+  position: relative;
+  padding-right: 3rem;
+}
+
+.alert-dismissible > .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+
+  padding: 0.75rem 1rem;
+  border: 0;
+  background: transparent;
+
+  color: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 1px 0 #fff;
+
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.alert-dismissible > .close:hover,
+.alert-dismissible > .close:focus {
+  color: inherit;
+  opacity: 0.75;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Bootstrap 3 float compatibility */
+.pull-right {
+  float: right !important;
+}
+
+.pull-left {
+  float: left !important;
 }
 
 /* Btn (Button)
 ================================= */
 
 .btn, .form-control, .panel, .list-group, .well, .span10X {
-  border-radius: 3px; /*box-shadow:0 0 0;*/
+  border-radius: 3px;
 }
 
-.btn-default {
-  background-color: #fff;
+.side-menu #search .quick-browse-form .form-control,
+.side-menu #search .quick-browse-form .btn {
+  border-radius: 0;
 }
 
 .btn-primary {
@@ -532,9 +1033,25 @@ li.divider {
   border-color: rgba(204, 204, 204, 0.4);
 }
 
-.panel-override.panel, .panel-override.panel .panel-heading,.panel-override.panel .panel-footer, .panel-override.panel .panel-body{
+.panel-override.card {
   border: 0;
-  background-color: inherit;
+  border-radius: 0;
+  background: transparent;
+}
+
+.panel-override.card > .card-header {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.panel-override.card > .card-body {
+  padding: 0;
+}
+
+.panel-override.card > .card-header .section-panel-heading {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 .panel-override.panel [class^="col-"]{
@@ -659,6 +1176,13 @@ li.divider {
   border: none;
 }
 
+/* Bootstrap 5 navbar is flex-based, but this legacy side menu expects the Bootstrap 3 block layout. */
+.side-menu > nav.navbar {
+  display: block;
+  width: 100%;
+  padding: 0;
+}
+
 .side-menu .navbar-header {
   width: 100%;
   border-bottom: 1px solid #e7e7e7;
@@ -736,6 +1260,15 @@ li.divider {
   padding: 15px 18px;
 }
 
+.brand-name-wrapper {
+  padding: 1rem;
+  padding-bottom: 0;
+}
+
+.brand-name-wrapper h4 {
+  margin: 0;
+}
+
 /*magnifying glass*/
 .side-menu .brand-name-wrapper {
   min-height: 50px;
@@ -744,42 +1277,43 @@ li.divider {
 /*Keeps magnifying glass in place when triggered*/
 /*.side-menu .brand-name-wrapper .navbar-brand {display: block;}*/
 /*.side-menu #search {position:relative;z-index:1000;}*/
-.side-menu #search .panel-body {
+
+.side-menu #search {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.side-menu #search .quick-browse-body {
   padding: 0;
 }
 
-.side-menu #search .panel-body .navbar-form {
+.side-menu #search .quick-browse-form {
+  display: flex;
+  width: 100%;
+  margin: 0;
   padding: 0;
-  padding-right: 50px;
-  width: 100%;
-  margin: 0;
-  position: relative;
-  border-top: 1px solid #e7e7e7;
-  border-bottom: 0;
 }
 
-.side-menu #search .panel-body .navbar-form .form-group {
-  width: 100%;
-  position: relative;
-  margin: 0;
-}
-
-.side-menu #search .panel-body .navbar-form input {
+.side-menu #search .quick-browse-form > .form-control {
+  flex: 1 1 auto;
+  height: 50px;
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  width: 100%;
-  height: 50px;
 }
 
-.side-menu #search .panel-body .navbar-form .btn {
-  position: absolute;
-  right: 0;
-  top: 0;
+.side-menu #search .quick-browse-form > .btn {
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  margin: 0;
+  padding: 0;
   border: 0;
   border-radius: 0;
-  background-color: #f3f3f3;
-  padding: 15px 18px;
+  line-height: 50px;
+  background-color: #f3f3f3 !important;
 }
 
 /*Search button tick*/
@@ -958,6 +1492,30 @@ li.divider {
   background-color: #eee;
 }
 
+.pagination > li > a,
+.pagination > li > span {
+  display: block;
+  padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+  position: relative;
+}
+
+.pagination > li:not(:first-child) > a,
+.pagination > li:not(:first-child) > span {
+  margin-left: calc(-1 * var(--bs-pagination-border-width));
+}
+
+.pagination > li:first-child > a,
+.pagination > li:first-child > span {
+  border-top-left-radius: var(--bs-pagination-border-radius);
+  border-bottom-left-radius: var(--bs-pagination-border-radius);
+}
+
+.pagination > li:last-child > a,
+.pagination > li:last-child > span {
+  border-top-right-radius: var(--bs-pagination-border-radius);
+  border-bottom-right-radius: var(--bs-pagination-border-radius);
+}
+
 /* Footer
 ================================= */
 
@@ -990,12 +1548,13 @@ ul.footer-nav.list-inline {
   padding: 0;
 }
 
-.main-footer li, .main-footer p {
+.main-footer li,
+.main-footer p {
   font-size: 15px;
 }
 
 .main-footer-border {
-  border-top: 1px solid;
+  border-top: 1px solid #0087BE;
   height: 0;
   margin-bottom: 4em;
   width: 100%;
@@ -1003,16 +1562,11 @@ ul.footer-nav.list-inline {
 }
 
 .main-footer {
-  border-top: 8px solid;
+  border-top: 8px solid #0087BE;
   margin: 30px 0 0;
+  padding-top: 30px;
   font-size: .95em;
   min-height: 230px;
-}
-/* do not show border on smaller devices*/
-@media only screen and (min-width: 992px){
-  .border-left{
-    border-left: 2px solid;
-  }
 }
 
 /* Social Icons
@@ -1100,17 +1654,13 @@ li .soc-bell:hover {
   font-style: normal;
 }
 
-.collection-thumbnail {
-  width: 160px;
-  height: 100px
-}
-
 accordion > div.panel-group > div.panel > div.panel-heading, .panel-title > a > a {
   /*color: #e9004a;*/
 }
 
 accordion > div.panel-group > div.panel {
   border: 1px solid white;
+  margin-bottom: 0;
 }
 
 accordion > div.panel-group, #search {
@@ -1141,6 +1691,7 @@ accordion > div.panel-group > div.panel > div.panel-collapse > div.panel-body {
   font-size: 14px;
   text-decoration: none;
   line-height: 1.6em;
+  cursor: pointer;
 }
 
 .panel-title > a > .caret {
@@ -1470,10 +2021,6 @@ hr.comment-divider {
 
 .upload-image-preview, .upload-image-preview img {
   height: 100px;
-}
-
-.thumbnail {
-  margin-bottom: 0;
 }
 
 .caption {
@@ -1923,12 +2470,22 @@ input.form-control:focus + span.input-group-btn > .btn-default {
 }
 
 ul.breadcrumb {
-  display: inline;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-left: 0;
+  margin-bottom: 1rem;
+  list-style: none;
 }
 
-ul.breadcrumb li:before {
+ul.breadcrumb li {
+  display: inline-flex;
+  align-items: center;
+}
+
+ul.breadcrumb li + li:before {
   padding-left: 10px;
-  padding-right: 5px;
+  padding-right: 10px;
   color: #ccc;
   content: "/\00a0";
 }
@@ -1950,22 +2507,57 @@ span.breadcrumb-dropdown {
   padding-right: 5px;
 }
 
-.vertical-centre-fixed {
-  position: fixed;
-  top: 45%;
-  width: 45px;
+ol.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.vertical-centre-fixed button {
-  margin-bottom: 5px;
-  width: 40px;
-  height: 40px;
+ol.breadcrumb > li,
+ol.breadcrumb > span,
+ol.breadcrumb taxonomy,
+ol.breadcrumb taxonomy > ul.breadcrumb,
+ol.breadcrumb taxonomy > ul.breadcrumb > li {
+  display: inline-flex;
+  align-items: center;
+}
+
+ol.breadcrumb taxonomy > ul.breadcrumb {
+  margin: 0;
+  padding: 0;
+}
+
+ol.breadcrumb > span:before {
+  padding-left: 10px;
+  padding-right: 10px;
+  color: #ccc;
+  content: "/\00a0";
 }
 
 .min-col {
   padding-left: 0;
   margin-left: 0;
   max-width: 40px;
+  position: relative;
+}
+
+profile-side-bar,
+profile-side-bar > div {
+  display: block;
+  height: 100%;
+}
+
+.vertical-centre-fixed {
+  position: sticky;
+  top: 35vh;
+  width: 45px;
+}
+
+.vertical-centre-fixed button {
+  display: block;
+  margin-bottom: 5px;
+  width: 40px;
+  height: 40px;
 }
 
 .navbar-nav > li > div {
@@ -1999,7 +2591,7 @@ span.breadcrumb-dropdown {
 .header-control .dropdown-toggle:hover {
   border-right: none;
   background: transparent !important;
-  margin-left: -30px !important;
+  margin-left: 0 !important;
   z-index: 99;
 }
 
@@ -2066,7 +2658,7 @@ span.breadcrumb-dropdown {
 }
 
 .std-width-btn {
-  width: 115px;
+  width: 130px;
 }
 
 .inline-attribute-image.pull-left {
@@ -2374,10 +2966,6 @@ h4, h5, h6 {
   color: #FFFFFF;
 }
 
-.btn-default:hover {
-  font-weight: bold;
-}
-
 .nav-tabs > li.active > a {
   border: 1px solid;
   border-bottom-color: transparent;
@@ -2385,24 +2973,6 @@ h4, h5, h6 {
 
 .nav-tabs {
   border-bottom: 1px solid;
-}
-
-.pagination > li > a, .pagination > li > span {
-  background-color: #fff;
-  border: 1px solid;
-}
-
-.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
-  color: #fff;
-}
-
-.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
-  color: #777;
-  background-color: #fff;
-}
-
-.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
-  background-color: #eee;
 }
 
 footer p.lead {

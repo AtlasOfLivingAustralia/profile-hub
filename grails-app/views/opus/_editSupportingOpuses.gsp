@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="OpusForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="OpusForm" ng-cloak>
+    <div class="card-header">
         <a name="supportingCollections">
             <h4 class="section-panel-heading">Supporting Collections</h4>
             <p:help help-id="opus.edit.supportingCollections"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
         <div class="col-md-12">
             <h5>Sharing data with other collections</h5>
@@ -83,7 +83,7 @@
                 </li>
 
                 <li ng-repeat="opus in opusCtrl.newSupportingOpuses">
-                    <div class="form-inline">
+                    <div class="d-flex align-items-center gap-2">
                         <div class="form-group">
                             <input placeholder="Collection name..."
                                    ng-model="opus.opus"
@@ -104,11 +104,11 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="opusCtrl.addSupportingOpus()"><i
+                    <button class="btn btn-outline-secondary" ng-click="opusCtrl.addSupportingOpus()"><i
                             class="fa fa-plus"></i>  Add collection</button>
                 </div>
                 <save-button ng-click="opusCtrl.saveSupportingOpuses(OpusForm)" form="OpusForm"></save-button>

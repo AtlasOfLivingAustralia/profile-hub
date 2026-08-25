@@ -1,14 +1,14 @@
-<div class="panel panel-default" ng-cloak>
+<div class="card" ng-cloak>
     <div>
         <navigation-anchor anchor-name="edit_additional_status" title="Additional Statuses"></navigation-anchor>
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading">Additional Statuses</h4>
                 </div>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div ng-form="$ctrl.AdditionalStatusesForm">
                 <div class="row">
                     <div class="col-sm-12">
@@ -17,7 +17,7 @@
                     <div class="col-sm-4">
                         <label>Statuses</label>
                     </div>
-                    <div ng-repeat-start="status in $ctrl.additionalStatuses track by $index" ng-class="{ 'col-sm-push-4': !$first }" class="col-sm-8 col-xs-12" >
+                    <div ng-repeat-start="status in $ctrl.additionalStatuses track by $index" ng-class="{ 'col-sm-push-4': !$first }" class="col-sm-8 col-12" >
                         <div class="input-group">
                             <input type="text" class="form-control" ng-model="$ctrl.additionalStatuses[$index]" ng-change="$ctrl.changeStatus($index)">
                             <span class="input-group-btn">
@@ -25,14 +25,14 @@
                             </span>
                         </div><!-- /input-group -->
                     </div>
-                    <div ng-repeat-end class="clearfix hidden-xs"></div>
+                    <div ng-repeat-end class="clearfix d-none d-sm-block"></div>
                 </div>
             </div>
         </div>
-        <div class="panel-footer">
+        <div class="card-footer">
             <div class="row">
                 <div class="col-sm-12">
-                    <button class="btn btn-default" ng-click="$ctrl.appendStatus()"><i class="fa fa-plus"></i> Append status</button>
+                    <button class="btn btn-outline-secondary" ng-click="$ctrl.appendStatus()"><i class="fa fa-plus"></i> Append status</button>
                     <save-button form="$ctrl.AdditionalStatusesForm" ng-click="$ctrl.saveAdditionalStatuses()"></save-button>
                 </div>
             </div>

@@ -59,7 +59,6 @@ skin.fluidLayout = true
 app.http.header.userId = "X-ALA-userId"
 app.view.nocache = true
 
-
 environments {
     development {
         grails.logging.jul.usebridge = true

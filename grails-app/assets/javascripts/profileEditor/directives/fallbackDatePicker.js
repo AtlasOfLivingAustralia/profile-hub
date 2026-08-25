@@ -26,7 +26,7 @@ profileEditor.directive('fallbackDatePicker', function () {
 
       switch (self.size) {
         case 'small':
-          self.inputClass = 'input-sm';
+          self.inputClass = 'form-control-sm';
           self.btnClass = 'btn-sm';
           break;
         default:

@@ -4,37 +4,37 @@
         <div class="main-footer-border"></div>
 
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-8 margin-bottom-1 site-logo" id="site-logo">
+            <div class="col-12 col-sm-12 col-md-8 margin-bottom-1 site-logo" id="site-logo">
                 <div class="row margin-bottom-1">
                     <g:each in="${logos?:[[logoUrl:asset.assetPath(src: "ala-logo-2016-inline.png")]]}" var="logo">
                         <g:if test="${logo.hyperlink}">
                             <a href="${logo.hyperlink}" target="_blank">
-                                <img class="col-xs-12 col-sm-6 col-md-4 img-responsive customizable-logo-img"
+                                <img class="col-12 col-sm-6 col-md-4 img-fluid customizable-logo-img"
                                      src="${logo.logoUrl}"
                                      alt="logo"/>
                             </a>
                         </g:if>
                         <g:else>
-                            <img class="col-xs-12 col-sm-6 col-md-4 img-responsive customizable-logo-img"
+                            <img class="col-12 col-sm-6 col-md-4 img-fluid customizable-logo-img"
                                  src="${logo.logoUrl}"
                                  alt="logo"/>
                         </g:else>
                     </g:each>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-4 margin-bottom-1 border-left">
+            <div class="col-12 col-sm-12 col-md-4 margin-bottom-1 border-left">
                 <div class="row">
-                    <div class="col-xs-12 col-md-7">
+                    <div class="col-12 col-md-7">
                         <g:if test="${footerText}">
                             <div class="row margin-bottom-1">
-                                <div class="col-xs-12">
+                                <div class="col-12">
                                     <b>${raw(footerText)}</b>
                                 </div>
                             </div>
                         </g:if>
                         <g:if test="${contact?.email?.contains('@')}">
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-12">
                                     <a class="soc-envelope" href="${'mailto:' + contact.email}"
                                        title="${'Email this collection'}"
                                        target="_blank"><i class="fa fa-envelope"></i>&nbsp;&nbsp;${contact.email}</a>
@@ -43,7 +43,7 @@
                         </g:if>
                         <g:elseif test="${contact?.email}">
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-12">
                                     <a class="soc-envelope" href="${contact.email}"
                                        title="${'Contact the Atlas'}"
                                        target="_blank"><i class="fa fa-globe"></i>&nbsp;&nbsp;Contact the Atlas</a>
@@ -52,7 +52,7 @@
                         </g:elseif>
                         <g:if test="${contact?.facebook || contact?.twitter}">
                             <div class="row margin-top-1">
-                                <div class="col-xs-12">
+                                <div class="col-12">
                                     <ul class="social list-inline">
                                         <g:if test="${contact.facebook}">
                                             <li><a class="soc-facebook" href="${contact.facebook}"
@@ -69,17 +69,17 @@
                             </div>
                         </g:if>
                     </div>
-                    <div class="col-xs-12 col-md-5">
+                    <div class="col-12 col-md-5">
                         <g:if test="${opus?.brandingConfig?.issn}">
                             <div class="row margin-bottom-1">
-                                <div class="col-xs-12">
+                                <div class="col-12">
                                     <g:render template="/opus/issn" model="${[issn: opus.brandingConfig.issn]}"></g:render>
                                 </div>
                             </div>
                         </g:if>
                         <g:if test="${opus?.brandingConfig?.shortLicense}">
                             <div class="row margin-bottom-1">
-                                <div class="col-xs-12">
+                                <div class="col-12">
                                     ${raw(opus.brandingConfig.shortLicense)}
                                 </div>
                             </div>
@@ -87,9 +87,9 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-md-5 col-md-offset-7">
+                    <div class="col-12 col-md-5 ms-md-auto">
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-12">
                                 <a href="${createLink(uri: '/')}">Other collections</a>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                    imageUpload:'${grailsApplication.config.feature.feature.imageUpload}'},
         map: {mapId: '${grailsApplication.config.map.id}',
               accessKey: '${grailsApplication.config.map.access.key}'},
-        bootstrapCssFile: '${assetPath(src: "/bootstrap/css/bootstrap3.3.4.min.css")}',
+        bootstrapCssFile: '${assetPath(src: "/bootstrap5/css/bootstrap.min.css")}',
         imageLoadErrorUrl: '${assetPath(src: "not-available.png")}',
         development: ${Environment.current == Environment.DEVELOPMENT},
         pdfHighThresholdLimit :  '${grailsApplication.config.pdf.highThresholdLimit?:50}',

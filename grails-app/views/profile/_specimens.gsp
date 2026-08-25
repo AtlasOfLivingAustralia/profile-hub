@@ -1,8 +1,8 @@
-<div class="panel panel-default" ng-controller="SpecimenController as specCtrl" ng-cloak ng-form="SpecimenForm"
+<div class="card" ng-controller="SpecimenController as specCtrl" ng-cloak ng-form="SpecimenForm"
      ng-show="specCtrl.specimens.length > 0 || !specCtrl.readonly()">
     <navigation-anchor anchor-name="{{profileCtrl.readonly() ? 'view_' : 'edit_'}}specimens" title="Specimens" condition="profileCtrl.profile.specimenIds && profileCtrl.profile.specimenIds.length > 0 || !profileCtrl.readonly()"></navigation-anchor>
 
-    <div class="panel-heading">
+    <div class="card-header">
         <div class="row">
             <div class="col-sm-12">
                 <h4 class="section-panel-heading">Specimens</h4>
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12" ng-if="!specCtrl.readonly()">
                 <p>
@@ -29,13 +29,8 @@
                         <label>URL</label>
                         <div class="input-group">
                             <input type="text" class="form-control" ng-model="specimen.url"/><br/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-success" type="button"
-                                        ng-click="specCtrl.checkAddedSpecimen($index, specimen.url)">
-                                    <span class="fa fa-check color--white"></span></button>
-                            </span>
+                                <button class="btn btn-success" type="button" ng-click="specCtrl.checkAddedSpecimen($index, specimen.url)"><span class="fa fa-check color--white"></span></button>
                         </div>
-
                         <alert type="danger" ng-if="specimen.error">{{ specimen.error }}</alert>
                     </div>
                 </div>
@@ -55,7 +50,7 @@
                         href="${grailsApplication.config.biocache.base.url}/occurrences/{{specimen.id}}"
                         target="_blank">View specimen record</a></div>
             </div>
-            <div class="col-sm-2 text-right" ng-if="!specCtrl.readonly()">
+            <div class="col-sm-2 text-end" ng-if="!specCtrl.readonly()">
                 <button class="btn btn-danger"
                         ng-click="specCtrl.deleteSpecimen($index, SpecimenForm)">Delete</button>
             </div>
@@ -65,10 +60,10 @@
         </div>
     </div>
 
-    <div class="panel-footer" ng-if="!specCtrl.readonly()">
+    <div class="card-footer" ng-if="!specCtrl.readonly()">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" ng-click="specCtrl.addSpecimen(SpecimenForm)"><i
+                <button class="btn btn-outline-secondary" ng-click="specCtrl.addSpecimen(SpecimenForm)"><i
                         class="fa fa-plus"></i> Add Specimen</button>
                 <save-button ng-click="specCtrl.save(SpecimenForm)" form="SpecimenForm"
                         disabled="!specCtrl.isValid()"></save-button>
