@@ -1,10 +1,10 @@
 <div click-off="sidebar.close()">
     <div class="vertical-centre-fixed">
-        <button class="btn btn-default" title="Show table of contents" ng-click="sidebar.open('profileTableOfContentsSideBar')">
+        <button class="btn btn-outline-secondary" title="Show table of contents" ng-click="sidebar.open('profileTableOfContentsSideBar')">
             <span class="fa fa-bars"></span></button>
-        <button class="btn btn-default" title="View full taxonomic hierarchy" ng-click="sidebar.open('profileTaxonomySideBar')" ng-if="profileCtrl.profile.classification.length > 0">
+        <button class="btn btn-outline-secondary" title="View full taxonomic hierarchy" ng-click="sidebar.open('profileTaxonomySideBar')" ng-if="profileCtrl.profile.classification.length > 0">
             <span class="fa fa-sitemap"></span></button>
-        <button class="btn btn-default" title="Find by profile name" ng-click="sidebar.open('profileSearchSideBar')"><span
+        <button class="btn btn-outline-secondary" title="Find by profile name" ng-click="sidebar.open('profileSearchSideBar')"><span
                 class="fa fa-binoculars"></span></button>
         <a href="#top" du-smooth-scroll target="_self"
            class="btn btn-link scroll-to-top" style="left: -4px"
@@ -16,14 +16,14 @@
 
     <div class="sidebar sidebar-vertical sidebar-left" id="sideBarContents">
         <div class="margin-bottom-2">
-            <button class="btn btn-default btn-sm" title="Show table of contents" ng-click="sidebar.close(); sidebar.open('profileTableOfContentsSideBar')">
+            <button class="btn btn-outline-secondary btn-sm" title="Show table of contents" ng-click="sidebar.close(); sidebar.open('profileTableOfContentsSideBar')">
                 <span class="fa fa-bars"></span></button>
-            <button class="btn btn-default btn-sm" title="View full taxonomic hierarchy" ng-click="sidebar.close(); sidebar.open('profileTaxonomySideBar')" ng-if="profileCtrl.profile.classification.length > 0">
+            <button class="btn btn-outline-secondary btn-sm" title="View full taxonomic hierarchy" ng-click="sidebar.close(); sidebar.open('profileTaxonomySideBar')" ng-if="profileCtrl.profile.classification.length > 0">
                 <span class="fa fa-sitemap"></span></button>
-            <button class="btn btn-default btn-sm" title="Find by profile name" ng-click="sidebar.close(); sidebar.open('profileSearchSideBar')"><span
+            <button class="btn btn-outline-secondary btn-sm" title="Find by profile name" ng-click="sidebar.close(); sidebar.open('profileSearchSideBar')"><span
                     class="fa fa-binoculars"></span></button>
 
-            <button class="btn btn-primary btn-sm pull-right" title="Close sidebar" ng-click="sidebar.close()">
+            <button class="btn btn-primary btn-sm float-end" title="Close sidebar" ng-click="sidebar.close()">
                 <span class="fa fa-close"></span>
             </button>
         </div>

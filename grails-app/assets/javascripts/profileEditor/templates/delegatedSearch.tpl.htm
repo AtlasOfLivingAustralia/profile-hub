@@ -1,26 +1,30 @@
-<div class="{{ delSearchCtrl.layout == 'large' ? '' : 'form-inline header-control' }}">
+<div class="{{ delSearchCtrl.layout == 'large' ? '' : 'd-flex align-items-center header-control' }}">
     <div class="input-group">
-        <div class="input-group-btn">
-            <button class="dropdown-toggle btn {{ delSearchCtrl.layout == 'large' ? 'btn-lg' : 'btn-sm' }} btn-default search-dropdown"
-                    aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" title="Select the search type"
-                    type="button" ng-click="delSearchCtrl.search()">
-                <span ng-show="delSearchCtrl.isScientificName()">
-                    {{ delSearchCtrl.layout == 'large' ? 'by name' : 'SN'  }}
-                </span>
+        <div class="dropdown">
+            <button class="dropdown-toggle btn {{ delSearchCtrl.layout == 'large' ? 'btn-lg' : 'btn-sm' }} btn-outline-secondary search-dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    data-bs-toggle="dropdown"
+                    title="Select the search type"
+                    type="button">
+            <span ng-show="delSearchCtrl.isScientificName()">
+                {{ delSearchCtrl.layout == 'large' ? 'by name' : 'SN' }}
+            </span>
                 <span ng-show="delSearchCtrl.isCommonName()">
-                    {{ delSearchCtrl.layout == 'large' ? 'by name' : 'CN'  }}
-                </span>
+                {{ delSearchCtrl.layout == 'large' ? 'by name' : 'CN' }}
+            </span>
                 <span ng-show="delSearchCtrl.isContainingText()">
-                    {{ delSearchCtrl.layout == 'large' ? 'containing text' : 'T'  }}
-                </span>
+                {{ delSearchCtrl.layout == 'large' ? 'containing text' : 'T' }}
+            </span>
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li><a ng-click="delSearchCtrl.setSearchOption('scientificname')">{{ delSearchCtrl.layout == 'large' ? 'by scientific name' : 'Search for profiles by scientific name'  }}</a></li>
-                <li><a ng-click="delSearchCtrl.setSearchOption('commonname')">{{ delSearchCtrl.layout == 'large' ? 'by common name' : 'Search for profiles by common name'  }}</a></li>
-                <li><a ng-click="delSearchCtrl.setSearchOption('text')">{{ delSearchCtrl.layout == 'large' ? 'containing text' : 'Search for profiles containing text'  }}</a></li>
+                <li><a class="dropdown-item" href="" ng-click="delSearchCtrl.setSearchOption('scientificname')">{{ delSearchCtrl.layout == 'large' ? 'by scientific name' : 'Search for profiles by scientific name' }}</a></li>
+                <li><a class="dropdown-item" href="" ng-click="delSearchCtrl.setSearchOption('commonname')">{{ delSearchCtrl.layout == 'large' ? 'by common name' : 'Search for profiles by common name' }}</a></li>
+                <li><a class="dropdown-item" href="" ng-click="delSearchCtrl.setSearchOption('text')">{{ delSearchCtrl.layout == 'large' ? 'containing text' : 'Search for profiles containing text' }}</a></li>
             </ul>
         </div>
+
         <input id="searchTerm"
                ng-model="delSearchCtrl.searchTerm"
                ng-enter="delSearchCtrl.search()"
@@ -28,33 +32,46 @@
                name="searchTerm"
                title="Enter a search term"
                placeholder="Search..."
-               class="delegated-search-control form-control ignore-save-warning {{ delSearchCtrl.layout == 'large' ? 'input-lg' : 'input-sm' }}"
+               class="delegated-search-control form-control ignore-save-warning {{ delSearchCtrl.layout == 'large' ? 'form-control-lg' : 'form-control-sm' }}"
                autocomplete="off"
                type="text"
                typeahead-editable="true"
                typeahead="profile.scientificName as profile.scientificName for profile in delSearchCtrl.autoCompleteSearchByScientificName($viewValue) | filter:$viewValue | limitTo:10" />
-            <span class="input-group-btn">
-                <button class="btn {{ delSearchCtrl.layout == 'large' ? 'btn-lg btn-primary' : 'btn-sm btn-default button-inside-input' }}"
-                        type="button" ng-click="delSearchCtrl.search()"><span
-                        class="fa fa-search"></span></button>
-            </span>
+        <button class="btn {{ delSearchCtrl.layout == 'large' ? 'btn-lg btn-primary' : 'btn-sm btn-outline-secondary button-inside-input' }}"
+                type="button"
+                ng-click="delSearchCtrl.search()">
+            <span class="fa fa-search"></span>
+        </button>
     </div>
+
     <div ng-show="delSearchCtrl.layout == 'large'">
-        <button class="btn btn-link toggle-link ignore-save-warning" ng-model="delSearchCtrl.showOptions" btn-checkbox>
+        <button class="btn btn-link toggle-link ignore-save-warning"
+                ng-model="delSearchCtrl.showOptions"
+                btn-checkbox>
             Options
         </button>
-        <div ng-show="delSearchCtrl.showOptions" class="well">
+
+        <div ng-show="delSearchCtrl.showOptions" class="card card-body">
             <div class="checkbox inline-block padding-right-1" ng-show="delSearchCtrl.searchOptions.nameOnly">
                 <label for="includeNameAttributes" class="inline-label">
-                    <input id="includeNameAttributes" type="checkbox" name="includeNameAttributes" class="ignore-save-warning"
-                           ng-model="delSearchCtrl.searchOptions.includeNameAttributes" ng-false-value="false">
+                    <input id="includeNameAttributes"
+                           type="checkbox"
+                           name="includeNameAttributes"
+                           class="ignore-save-warning"
+                           ng-model="delSearchCtrl.searchOptions.includeNameAttributes"
+                           ng-false-value="false">
                     Include alternate names
                 </label>
             </div>
+
             <div class="checkbox inline-block padding-right-1" ng-hide="delSearchCtrl.searchOptions.nameOnly">
                 <label for="matchAll" class="inline-label">
-                    <input id="matchAll" type="checkbox" name="matchAll" class="ignore-save-warning"
-                           ng-model="delSearchCtrl.searchOptions.matchAll" ng-false-value="false">
+                    <input id="matchAll"
+                           type="checkbox"
+                           name="matchAll"
+                           class="ignore-save-warning"
+                           ng-model="delSearchCtrl.searchOptions.matchAll"
+                           ng-false-value="false">
                     Must contain all terms
                 </label>
             </div>

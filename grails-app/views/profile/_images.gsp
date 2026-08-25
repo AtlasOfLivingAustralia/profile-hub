@@ -1,9 +1,9 @@
-<div class="panel panel-default ${edit?'':'panel-override'}" ng-controller="ImagesController as imageCtrl" ng-init="imageCtrl.init('${edit}')">
+<div class="card ${edit?'':'panel-override'}" ng-controller="ImagesController as imageCtrl" ng-init="imageCtrl.init('${edit}')">
     <div ng-if="imageCtrl.images.length >= 0 && imageCtrl.readonly" ng-cloak>
         <navigation-anchor anchor-name="view_images" title="Images"
                            condition="imageCtrl.images.length > 0"></navigation-anchor>
 
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading">Images <span class="caption">({{imageCtrl.availableImagesCount}})</span>
@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-sm-12">
                     <div ng-repeat-start="image in imageCtrl.images" class="col-md-6 col-sm-6 margin-bottom-2"
@@ -65,7 +65,7 @@
     <div ng-form="ImageForm" ng-if="!imageCtrl.readonly" ng-cloak>
         <navigation-anchor anchor-name="edit_images" title="Images"></navigation-anchor>
 
-        <div class="panel-heading">
+        <div class="card-header">
             <div class="row">
                 <div class="col-sm-12">
                     <h4 class="section-panel-heading">Images <span class="caption">({{imageCtrl.availableImagesCount}})</span>
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="col-sm-12">
                 <div class="row section-no-para" ng-if="imageCtrl.images.length > 0">
                     <div class="row">
@@ -120,11 +120,11 @@
                             <div class="small center">
                                 <div class="btn-group">
                                     <button class="btn btn-xs" ng-disabled="image.primary"
-                                           ng-class="image.displayOption == 'INCLUDE' ? 'btn-success' : 'btn-default'"
+                                           ng-class="image.displayOption == 'INCLUDE' ? 'btn-success' : 'btn-outline-secondary'"
                                            ng-model="image.displayOption" btn-radio="'INCLUDE'"
                                            ng-change="imageCtrl.changeImageDisplay(ImageForm)">Yes</button>
                                     <button class="btn btn-xs" ng-disabled="image.primary"
-                                           ng-class="image.displayOption == 'EXCLUDE' ? 'btn-danger' : 'btn-default'"
+                                           ng-class="image.displayOption == 'EXCLUDE' ? 'btn-danger' : 'btn-outline-secondary'"
                                            ng-model="image.displayOption" btn-radio="'EXCLUDE'"
                                            ng-change="imageCtrl.changeImageDisplay(ImageForm)">No</button>
                                 </div>
@@ -135,12 +135,12 @@
                             <div class="small center">
                                 <div class="btn-group">
                                     <button class="btn btn-xs" ng-disabled="image.displayOption == 'EXCLUDE'"
-                                           ng-class="image.primary ? 'btn-success' : 'btn-default'"
+                                           ng-class="image.primary ? 'btn-success' : 'btn-outline-secondary'"
                                            ng-model="image.primary"
                                            ng-click="imageCtrl.changePrimaryImage(image.imageId, ImageForm)"
                                            btn-radio="true">Yes</button>
                                     <button class="btn btn-xs" ng-disabled="image.displayOption == 'EXCLUDE'"
-                                           ng-class="image.primary ? 'btn-default' : 'btn-danger'"
+                                           ng-class="image.primary ? 'btn-outline-secondary' : 'btn-danger'"
                                            ng-model="image.primary"
                                            ng-click="imageCtrl.changePrimaryImage(image.imageId, ImageForm)"
                                            btn-radio="false">No</button>
@@ -158,7 +158,7 @@
                                 <button type="button" aria-label="Edit image"
                                         tooltip="Edit '{{image.metadata.title}}'" tooltip-placement="bottom"
                                         tooltip-append-to-body="true"
-                                        class="btn btn-sm btn-default"
+                                        class="btn btn-sm btn-outline-secondary"
                                         ng-click="imageCtrl.editImage(image, imageCtrl.offset, imageCtrl.page)">
                                     <i class="fa fa-edit"></i> Edit
                                 </button>
@@ -195,7 +195,7 @@
                                 ng-change="imageCtrl.loadImages((imageCtrl.page - 1) * imageCtrl.itemsPerPage, imageCtrl.itemsPerPage)"></pagination>
                 </div>
 
-                <div class="small margin-top-1 well" ng-show="!imageCtrl.readonly">
+                <div class="card card-body small margin-top-1" ng-show="!imageCtrl.readonly">
                     <i class="fa fa-info-circle color--medium-blue margin-bottom-1"></i>
 
                     <p>
@@ -211,11 +211,11 @@
             </div>
         </div>
 
-        <div class="panel-footer" ng-show="!imageCtrl.readonly">
+        <div class="card-footer" ng-show="!imageCtrl.readonly">
             <div class="row">
                 <div class="col-md-12">
                     <g:if test="${grailsApplication.config.feature.imageUpload == 'true'}">
-                        <button class="btn btn-default" ng-click="imageCtrl.uploadImage()"><i
+                        <button class="btn btn-outline-secondary" ng-click="imageCtrl.uploadImage()"><i
                                 class="fa fa-plus"></i>&nbsp;Add Image</button>
                     </g:if>
                     <g:elseif

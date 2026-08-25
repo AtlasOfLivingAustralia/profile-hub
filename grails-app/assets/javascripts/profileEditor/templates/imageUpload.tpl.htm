@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="form-group" ng-hide="disableSource">
-        <label class="col-sm-3 control-label">Upload source</label>
+        <label class="col-sm-3 col-form-label">Upload source</label>
         <div class="col-sm-9">
             <label class="radio-inline">
                 <input type="radio" ng-model="imageUpload.source" value="file" ng-change="imageUpload.clearUrl()" class="ignore-save-warning"> File
@@ -21,10 +21,10 @@
     </div>
     <div ng-show="imageUpload.source == 'file'">
         <div class="form-group">
-            <label for="file" class="col-sm-3 control-label">Image *</label>
+            <label for="file" class="col-sm-3 col-form-label">Image *</label>
 
             <div class="col-sm-9">
-                <span class="btn btn-default btn-file">
+                <span class="btn btn-outline-secondary btn-file">
                     Choose file
                     <input id="file" type="file" ngf-select="" ng-model="imageUpload.files" name="file"
                            accept="image/*" alt="preview" title="Image preview"
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="form-group" ng-show="imageUpload.files[0] != null">
-            <label class="col-sm-3 control-label">Preview</label>
+            <label class="col-sm-3 col-form-label">Preview</label>
 
             <div class="col-sm-9">
                 <div class="upload-image-preview">
@@ -45,7 +45,7 @@
     </div>
     <div ng-show="imageUpload.source == 'url'">
         <div class="form-group" >
-            <label for="url" class="col-sm-3 control-label">Image URL *</label>
+            <label for="url" class="col-sm-3 col-form-label">Image URL *</label>
 
             <div class="col-sm-9">
                 <input id="url" type="url" ng-model="imageUpload.url" name="url" class="form-control"
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="form-group" ng-show="imageUpload.url">
-            <label class="col-sm-3 control-label">Preview</label>
+            <label class="col-sm-3 col-form-label">Preview</label>
 
             <div class="col-sm-9">
                 <div class="upload-image-preview">
@@ -68,7 +68,7 @@
 <div ng-show="showMetadata">
     <div class="form-horizontal">
         <div class="form-group">
-            <label for="title" class="col-sm-3 control-label">Title *</label>
+            <label for="title" class="col-sm-3 col-form-label">Title *</label>
 
             <div class="col-sm-9">
                 <input id="title" type="text" ng-model="metadata.title" class="form-control"
@@ -79,7 +79,7 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            <label for="created" class="col-sm-3 control-label">Date Taken</label>
+            <label for="created" class="col-sm-3 col-form-label">Date Taken</label>
 
             <div class="col-sm-9">
                 <fallback-date-picker field-id="created" ng-model="metadata.created" />
@@ -89,7 +89,7 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            <label for="description" class="col-sm-3 control-label">Description</label>
+            <label for="description" class="col-sm-3 col-form-label">Description</label>
 
             <div class="col-sm-9">
                         <textarea id="description" ng-model="metadata.description"
@@ -100,7 +100,7 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            <label for="owner" class="col-sm-3 control-label" required>Owner</label>
+            <label for="owner" class="col-sm-3 col-form-label" required>Owner</label>
 
             <div class="col-sm-9">
                 <input id="owner" type="text" ng-model="metadata.creator"
@@ -112,7 +112,7 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            <label for="rights" class="col-sm-3 control-label" required>Rights</label>
+            <label for="rights" class="col-sm-3 col-form-label" required>Rights</label>
 
             <div class="col-sm-9">
                 <input id="rights" type="text" ng-model="metadata.rights"
@@ -123,7 +123,7 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            <label for="rightsHolder" class="col-sm-3 control-label" required>Rights Holder</label>
+            <label for="rightsHolder" class="col-sm-3 col-form-label" required>Rights Holder</label>
 
             <div class="col-sm-9">
                 <input id="rightsHolder" type="text" ng-model="metadata.rightsHolder"
@@ -134,7 +134,7 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            <label for="licence" class="col-sm-3 control-label" required>Licence *</label>
+            <label for="licence" class="col-sm-3 col-form-label" required>Licence *</label>
 
             <div class="col-sm-9">
                 <select id="licence"
@@ -146,17 +146,17 @@
     </div>
 
     <div class="col-md-12">
-        <p class="small pull-right">
+        <p class="small float-end">
             Fields marked with an asterisk (*) are mandatory.
         </p>
     </div>
 </div>
 
 <div class="col-md-12">
-    <button class="btn btn-primary pull-right" ng-if="updateMode" ng-show="!updateOnEvent" ng-click="save()">
+    <button class="btn btn-primary float-end" ng-if="updateMode" ng-show="!updateOnEvent" ng-click="save()">
         Save
     </button>
-    <button class="btn btn-primary pull-right" ng-if="!updateMode" ng-show="!uploadOnEvent" ng-click="doUpload()" ng-disabled="(!imageUpload.files || imageUpload.files.length == 0) && !imageUpload.url">
+    <button class="btn btn-primary float-end" ng-if="!updateMode" ng-show="!uploadOnEvent" ng-click="doUpload()" ng-disabled="(!imageUpload.files || imageUpload.files.length == 0) && !imageUpload.url">
         Upload
     </button>
 </div>

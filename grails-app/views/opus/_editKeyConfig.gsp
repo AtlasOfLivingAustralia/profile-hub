@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="KeyForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="KeyForm" ng-cloak>
+    <div class="card-header">
         <a name="key">
             <h4 class="section-panel-heading">Keys configuration</h4>
             <p:help help-id="opus.edit.keys"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -22,7 +22,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <save-button ng-click="opusCtrl.saveOpus(KeyForm)" form="KeyForm"></save-button>
