@@ -44,8 +44,7 @@ profileEditor.controller('MapController', function ($scope, profileService, util
                     draggableMarkers: false,
                     showReset: false,
                     zoom: self.opus.mapConfig.mapZoom,
-                    center: [self.opus.mapConfig.mapDefaultLatitude, self.opus.mapConfig.mapDefaultLongitude],
-                    baseLayer: createBaseLayer()
+                    center: [self.opus.mapConfig.mapDefaultLatitude, self.opus.mapConfig.mapDefaultLongitude]
                 });
 
                 if (_.isUndefined(self.profile.mapSnapshot) || _.isEmpty(self.profile.mapSnapshot)) {
@@ -299,8 +298,7 @@ profileEditor.controller('MapController', function ($scope, profileService, util
                         zoomToObject: false,
                         showFitBoundsToggle: true,
                         zoom: self.opus.mapConfig.mapZoom + 1, // the edit map panel is bigger than the view, so increase the zoom
-                        center: [self.opus.mapConfig.mapDefaultLatitude, self.opus.mapConfig.mapDefaultLongitude],
-                        baseLayer: createBaseLayer()
+                        center: [self.opus.mapConfig.mapDefaultLatitude, self.opus.mapConfig.mapDefaultLongitude]
                     },
                     point: {
                         colour: self.opus.mapConfig.mapPointColour,
@@ -313,12 +311,4 @@ profileEditor.controller('MapController', function ($scope, profileService, util
             $timeout(self.editableMap.map.redraw, 500);
         }
     }
-
-    function createBaseLayer() {
-        return L.tileLayer(config.map.baseUrl, {
-            maxZoom: 21,
-            maxNativeZoom: 21
-        });
-    }
-
 });
