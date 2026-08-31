@@ -27,7 +27,12 @@ jobs:
       - name: Install nodejs
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 20
+
+      - name: Run javascript unit tests
+        run: node_modules/karma/bin/karma start karma.conf.js --single-run --browsers ChromeHeadless --log-level DEBUG
+        env:
+          DEBUG: '*'
 
       - run: npm install
 
