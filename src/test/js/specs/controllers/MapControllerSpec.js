@@ -52,7 +52,7 @@ describe("MapController tests", function () {
             $scope: scope,
             profileService: profileService,
             util: mockUtil,
-            config: {map: {mapId: "123", token: "123"}, biocacheServiceUrl: "http://biocacheWmsUrl"},
+            config: {map: {mapId: "123", token: "123", baseUrl: "http://tiles/{a}/{b}/{c}.png"}, biocacheServiceUrl: "http://biocacheWmsUrl"},
             messageService: messageService
         });
 
