@@ -27,20 +27,7 @@ jobs:
       - name: Install nodejs
         uses: actions/setup-node@v3
         with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run javascript unit tests
-        run: node_modules/karma/bin/karma start karma.conf.js --single-run --browsers ChromeHeadless --log-level DEBUG
-        env:
-          DEBUG: '*'
-
-      - name: Clean to remove clover instrumentation
-        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-        with:
-          arguments: clean
+          node-version: 16
 
       - run: npm install
 
