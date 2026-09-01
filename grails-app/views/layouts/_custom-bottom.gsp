@@ -137,7 +137,7 @@
         map: {mapId: '${grailsApplication.config.getProperty('map.id')}',
               accessKey: '${grailsApplication.config.getProperty('map.access.key')}',
               baseUrl: '${grailsApplication.config.getProperty('map.base.url')}',
-              attribution: '${grailsApplication.config.getProperty('map.attribution')}'},
+              attribution: '${raw(grailsApplication.config.getProperty('map.attribution'))}'},
         bootstrapCssFile: '${assetPath(src: "/bootstrap/css/bootstrap3.3.4.min.css")}',
         imageLoadErrorUrl: '${assetPath(src: "not-available.png")}',
         development: ${Environment.current == Environment.DEVELOPMENT},
