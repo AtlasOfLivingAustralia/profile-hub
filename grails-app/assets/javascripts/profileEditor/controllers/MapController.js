@@ -317,7 +317,8 @@ profileEditor.controller('MapController', function ($scope, profileService, util
     function createBaseLayer() {
         return L.tileLayer(config.map.baseUrl, {
             maxZoom: 21,
-            maxNativeZoom: 21
+            maxNativeZoom: 21,
+            attribution: config.map.attribution
         });
     }
 
