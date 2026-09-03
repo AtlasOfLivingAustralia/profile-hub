@@ -1,5 +1,6 @@
 describe("EmbedService tests", function () {
   var embedService;
+  var $httpBackend;
 
   beforeAll(function () {
     console.log("****** Embed Service Tests ******")
@@ -10,10 +11,16 @@ describe("EmbedService tests", function () {
 
   beforeEach(module("profileEditor"));
 
-  beforeEach(inject(function (_embedService_) {
+  beforeEach(inject(function (_embedService_, _$httpBackend_) {
     console.log("injecting " + _embedService_);
     embedService = _embedService_;
+    $httpBackend = _$httpBackend_;
   }));
+
+  afterEach(function () {
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
 
   var inputs = [
       ['https://www.youtube.com/watch?v=sCAlIDe5Hi8&t=2261s', 'YouTube'],
@@ -40,4 +47,25 @@ describe("EmbedService tests", function () {
           expect(service.name).toBe(name);
       });
   }
+
+  it("retrieves oEmbed data through the same-origin multimedia endpoint", function () {
+      var url = "https://vimeo.com/147173661";
+      var result;
+
+      $httpBackend.expectGET(function(requestUrl) {
+          return requestUrl.indexOf("/path/multimedia/describe?") === 0 &&
+              decodeURIComponent(requestUrl).indexOf(url) !== -1;
+      }).respond(200, {
+          service: {type: "video", name: "Vimeo"},
+          embed: {title: "Example", html: "<iframe></iframe>"}
+      });
+
+      embedService.describe(url).then(function(description) {
+          result = description;
+      });
+      $httpBackend.flush();
+
+      expect(result.service.name).toBe("Vimeo");
+      expect(result.embed.title).toBe("Example");
+  });
 });
