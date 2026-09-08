@@ -32,6 +32,7 @@ profileEditor.controller('MapController', function ($scope, profileService, util
                 self.opus = data.opus;
                 self.autoZoom = self.opus.mapConfig.autoZoom;
 
+                var baseLayer = createBaseLayer();
                 self.map = new ALA.Map("occurrenceMap", {
                     zoomToObject: self.autoZoom,
                     maxAutoZoom: self.opus.mapConfig.maxAutoZoom,
@@ -44,7 +45,12 @@ profileEditor.controller('MapController', function ($scope, profileService, util
                     draggableMarkers: false,
                     showReset: false,
                     zoom: self.opus.mapConfig.mapZoom,
-                    center: [self.opus.mapConfig.mapDefaultLatitude, self.opus.mapConfig.mapDefaultLongitude]
+                    center: [self.opus.mapConfig.mapDefaultLatitude, self.opus.mapConfig.mapDefaultLongitude],
+                    baseLayer: baseLayer,
+                    otherLayers: {
+                        "Minimal": baseLayer,
+                        "World Imagery": "WorldImagery"
+                    }
                 });
 
                 if (_.isUndefined(self.profile.mapSnapshot) || _.isEmpty(self.profile.mapSnapshot)) {
@@ -289,7 +295,7 @@ profileEditor.controller('MapController', function ($scope, profileService, util
     function createEditableMap() {
         if (!config.readonly) {
             var occurrenceQuery = self.profile.occurrenceQuery;
-
+            var editableBaseLayer = createBaseLayer();
             self.editableMap = new ALA.OccurrenceMap("editOccurrenceMap",
                 config.biocacheServiceUrl,
                 occurrenceQuery,
@@ -298,7 +304,12 @@ profileEditor.controller('MapController', function ($scope, profileService, util
                         zoomToObject: false,
                         showFitBoundsToggle: true,
                         zoom: self.opus.mapConfig.mapZoom + 1, // the edit map panel is bigger than the view, so increase the zoom
-                        center: [self.opus.mapConfig.mapDefaultLatitude, self.opus.mapConfig.mapDefaultLongitude]
+                        center: [self.opus.mapConfig.mapDefaultLatitude, self.opus.mapConfig.mapDefaultLongitude],
+                        baseLayer: editableBaseLayer,
+                        otherLayers: {
+                            "Minimal": editableBaseLayer,
+                            "World Imagery": "WorldImagery"
+                        }
                     },
                     point: {
                         colour: self.opus.mapConfig.mapPointColour,
@@ -311,4 +322,13 @@ profileEditor.controller('MapController', function ($scope, profileService, util
             $timeout(self.editableMap.map.redraw, 500);
         }
     }
+
+    function createBaseLayer() {
+        return L.tileLayer(config.map.baseUrl, {
+            maxZoom: 21,
+            maxNativeZoom: 21,
+            attribution: config.map.attribution
+        });
+    }
+
 });
