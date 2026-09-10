@@ -10,45 +10,7 @@ import org.apache.http.entity.ContentType
 class EmbedService {
 
     def webService
-
-    private static final List<Map> PROVIDERS = [
-            [
-                    type: 'video',
-                    name: 'YouTube',
-                    api: 'https://www.youtube.com/oembed',
-                    patterns: [
-                            ~/(?i)https?:\/\/(?:[^.]+\.)?youtube\.com\/watch\/?\?.*v=[^&]+.*/,
-                            ~/(?i)https?:\/\/(?:[^.]+\.)?(?:youtu\.be|youtube\.com\/embed)\/[a-zA-Z0-9_-]+.*/
-                    ]
-            ],
-            [
-                    type: 'video',
-                    name: 'TED Talks',
-                    api: 'https://www.ted.com/services/v1/oembed.json',
-                    patterns: [~/(?i)https?:\/\/((?:www|embed)\.)?ted\.com\/talks\/.*/]
-            ],
-            [
-                    type: 'audio',
-                    name: 'SoundCloud',
-                    api: 'https://soundcloud.com/oembed',
-                    patterns: [~/(?i)https?:\/\/(?:www\.)?soundcloud\.com\/.+/]
-            ],
-            [
-                    type: 'video',
-                    name: 'Wistia',
-                    api: 'https://fast.wistia.com/oembed',
-                    patterns: [~/(?i)https?:\/\/(?:[^\/]+\.)?(?:wistia\.com|wi\.st)\/.*/]
-            ],
-            [
-                    type: 'video',
-                    name: 'Vimeo',
-                    api: 'https://vimeo.com/api/oembed.json',
-                    patterns: [
-                            ~/(?i)https?:\/\/(?:www\.)?vimeo\.com\/.+/,
-                            ~/(?i)https?:\/\/player\.vimeo\.com\/video\/.*/
-                    ]
-            ]
-    ].asImmutable()
+    def grailsApplication
 
     Map describe(String url) {
         Map provider = findProvider(url)
@@ -85,8 +47,16 @@ class EmbedService {
             return null
         }
 
-        PROVIDERS.find { provider ->
-            provider.patterns.any { pattern -> pattern.matcher(url).matches() }
+        List providers = grailsApplication.config.getProperty(
+            'multimedia.oembed.providers',
+            List,
+            []
+        )
+
+        providers.find { provider ->
+            provider.patterns?.any { pattern ->
+                url ==~ pattern.toString()
+            }
         }
     }
 }
