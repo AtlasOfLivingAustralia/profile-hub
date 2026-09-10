@@ -24,7 +24,7 @@ class EmbedServiceSpec extends Specification implements ServiceUnitTest<EmbedSer
         'https://player.vimeo.com/video/147173661'                      | 'Vimeo'
     }
 
-    def "describe uses the fixed HTTPS provider endpoint"() {
+    def "describe uses the configured HTTPS provider endpoint"() {
         given:
         String url = 'https://soundcloud.com/example/recording'
         WebService webService = Mock(WebService)
@@ -51,5 +51,13 @@ class EmbedServiceSpec extends Specification implements ServiceUnitTest<EmbedSer
         then:
         result.error == 'Unsupported multimedia URL'
         0 * webService._
+    }
+
+    def "findProvider returns null when no providers are configured"() {
+        given:
+        grailsApplication.config.multimedia.oembed.providers = []
+
+        expect:
+        service.findProvider('https://www.youtube.com/watch?v=sCAlIDe5Hi8') == null
     }
 }
