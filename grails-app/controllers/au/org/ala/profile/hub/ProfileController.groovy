@@ -821,7 +821,7 @@ class ProfileController extends BaseController {
         if (result.error) {
             response.sendError(500, "Couldn't update primary multimedia")
         } else {
-            response.sendError(204)
+            response.status = 204
         }
     }
 
@@ -863,4 +863,3 @@ class ProfileController extends BaseController {
         ]
     }
 }
-

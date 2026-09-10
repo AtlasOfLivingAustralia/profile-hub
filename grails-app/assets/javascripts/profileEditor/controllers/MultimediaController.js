@@ -49,7 +49,13 @@
                 doc.deleting = true;
                 profileService.deleteMultimedia(self.profile, doc.documentId).then(
                   function() {
-                      self.profile.documents.splice(_.indexOf(self.documents, doc), 1);
+                      self.profile.documents.splice(_.indexOf(self.profile.documents, doc), 1);
+                      if (self.profile.primaryAudio === doc.documentId) {
+                          self.profile.primaryAudio = null;
+                      }
+                      if (self.profile.primaryVideo === doc.documentId) {
+                          self.profile.primaryVideo = null;
+                      }
                   }, function(error) {
                       doc.deleting = false;
                       $log.error("Couldn't delete doc", doc, error);
