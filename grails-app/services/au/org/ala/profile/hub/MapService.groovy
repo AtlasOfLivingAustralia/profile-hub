@@ -29,7 +29,7 @@ class MapService {
 
         String url
         if (useSandbox) {
-            url = "${grailsApplication.config.sandbox.biocache.service.url}/mapping/wms/image?${occurrenceQuery}&"
+            url = "${grailsApplication.config.getProperty('sandbox.biocache.service.url')}/mapping/wms/image?${occurrenceQuery}&"
         } else {
             url = "${grailsApplication.config.getProperty('biocache.ws.url')}/ws/mapping/wms/image?${occurrenceQuery}&"
         }
@@ -55,13 +55,13 @@ class MapService {
         UrlTransferrableAdapter transfer = new UrlTransferrableAdapter(url: url.toURL())
         transfer.withCloseable {
             Map metadata = [imageId: MAP_SNAPSHOT_IMAGE_NAME, extension: ".${MAP_FILE_TYPE}"]
-            imageService.storeLocalImage(opus, profile, metadata, transfer, grailsApplication.config.image.private.dir)
+            imageService.storeLocalImage(opus, profile, metadata, transfer, grailsApplication.config.getProperty('image.private.dir'))
         }
     }
 
     void deleteMapSnapshot(String opusUuid, String profileUuid) {
         if (snapshotImageExists(opusUuid, profileUuid)) {
-            imageService.deleteSnapshotImage(grailsApplication.config.image.private.dir,
+            imageService.deleteSnapshotImage(grailsApplication.config.getProperty('image.private.dir'),
                     opusUuid, profileUuid, MAP_SNAPSHOT_IMAGE_NAME)
         }
     }
@@ -96,7 +96,7 @@ class MapService {
     }
 
     boolean snapshotImageExists(String opusId, String profileId) {
-        File mapFile = imageService.getLocalImageFile(grailsApplication.config.image.private.dir, opusId, profileId, MAP_SNAPSHOT_IMAGE_NAME, ".${MAP_FILE_TYPE}")
+        File mapFile = imageService.getLocalImageFile(grailsApplication.config.getProperty('image.private.dir'), opusId, profileId, MAP_SNAPSHOT_IMAGE_NAME, ".${MAP_FILE_TYPE}")
 
         mapFile?.exists()
     }

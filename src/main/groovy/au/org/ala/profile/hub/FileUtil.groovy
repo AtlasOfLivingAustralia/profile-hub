@@ -1,6 +1,8 @@
 package au.org.ala.profile.hub
 
-import au.com.bytecode.opencsv.CSVReader
+import com.opencsv.CSVParserBuilder
+import com.opencsv.CSVReader
+import com.opencsv.CSVReaderBuilder
 import groovy.util.logging.Slf4j
 import org.apache.tika.metadata.HttpHeaders
 import org.apache.tika.metadata.Metadata
@@ -111,8 +113,9 @@ class FileUtil {
 
     static CSVReader getCSVReaderForText(String raw) {
         String separator = getSeparator(raw)
-        CSVReader csvReader = new CSVReader(new StringReader(raw), separator.charAt(0))
-        csvReader
+        new CSVReaderBuilder(new StringReader(raw))
+                .withCSVParser(new CSVParserBuilder().withSeparator(separator.charAt(0)).build())
+                .build()
     }
 
     static String getSeparator(String raw) {

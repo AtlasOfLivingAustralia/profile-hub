@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="${grailsApplication.config.layout + '-nocontainer'}"/>
+    <meta name="layout" content="${grailsApplication.config.getProperty('layout') + '-nocontainer'}"/>
     <title>Profile search | Atlas of Living Australia</title>
 
 </head>

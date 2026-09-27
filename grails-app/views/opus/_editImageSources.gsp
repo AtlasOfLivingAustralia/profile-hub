@@ -59,7 +59,7 @@
                         <span class="fa fa-info-circle">&nbsp;</span>Every collection has its own data resource in the Atlas of Living Australia. This option will limit images to that resource only.
                     </p>
                     <p class="padding-left-1">
-                        The name of your collection's data resource is <a href="${grailsApplication.config.collectory.base.url}/public/show/{{opusCtrl.dataResource.uid}}" target="_blank" title="Click to visit your collection resource's page in the Atlas of Living Australia">{{opusCtrl.dataResource.name}}</a>.
+                        The name of your collection's data resource is <a href="${grailsApplication.config.getProperty('collectory.base.url')}/public/show/{{opusCtrl.dataResource.uid}}" target="_blank" title="Click to visit your collection resource's page in the Atlas of Living Australia">{{opusCtrl.dataResource.name}}</a>.
                     </p>
                 </div>
 

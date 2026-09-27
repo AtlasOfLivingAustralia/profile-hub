@@ -25,7 +25,7 @@ class KeybaseService {
 
         String key = null
 
-        def json = webService.get("${grailsApplication.config.keybase.taxon.lookup}${name}", [:], ContentType.APPLICATION_JSON, false, false).resp
+        def json = webService.get("${grailsApplication.config.getProperty('keybase.taxon.lookup')}${name}", [:], ContentType.APPLICATION_JSON, false, false).resp
         json?.Items?.each {
             if (it.ProjectsID == projectId) {
                 key = it.KeysID
@@ -36,7 +36,7 @@ class KeybaseService {
     }
 
     def retrieveAllProjects() {
-        webService.get("${grailsApplication.config.keybase.project.lookup}", [:], ContentType.APPLICATION_JSON, false, false)
+        webService.get("${grailsApplication.config.getProperty('keybase.project.lookup')}", [:], ContentType.APPLICATION_JSON, false, false)
     }
 
     /**
@@ -98,7 +98,7 @@ class KeybaseService {
         String keyId = findKey(name, projectId)
 
         if (keyId) {
-            Map key = webService.get("${grailsApplication.config.keybase.key.lookup}?key_id=${keyId}", [:], ContentType.APPLICATION_JSON, false, false)?.resp as Map
+            Map key = webService.get("${grailsApplication.config.getProperty('keybase.key.lookup')}?key_id=${keyId}", [:], ContentType.APPLICATION_JSON, false, false)?.resp as Map
 
             if (key) {
                 Map items = key.items.collectEntries { [(it.item_id): it.item_name] }

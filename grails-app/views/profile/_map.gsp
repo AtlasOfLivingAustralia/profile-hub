@@ -74,7 +74,7 @@
                     <a href="" ng-show="mapCtrl.hasEditorCustomisations()" ng-click="mapCtrl.toggleEditorCustomisations()" target="_blank"
                        class="margin-top-1 inline-block">{{ mapCtrl.showingEditorView ? 'Show' : 'Hide' }} non-vouchered occurrences</a>
                     <span class="padding-right-1 padding-left-1" ng-show="mapCtrl.hasEditorCustomisations()">|</span>
-                    <a href="${grailsApplication.config.biocache.base.url}/occurrences/search?{{ mapCtrl.getQueryToExploreInALA() }}#tab_mapView"
+                    <a href="${grailsApplication.config.getProperty('biocache.base.url')}/occurrences/search?{{ mapCtrl.getQueryToExploreInALA() }}#tab_mapView"
                        ng-if="mapCtrl.opus.mapConfig.biocacheUrl && mapCtrl.getQueryToExploreInALA()" target="_blank"
                        class="margin-top-1 inline-block">Explore in the Atlas of Living Australia</a>
                 </div>

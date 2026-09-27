@@ -42,7 +42,7 @@ class HelpTagLib {
 
     private Map loadHelpUrls() {
         log.debug("Loading help url mappings...")
-        String helpFile = "${grailsApplication.config.help.mapping.file}"
+        String helpFile = "${grailsApplication.config.getProperty('help.mapping.file')}"
 
         File file = new File(helpFile)
 

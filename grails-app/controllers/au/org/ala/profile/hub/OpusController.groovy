@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import static au.org.ala.profile.hub.util.HubConstants.*
 import static au.org.ala.profile.security.Role.ROLE_ADMIN
 import static au.org.ala.profile.security.Role.ROLE_PROFILE_ADMIN
-import static javax.servlet.http.HttpServletResponse.*
+import static jakarta.servlet.http.HttpServletResponse.*
 
 class OpusController extends OpusBaseController {
 
@@ -84,10 +84,10 @@ class OpusController extends OpusBaseController {
             notFound("Opus ${params.opusId} not found")
         } else {
             def model = commonViewModelParams(opus, 'filter')
-            def listType = grailsApplication.config.lists.masterlist.type ?: 'PROFILE'
-            def speciesListPath = grailsApplication.config.lists.speciesList.path ?: '/ws/speciesList'
+            def listType = grailsApplication.config.getProperty('lists.masterlist.type') ?: 'PROFILE'
+            def speciesListPath = grailsApplication.config.getProperty('lists.speciesList.path') ?: '/ws/speciesList'
             def lists = webService.get(
-                grailsApplication.config.lists.base.url + speciesListPath,
+                grailsApplication.config.getProperty('lists.base.url') + speciesListPath,
                 [listType: 'eq:' + listType, max: 1000, user: authService.userId]
             )
 
@@ -200,7 +200,7 @@ class OpusController extends OpusBaseController {
         SimpleDateFormat yearFormat = new SimpleDateFormat('yyyy')
         Date today = new Date()
         response?.resp?.opus << [
-                opusUrl             : "${grailsApplication.config.grails.serverURL}/opus/${params.opusId}",
+                opusUrl             : "${grailsApplication.config.getProperty('grails.serverURL')}/opus/${params.opusId}",
                 date                : longFormat.format(today),
                 year                : yearFormat.format(today),
                 genericCopyrightHtml: GENERIC_COPYRIGHT_TEXT
@@ -421,7 +421,7 @@ class OpusController extends OpusBaseController {
 
             if (opus) {
                 def filename = params.filename
-                File file = new File("${grailsApplication.config.image.private.dir}/${opus.uuid}/$filename")
+                File file = new File("${grailsApplication.config.getProperty('image.private.dir')}/${opus.uuid}/$filename")
                 if (file.exists()) {
                     response.setHeader('Cache-Control', 'must-revalidate')
                     response.setHeader('Expires', null)
@@ -450,7 +450,7 @@ class OpusController extends OpusBaseController {
             Map opus = profileService.getOpus(params.opusId)
 
             if (opus) {
-                File file = new File("${grailsApplication.config.image.private.dir}/${opus.uuid}/${params.filename}")
+                File file = new File("${grailsApplication.config.getProperty('image.private.dir')}/${opus.uuid}/${params.filename}")
                 if (file.exists()) {
                     boolean success = file.delete()
 
@@ -581,7 +581,7 @@ class OpusController extends OpusBaseController {
         Map opus = profileService.getOpus(params.opusId)
 
         if (opus) {
-            File imageDir = new File("${grailsApplication.config.image.private.dir}/${opus.uuid}")
+            File imageDir = new File("${grailsApplication.config.getProperty('image.private.dir')}/${opus.uuid}")
             if (!imageDir.exists()) {
                 imageDir.mkdirs()
             }

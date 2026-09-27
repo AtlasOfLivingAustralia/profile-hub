@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="${grailsApplication.config.layout + '-nocontainer'}"/>
+    <meta name="layout" content="${grailsApplication.config.getProperty('layout') + '-nocontainer'}"/>
     <title>Profile</title>
 </head>
 
@@ -64,7 +64,7 @@
 
                         <div class="archived-publication">
                             <publication data="profileCtrl.profile.publications[0]" opus-id="profileCtrl.opusId"
-                                         profile-id="profileCtrl.profileId"  prefix="${grailsApplication.config.doi.resolver.prefix}">
+                                         profile-id="profileCtrl.profileId"  prefix="${grailsApplication.config.getProperty('doi.resolver.prefix')}">
                             </publication>
                         </div>
                     </p>

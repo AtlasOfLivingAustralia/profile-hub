@@ -11,7 +11,7 @@
             <div class="col-sm-12">
                 <p>Configure the list(s) to be used to retrieve additional features for your profiles from the Atlas of Living Australia's List Tool. These lists can include such information as naturalised status, pest status, characters, traits, and so on.</p>
 
-                <p>Using the <a href="${grailsApplication.config.lists.ui.url}"
+                <p>Using the <a href="${grailsApplication.config.getProperty('lists.ui.url')}"
                                 target="_blank">Atlas of Living Australia Lists Tool</a>, upload a Species List as a .csv file, where the first column is "scientific_name" (this must match the name of your profile, excluding author information), plus a separate column for each status you wish to display.
                 </p>
             </div>
@@ -30,7 +30,7 @@
 
                 <ul id="lists">
                     <li ng-repeat="feature in opusCtrl.opus.featureLists">
-                        <a href="${grailsApplication.config.lists.ui.url}/speciesListItem/list/{{feature}}">{{(opusCtrl.allSpeciesLists | filter: feature)[0].listName | default:'Loading...'}}</a>
+                        <a href="${grailsApplication.config.getProperty('lists.ui.url')}/speciesListItem/list/{{feature}}">{{(opusCtrl.allSpeciesLists | filter: feature)[0].listName | default:'Loading...'}}</a>
                         <a class="btn btn-mini btn-link" title="Remove this resource"
                            ng-click="opusCtrl.removeFeatureList($index, 'existing', FeatureForm)">
                             <i class="fa fa-trash-o color--red"></i>

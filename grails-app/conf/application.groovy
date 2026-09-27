@@ -1,5 +1,3 @@
-import java.text.SimpleDateFormat
-
 grails.project.groupId = 'au.org.ala' // change this to alter the default package name and Maven publishing destination
 
 // The ACCEPT header will not be used for content negotiation for user agents containing the following strings (defaults to the 4 major rendering engines)
@@ -92,9 +90,3 @@ environments {
 jasper.dir.reports = 'classpath:reports'
 googleAnalyticsId = 'UA-4355440-1'
 doi.resolver.prefix = 'http://dx.doi.org/'
-
-grails.cache.config = {
-    provider {
-        name "ehcache-profile-hub-" + (new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()))
-    }
-}

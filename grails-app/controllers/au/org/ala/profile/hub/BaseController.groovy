@@ -12,7 +12,7 @@ class BaseController extends BasicWSController {
     }
 
     def enabled(feature) {
-        return !grailsApplication.config.feature[feature] || grailsApplication.config.feature[feature].toBoolean()
+        return !grailsApplication.config.getProperty('feature')[feature] || grailsApplication.config.getProperty('feature')[feature].toBoolean()
     }
 
     protected getBannerItems(opus, doMainBanner = false, isProfile = false) {

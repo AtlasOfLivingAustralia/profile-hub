@@ -26,9 +26,9 @@ class BiodiversityLibraryService {
     }
 
     private lookup = { String noun, Integer id, boolean json, String suffix = "" ->
-        def apiKey = grailsApplication.config.biodiv.library.api.key
+        def apiKey = grailsApplication.config.getProperty('biodiv.library.api.key')
 
-        String url = "${grailsApplication.config.biodiv.library.httpquery.url.prefix}op=Get${noun}Metadata&format=json&${noun.toLowerCase()}id=${id}&apikey=${apiKey}${suffix}"
+        String url = "${grailsApplication.config.getProperty('biodiv.library.httpquery.url.prefix')}op=Get${noun}Metadata&format=json&${noun.toLowerCase()}id=${id}&apikey=${apiKey}${suffix}"
 
         try {
             if (json) {

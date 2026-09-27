@@ -17,7 +17,7 @@ class SandboxBiocacheProxyController {
         // all incoming urls will be .../opus/[opusid]/ws/..., but we need to proxy them to just the bit after the /ws
         String requestPath = request.forwardURI.substring(request.forwardURI.indexOf("/ws") + 3)
         String queryString = request.queryString
-        String baseUrl = "${grailsApplication.config.sandbox.biocache.service.url}"
+        String baseUrl = "${grailsApplication.config.getProperty('sandbox.biocache.service.url')}"
 
         webService.proxyGetRequest(response, "${baseUrl}${requestPath}${queryString ? "?" : ""}${queryString ?: ""}", true, true)
     }

@@ -8,6 +8,6 @@ class BieService {
     WebService webService
 
     def getSpeciesProfile(String guid) {
-        webService.get("${grailsApplication.config.bie.ws.url}/ws/species/${guid}")
+        webService.get("${grailsApplication.config.getProperty('bie.ws.url')}/ws/species/${guid}")
     }
 }

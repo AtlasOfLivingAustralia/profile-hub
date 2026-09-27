@@ -1,157 +1,174 @@
-import grails.util.Environment
-
 buildscript {
     repositories {
         mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
-        maven { url "https://jaspersoft.jfrog.io/artifactory/third-party-ce-artifacts"}
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://nexus.ala.org.au/content/groups/public/" }
+        maven { url "https://jaspersoft.jfrog.io/artifactory/third-party-ce-artifacts" }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
-        classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.6"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:4.3.0"
-        classpath 'org.grails.plugins:quartz:2.0.13' // Needed to implementation *Job classes
+        classpath "org.apache.grails:grails-gradle-plugins:$grailsVersion"
+        classpath "cloud.wondrify:asset-pipeline-gradle:$assetPipelineVersion"
+        classpath "cloud.wondrify:sass-asset-pipeline:$assetPipelineVersion"
     }
 }
 
 version "$profileHubVersion"
 group "au.org.ala"
-boolean inplace = false // Set to true it needed only for development
+boolean inplace = Boolean.valueOf(project.findProperty('inplace') ?: 'false')
 
-apply plugin:"eclipse"
-apply plugin:"idea"
-apply plugin:"war"
-apply plugin:"org.grails.grails-web"
-apply plugin:"com.github.erdi.webdriver-binaries"
-apply plugin:"com.bertramlabs.asset-pipeline"
-apply plugin:"org.grails.grails-gsp"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "war"
+apply plugin: "groovy"
+apply plugin: "org.apache.grails.gradle.grails-web"
+apply plugin: "cloud.wondrify.asset-pipeline"
+apply plugin: "org.apache.grails.gradle.grails-gsp"
 apply from: "${project.projectDir}/gradle/publish.gradle"
 
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 targetCompatibility = '17'
 
 repositories {
-    mavenLocal()
+    mavenLocal {
+        // ~/.m2 has the ehcache pom without the jakarta classifier jar, which breaks
+        // resolution of org.ehcache:ehcache:3.10.8:jakarta; force it to Maven Central
+        content { excludeGroup 'org.ehcache' }
+    }
     maven { url "https://repo.grails.org/grails/core" }
     maven { url "https://nexus.ala.org.au/content/groups/public/" }
-    maven { url "https://jaspersoft.jfrog.io/artifactory/third-party-ce-artifacts"}
+    maven { url "https://nexus.ala.org.au/content/repositories/snapshots" }
+    maven { url "https://jaspersoft.jfrog.io/artifactory/third-party-ce-artifacts" }
     mavenCentral()
 }
 
-configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
+// Groovy 4 artifacts moved from org.codehaus.groovy to org.apache.groovy.
+// Old transitive requests (http-builder, etc.) are retargeted here; the Grails BOM
+// constraints then upgrade them to the managed Groovy 4 version.
+configurations.configureEach {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        // groovy-bom is exempt: retargeting it to org.apache.groovy:groovy-bom turns a
+        // pom-only module into a platform-only module, which breaks library resolution
+        if (details.requested.group == 'org.codehaus.groovy' && details.requested.name != 'groovy-bom') {
+            details.useTarget(group: 'org.apache.groovy', name: details.requested.name, version: details.requested.version)
+            details.because 'Groovy 4 coordinates moved to org.apache.groovy'
+        }
     }
 }
 
-def httpmimeVersion = "4.4.1"
+def httpmimeVersion = "4.5.14"
+def httpcoreVersion = "4.4.16"
 
 dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    compileOnly "io.micronaut:micronaut-inject-groovy"
-    console "org.grails:grails-console"
+    developmentOnly "net.java.dev.jna:jna"
+    developmentOnly "io.methvin:directory-watcher"
+    console "org.apache.grails:grails-console"
+
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-autoconfigure"
-    implementation "org.grails:grails-core"
+    implementation "org.apache.grails:grails-core"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-tomcat"
-    implementation "org.grails:grails-web-boot"
-    implementation "org.grails:grails-logging"
-    implementation "org.grails:grails-plugin-rest"
-    implementation "org.grails:grails-plugin-databinding"
-    implementation "org.grails:grails-plugin-i18n"
-    implementation "org.grails:grails-plugin-services"
-    implementation "org.grails:grails-plugin-url-mappings"
-    implementation "org.grails:grails-plugin-interceptors"
-//    implementation "org.codehaus.groovy:groovy:$groovyVersion"
-    implementation ("org.grails.plugins:cache") {
-        exclude module: 'groovy'
-        exclude module: 'groovy-all'
-        exclude module: 'asset-pipeline-grails'
+    implementation "org.apache.grails:grails-logging"
+    implementation "org.apache.grails:grails-web-boot"
+    implementation "org.apache.grails:grails-rest-transforms"
+    implementation "org.apache.grails:grails-databinding"
+    implementation "org.apache.grails:grails-services"
+    implementation "org.apache.grails:grails-url-mappings"
+    implementation "org.apache.grails:grails-interceptors"
+    // Sitemesh 2 layout support moved out of grails-gsp into its own plugin in Grails 7
+    implementation "org.apache.grails:grails-layout"
+    implementation "org.apache.grails:grails-gsp"
+    implementation "org.apache.grails:grails-cache"
+    // JCache/Ehcache 3 wiring (replaces the discontinued cache-ehcache plugin).
+    // Configured via spring.cache.jcache.config in application.yml (profile-ehcache.xml).
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+    implementation "javax.cache:cache-api:1.1.1"
+    implementation("org.ehcache:ehcache:3.10.8:jakarta") {
+        // the jakarta classifier jar must not drag in the javax JAXB stack from the default pom
+        exclude group: 'javax.xml.bind'
+        exclude group: 'org.glassfish.jaxb'
     }
-    implementation ("org.grails.plugins:async") {
-        exclude module: 'groovy'
-        exclude module: 'groovy-all'
-    }
-    implementation "org.grails.plugins:scaffolding"
-    implementation "org.grails.plugins:events"
-    implementation "org.grails.plugins:gsp"
+    runtimeOnly "jakarta.xml.bind:jakarta.xml.bind-api:4.0.2"
+    runtimeOnly "org.glassfish.jaxb:jaxb-runtime:4.0.5"
+    implementation "org.apache.grails:grails-async"
+    implementation "org.apache.grails.async:grails-async-gpars"
+    profile "org.apache.grails.profiles:web"
 
-    profile "org.grails.profiles:web"
-    runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
-    runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
-    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails"
-    testImplementation "io.micronaut:micronaut-inject-groovy"
-    testImplementation "org.grails:grails-gorm-testing-support"
+    implementation "cloud.wondrify:asset-pipeline-core:$assetPipelineVersion"
+    implementation "cloud.wondrify:asset-pipeline-grails:$assetPipelineVersion"
+    implementation "cloud.wondrify:sass-asset-pipeline:$assetPipelineVersion"
+
     testImplementation "org.mockito:mockito-core"
-    testImplementation "org.grails:grails-web-testing-support"
-    testImplementation "org.grails.plugins:geb"
-    testImplementation "org.seleniumhq.selenium:selenium-remote-driver:4.0.0"
-    testImplementation "org.seleniumhq.selenium:selenium-api:4.0.0"
-    testImplementation "org.seleniumhq.selenium:selenium-support:4.0.0"
-    testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:4.0.0"
-    testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:4.0.0"
+    testImplementation "org.apache.grails:grails-testing-support-web"
+    testImplementation "org.apache.grails:grails-geb"
+    testImplementation "org.seleniumhq.selenium:selenium-remote-driver:$seleniumVersion"
+    testImplementation "org.seleniumhq.selenium:selenium-api:$seleniumVersion"
+    testImplementation "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+    testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
+    testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
 
     implementation "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
-    implementation "org.apache.httpcomponents:httpcore:${httpmimeVersion}"
+    implementation "org.apache.httpcomponents:httpcore:${httpcoreVersion}"
     implementation "org.apache.httpcomponents:httpclient:${httpmimeVersion}"
 
-    implementation 'net.sf.ehcache:ehcache:2.8.4'
     implementation 'au.org.ala:image-utils:1.8.2'
-    implementation 'org.jsoup:jsoup:1.7.2'
+    implementation 'org.jsoup:jsoup:1.17.2'
+    // Keep tika on a version compatible with existing usage; newer parsers pull awkward transitive httpcore pins
     implementation 'org.apache.tika:tika-parsers:1.3'
-    implementation "commons-fileupload:commons-fileupload:1.3.1"
+    implementation "commons-fileupload:commons-fileupload:1.5"
+    implementation "commons-io:commons-io:2.14.0"
 
     implementation 'net.glxn:qrgen:1.4'
-    implementation 'org.apache.xmlgraphics:batik-bridge:1.9'
-    implementation 'org.apache.xmlgraphics:batik-svggen:1.9'
-    implementation 'com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20160827.1'
-    implementation 'com.google.guava:guava:19.0'
-    implementation 'com.google.code.findbugs:jsr305:3.0.1'
-    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
-    implementation "org.apache.httpcomponents:httpcore:${httpmimeVersion}"
-    implementation "org.apache.httpcomponents:httpclient:${httpmimeVersion}"
-    implementation "org.apache.httpcomponents:httpmime:${httpmimeVersion}"
+    implementation 'org.apache.xmlgraphics:batik-bridge:1.17'
+    implementation 'org.apache.xmlgraphics:batik-svggen:1.17'
+    implementation 'com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:20240325.1'
+    implementation 'com.google.guava:guava:33.0.0-jre'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
 
-    implementation 'dk.glasius:external-config:3.0.0'
+    // external-config removed: grails.config.locations is built into Grails 7
+    implementation 'org.grails.plugins:grails-mail:5.0.3'
 
-    implementation "org.grails.plugins:ala-auth:$alaSecurityLibsVersion"
+    implementation ("org.grails.plugins:ala-auth:$alaSecurityLibsVersion")
     implementation "org.grails.plugins:ala-ws-security-plugin:$alaSecurityLibsVersion"
-    if(!inplace){
+    if (!inplace) {
         implementation("org.grails.plugins:ala-ws-plugin:$alaSecurityLibsVersion")
     }
     testImplementation "au.org.ala:userdetails-service-client:$alaSecurityLibsVersion"
 
-    implementation 'org.grails.plugins:csv:1.0.1'
-    implementation 'net.sf.opencsv:opencsv:2.3'
-    implementation("org.grails.plugins:ala-map-plugin:4.0.1")
-    implementation 'au.org.ala.grails:interceptor-annotation-matcher:1.0.0'
+    implementation 'com.opencsv:opencsv:5.7.0'
+    // 2.0.0 is the Grails 7 build. 1.0.0 pulls org.grails:grails-plugin-*:4.0.13 onto the
+    // classpath; Grails 7 plugin discovery then livelocks in loadDelayedPlugins / isValidVersion,
+    // so bootRun hangs at "> Task :bootRun" with no logs.
+    implementation 'au.org.ala.grails:interceptor-annotation-matcher:2.0.0'
 
     implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
-    implementation("org.grails.plugins:ala-admin-plugin:2.3.0")
-    implementation "org.grails.plugins:quartz:2.0.13"
-    implementation "org.quartz-scheduler:quartz:2.2.1" // transitive dependency
-    //    swagger API
-    implementation 'au.org.ala.plugins:openapi:1.1.0'
-    runtimeOnly("au.org.ala.plugins.grails:images-client-plugin:1.2")
-
-    runtimeOnly "org.grails.plugins:jquery:1.11.1"
-    implementation 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.4'
-    assets 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.1'
-    assets ("com.craigburke.angular:angular-template-asset-pipeline:2.5.0")
-    if (Environment.current == Environment.DEVELOPMENT) {
-        implementation "org.grails.plugins:console:1.5.11"
+    implementation "org.grails.plugins:ala-admin-plugin:3.0.0-SNAPSHOT"
+    implementation "org.grails.plugins:ala-map-plugin:6.0-SNAPSHOT"
+    // openapi 2.0.0-SNAPSHOT is the Grails 7 / Jakarta build
+    implementation 'au.org.ala.plugins:openapi:2.0.0-SNAPSHOT'
+    implementation "io.swagger.core.v3:swagger-annotations:2.2.23"
+    runtimeOnly("au.org.ala.plugins.grails:images-client-plugin:2.0-SNAPSHOT") {
+        exclude group: 'org.grails.plugins', module: 'ala-auth'
     }
 
+    runtimeOnly 'org.webjars:jquery:1.12.4'
+    runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
+    implementation 'org.apache.groovy:groovy-dateutil'
+
+}
+
+springBoot {
+    buildInfo()
 }
 
 bootRun {
     ignoreExitValue true
     jvmArgs(
-        '-Dspring.output.ansi.enabled=always', 
-        '-noverify', 
+        '-Dspring.output.ansi.enabled=always',
         '-XX:TieredStopAtLevel=1',
         '-Xmx1024m')
     sourceResources sourceSets.main
@@ -165,47 +182,29 @@ tasks.withType(GroovyCompile) {
     }
 }
 
-webdriverBinaries {
-    if (!System.getenv().containsKey('GITHUB_ACTIONS')) {
-        chromedriver {
-            version = '2.45.0'
-            fallbackTo32Bit = true
-        }
-        geckodriver '0.30.0'
-    }
-}
-
 tasks.withType(Test) {
+    useJUnitPlatform()
     systemProperty "geb.env", System.getProperty('geb.env')
     systemProperty "geb.build.reportsDir", reporting.file("geb/integrationTest")
-    if (!System.getenv().containsKey('GITHUB_ACTIONS')) {
-        systemProperty 'webdriver.chrome.driver', System.getProperty('webdriver.chrome.driver')
-        systemProperty 'webdriver.gecko.driver', System.getProperty('webdriver.gecko.driver')
-    } else {
-        systemProperty 'webdriver.chrome.driver', "${System.getenv('CHROMEWEBDRIVER')}/chromedriver"
-        systemProperty 'webdriver.gecko.driver', "${System.getenv('GECKOWEBDRIVER')}/geckodriver"
-    }
+    systemProperty 'webdriver.chrome.driver', System.getProperty('webdriver.chrome.driver')
+    systemProperty 'webdriver.gecko.driver', System.getProperty('webdriver.gecko.driver')
 }
-
 
 assets {
     minifyJs = false
     minifyCss = true
     minifyOptions = [
-        excludes : ["**/*.min.js", "ckeditor5/build/ckeditor.js", "webjars/swagger-ui/4.5.2/swagger-ui-bundle.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js']
+        excludes: ["**/*.min.js", "ckeditor5/build/ckeditor.js", "webjars/swagger-ui/4.5.2/swagger-ui-bundle.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js']
     ]
-    excludes = ["webjars/leaflet/0.7.7/**/*.*",  "ckeditor5/node_modules/**/*.*", "ckeditor5/src/**/*.*", "ckeditor5/build/ckeditor.js", "ckeditor5/webpack.config.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js']
+    // Exclude HTML: HtmlProcessor can crash on quoted '%' in third-party assets.
+    excludes = ["**/*.html", "webjars/leaflet/0.7.7/**/*.*", "ckeditor5/node_modules/**/*.*", "ckeditor5/src/**/*.*", "ckeditor5/build/ckeditor.js", "ckeditor5/webpack.config.js", '**/spec.hintrc.unminified.js', 'spec.hintrc.unminified.js']
     includes = ["webjars/leaflet/0.7.7/dist/*.*"]
 }
 
 bootJar {
     enabled = true
-    classifier = 'exec'
+    archiveClassifier = 'exec'
     launchScript()
-}
-
-tasks.withType(Test) {
-    useJUnitPlatform()
 }
 
 assemble {

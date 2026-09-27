@@ -34,7 +34,7 @@ class AccessControlInterceptor {
         List<String> usersRoles = delegateService?.getUserRoles()?.asList()
         params.isALAAdmin = usersRoles.contains(Role.ROLE_ADMIN.toString())
 
-        if (grailsApplication.config.security.authorisation.disable != "true") {
+        if (grailsApplication.config.getProperty('security.authorisation.disable') != "true") {
             boolean authorised = false
 
             String actionFullName = "${controllerName.capitalize()}Controller.${actionName}"

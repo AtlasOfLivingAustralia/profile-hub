@@ -2,14 +2,14 @@ package au.org.ala.profile.hub
 
 import grails.testing.web.controllers.ControllerUnitTest
 import org.apache.http.HttpStatus
-import org.grails.plugin.cache.GrailsCacheManager
+import org.springframework.cache.CacheManager
 import org.springframework.cache.Cache
 import spock.lang.Specification
 
 class AdminControllerSpec extends Specification implements ControllerUnitTest<AdminController> {
 
     def setup() {
-        controller.grailsCacheManager = Mock(GrailsCacheManager)
+        controller.grailsCacheManager = Mock(CacheManager)
     }
 
     def "cache management should display to the admin controller when admin mode"() {
