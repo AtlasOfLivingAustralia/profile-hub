@@ -25,6 +25,10 @@ Everything runs through the Gradle wrapper:
 
 The React frontend lives in [`src/ui`](src/ui/). See the [UI README](src/ui/README.md) for local setup, environment configuration, and the CI/CD pipeline.
 
+# React UI
+
+The React frontend lives in [`src/ui`](src/ui/). See the [UI README](src/ui/README.md) for local setup, environment configuration, and the CI/CD pipeline.
+
 # Design notes and setup instructions
 
 See the [project wiki](https://github.com/AtlasOfLivingAustralia/profile-hub/wiki/).

@@ -108,6 +108,7 @@ server:
         max-part-count: 100
 ---
 
+---
 grails:
     config:
         locations:
