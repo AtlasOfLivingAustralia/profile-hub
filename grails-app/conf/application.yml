@@ -39,9 +39,9 @@ spring:
 
 management:
     endpoints:
-        enabled-by-default: false
-        jmx:
-            unique-names: true
+        # "none" keeps every actuator endpoint disabled unless one is granted access explicitly
+        access:
+            default: "none"
 
 server:
     tomcat:
