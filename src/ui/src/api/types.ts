@@ -429,3 +429,69 @@ export interface ProfileImagesResponse {
   availImagesCount?: number;
   primaryImage?: ProfileImage | null;
 }
+
+export interface ProfileSearchOptions {
+  nameOnly?: boolean;
+  includeNameAttributes?: boolean;
+  matchAll?: boolean;
+  hideStubs?: boolean;
+  searchAla?: boolean;
+  searchNsl?: boolean;
+  includeArchived?: boolean;
+  pageSize?: number;
+  offset?: number;
+}
+
+export interface ProfileSearchMatchInfo {
+  reason?: string | null;
+  matchName?: MatchedName | null;
+  nslmatchname?: {
+    canonicalName?: string | null;
+    scientificNameAuthorship?: string | null;
+  } | null;
+}
+
+export interface ProfileSearchItem {
+  scientificName: string;
+  nameAuthor?: string | null;
+  fullName?: string | null;
+  uuid: string;
+  guid?: string | null;
+  rank?: string | null;
+  primaryImage?: string | null;
+  opusShortName?: string | null;
+  opusName?: string | null;
+  opusId: string;
+  profileStatus?: string | null;
+  archivedDate?: string | number | null;
+  matchInfo?: ProfileSearchMatchInfo | null;
+  description?: { title?: string; text?: string }[];
+  otherNames?: { title?: string; text?: string }[];
+  score?: number;
+}
+
+export interface ProfileSearchResult {
+  total: number;
+  items: ProfileSearchItem[];
+}
+
+export interface ProfileSearchAutocompleteItem {
+  scientificName: string;
+  uuid?: string;
+  nameAuthor?: string | null;
+  fullName?: string | null;
+}
+
+export interface CreateCollectionPayload {
+  title: string;
+  dataResourceUid: string;
+  description?: string;
+  tags?: Tag[];
+}
+
+/** Collectory data-resource list: uid → display name. */
+export type DataResourceMap = Record<string, string>;
+
+export interface TagsResponse {
+  tags: Tag[];
+}

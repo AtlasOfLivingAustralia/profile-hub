@@ -1,13 +1,19 @@
 import { request } from "./query";
-import type { TaxonCounts, TaxonNameResult } from "./types";
+import type {
+  ProfileSearchAutocompleteItem,
+  ProfileSearchOptions,
+  ProfileSearchResult,
+  TaxonCounts,
+  TaxonNameResult,
+} from "./types";
 
 function queryString(
-  params: Record<string, number | string | boolean | undefined>,
+  params: Record<string, number | string | boolean | undefined | null>,
 ) {
   const query = new URLSearchParams();
 
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined && value !== "") {
+    if (value !== undefined && value !== null && value !== "") {
       query.set(key, String(value));
     }
   }
@@ -16,6 +22,47 @@ function queryString(
 }
 
 export default {
+  profiles: async (
+    term: string,
+    options: ProfileSearchOptions & { opusId?: string } = {},
+  ): Promise<ProfileSearchResult> =>
+    request(
+      `/profile/search?${queryString({
+        term,
+        opusId: options.opusId,
+        nameOnly: options.nameOnly ?? false,
+        includeNameAttributes: options.includeNameAttributes ?? true,
+        matchAll: options.matchAll ?? true,
+        hideStubs: options.hideStubs ?? true,
+        searchAla: options.searchAla ?? true,
+        searchNsl: options.searchNsl ?? true,
+        includeArchived: options.includeArchived ?? false,
+        pageSize: options.pageSize ?? 25,
+        offset: options.offset ?? 0,
+      })}`,
+      "GET",
+      null,
+    ),
+
+  scientificNameAutocomplete: async (
+    scientificName: string,
+    options: { opusId?: string; max?: number } = {},
+  ): Promise<ProfileSearchAutocompleteItem[]> => {
+    const data = await request<ProfileSearchAutocompleteItem[]>(
+      `/profile/search/scientificName?${queryString({
+        scientificName,
+        opusId: options.opusId,
+        useWildcard: true,
+        autoCompleteScientificName: true,
+        sortBy: "name",
+        max: options.max ?? 10,
+      })}`,
+      "GET",
+      null,
+    );
+    return Array.isArray(data) ? data : [];
+  },
+
   taxonLevels: async (opusId: string): Promise<TaxonCounts> =>
     request(
       `/profile/search/taxon/levels?${queryString({ opusId })}`,

@@ -17,6 +17,7 @@ import {
 } from "#/helpers/collectionTheme";
 
 import { Banner } from "./components/Banner";
+import { CollectionFooter } from "./components/CollectionFooter";
 import { CollectionTheme } from "./components/CollectionTheme";
 
 export type CollectionOutletContext = {
@@ -57,9 +58,12 @@ export async function loader({
     return { collection };
   } catch (error) {
     if (error instanceof ApiError) {
-      throw new Response(error.message || "error.collection.notFound", {
-        status: error.status,
-      });
+      throw Object.assign(
+        new Error(error.message || "error.collection.notFound", {
+          cause: error,
+        }),
+        { status: error.status },
+      );
     }
     throw error;
   }
@@ -99,6 +103,7 @@ export function Component() {
       <Container className="py-5">
         <Outlet context={{ collection } satisfies CollectionOutletContext} />
       </Container>
+      <CollectionFooter collection={collection} />
     </>
   );
 }

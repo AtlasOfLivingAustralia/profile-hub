@@ -4,10 +4,12 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import { FormattedMessage, useIntl } from "react-intl";
+import { Link } from "react-router";
 
 import api from "#/api";
 import type { Collection } from "#/api/types";
 import { getErrorMessage } from "#/helpers";
+import { useALA } from "#/helpers/context/useALA";
 
 import { CollectionCard } from "./components/CollectionCard";
 import { Search } from "./components/Search";
@@ -15,6 +17,7 @@ import styles from "./index.module.css";
 
 function Home() {
   const intl = useIntl();
+  const { isAdmin } = useALA();
   const [collections, setCollections] = useState<Collection[] | null>(null);
   const [error, setError] = useState<unknown>(null);
 
@@ -47,23 +50,32 @@ function Home() {
     <>
       <section className={styles.hero} aria-labelledby="home-title">
         <Container className={styles.heroInner}>
-          <h1 id="home-title" className={styles.title}>
-            <FormattedMessage id="view.home.title" />
-          </h1>
-          <p className={styles.lede}>
-            <FormattedMessage id="view.home.lede" />
-            {typeof collectionCount === "number" && (
-              <span className={styles.count}>
-                {" "}
-                {intl.formatMessage(
-                  { id: "view.home.collectionCount" },
-                  { count: collectionCount },
+          <div className="d-flex flex-wrap justify-content-between align-items-start gap-3">
+            <div>
+              <h1 id="home-title" className={styles.title}>
+                <FormattedMessage id="view.home.title" />
+              </h1>
+              <p className={styles.lede}>
+                <FormattedMessage id="view.home.lede" />
+                {typeof collectionCount === "number" && (
+                  <span className={styles.count}>
+                    {" "}
+                    {intl.formatMessage(
+                      { id: "view.home.collectionCount" },
+                      { count: collectionCount },
+                    )}
+                  </span>
                 )}
-              </span>
+              </p>
+            </div>
+            {isAdmin && (
+              <Link to="/opus/create" className="btn btn-secondary">
+                <FormattedMessage id="view.home.createCollection" />
+              </Link>
             )}
-          </p>
+          </div>
           <div className="mt-5">
-            <Search />
+            <Search slug={null} size="lg" />
           </div>
         </Container>
       </section>

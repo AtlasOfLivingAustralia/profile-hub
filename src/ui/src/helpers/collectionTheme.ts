@@ -73,6 +73,8 @@ export function buildCollectionThemeCss(theme: Theme): string {
     declaration("--opus-cta-text", callToActionText),
     declaration("--opus-header-border", headerBorder),
     declaration("--opus-footer-border", footerBorder),
+    declaration("--opus-footer-bg", theme.footerBackgroundColour),
+    declaration("--opus-footer-text", theme.footerTextColour),
     primaryRgb ? `  --bs-primary-rgb: ${primaryRgb};` : "",
     primaryRgb ? `  --bs-link-color-rgb: ${primaryRgb};` : "",
     primaryRgb ? `  --bs-focus-ring-color: rgba(${primaryRgb}, 0.25);` : "",

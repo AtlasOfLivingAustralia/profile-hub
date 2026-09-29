@@ -3,14 +3,19 @@ import type {
   Attachment,
   Collection,
   CollectionStatistic,
+  CreateCollectionPayload,
+  DataResourceMap,
   Glossary,
   OpusAboutResponse,
+  TagsResponse,
 } from "./types";
 
 export default {
   list: async (): Promise<Collection[]> => request("/opus/list", "GET", null),
   get: async (slug: string): Promise<Collection> =>
     request(`/opus/${encodeURIComponent(slug)}/json`, "GET", null),
+  create: async (payload: CreateCollectionPayload): Promise<Collection> =>
+    request("/opus/create", "PUT", payload),
   glossary: async (slug: string, letter: string): Promise<Glossary> =>
     request(
       `/opus/${encodeURIComponent(slug)}/glossary/${encodeURIComponent(letter)}`,
@@ -23,4 +28,7 @@ export default {
     request(`/opus/${encodeURIComponent(slug)}/statistics`, "GET", null),
   attachments: async (slug: string): Promise<Attachment[]> =>
     request(`/opus/${encodeURIComponent(slug)}/attachment/`, "GET", null),
+  tags: async (): Promise<TagsResponse> => request("/tags", "GET", null),
+  dataResources: async (): Promise<DataResourceMap> =>
+    request("/dataResource/", "GET", null),
 };

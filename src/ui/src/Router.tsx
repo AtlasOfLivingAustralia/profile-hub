@@ -20,6 +20,18 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "opus",
+        element: <Home />,
+      },
+      {
+        path: "opus/search",
+        lazy: () => import("./views/Search"),
+      },
+      {
+        path: "opus/create",
+        lazy: () => import("./views/CollectionCreate"),
+      },
+      {
         path: "opus/:slug",
         lazy: () => import("./views/Collection"),
         errorElement: <PageError />,
@@ -29,12 +41,20 @@ const router = createBrowserRouter([
             lazy: () => import("./views/CollectionHome"),
           },
           {
+            path: "search",
+            lazy: () => import("./views/Search"),
+          },
+          {
             path: "browse",
             lazy: () => import("./views/Browse"),
           },
           {
             path: "filter",
             lazy: () => import("./views/Filter"),
+          },
+          {
+            path: "identify",
+            lazy: () => import("./views/Identify"),
           },
           {
             path: "glossary/:letter?",

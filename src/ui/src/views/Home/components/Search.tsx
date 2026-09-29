@@ -1,86 +1,125 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useIntl } from "react-intl";
+import { useNavigate, useParams } from "react-router";
 
-export const SearchOptions = {
-  scientificName: "scientificName",
-  commonName: "commonName",
-  containingText: "containingText",
-} as const;
+import {
+  isSearchType,
+  searchPath,
+  SearchTypes,
+  type SearchType,
+} from "#/helpers/searchOptions";
 
-export type SearchOption = (typeof SearchOptions)[keyof typeof SearchOptions];
+export { SearchTypes, type SearchType };
 
-const SEARCH_OPTION_VALUES = Object.values(SearchOptions);
+const SEARCH_OPTION_VALUES = Object.values(SearchTypes);
 
-const SEARCH_OPTION_MESSAGE_IDS: Record<SearchOption, string> = {
-  [SearchOptions.scientificName]: "search.option.scientificName",
-  [SearchOptions.commonName]: "search.option.commonName",
-  [SearchOptions.containingText]: "search.option.containingText",
+const SEARCH_OPTION_MESSAGE_IDS: Record<SearchType, string> = {
+  [SearchTypes.scientificName]: "search.option.scientificName",
+  [SearchTypes.commonName]: "search.option.commonName",
+  [SearchTypes.containingText]: "search.option.containingText",
 };
 
-const SEARCH_PLACEHOLDER_MESSAGE_IDS: Record<SearchOption, string> = {
-  [SearchOptions.scientificName]: "search.placeholder.scientificName",
-  [SearchOptions.commonName]: "search.placeholder.commonName",
-  [SearchOptions.containingText]: "search.placeholder.containingText",
+const SEARCH_PLACEHOLDER_MESSAGE_IDS: Record<SearchType, string> = {
+  [SearchTypes.scientificName]: "search.placeholder.scientificName",
+  [SearchTypes.commonName]: "search.placeholder.commonName",
+  [SearchTypes.containingText]: "search.placeholder.containingText",
 };
 
-function isSearchOption(value: string): value is SearchOption {
-  return SEARCH_OPTION_VALUES.includes(value as SearchOption);
-}
+type SearchProps = {
+  /** Override collection slug; defaults to route param when present. */
+  slug?: string | null;
+  /** Initial search option. */
+  initialType?: SearchType;
+  /** Initial term shown in the input. */
+  initialTerm?: string;
+  /** Compact sizing for header usage. */
+  size?: "sm" | "lg";
+  /** Called instead of navigating (e.g. already on the search page). */
+  onSearch?: (term: string, type: SearchType) => void;
+  className?: string;
+};
 
-export function Search() {
+export function Search({
+  slug: slugProp,
+  initialType = SearchTypes.scientificName,
+  initialTerm = "",
+  size,
+  onSearch,
+  className,
+}: SearchProps) {
   const intl = useIntl();
-  const [searchOption, setSearchOption] = useState<SearchOption>(
-    SearchOptions.scientificName,
-  );
+  const navigate = useNavigate();
+  const { slug: routeSlug } = useParams<{ slug?: string }>();
+  const slug = slugProp === undefined ? routeSlug : slugProp;
+
+  const [searchOption, setSearchOption] = useState<SearchType>(initialType);
+  const [term, setTerm] = useState(initialTerm);
+
+  function submit(event?: FormEvent) {
+    event?.preventDefault();
+    const trimmed = term.trim();
+    if (!trimmed) return;
+
+    if (onSearch) {
+      onSearch(trimmed, searchOption);
+      return;
+    }
+
+    navigate(searchPath({ term: trimmed, type: searchOption, slug }));
+  }
 
   return (
-    <Form.Group className="mb-0">
-      <InputGroup>
-        <DropdownButton
-          variant="secondary"
-          title={intl.formatMessage({
-            id: SEARCH_OPTION_MESSAGE_IDS[searchOption],
-          })}
-          id="search-option-dropdown"
-          onSelect={(eventKey) => {
-            if (eventKey && isSearchOption(eventKey)) {
-              setSearchOption(eventKey);
-            }
-          }}
-        >
-          {SEARCH_OPTION_VALUES.map((option) => (
-            <Dropdown.Item
-              key={option}
-              eventKey={option}
-              active={searchOption === option}
-            >
-              {intl.formatMessage({ id: SEARCH_OPTION_MESSAGE_IDS[option] })}
-            </Dropdown.Item>
-          ))}
-        </DropdownButton>
+    <Form className={className} onSubmit={submit}>
+      <Form.Group className="mb-0">
+        <InputGroup size={size}>
+          <DropdownButton
+            variant="secondary"
+            title={intl.formatMessage({
+              id: SEARCH_OPTION_MESSAGE_IDS[searchOption],
+            })}
+            id="search-option-dropdown"
+            onSelect={(eventKey) => {
+              if (eventKey && isSearchType(eventKey)) {
+                setSearchOption(eventKey);
+              }
+            }}
+          >
+            {SEARCH_OPTION_VALUES.map((option) => (
+              <Dropdown.Item
+                key={option}
+                eventKey={option}
+                active={searchOption === option}
+              >
+                {intl.formatMessage({ id: SEARCH_OPTION_MESSAGE_IDS[option] })}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
 
-        <Form.Control
-          aria-label={intl.formatMessage({ id: "search.input.ariaLabel" })}
-          placeholder={intl.formatMessage({
-            id: SEARCH_PLACEHOLDER_MESSAGE_IDS[searchOption],
-          })}
-        />
+          <Form.Control
+            aria-label={intl.formatMessage({ id: "search.input.ariaLabel" })}
+            placeholder={intl.formatMessage({
+              id: SEARCH_PLACEHOLDER_MESSAGE_IDS[searchOption],
+            })}
+            value={term}
+            onChange={(event) => setTerm(event.target.value)}
+          />
 
-        <Button
-          variant="primary"
-          type="button"
-          aria-label={intl.formatMessage({ id: "search.button.ariaLabel" })}
-        >
-          <FontAwesomeIcon icon={faSearch} />
-        </Button>
-      </InputGroup>
-    </Form.Group>
+          <Button
+            variant="primary"
+            type="submit"
+            aria-label={intl.formatMessage({ id: "search.button.ariaLabel" })}
+          >
+            <FontAwesomeIcon icon={faSearch} />
+          </Button>
+        </InputGroup>
+      </Form.Group>
+    </Form>
   );
 }

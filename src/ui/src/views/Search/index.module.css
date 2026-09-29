@@ -1,0 +1,44 @@
+.title {
+  margin-bottom: 1.25rem;
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  font-weight: 600;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  padding: 0.85rem 1rem;
+  background: var(--bs-tertiary-bg);
+  border-radius: var(--bs-border-radius-lg);
+}
+
+.resultRow {
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+}
+
+.resultTitle {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.resultTitle a {
+  text-decoration: none;
+}
+
+.resultTitle a:hover {
+  text-decoration: underline;
+}
+
+.author {
+  font-weight: 400;
+  color: var(--bs-secondary-color);
+}
+
+.snippet {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}

@@ -29,6 +29,7 @@ export function Component() {
         messageId: "view.collectionHome.action.search",
         icon: faSearch,
         helpText: collection.opusLayoutConfig.helpTextSearch,
+        to: `/opus/${slug}/search`,
       },
       {
         messageId: "view.collectionHome.action.browse",
@@ -42,6 +43,7 @@ export function Component() {
               messageId: "view.collectionHome.action.identify",
               icon: faFingerprint,
               helpText: collection.opusLayoutConfig.helpTextIdentify,
+              to: `/opus/${slug}/identify`,
             },
           ]
         : []),
@@ -61,76 +63,59 @@ export function Component() {
     [collection, slug],
   );
 
+  const updatesHtml = collection.opusLayoutConfig.updatesSection?.trim();
+  const explanatoryHtml = collection.opusLayoutConfig.explanatoryText?.trim();
+
   return (
     <Row className="g-4">
-      <Col md={12} lg={3}>
+      <Col sm={12} md={4}>
         <div className={styles.panel}>
           <h2 className={styles.heading}>
             <FormattedMessage id="view.collectionHome.exploreHeading" />
           </h2>
           <div className="vstack gap-3">
-            {actions.map(({ messageId, icon, helpText, to }) => {
-              const content = (
-                <>
-                  <span className={styles.actionIcon}>
-                    <FontAwesomeIcon icon={icon} />
-                  </span>
-                  <span>
-                    <FormattedMessage id={messageId} />
-                  </span>
-                  <FontAwesomeIcon
-                    icon={faChevronRight}
-                    className={styles.actionArrow}
-                  />
-                </>
-              );
-
-              return to ? (
-                <Link
-                  key={messageId}
-                  to={to}
-                  className={styles.actionButton}
-                  title={helpText}
-                >
-                  {content}
-                </Link>
-              ) : (
-                <button
-                  key={messageId}
-                  type="button"
-                  className={styles.actionButton}
-                  title={helpText}
-                >
-                  {content}
-                </button>
-              );
-            })}
+            {actions.map(({ messageId, icon, helpText, to }) => (
+              <Link
+                key={messageId}
+                to={to}
+                className={styles.actionButton}
+                title={helpText}
+              >
+                <span className={styles.actionIcon}>
+                  <FontAwesomeIcon icon={icon} />
+                </span>
+                <span>
+                  <FormattedMessage id={messageId} />
+                </span>
+                <FontAwesomeIcon
+                  icon={faChevronRight}
+                  className={styles.actionArrow}
+                />
+              </Link>
+            ))}
           </div>
         </div>
       </Col>
-      <Col md={12} lg={9}>
-        <section className="px-2 px-md-4 pt-3">
-          <h2 className="mb-4 text-body-secondary">
-            <FormattedMessage id="view.collectionHome.aboutHeading" />
-          </h2>
-          {collection.aboutHtml?.trim() ? (
-            <RichText html={collection.aboutHtml} />
-          ) : (
-            <p className="text-body-secondary mb-0">
-              <FormattedMessage id="view.collectionHome.noInformation" />
-            </p>
-          )}
-          <h2 className="mb-4 mt-5 text-body-secondary">
-            <FormattedMessage id="view.collectionHome.informationHeading" />
-          </h2>
-          {collection.opusLayoutConfig.explanatoryText?.trim() ? (
-            <RichText html={collection.opusLayoutConfig.explanatoryText} />
+      <Col sm={12} md={4}>
+        <section className="px-1 px-md-2 pt-1">
+          {explanatoryHtml ? (
+            <RichText html={explanatoryHtml} />
           ) : (
             <p className="text-body-secondary mb-0">
               <FormattedMessage id="view.collectionHome.noInformation" />
             </p>
           )}
         </section>
+      </Col>
+      <Col sm={12} md={4}>
+        {updatesHtml ? (
+          <section className="px-1 px-md-2 pt-1">
+            <h2 className="h5 mb-3 text-body-secondary">
+              <FormattedMessage id="view.collectionHome.updatesHeading" />
+            </h2>
+            <RichText html={updatesHtml} />
+          </section>
+        ) : null}
       </Col>
     </Row>
   );

@@ -13,6 +13,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { type FormEvent, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
@@ -20,10 +21,11 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAuth } from "react-oidc-context";
-import { NavLink, useParams } from "react-router";
+import { NavLink, useNavigate, useParams } from "react-router";
 import handleSignout from "#/helpers/auth/handleSignout";
 import { useLocale } from "#/helpers/context/useLocale";
 import { APP_LOCALES, type AppLocale, LOCALE_LABELS } from "#/helpers/locale";
+import { searchPath, SearchTypes } from "#/helpers/searchOptions";
 import type { ThemePreference } from "#/helpers/theme";
 import { useColorMode } from "#/helpers/useColorMode";
 
@@ -160,6 +162,40 @@ function LanguageDropdown({
   );
 }
 
+function HeaderSearch({ slug }: { slug?: string }) {
+  const intl = useIntl();
+  const navigate = useNavigate();
+  const [term, setTerm] = useState("");
+
+  function onSubmit(event: FormEvent) {
+    event.preventDefault();
+    const trimmed = term.trim();
+    if (!trimmed) return;
+    navigate(
+      searchPath({
+        term: trimmed,
+        type: SearchTypes.containingText,
+        slug,
+      }),
+    );
+    setTerm("");
+  }
+
+  return (
+    <Form onSubmit={onSubmit}>
+      <Form.Control
+        type="search"
+        value={term}
+        onChange={(event) => setTerm(event.target.value)}
+        placeholder={intl.formatMessage({
+          id: "nav.search.placeholder",
+        })}
+        aria-label={intl.formatMessage({ id: "search.input.ariaLabel" })}
+      />
+    </Form>
+  );
+}
+
 export function Header() {
   const auth = useAuth();
   const intl = useIntl();
@@ -225,16 +261,11 @@ export function Header() {
           )}
 
           {/* Mobile: search + account links as normal nav items */}
-          {slug && <hr className={`d-lg-none ${styles.separator}`} />}
+          <hr className={`d-lg-none ${styles.separator}`} />
           <Nav className="d-lg-none flex-column">
-            <Form className="py-2">
-              <Form.Control
-                type="text"
-                placeholder={intl.formatMessage({
-                  id: "nav.search.placeholder",
-                })}
-              />
-            </Form>
+            <div className="py-2">
+              <HeaderSearch slug={slug} />
+            </div>
             {userNavItems}
             <hr className={styles.separator} />
             <LanguageDropdown locale={locale} setLocale={setLocale} />
@@ -247,14 +278,7 @@ export function Header() {
 
           {/* Desktop: search + language + hamburger dropdown */}
           <div className="d-none d-lg-flex align-items-center gap-3 ms-auto">
-            <Form>
-              <Form.Control
-                type="text"
-                placeholder={intl.formatMessage({
-                  id: "nav.search.placeholder",
-                })}
-              />
-            </Form>
+            <HeaderSearch slug={slug} />
             <Nav>
               <LanguageDropdown locale={locale} setLocale={setLocale} />
               <NavDropdown

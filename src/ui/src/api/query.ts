@@ -24,7 +24,7 @@ async function redirectToSpaLogin(): Promise<void> {
 export const request = async <T>(
   input: RequestInfo | URL,
   method?: "GET" | "PUT" | "POST" | "DELETE",
-  body?: BodyInit | null,
+  body?: BodyInit | object | null,
   additionalHeaders?: HeadersInit,
 ): Promise<T> => {
   const headerMap: Record<string, string> = {
