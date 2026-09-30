@@ -244,6 +244,13 @@ class ProfileService {
         }
     }
 
+    def proxySound(HttpServletResponse response, String opusId, String profileId, String attachmentId, boolean latest = false) {
+        log.debug("Proxying sound $attachmentId")
+        webService.proxyGetRequest(response,
+                "${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/sound/${encPath(attachmentId)}?latest=${latest}",
+                true, false)
+    }
+
     def getImageMetadata(String imageId) {
         webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/image/${imageId}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
     }

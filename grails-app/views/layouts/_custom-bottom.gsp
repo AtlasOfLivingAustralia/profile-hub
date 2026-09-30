@@ -142,6 +142,7 @@
         imageLoadErrorUrl: '${assetPath(src: "not-available.png")}',
         development: ${Environment.current == Environment.DEVELOPMENT},
         pdfHighThresholdLimit :  '${grailsApplication.config.pdf.highThresholdLimit?:50}',
+        maxSoundFileSize: ${grailsApplication.config.getProperty('attachments.sound.maxFileSize', Long, 5000000L)},
         facetGroupUrl: '${g.createLink(controller: 'resource', action: 'facets')}'
     });
 </asset:script>

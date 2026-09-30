@@ -21,6 +21,16 @@
 
 </div>
 
+<div class="row margin-bottom-1" ng-if="profileCtrl.primarySound" ng-cloak>
+    <div class="col-md-8">
+        <strong>{{profileCtrl.primarySound.title}}</strong>
+        <audio controls preload="metadata" class="full-width">
+            <source ng-src="{{profileCtrl.soundUrl(profileCtrl.primarySound)}}" type="{{profileCtrl.primarySound.contentType}}">
+            Your browser does not support audio playback.
+        </audio>
+    </div>
+</div>
+
 <div class="row margin-bottom-1" ng-show="profileCtrl.nslProtologue" ng-cloak>
     <div class="col-md-12">
         <div class="citation zero-margin" data-ng-bind-html="profileCtrl.nslProtologue | sanitizeHtml"></div>
@@ -101,10 +111,11 @@
                     </div>
                 </tab>
                 <tab managed-tab heading="Documents" class="font-xxsmall"
-                     ng-show="!profileCtrl.readonly() || profileCtrl.profile.attachments.length > 0">
+                     ng-show="!profileCtrl.readonly() || (profileCtrl.profile.attachments | filter:{type:'!sound'}).length > 0">
                     <g:render template="/common/attachments" model="[hideHeading: true]"/>
                 </tab>
             </tabset>
+            <sounds ng-if="profileCtrl.profile" profile="profileCtrl.profile" readonly="profileCtrl.readonly"></sounds>
         </div>
     </div>
 </g:if>

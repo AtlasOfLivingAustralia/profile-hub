@@ -60,6 +60,9 @@ profileEditor.controller('ProfileController',
 
                     self.primaryVideo = self.profile.primaryVideo ? _.find(self.profile.documents, function(doc) { return doc.documentId == self.profile.primaryVideo }) : null;
                     self.primaryAudio = self.profile.primaryAudio ? _.find(self.profile.documents, function(doc) { return doc.documentId == self.profile.primaryAudio }) : null;
+                    self.primarySound = self.profile.primaryAudio ? _.find(self.profile.attachments, function(attachment) {
+                        return attachment.uuid == self.profile.primaryAudio && attachment.type == 'sound';
+                    }) : null;
 
                     if (self.opus.keybaseProjectId) {
                         var keyPromise = profileService.findKeybaseKeyForName(self.opus.uuid, self.profile.scientificName);
@@ -105,6 +108,37 @@ profileEditor.controller('ProfileController',
             );
         }
     };
+
+    self.soundUrl = function(sound) {
+        if (!sound || !self.profile) {
+            return null;
+        }
+        return util.contextRoot() + "/opus/" + encodeURIComponent(self.opusId) + "/profile/" +
+            encodeURIComponent(self.profile.uuid) + "/sound/" + encodeURIComponent(sound.uuid);
+    };
+    function updatePrimaryAudio() {
+        if (!self.profile) {
+            return;
+        }
+
+        var primaryAudio = self.profile.primaryAudio;
+
+        self.primaryAudio = primaryAudio ? _.find(self.profile.documents, function(doc) {
+            return doc.documentId == primaryAudio;
+        }) : null;
+
+        self.primarySound = primaryAudio ? _.find(self.profile.attachments, function(attachment) {
+            return attachment.uuid == primaryAudio && attachment.type == 'sound';
+        }) : null;
+    }
+
+    $scope.$watch(function() {
+        return self.profile ? self.profile.primaryAudio : null;
+    }, updatePrimaryAudio);
+
+    $scope.$watch(function() {
+        return self.profile ? self.profile.attachments : null;
+    }, updatePrimaryAudio);
 
     self.constructManualHierarchyForNameDirective = function() {
         if (!self.readonly() && self.profile.manualClassification) {

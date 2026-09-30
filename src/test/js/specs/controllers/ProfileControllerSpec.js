@@ -97,6 +97,60 @@ describe("ProfileController tests", function () {
         expect(scope.profileCtrl.profile).toBeDefined();
     });
 
+    it("should resolve an uploaded primary sound and construct its raw URL", function () {
+        profileDefer.resolve({
+            profile: {
+                uuid: PROFILE_ID,
+                guid: "guid1",
+                scientificName: "profileName",
+                primaryAudio: "sound1",
+                documents: [],
+                attachments: [{uuid: "sound1", type: "sound", title: "Call"}],
+                attributes: [],
+                authorship: [],
+                classification: []
+            },
+            opus: {}
+        });
+
+        scope.profileCtrl.loadProfile();
+        scope.$apply();
+
+        expect(scope.profileCtrl.primaryAudio).toBeUndefined();
+        expect(scope.profileCtrl.primarySound.uuid).toBe("sound1");
+        expect(scope.profileCtrl.soundUrl(scope.profileCtrl.primarySound)).toBe(
+            "/context/opus/profileId/profile/" + PROFILE_ID + "/sound/sound1");
+    });
+
+    it("should refresh the uploaded primary sound when attachments are replaced", function () {
+        profileDefer.resolve({
+            profile: {
+                uuid: PROFILE_ID,
+                guid: "guid1",
+                scientificName: "profileName",
+                primaryAudio: "sound1",
+                documents: [],
+                attachments: [{uuid: "sound1", type: "sound", title: "Old title"}],
+                attributes: [],
+                authorship: [],
+                classification: []
+            },
+            opus: {}
+        });
+
+        scope.profileCtrl.loadProfile();
+        scope.$apply();
+
+        expect(scope.profileCtrl.primarySound.title).toBe("Old title");
+
+        scope.profileCtrl.profile.attachments = [
+            {uuid: "sound1", type: "sound", title: "New title"}
+        ];
+        scope.$apply();
+
+        expect(scope.profileCtrl.primarySound.title).toBe("New title");
+    });
+
     it("should raise an alert message when getProfile fails", function () {
         profileDefer.reject();
 
@@ -604,4 +658,3 @@ describe("ProfileController tests", function () {
         expect(scope.profileCtrl.manualHierarchy[3].guid).toBe("123");
     });
 });
-

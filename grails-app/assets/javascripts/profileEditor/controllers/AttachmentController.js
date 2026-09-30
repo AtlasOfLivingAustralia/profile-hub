@@ -16,7 +16,9 @@ profileEditor.controller('AttachmentController', function (profileService, messa
     self.loadAttachments = function () {
         var future = profileService.getAttachmentMetadata(self.opusId, self.profileId, null);
         future.then (function (data) {
-                self.attachments = data;
+                self.attachments = _.filter(data, function (attachment) {
+                    return attachment.type !== 'sound';
+                });
             },
             function () {
                 messageService.alert("An error occurred while retrieving attachments");
