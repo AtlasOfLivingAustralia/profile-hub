@@ -1,0 +1,85 @@
+<div ng-form="SoundUploadForm">
+    <div class="modal-header">
+        <h4 class="modal-title">{{soundUploadCtrl.metadata.uuid ? 'Edit sound' : 'Add sound'}}</h4>
+        <close-modal close="soundUploadCtrl.cancel()"></close-modal>
+    </div>
+
+    <div class="modal-body form-horizontal">
+        <alert class="alert-danger" ng-show="soundUploadCtrl.error">{{soundUploadCtrl.error}}</alert>
+
+        <div class="form-group" ng-if="!soundUploadCtrl.metadata.uuid">
+            <label for="soundFile" class="col-sm-3 control-label">Sound *</label>
+            <div class="col-sm-9">
+                <span class="btn btn-default btn-file">
+                    Choose file
+                    <input id="soundFile" type="file" ngf-select ng-model="soundUploadCtrl.file"
+                           accept=".mp3,.wav,audio/mpeg,audio/wav,audio/x-wav" required>
+                </span>
+                <span class="font-xsmall">{{soundUploadCtrl.file[0].name}}</span>
+                <p class="help-block">MP3 or WAV, up to {{soundUploadCtrl.maxFileSizeMb}} MB.</p>
+            </div>
+        </div>
+
+        <div class="form-group" ng-if="soundUploadCtrl.metadata.uuid">
+            <label class="col-sm-3 control-label">Sound</label>
+            <div class="col-sm-9"><p class="form-control-static">{{soundUploadCtrl.metadata.filename}}</p></div>
+        </div>
+
+        <div class="form-group">
+            <label for="soundTitle" class="col-sm-3 control-label">Title *</label>
+            <div class="col-sm-9">
+                <input id="soundTitle" class="form-control" ng-model="soundUploadCtrl.metadata.title" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="soundDescription" class="col-sm-3 control-label">Description</label>
+            <div class="col-sm-9">
+                <textarea id="soundDescription" class="form-control" rows="3" maxlength="1024"
+                          ng-model="soundUploadCtrl.metadata.description"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="soundDate" class="col-sm-3 control-label">Date created</label>
+            <div class="col-sm-9">
+                <fallback-date-picker field-id="soundDate" ng-model="soundUploadCtrl.metadata.createdDate"></fallback-date-picker>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="soundCreator" class="col-sm-3 control-label">Creator</label>
+            <div class="col-sm-9">
+                <input id="soundCreator" class="form-control" ng-model="soundUploadCtrl.metadata.creator">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="soundRightsHolder" class="col-sm-3 control-label">Rights holder</label>
+            <div class="col-sm-9">
+                <input id="soundRightsHolder" class="form-control" ng-model="soundUploadCtrl.metadata.rightsHolder">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="soundRights" class="col-sm-3 control-label">Rights</label>
+            <div class="col-sm-9">
+                <input id="soundRights" class="form-control" ng-model="soundUploadCtrl.metadata.rights">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="soundLicence" class="col-sm-3 control-label">Licence *</label>
+            <div class="col-sm-9">
+                <select id="soundLicence" class="form-control"
+                        ng-options="licence.name as licence.name for licence in soundUploadCtrl.licences"
+                        ng-model="soundUploadCtrl.metadata.licence" required></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="soundUploadCtrl.ok()" ng-disabled="SoundUploadForm.$invalid">OK</button>
+        <button class="btn btn-default" ng-click="soundUploadCtrl.cancel()">Cancel</button>
+    </div>
+</div>

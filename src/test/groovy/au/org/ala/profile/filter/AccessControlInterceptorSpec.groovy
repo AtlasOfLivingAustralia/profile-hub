@@ -489,6 +489,22 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         "show"                  | "AUTHOR"                    | 200
         "show"                  | "ADMIN"                     | 200
         "show"                  | "ALA_ADMIN"                 | 200
+        // stream published sound
+        "streamSound"           | "NOT_LOGGED_IN_USER"        | 200
+        "streamSound"           | "LOGGED_IN_USER"            | 200
+        "streamSound"           | "REVIEWER"                  | 200
+        "streamSound"           | "EDITOR"                    | 200
+        "streamSound"           | "AUTHOR"                    | 200
+        "streamSound"           | "ADMIN"                     | 200
+        "streamSound"           | "ALA_ADMIN"                 | 200
+        // render sound QR code
+        "soundQrCode"           | "NOT_LOGGED_IN_USER"        | 200
+        "soundQrCode"           | "LOGGED_IN_USER"            | 200
+        "soundQrCode"           | "REVIEWER"                  | 200
+        "soundQrCode"           | "EDITOR"                    | 200
+        "soundQrCode"           | "AUTHOR"                    | 200
+        "soundQrCode"           | "ADMIN"                     | 200
+        "soundQrCode"           | "ALA_ADMIN"                 | 200
         // edit profile
         "edit"                  | "NOT_LOGGED_IN_USER"        | 403
         "edit"                  | "LOGGED_IN_USER"            | 403

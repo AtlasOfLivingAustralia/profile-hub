@@ -5,6 +5,8 @@ import au.org.ala.profile.security.Secured
 import au.org.ala.web.AuthService
 import grails.converters.JSON
 import groovy.json.JsonSlurper
+import net.glxn.qrgen.QRCode
+import net.glxn.qrgen.image.ImageType
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import org.springframework.web.multipart.MultipartFile
@@ -612,13 +614,17 @@ class ProfileController extends BaseController {
         if (!params.opusId || !params.profileId || !(request instanceof MultipartHttpServletRequest) || !request.getParameter("data")) {
             badRequest "opusId and profile are required parameters, a JSON data paramaeter must be provided, and the request must be a multipart request"
         } else if (request instanceof AbstractMultipartHttpServletRequest) {
-            if (request.fileNames && request.getFile(request.fileNames[0]).contentType != "application/pdf") {
+            Map attachment = new JsonSlurper().parseText(request.getParameter("data"))
+            MultipartFile file = request.fileNames ? request.getFile(request.fileNames[0]) : null
+            Map validation = attachment.type == 'sound' && !attachment.uuid ? validateSound(file) : [valid: true]
+
+            if (!validation.valid) {
+                badRequest validation.error as String
+            } else if (attachment.type != 'sound' && file && file.contentType != "application/pdf") {
                 badRequest "Invalid file type - must be one of [PDF]"
             } else {
-                Map attachment = new JsonSlurper().parseText(request.getParameter("data"))
-
                 if (!attachment.uuid && !attachment.url) {
-                    attachment.filename = request.getFile("file").originalFilename
+                    attachment.filename = file.originalFilename
                 }
 
                 def result = profileService.saveAttachment(params.opusId, params.profileId, attachment, request)
@@ -651,6 +657,60 @@ class ProfileController extends BaseController {
             log.info("Proxying attachment download opus: $opusId, profile: $profileId, attachment: $attachmentId")
             profileService.proxyAttachmentDownload(response, opusId, profileId, attachmentId)
         }
+    }
+
+    def streamSound() {
+        if (!params.opusId || !params.profileId || !params.attachmentId) {
+            badRequest "opusId, profileId and attachmentId are required parameters"
+        } else {
+            profileService.proxySound(response, params.opusId as String, params.profileId as String,
+                    params.attachmentId as String, canViewLatestProfile())
+        }
+    }
+
+    def soundQrCode() {
+        if (!params.opusId || !params.profileId || !params.attachmentId) {
+            badRequest "opusId, profileId and attachmentId are required parameters"
+        } else {
+            String soundUrl = g.createLink(controller: 'profile', action: 'streamSound', absolute: true,
+                    params: [opusId: params.opusId, profileId: params.profileId, attachmentId: params.attachmentId])
+            byte[] png = QRCode.from(soundUrl).to(ImageType.PNG).withSize(180, 180).stream().toByteArray()
+            response.contentType = 'image/png'
+            response.contentLength = png.length
+            response.outputStream << png
+            response.outputStream.flush()
+        }
+    }
+
+    private boolean canViewLatestProfile() {
+        params.isOpusReviewer || params.isOpusAuthor || params.isOpusAdmin || params.isOpusEditor
+    }
+
+    private Map validateSound(MultipartFile file) {
+        if (!file || file.empty) {
+            return [valid: false, error: 'A sound file is required']
+        }
+
+        String extension = Utils.getExtension(file.originalFilename)?.replaceFirst('^\\.', '')?.toLowerCase()
+        Map<String, List<String>> contentTypes = [
+                mp3: ['audio/mpeg', 'audio/mp3', 'audio/x-mp3'],
+                wav: ['audio/wav', 'audio/x-wav', 'audio/wave', 'audio/vnd.wave']
+        ]
+        if (!contentTypes.containsKey(extension)) {
+            return [valid: false, error: 'Invalid sound file extension - must be one of [mp3, wav]']
+        }
+
+        long maxFileSize = grailsApplication.config.getProperty('attachments.sound.maxFileSize', Long, 5_000_000L)
+        if (file.size > maxFileSize) {
+            return [valid: false, error: "Sound file exceeds the maximum size of ${maxFileSize} bytes"]
+        }
+
+        String contentType = file.contentType?.toLowerCase()?.split(';')?.first()?.trim()
+        if (!contentTypes[extension].contains(contentType)) {
+            return [valid: false, error: "Invalid content type '${file.contentType}' for a ${extension} sound file"]
+        }
+
+        [valid: true]
     }
 
 

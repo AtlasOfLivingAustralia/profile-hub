@@ -48,6 +48,42 @@ class ProfileControllerSpec extends Specification implements ControllerUnitTest<
         assert response.status == HttpStatus.SC_NOT_FOUND
     }
 
+    def "streamSound should request published content for a public viewer"() {
+        when:
+        params.opusId = "opus"
+        params.profileId = "profile"
+        params.attachmentId = "sound"
+        controller.streamSound()
+
+        then:
+        1 * profileService.proxySound(_, "opus", "profile", "sound", false)
+    }
+
+    def "streamSound should request latest content for an editor"() {
+        when:
+        params.opusId = "opus"
+        params.profileId = "profile"
+        params.attachmentId = "sound"
+        params.isOpusEditor = true
+        controller.streamSound()
+
+        then:
+        1 * profileService.proxySound(_, "opus", "profile", "sound", true)
+    }
+
+    def "soundQrCode should render a PNG"() {
+        when:
+        params.opusId = "opus"
+        params.profileId = "profile"
+        params.attachmentId = "sound"
+        controller.soundQrCode()
+
+        then:
+        response.status == 200
+        response.contentType == "image/png"
+        response.contentAsByteArray[0..3] == ([0x89, 0x50, 0x4e, 0x47] as byte[])
+    }
+
     def "edit should return a 400 (BAD REQUEST) if a profile id is not provided"() {
         when:
         controller.edit()

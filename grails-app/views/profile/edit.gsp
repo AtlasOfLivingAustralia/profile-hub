@@ -173,6 +173,7 @@
                                                 <g:include controller="profile" action="imagesPanel"
                                                            params="[opusId: params.opusId]"/>
                                                 <multimedia profile="profileCtrl.profile" readonly="profileCtrl.readonly"></multimedia>
+                                               <sounds ng-if="profileCtrl.profile" profile="profileCtrl.profile" readonly="profileCtrl.readonly"></sounds>
                                             </g:if>
                                             <g:include controller="profile" action="publicationsPanel"
                                                        params="[opusId: params.opusId]"/>

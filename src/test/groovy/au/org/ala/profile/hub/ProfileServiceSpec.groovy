@@ -39,6 +39,30 @@ class ProfileServiceSpec extends Specification implements ServiceUnitTest<Profil
         1 * webServiceWrapperService.get(expectedUrl, _ , _ , _, _, _)
     }
 
+    def "proxySound should request the published sound by default"() {
+        given:
+        def response = Mock(javax.servlet.http.HttpServletResponse)
+
+        when:
+        service.proxySound(response, "opus", "profile", "sound")
+
+        then:
+        1 * webService.proxyGetRequest(response,
+                "http://profile.service/opus/opus/profile/profile/sound/sound?latest=false", true, false)
+    }
+
+    def "proxySound should request the draft sound for an authorised editor"() {
+        given:
+        def response = Mock(javax.servlet.http.HttpServletResponse)
+
+        when:
+        service.proxySound(response, "opus", "profile", "sound", true)
+
+        then:
+        1 * webService.proxyGetRequest(response,
+                "http://profile.service/opus/opus/profile/profile/sound/sound?latest=true", true, false)
+    }
+
     def "updateLinks() should construct the correct Profile Service URL"() {
         setup:
         String expectedUrl = "http://profile.service/opus/opusid/profile/profileId/links"

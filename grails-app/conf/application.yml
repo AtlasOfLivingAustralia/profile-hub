@@ -72,7 +72,7 @@ grails:
     controllers:
         upload:
             maxFileSize: 5000000
-            maxRequestSize: 5000000
+            maxRequestSize: 5100000
         defaultScope: singleton
     converters:
         encoding: UTF-8
@@ -87,6 +87,10 @@ grails:
                 scriptlet: html
                 taglib: none
                 staticparts: none
+
+attachments:
+    sound:
+        maxFileSize: 5000000
 management:
     endpoints:
         jmx:

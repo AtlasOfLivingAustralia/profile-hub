@@ -1,0 +1,60 @@
+<div class="panel panel-default" ng-show="soundCtrl.sounds.length > 0 || soundCtrl.isEditable" ng-form="soundCtrl.SoundForm" ng-cloak>
+    <navigation-anchor anchor-name="view_sounds" title="Sounds"
+                       condition="soundCtrl.sounds.length > 0 || soundCtrl.isEditable"></navigation-anchor>
+    <div class="panel-heading">
+        <h4 class="section-panel-heading">Sounds</h4>
+    </div>
+
+    <div class="panel-body">
+        <div ng-if="soundCtrl.sounds.length === 0">No sounds have been uploaded to this profile.</div>
+
+        <div class="row padding-bottom-2" ng-repeat="sound in soundCtrl.sounds track by sound.uuid">
+            <div class="col-md-8">
+                <h5>{{sound.title}}</h5>
+                <audio controls preload="metadata" class="full-width">
+                    <source ng-src="{{soundCtrl.rawUrl(sound)}}" type="{{sound.contentType}}">
+                    Your browser does not support audio playback.
+                </audio>
+                <p ng-if="sound.description">{{sound.description}}</p>
+                <div class="citation" ng-if="sound.creator || sound.rightsHolder || sound.createdDate">
+                    <span ng-if="sound.creator">{{sound.creator}}</span>
+                    <span ng-if="sound.createdDate">, {{sound.createdDate | date:'dd/MM/yyyy'}}</span>
+                    <span ng-if="sound.rightsHolder"> (&copy; {{sound.rightsHolder}})</span>
+                </div>
+                <div ng-if="sound.licence">
+                    <img ng-if="sound.licenceIcon" ng-src="{{sound.licenceIcon}}" alt="{{sound.licence}}" title="{{sound.licence}}">
+                    <span>{{sound.licence}}</span>
+                </div>
+
+                <div ng-if="soundCtrl.isEditable" class="margin-top-1">
+                    <label class="radio-inline">
+                        <input type="radio" name="primary-audio" ng-model="soundCtrl.profile.primaryAudio"
+                               ng-value="sound.uuid" aria-label="Use {{sound.title}} as primary sound">
+                        Use as primary sound
+                    </label>
+                    <button class="btn btn-default btn-xs" ng-click="soundCtrl.editSound(sound)">
+                        <i class="fa fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-danger btn-xs" ng-click="soundCtrl.deleteSound(sound)">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <a ng-href="{{soundCtrl.rawUrl(sound)}}" target="_blank" title="Open raw sound">
+                    <img ng-src="{{soundCtrl.qrUrl(sound)}}" width="180" height="180"
+                         alt="QR code linking to {{sound.title}}">
+                </a>
+                <div><small>Scan to open this sound</small></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-footer" ng-if="soundCtrl.isEditable">
+        <button class="btn btn-default" ng-click="soundCtrl.addSound()"><i class="fa fa-plus"></i> Add sound</button>
+        <button class="btn btn-default" ng-disabled="!soundCtrl.hasPrimarySound()"
+                ng-click="soundCtrl.clearPrimarySound()">Unset Primary Sound</button>
+        <button class="btn btn-primary pull-right" ng-disabled="soundCtrl.SoundForm.$pristine"
+                ng-click="soundCtrl.savePrimarySound()">Save primary sound</button>
+    </div>
+</div>
