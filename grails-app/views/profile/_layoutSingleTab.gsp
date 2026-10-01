@@ -52,7 +52,7 @@
         <div class="col-md-6 col-sm-12" ng-if="profileCtrl.profile.primaryVideo">
             <div embed selected-multimedia="profileCtrl.primaryVideo"></div>
         </div>
-        <div class="col-md-6 col-sm-12" ng-if="profileCtrl.profile.primaryAudio">
+        <div class="col-md-6 col-sm-12" ng-if="profileCtrl.primaryAudio">
             <div embed selected-multimedia="profileCtrl.primaryAudio"></div>
         </div>
     </div>
