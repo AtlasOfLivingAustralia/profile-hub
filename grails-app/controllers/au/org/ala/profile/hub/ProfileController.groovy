@@ -6,7 +6,6 @@ import au.org.ala.web.AuthService
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import net.glxn.qrgen.QRCode
-import net.glxn.qrgen.image.ImageType
 import org.grails.web.json.JSONArray
 import org.grails.web.json.JSONObject
 import org.springframework.web.multipart.MultipartFile
@@ -674,7 +673,7 @@ class ProfileController extends BaseController {
         } else {
             String soundUrl = g.createLink(controller: 'profile', action: 'streamSound', absolute: true,
                     params: [opusId: params.opusId, profileId: params.profileId, attachmentId: params.attachmentId])
-            byte[] png = QRCode.from(soundUrl).to(ImageType.PNG).withSize(180, 180).stream().toByteArray()
+            byte[] png = QRCode.from(soundUrl).to(net.glxn.qrgen.image.ImageType.PNG).withSize(180, 180).stream().toByteArray()
             response.contentType = 'image/png'
             response.contentLength = png.length
             response.outputStream << png
