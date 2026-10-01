@@ -1,3 +1,4 @@
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { type FormEvent, useEffect, useRef, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
@@ -6,6 +7,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 
 import api from "#/api";
 import type { TaxonCounts } from "#/api/types";
+import PageMessage from "#/components/PageMessage";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
 import styles from "./Level.module.css";
@@ -14,6 +16,7 @@ import { SubLevel } from "./SubLevel";
 import { TaxaSkeleton } from "./TaxaSkeleton";
 
 const PAGE_SIZE = 25;
+const FILTER_DEBOUNCE_MS = 300;
 const numberFormatter = new Intl.NumberFormat();
 
 type LevelProps = {
@@ -94,6 +97,24 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     setSelected(null);
     setPageIsFull(false);
   }, [slug, level]);
+
+  // Apply the taxon filter as the user types. The list request already
+  // depends on appliedFilter, so debouncing that value avoids one request
+  // per keystroke. Skip while a taxon is open so a pending timer cannot
+  // clear the child view.
+  useEffect(() => {
+    if (selected) return;
+
+    const nextFilter = filter.trim();
+    if (nextFilter === appliedFilter) return;
+
+    const timer = window.setTimeout(() => {
+      setPage(1);
+      setAppliedFilter(nextFilter);
+    }, FILTER_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [filter, appliedFilter, selected]);
 
   function applyFilter(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -185,9 +206,9 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
       ) : loading && taxaEntries.length === 0 ? (
         <TaxaSkeleton count={skeletonCount} />
       ) : taxaEntries.length === 0 ? (
-        <p className="text-body-secondary mb-0 py-4">
+        <PageMessage icon={faMagnifyingGlass}>
           <FormattedMessage id="view.browse.level.empty" />
-        </p>
+        </PageMessage>
       ) : (
         <>
           <div className={styles.taxa} aria-busy={loading}>

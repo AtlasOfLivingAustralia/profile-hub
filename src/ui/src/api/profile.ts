@@ -1,5 +1,9 @@
 import { request } from "./query";
-import type { ProfileImagesResponse, ProfileJsonResponse } from "./types";
+import type {
+  ProfileImage,
+  ProfileImagesResponse,
+  ProfileJsonResponse,
+} from "./types";
 
 function queryString(
   params: Record<string, string | boolean | number | undefined>,
@@ -27,6 +31,16 @@ export default {
           fullClassification: options.fullClassification ?? true,
         },
       )}`,
+      "GET",
+      null,
+    ),
+
+  primaryImage: async (
+    opusId: string,
+    profileId: string,
+  ): Promise<ProfileImage> =>
+    request(
+      `/opus/${encodeURIComponent(opusId)}/profile/${encodeURIComponent(profileId)}/primaryImage`,
       "GET",
       null,
     ),

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type FormEvent, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useIntl } from "react-intl";
@@ -11,12 +10,14 @@ import { useNavigate, useParams } from "react-router";
 
 import {
   isSearchType,
-  searchPath,
-  SearchTypes,
   type SearchType,
+  SearchTypes,
+  searchPath,
 } from "#/helpers/searchOptions";
 
-export { SearchTypes, type SearchType };
+import styles from "./Search.module.css";
+
+export { type SearchType, SearchTypes };
 
 const SEARCH_OPTION_VALUES = Object.values(SearchTypes);
 
@@ -79,28 +80,36 @@ export function Search({
     <Form className={className} onSubmit={submit}>
       <Form.Group className="mb-0">
         <InputGroup size={size}>
-          <DropdownButton
-            variant="secondary"
-            title={intl.formatMessage({
-              id: SEARCH_OPTION_MESSAGE_IDS[searchOption],
-            })}
-            id="search-option-dropdown"
+          <Dropdown
             onSelect={(eventKey) => {
               if (eventKey && isSearchType(eventKey)) {
                 setSearchOption(eventKey);
               }
             }}
           >
-            {SEARCH_OPTION_VALUES.map((option) => (
-              <Dropdown.Item
-                key={option}
-                eventKey={option}
-                active={searchOption === option}
-              >
-                {intl.formatMessage({ id: SEARCH_OPTION_MESSAGE_IDS[option] })}
-              </Dropdown.Item>
-            ))}
-          </DropdownButton>
+            <Dropdown.Toggle
+              variant="secondary"
+              className={styles.typeToggle}
+              id="search-option-dropdown"
+            >
+              {intl.formatMessage({
+                id: SEARCH_OPTION_MESSAGE_IDS[searchOption],
+              })}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {SEARCH_OPTION_VALUES.map((option) => (
+                <Dropdown.Item
+                  key={option}
+                  eventKey={option}
+                  active={searchOption === option}
+                >
+                  {intl.formatMessage({
+                    id: SEARCH_OPTION_MESSAGE_IDS[option],
+                  })}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
 
           <Form.Control
             aria-label={intl.formatMessage({ id: "search.input.ariaLabel" })}
@@ -112,6 +121,7 @@ export function Search({
           />
 
           <Button
+            className={styles.searchButton}
             variant="primary"
             type="submit"
             aria-label={intl.formatMessage({ id: "search.button.ariaLabel" })}

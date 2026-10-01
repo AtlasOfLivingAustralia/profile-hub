@@ -25,10 +25,9 @@ export default {
   profiles: async (
     term: string,
     options: ProfileSearchOptions & { opusId?: string } = {},
-  ): Promise<ProfileSearchResult> =>
-    request(
-      `/profile/search?${queryString({
-        term,
+  ): Promise<ProfileSearchResult> => {
+    const query = new URLSearchParams(
+      queryString({
         opusId: options.opusId,
         nameOnly: options.nameOnly ?? false,
         includeNameAttributes: options.includeNameAttributes ?? true,
@@ -39,10 +38,12 @@ export default {
         includeArchived: options.includeArchived ?? false,
         pageSize: options.pageSize ?? 25,
         offset: options.offset ?? 0,
-      })}`,
-      "GET",
-      null,
-    ),
+      }),
+    );
+    query.set("term", term);
+
+    return request(`/profile/search?${query.toString()}`, "GET", null);
+  },
 
   scientificNameAutocomplete: async (
     scientificName: string,

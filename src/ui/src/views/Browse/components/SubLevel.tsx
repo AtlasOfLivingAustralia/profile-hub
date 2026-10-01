@@ -1,3 +1,4 @@
+import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import { FormattedMessage } from "react-intl";
@@ -5,6 +6,7 @@ import { Link } from "react-router";
 
 import api from "#/api";
 import type { TaxonNameResult } from "#/api/types";
+import PageMessage from "#/components/PageMessage";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
 import { PaginationBar } from "./PaginationBar";
@@ -90,9 +92,9 @@ export function SubLevel({
 
   if (items.length === 0) {
     return (
-      <p className="text-body-secondary mb-0 py-4">
+      <PageMessage icon={faFolderOpen}>
         <FormattedMessage id="view.browse.level.children.empty" />
-      </p>
+      </PageMessage>
     );
   }
 

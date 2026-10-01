@@ -31,6 +31,8 @@ import { useColorMode } from "#/helpers/useColorMode";
 
 import styles from "./Header.module.css";
 
+const SLUG_BADGE_MAX_LENGTH = 20;
+
 const COLLECTION_NAV_ITEMS = [
   { messageId: "nav.collection.home", path: "", end: true },
   { messageId: "nav.collection.browse", path: "/browse" },
@@ -247,6 +249,9 @@ export function Header() {
         <Navbar.Collapse id="primary-navbar-nav">
           {slug && (
             <Nav className="me-auto">
+              {slug.length <= SLUG_BADGE_MAX_LENGTH && (
+                <span className={styles.slugBadge}>{slug}</span>
+              )}
               {COLLECTION_NAV_ITEMS.map((item) => (
                 <Nav.Link
                   key={item.messageId}

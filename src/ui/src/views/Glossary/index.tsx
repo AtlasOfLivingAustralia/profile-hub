@@ -1,3 +1,4 @@
+import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
@@ -9,6 +10,7 @@ import { Navigate, NavLink, useParams } from "react-router";
 import api from "#/api";
 import type { Glossary } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
+import PageMessage from "#/components/PageMessage";
 import { RichText } from "#/components/RichText";
 
 import styles from "./index.module.css";
@@ -85,21 +87,23 @@ export function Component() {
         </Col>
 
         <Col xs={12} md>
-          <div className={`${styles.panel} p-0`}>
-            {loading ? (
+          {loading ? (
+            <div className={`${styles.panel} p-0`}>
               <div className="d-flex justify-content-center p-5">
                 <PageLoader />
               </div>
-            ) : !glossary || glossary.items.length === 0 ? (
-              <p className="text-body-secondary mb-0 p-4">
-                <FormattedMessage
-                  id="view.glossary.empty"
-                  values={{
-                    letter: <b>{letter.toUpperCase()}</b>,
-                  }}
-                />
-              </p>
-            ) : (
+            </div>
+          ) : !glossary || glossary.items.length === 0 ? (
+            <PageMessage icon={faBook}>
+              <FormattedMessage
+                id="view.glossary.empty"
+                values={{
+                  letter: <b>{letter.toUpperCase()}</b>,
+                }}
+              />
+            </PageMessage>
+          ) : (
+            <div className={`${styles.panel} p-0`}>
               <Table responsive striped hover className="mb-0">
                 <thead>
                   <tr>
@@ -124,8 +128,8 @@ export function Component() {
                   ))}
                 </tbody>
               </Table>
-            )}
-          </div>
+            </div>
+          )}
         </Col>
       </Row>
     </div>

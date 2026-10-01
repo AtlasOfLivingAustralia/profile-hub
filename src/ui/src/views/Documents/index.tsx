@@ -1,3 +1,4 @@
+import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useMemo, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -6,6 +7,7 @@ import { useOutletContext, useParams } from "react-router";
 import api from "#/api";
 import type { Attachment } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
+import PageMessage from "#/components/PageMessage";
 
 import type { CollectionOutletContext } from "../Collection";
 import { DocumentItem } from "./components/DocumentItem";
@@ -105,11 +107,9 @@ export function Component() {
           <FormattedMessage id="view.documents.error.loadFailed" />
         </Alert>
       ) : !attachments || attachments.length === 0 ? (
-        <div className={`${styles.panel} py-4`}>
-          <p className="text-body-secondary mb-0">
-            <FormattedMessage id="view.documents.empty" />
-          </p>
-        </div>
+        <PageMessage icon={faFileLines}>
+          <FormattedMessage id="view.documents.empty" />
+        </PageMessage>
       ) : (
         <div className="vstack gap-4">
           {groups.map(({ category, items }) => (

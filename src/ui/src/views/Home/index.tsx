@@ -81,7 +81,7 @@ function Home() {
       </section>
 
       <Container className="pb-5">
-        <div className="vstack gap-3">
+        <div className="vstack gap-4">
           <h2 className="text-body-secondary">
             <FormattedMessage id="view.home.browseByCollection" />
           </h2>

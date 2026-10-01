@@ -13,6 +13,7 @@ import type {
   OpusAboutResponse,
 } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
+import PageMessage from "#/components/PageMessage";
 import { RichText } from "#/components/RichText";
 
 import type { CollectionOutletContext } from "../Collection";
@@ -134,15 +135,15 @@ export function Component() {
         </div>
       )}
 
-      <section className={styles.panel}>
-        {opus.aboutHtml?.trim() ? (
+      {opus.aboutHtml?.trim() ? (
+        <section className={styles.panel}>
           <RichText html={opus.aboutHtml} />
-        ) : (
-          <p className="text-body-secondary mb-0">
-            <FormattedMessage id="view.about.empty" />
-          </p>
-        )}
-      </section>
+        </section>
+      ) : (
+        <PageMessage icon={faCircleInfo}>
+          <FormattedMessage id="view.about.empty" />
+        </PageMessage>
+      )}
 
       {hasCitation && (
         <Section title={<FormattedMessage id="view.about.section.citations" />}>

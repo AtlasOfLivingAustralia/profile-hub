@@ -1,30 +1,33 @@
-import { useEffect, useMemo, useState } from "react";
+import { faImage, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Alert from "react-bootstrap/Alert";
-import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import Placeholder from "react-bootstrap/Placeholder";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 
 import api from "#/api";
 import type { ProfileSearchItem, ProfileSearchResult } from "#/api/types";
-import PageLoader from "#/components/PageLoader";
+import PageMessage from "#/components/PageMessage";
 import { getErrorMessage } from "#/helpers";
 import {
   isSearchType,
   profilePath,
+  type SearchType,
+  SearchTypes,
   searchOptionsForType,
   searchPath,
-  SearchTypes,
-  type SearchType,
 } from "#/helpers/searchOptions";
+import { resolveMediaUrl } from "#/helpers/utils/resolveMediaUrl";
 import { PaginationBar } from "#/views/Browse/components/PaginationBar";
 import { Search } from "#/views/Home/components/Search";
 
 import styles from "./index.module.css";
 
 const PAGE_SIZE = 25;
+const RESULT_SKELETON_COUNT = 6;
+const SKELETON_TITLE_WIDTHS = ["48%", "36%", "55%", "32%", "44%", "40%"];
 
 export function Component() {
   const intl = useIntl();
@@ -41,7 +44,7 @@ export function Component() {
 
   const [result, setResult] = useState<ProfileSearchResult | null>(null);
   const [error, setError] = useState<unknown>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [matchAll, setMatchAll] = useState(true);
   const [hideStubs, setHideStubs] = useState(true);
 
@@ -57,13 +60,6 @@ export function Component() {
   );
 
   useEffect(() => {
-    if (!term) {
-      setResult(null);
-      setError(null);
-      setLoading(false);
-      return;
-    }
-
     let cancelled = false;
 
     async function runSearch() {
@@ -127,42 +123,74 @@ export function Component() {
           slug={slug}
           initialTerm={term}
           initialType={type}
-          size="lg"
           onSearch={(nextTerm, nextType) =>
             navigateSearch({ term: nextTerm, type: nextType, page: 1 })
           }
         />
         <div className={`mt-3 ${styles.options}`}>
           {!options.nameOnly && (
-            <Form.Check
+            <SearchOption
               id="search-match-all"
-              type="checkbox"
               checked={matchAll}
-              onChange={(event) => {
-                setMatchAll(event.target.checked);
-                if (page > 1 && term) {
+              label={intl.formatMessage({ id: "view.search.option.matchAll" })}
+              onChange={(checked) => {
+                setMatchAll(checked);
+                if (page > 1) {
                   navigateSearch({ term, type, page: 1 });
                 }
               }}
-              label={intl.formatMessage({ id: "view.search.option.matchAll" })}
             />
           )}
-          <Form.Check
+          <SearchOption
             id="search-hide-stubs"
-            type="checkbox"
             checked={hideStubs}
-            onChange={(event) => {
-              setHideStubs(event.target.checked);
-              if (page > 1 && term) {
+            label={intl.formatMessage({ id: "view.search.option.hideStubs" })}
+            onChange={(checked) => {
+              setHideStubs(checked);
+              if (page > 1) {
                 navigateSearch({ term, type, page: 1 });
               }
             }}
-            label={intl.formatMessage({ id: "view.search.option.hideStubs" })}
           />
         </div>
       </div>
 
-      {loading && <PageLoader />}
+      {((loading && error == null) ||
+        (!loading && error == null && result && result.items.length > 0)) && (
+        <p className="text-body-secondary mb-0">
+          <FormattedMessage
+            id="view.search.summary"
+            values={{
+              from: (
+                <SummaryFigure
+                  value={loading || !result ? undefined : options.offset! + 1}
+                />
+              ),
+              to: (
+                <SummaryFigure
+                  value={
+                    loading || !result
+                      ? undefined
+                      : options.offset! + result.items.length
+                  }
+                />
+              ),
+              total: (
+                <SummaryFigure
+                  value={loading || !result ? undefined : result.total}
+                />
+              ),
+            }}
+          />
+        </p>
+      )}
+
+      {loading && !error && (
+        <SearchResultsSkeleton
+          count={RESULT_SKELETON_COUNT}
+          showCollection={showCollectionColumn}
+        />
+      )}
 
       {error != null && (
         <Alert variant="danger" className="mb-0">
@@ -170,24 +198,14 @@ export function Component() {
         </Alert>
       )}
 
-      {!loading && !error && term && result && result.items.length === 0 && (
-        <p className="text-body-secondary mb-0">
+      {!loading && !error && result && result.items.length === 0 && (
+        <PageMessage icon={faSearch}>
           <FormattedMessage id="view.search.empty" />
-        </p>
+        </PageMessage>
       )}
 
       {!loading && !error && result && result.items.length > 0 && (
         <>
-          <p className="text-body-secondary mb-0">
-            <FormattedMessage
-              id="view.search.summary"
-              values={{
-                from: options.offset! + 1,
-                to: options.offset! + result.items.length,
-                total: result.total,
-              }}
-            />
-          </p>
           <div className="vstack gap-0">
             {result.items.map((item) => (
               <SearchResultRow
@@ -218,6 +236,86 @@ export function Component() {
   return <Container className="py-5">{content}</Container>;
 }
 
+function SearchOption({
+  id,
+  checked,
+  label,
+  onChange,
+}: {
+  id: string;
+  checked: boolean;
+  label: string;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label className={styles.option} data-checked={checked}>
+      <input
+        id={id}
+        className={styles.optionInput}
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+      />
+      <span>{label}</span>
+    </label>
+  );
+}
+
+function SummaryFigure({ value }: { value?: number }) {
+  if (value == null) {
+    return (
+      <Placeholder animation="glow" className={styles.summaryFigure}>
+        <Placeholder className={`rounded-pill ${styles.summaryNumber}`} />
+      </Placeholder>
+    );
+  }
+
+  return value;
+}
+
+function SearchResultsSkeleton({
+  count,
+  showCollection,
+}: {
+  count: number;
+  showCollection: boolean;
+}) {
+  return (
+    <div className="vstack gap-0" aria-hidden="true">
+      {Array.from({ length: count }, (_, index) => (
+        <div key={index} className={styles.resultRow}>
+          <div className={styles.thumbFrame}>
+            <div className={styles.thumb}>
+              <Placeholder animation="glow" className={styles.thumbSkeleton}>
+                <Placeholder className={styles.thumbSkeletonBlock} />
+              </Placeholder>
+            </div>
+          </div>
+          <div className={styles.resultMain}>
+            <Placeholder animation="glow" className={styles.skeletonLines}>
+              <Placeholder
+                className={`rounded-pill ${styles.skeletonTitle}`}
+                style={{
+                  width:
+                    SKELETON_TITLE_WIDTHS[index % SKELETON_TITLE_WIDTHS.length],
+                }}
+              />
+              <Placeholder className={`rounded-pill ${styles.skeletonMeta}`} />
+            </Placeholder>
+          </div>
+          {showCollection && (
+            <div className={styles.resultOpus}>
+              <Placeholder animation="glow">
+                <Placeholder className={`rounded-pill ${styles.skeletonOpus}`} />
+              </Placeholder>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function SearchResultRow({
   item,
   showCollection,
@@ -232,19 +330,24 @@ function SearchResultRow({
     .filter(Boolean);
 
   return (
-    <Row className={`g-3 py-3 ${styles.resultRow}`}>
-      <Col
-        md={showCollection ? 8 : 10}
-        className="d-flex flex-column justify-content-center"
-      >
+    <article className={styles.resultRow}>
+      <SearchResultImage
+        opusId={item.opusId}
+        profileId={item.uuid}
+        to={to}
+        name={item.scientificName}
+      />
+      <div className={styles.resultMain}>
         <h2 className={styles.resultTitle}>
-          <Link to={to}>{item.scientificName}</Link>
+          <Link to={to} style={{ fontStyle: "italic" }}>
+            {item.scientificName}
+          </Link>
           {item.nameAuthor ? (
             <span className={styles.author}> {item.nameAuthor}</span>
           ) : null}
         </h2>
         {item.rank && (
-          <div className="small text-body-secondary">({item.rank})</div>
+          <div className="small text-body-secondary">{item.rank}</div>
         )}
         {otherNames && otherNames.length > 0 && (
           <div className="small mt-1">{otherNames.join(", ")}</div>
@@ -259,12 +362,89 @@ function SearchResultRow({
             <FormattedMessage id="view.search.stub" />
           </Alert>
         )}
-      </Col>
+      </div>
       {showCollection && (
-        <Col md={4} className="d-flex align-items-center">
-          <span className="text-body-secondary">{item.opusName}</span>
-        </Col>
+        <div className={styles.resultOpus}>{item.opusName}</div>
       )}
-    </Row>
+    </article>
+  );
+}
+
+function SearchResultImage({
+  opusId,
+  profileId,
+  to,
+  name,
+}: {
+  opusId: string;
+  profileId: string;
+  to: string;
+  name: string;
+}) {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [status, setStatus] = useState<"pending" | "loading" | "done">(
+    "pending",
+  );
+  const [src, setSrc] = useState<string | undefined>();
+
+  useEffect(() => {
+    const node = frameRef.current;
+    if (!node) return;
+
+    let timer = 0;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        timer = window.setTimeout(() => setStatus("loading"), 100);
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(node);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (status !== "loading") return;
+
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const image = await api.profile.primaryImage(opusId, profileId);
+        if (cancelled) return;
+        setSrc(resolveMediaUrl(image?.thumbnailUrl));
+      } catch {
+        if (!cancelled) setSrc(undefined);
+      } finally {
+        if (!cancelled) setStatus("done");
+      }
+    }
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [status, opusId, profileId]);
+
+  return (
+    <div ref={frameRef} className={styles.thumbFrame}>
+      <Link to={to} className={styles.thumb} aria-label={name}>
+        {src ? (
+          <img src={src} alt="" onError={() => setSrc(undefined)} />
+        ) : status === "done" ? (
+          <FontAwesomeIcon icon={faImage} />
+        ) : (
+          <Placeholder animation="glow" className={styles.thumbSkeleton}>
+            <Placeholder className={styles.thumbSkeletonBlock} />
+          </Placeholder>
+        )}
+      </Link>
+    </div>
   );
 }
