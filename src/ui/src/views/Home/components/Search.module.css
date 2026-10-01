@@ -46,3 +46,22 @@
 .searchButton :global(svg) {
   color: #fff !important;
 }
+
+:global(::view-transition-group(.search-field-share)) {
+  animation-duration: 450ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:global(::view-transition-old(.search-field-share)),
+:global(::view-transition-new(.search-field-share)) {
+  animation-duration: 450ms;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(::view-transition-group(.search-field-share)),
+  :global(::view-transition-old(.search-field-share)),
+  :global(::view-transition-new(.search-field-share)) {
+    animation: none !important;
+  }
+}

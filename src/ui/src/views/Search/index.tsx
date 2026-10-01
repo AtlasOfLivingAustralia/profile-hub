@@ -119,8 +119,8 @@ export function Component() {
           <FormattedMessage id="view.search.title" />
         </h1>
         <Search
-          key={`${term}-${type}`}
           slug={slug}
+          size={slug ? undefined : "lg"}
           initialTerm={term}
           initialType={type}
           onSearch={(nextTerm, nextType) =>
