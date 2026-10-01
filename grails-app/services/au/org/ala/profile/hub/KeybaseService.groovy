@@ -9,6 +9,7 @@ class KeybaseService {
 
     def grailsApplication
     WebService webService
+    DownstreamGetCacheService downstreamGetCacheService
 
     String findKeyForTaxon(scientificName, projectId) {
         String key = null
@@ -25,7 +26,9 @@ class KeybaseService {
 
         String key = null
 
-        def json = webService.get("${grailsApplication.config.getProperty('keybase.taxon.lookup')}${name}", [:], ContentType.APPLICATION_JSON, false, false).resp
+        def json = DownstreamGetCacheService.unwrap {
+            downstreamGetCacheService.keybaseTaxon("${grailsApplication.config.getProperty('keybase.taxon.lookup')}${name}")
+        }?.resp
         json?.Items?.each {
             if (it.ProjectsID == projectId) {
                 key = it.KeysID
@@ -36,7 +39,9 @@ class KeybaseService {
     }
 
     def retrieveAllProjects() {
-        webService.get("${grailsApplication.config.getProperty('keybase.project.lookup')}", [:], ContentType.APPLICATION_JSON, false, false)
+        DownstreamGetCacheService.unwrap {
+            downstreamGetCacheService.keybaseProjects("${grailsApplication.config.getProperty('keybase.project.lookup')}")
+        }
     }
 
     /**

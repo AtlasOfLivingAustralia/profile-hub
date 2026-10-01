@@ -1,4 +1,5 @@
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { type FormEvent, useMemo, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
@@ -15,6 +16,7 @@ import type { Tag } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
 import { getErrorMessage } from "#/helpers";
 import { useALA } from "#/helpers/context/useALA";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import styles from "./index.module.css";
 
@@ -35,46 +37,41 @@ export function Component() {
   const [dataResourceQuery, setDataResourceQuery] = useState("");
   const [selectedResource, setSelectedResource] =
     useState<DataResourceOption | null>(null);
-  const [resources, setResources] = useState<DataResourceOption[] | null>(null);
-  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [selectedTagId, setSelectedTagId] = useState("");
-  const [loadingMeta, setLoadingMeta] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<unknown>(null);
-  const [metaError, setMetaError] = useState<unknown>(null);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    let cancelled = false;
+  const resourcesQuery = useQuery({
+    queryKey: queryKeys.dataResources,
+    queryFn: async () => {
+      const resourceMap = await api.opus.dataResources();
+      const options = Object.entries(resourceMap ?? {}).map(([id, name]) => ({
+        id,
+        name: String(name).trim(),
+      }));
+      options.sort((a, b) => a.name.localeCompare(b.name));
+      return options;
+    },
+    staleTime: STALE.meta,
+    gcTime: STALE.meta,
+  });
+  const tagsQuery = useQuery({
+    queryKey: queryKeys.tags,
+    queryFn: async () => {
+      const tagsResponse = await api.opus.tags();
+      return tagsResponse?.tags ?? [];
+    },
+    staleTime: STALE.meta,
+    gcTime: STALE.meta,
+  });
 
-    async function loadMeta() {
-      setLoadingMeta(true);
-      setMetaError(null);
-      try {
-        const [resourceMap, tagsResponse] = await Promise.all([
-          api.opus.dataResources(),
-          api.opus.tags(),
-        ]);
-        if (cancelled) return;
-        const options = Object.entries(resourceMap ?? {}).map(([id, name]) => ({
-          id,
-          name: String(name).trim(),
-        }));
-        options.sort((a, b) => a.name.localeCompare(b.name));
-        setResources(options);
-        setAvailableTags(tagsResponse?.tags ?? []);
-      } catch (err) {
-        if (!cancelled) setMetaError(err);
-      } finally {
-        if (!cancelled) setLoadingMeta(false);
-      }
-    }
-
-    loadMeta();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const resources = resourcesQuery.data ?? null;
+  const availableTags = tagsQuery.data ?? [];
+  const metaError = resourcesQuery.error ?? tagsQuery.error;
+  const loadingMeta =
+    !metaError && (resourcesQuery.isPending || tagsQuery.isPending);
 
   const filteredResources = useMemo(() => {
     if (!resources) return [];
@@ -114,6 +111,7 @@ export function Component() {
         description: description.trim() || undefined,
         tags: selectedTags,
       });
+      await queryClient.invalidateQueries({ queryKey: queryKeys.opusList });
       const slug = created.shortName || created.uuid;
       navigate(`/opus/${encodeURIComponent(slug)}`);
     } catch (err) {

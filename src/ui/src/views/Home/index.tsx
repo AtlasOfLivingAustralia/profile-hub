@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Alert from "react-bootstrap/Alert";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
@@ -7,9 +7,9 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router";
 
 import api from "#/api";
-import type { Collection } from "#/api/types";
 import { getErrorMessage } from "#/helpers";
 import { useALA } from "#/helpers/context/useALA";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import { CollectionCard } from "./components/CollectionCard";
 import { Search } from "./components/Search";
@@ -18,32 +18,17 @@ import styles from "./index.module.css";
 function Home() {
   const intl = useIntl();
   const { isAdmin } = useALA();
-  const [collections, setCollections] = useState<Collection[] | null>(null);
-  const [error, setError] = useState<unknown>(null);
+  const collectionsQuery = useQuery({
+    queryKey: queryKeys.opusList,
+    queryFn: async () => {
+      const data = await api.opus.list();
+      return Array.isArray(data) ? data : [];
+    },
+    staleTime: STALE.reference,
+  });
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function fetchCollections() {
-      setError(null);
-      try {
-        const data = await api.opus.list();
-        if (cancelled) return;
-        setCollections(Array.isArray(data) ? data : []);
-      } catch (err) {
-        if (cancelled) return;
-        setCollections(null);
-        setError(err);
-      }
-    }
-
-    fetchCollections();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+  const collections = collectionsQuery.data;
+  const error = collectionsQuery.error;
   const collectionCount = collections?.length;
 
   return (
@@ -85,7 +70,7 @@ function Home() {
           <h2 className="text-body-secondary">
             <FormattedMessage id="view.home.browseByCollection" />
           </h2>
-          {error ? (
+          {error && !collections ? (
             <Alert variant="danger" className="mb-0">
               {getErrorMessage(error, intl)}
             </Alert>

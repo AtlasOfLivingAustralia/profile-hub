@@ -1,5 +1,6 @@
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import Alert from "react-bootstrap/Alert";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useOutletContext, useParams } from "react-router";
@@ -8,6 +9,7 @@ import api from "#/api";
 import type { Attachment } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
 import PageMessage from "#/components/PageMessage";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";
 import { DocumentItem } from "./components/DocumentItem";
@@ -39,41 +41,21 @@ export function Component() {
   const intl = useIntl();
   const { slug } = useParams<{ slug: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
-  const [attachments, setAttachments] = useState<Attachment[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const attachmentsQuery = useQuery({
+    queryKey: queryKeys.documents(slug ?? ""),
+    queryFn: async () => {
+      const data = await api.opus.attachments(slug!);
+      return Array.isArray(data) ? data : [];
+    },
+    enabled: Boolean(slug),
+    staleTime: STALE.reference,
+  });
 
-  useEffect(() => {
-    if (!slug) return;
-
-    const opusSlug = slug;
-    let cancelled = false;
-
-    async function load() {
-      setLoading(true);
-      setError(false);
-
-      try {
-        const data = await api.opus.attachments(opusSlug);
-        if (!cancelled) {
-          setAttachments(Array.isArray(data) ? data : []);
-        }
-      } catch {
-        if (!cancelled) {
-          setAttachments(null);
-          setError(true);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [slug]);
+  const attachments = attachmentsQuery.isError
+    ? null
+    : (attachmentsQuery.data ?? null);
+  const loading = attachmentsQuery.isPending;
+  const error = attachmentsQuery.isError;
 
   const groups = useMemo(
     () => groupByCategory(attachments ?? []),

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import Col from "react-bootstrap/Col";
 import Placeholder from "react-bootstrap/Placeholder";
@@ -7,7 +8,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useParams } from "react-router";
 
 import api from "#/api";
-import type { TaxonCounts } from "#/api/types";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import { Level } from "./components/Level";
 import styles from "./index.module.css";
@@ -38,36 +39,22 @@ const numberFormatter = new Intl.NumberFormat();
 export function Component() {
   const intl = useIntl();
   const { slug } = useParams<{ slug: string }>();
-  const [levels, setLevels] = useState<TaxonCounts | null>(null);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    if (!slug) return;
-
-    let cancelled = false;
-    setLevels(null);
+  const [trackedSlug, setTrackedSlug] = useState(slug);
+  if (slug !== trackedSlug) {
+    setTrackedSlug(slug);
     setSelectedLevel(null);
-    setError(false);
+  }
 
-    async function load() {
-      try {
-        const data = await api.search.taxonLevels(slug!);
-        if (!cancelled) setLevels(data);
-      } catch {
-        if (!cancelled) {
-          setLevels({});
-          setError(true);
-        }
-      }
-    }
+  const levelsQuery = useQuery({
+    queryKey: queryKeys.taxonLevels(slug ?? ""),
+    queryFn: () => api.search.taxonLevels(slug!),
+    enabled: Boolean(slug),
+    staleTime: STALE.reference,
+  });
 
-    load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [slug]);
+  const levels = levelsQuery.isError ? {} : levelsQuery.data;
+  const error = levelsQuery.isError;
 
   const selected = TAXON_LEVELS.find(({ key }) => key === selectedLevel);
 

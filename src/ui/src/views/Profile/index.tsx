@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 import Alert from "react-bootstrap/Alert";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, useOutletContext, useParams } from "react-router";
 
 import api from "#/api";
 import { ApiError } from "#/api/query";
-import type { Profile, ProfileImage } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";
 
@@ -30,69 +31,50 @@ export function Component() {
   const intl = useIntl();
   const { slug, nameOrId } = useParams<{ slug: string; nameOrId: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [primaryImage, setPrimaryImage] = useState<ProfileImage | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<"notFound" | "generic" | null>(null);
 
-  useEffect(() => {
-    if (!slug || !nameOrId) return;
+  const profileQuery = useQuery({
+    queryKey: queryKeys.profile(slug ?? "", nameOrId ?? ""),
+    queryFn: () =>
+      api.profile.get(slug!, nameOrId!, { fullClassification: true }),
+    enabled: Boolean(slug && nameOrId),
+    staleTime: STALE.profile,
+    gcTime: STALE.profile,
+  });
 
-    const opusId = slug;
-    const profileId = nameOrId;
-    let cancelled = false;
+  const profile = profileQuery.data?.profile;
+  const imageEnabled = Boolean(
+    slug && profile?.uuid && profile.guid && !profile.archivedDate,
+  );
+  const searchIdentifier = profile?.guid ? `lsid:${profile.guid}` : "";
 
-    async function load() {
-      setLoading(true);
-      setError(null);
-      setProfile(null);
-      setPrimaryImage(null);
+  const imageQuery = useQuery({
+    queryKey: queryKeys.profileImages(
+      slug ?? "",
+      profile?.uuid ?? "",
+      searchIdentifier,
+    ),
+    queryFn: async () => {
+      const images = await api.profile.images(slug!, profile!.uuid, {
+        searchIdentifier,
+        pageSize: 1,
+        startIndex: 0,
+      });
+      return images.primaryImage ?? images.images?.[0] ?? null;
+    },
+    enabled: imageEnabled,
+    staleTime: STALE.primaryImage,
+  });
 
-      try {
-        const data = await api.profile.get(opusId, profileId, {
-          fullClassification: true,
-        });
-        if (cancelled) return;
-
-        setProfile(data.profile);
-
-        if (data.profile.guid && !data.profile.archivedDate) {
-          try {
-            const images = await api.profile.images(opusId, data.profile.uuid, {
-              searchIdentifier: `lsid:${data.profile.guid}`,
-              pageSize: 1,
-              startIndex: 0,
-            });
-            if (!cancelled) {
-              setPrimaryImage(
-                images.primaryImage ?? images.images?.[0] ?? null,
-              );
-            }
-          } catch {
-            if (!cancelled) setPrimaryImage(null);
-          }
-        }
-      } catch (err) {
-        if (cancelled) return;
-        if (
-          err instanceof ApiError &&
-          (err.status === 404 || err.status === 400)
-        ) {
-          setError("notFound");
-        } else {
-          setError("generic");
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [slug, nameOrId]);
+  const loading = profileQuery.isPending;
+  const imageLoading = imageEnabled && imageQuery.isPending;
+  const error = profileQuery.isError
+    ? profileQuery.error instanceof ApiError &&
+      (profileQuery.error.status === 404 || profileQuery.error.status === 400)
+      ? "notFound"
+      : "generic"
+    : null;
+  const primaryImage =
+    !imageEnabled || imageQuery.isError ? null : (imageQuery.data ?? null);
 
   const otherNames = useMemo(
     () => otherNamesFromAttributes(profile?.attributes),
@@ -184,6 +166,7 @@ export function Component() {
           mapSnapshot={profile.mapSnapshot}
           primaryImage={primaryImage}
           imageAlt={title}
+          imageLoading={imageLoading}
         />
       )}
 

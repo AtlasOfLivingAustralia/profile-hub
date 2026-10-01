@@ -7,7 +7,6 @@ import {
   useParams,
 } from "react-router";
 
-import api from "#/api";
 import { ApiError } from "#/api/query";
 import type { Collection } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
@@ -15,6 +14,7 @@ import {
   cacheCollectionTheme,
   readCachedCollectionTheme,
 } from "#/helpers/collectionTheme";
+import { collectionQuery, queryClient } from "#/helpers/queryClient";
 
 import { Banner } from "./components/Banner";
 import { CollectionFooter } from "./components/CollectionFooter";
@@ -53,7 +53,12 @@ export async function loader({
   }
 
   try {
-    const collection = await api.opus.get(slug);
+    // Child routes re-run this loader. ensureQueryData reuses the collection
+    // while it is still fresh, so in-flight loads for the same slug collapse.
+    const collection = await queryClient.ensureQueryData({
+      ...collectionQuery(slug),
+      revalidateIfStale: true,
+    });
     cacheCollectionTheme(slug, collection.theme);
     return { collection };
   } catch (error) {

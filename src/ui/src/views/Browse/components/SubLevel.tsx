@@ -1,12 +1,13 @@
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useRef, useState } from "react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router";
 
 import api from "#/api";
-import type { TaxonNameResult } from "#/api/types";
 import PageMessage from "#/components/PageMessage";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
 import { PaginationBar } from "./PaginationBar";
@@ -28,50 +29,26 @@ export function SubLevel({
   scientificName,
   totalCount,
 }: SubLevelProps) {
-  const [items, setItems] = useState<TaxonNameResult[]>([]);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const requestId = useRef(0);
 
+  const itemsQuery = useQuery({
+    queryKey: queryKeys.taxonName(slug, level, scientificName, page),
+    queryFn: () =>
+      api.search.taxonName(slug, {
+        scientificName,
+        taxon: level,
+        max: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE,
+      }),
+    placeholderData: keepPreviousData,
+    staleTime: STALE.reference,
+  });
+
+  const items = itemsQuery.isError ? [] : (itemsQuery.data ?? []);
+  const loading = itemsQuery.isPending || itemsQuery.isFetching;
+  const error = itemsQuery.isError;
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
   const skeletonCount = estimatePageItemCount(totalCount, page, PAGE_SIZE);
-
-  useEffect(() => {
-    let cancelled = false;
-    const currentRequest = ++requestId.current;
-    const offset = (page - 1) * PAGE_SIZE;
-
-    setLoading(true);
-    setError(false);
-
-    async function load() {
-      try {
-        const data = await api.search.taxonName(slug, {
-          scientificName,
-          taxon: level,
-          max: PAGE_SIZE,
-          offset,
-        });
-        if (cancelled || currentRequest !== requestId.current) return;
-        setItems(data);
-      } catch (_) {
-        if (cancelled || currentRequest !== requestId.current) return;
-        setError(true);
-        setItems([]);
-      } finally {
-        if (!cancelled && currentRequest === requestId.current) {
-          setLoading(false);
-        }
-      }
-    }
-
-    load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [slug, level, scientificName, page]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: reset page when the selected taxon changes
   useEffect(() => {

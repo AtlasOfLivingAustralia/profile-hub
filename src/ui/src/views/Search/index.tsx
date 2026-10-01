@@ -1,5 +1,6 @@
 import { faImage, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Container from "react-bootstrap/Container";
@@ -8,9 +9,10 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 
 import api from "#/api";
-import type { ProfileSearchItem, ProfileSearchResult } from "#/api/types";
+import type { ProfileSearchItem } from "#/api/types";
 import PageMessage from "#/components/PageMessage";
 import { getErrorMessage } from "#/helpers";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 import {
   isSearchType,
   profilePath,
@@ -42,9 +44,6 @@ export function Component() {
     : SearchTypes.scientificName;
   const page = Math.max(1, Number(searchParams.get("page") ?? "1") || 1);
 
-  const [result, setResult] = useState<ProfileSearchResult | null>(null);
-  const [error, setError] = useState<unknown>(null);
-  const [loading, setLoading] = useState(true);
   const [matchAll, setMatchAll] = useState(true);
   const [hideStubs, setHideStubs] = useState(true);
 
@@ -59,36 +58,24 @@ export function Component() {
     [type, matchAll, hideStubs, page],
   );
 
-  useEffect(() => {
-    let cancelled = false;
+  const searchQuery = useQuery({
+    queryKey: queryKeys.searchProfiles(slug ?? null, term, options),
+    queryFn: async () => {
+      const data = await api.search.profiles(term, {
+        ...options,
+        opusId: slug,
+      });
+      return {
+        total: data?.total ?? 0,
+        items: Array.isArray(data?.items) ? data.items : [],
+      };
+    },
+    staleTime: STALE.search,
+  });
 
-    async function runSearch() {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await api.search.profiles(term, {
-          ...options,
-          opusId: slug,
-        });
-        if (cancelled) return;
-        setResult({
-          total: data?.total ?? 0,
-          items: Array.isArray(data?.items) ? data.items : [],
-        });
-      } catch (err) {
-        if (cancelled) return;
-        setResult(null);
-        setError(err);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    runSearch();
-    return () => {
-      cancelled = true;
-    };
-  }, [term, options, slug]);
+  const result = searchQuery.data ?? null;
+  const error = searchQuery.error;
+  const loading = searchQuery.isPending;
 
   function navigateSearch(next: {
     term: string;
@@ -306,7 +293,9 @@ function SearchResultsSkeleton({
           {showCollection && (
             <div className={styles.resultOpus}>
               <Placeholder animation="glow">
-                <Placeholder className={`rounded-pill ${styles.skeletonOpus}`} />
+                <Placeholder
+                  className={`rounded-pill ${styles.skeletonOpus}`}
+                />
               </Placeholder>
             </div>
           )}
@@ -382,10 +371,8 @@ function SearchResultImage({
   name: string;
 }) {
   const frameRef = useRef<HTMLDivElement>(null);
-  const [status, setStatus] = useState<"pending" | "loading" | "done">(
-    "pending",
-  );
-  const [src, setSrc] = useState<string | undefined>();
+  const [visible, setVisible] = useState(false);
+  const [broken, setBroken] = useState(false);
 
   useEffect(() => {
     const node = frameRef.current;
@@ -396,7 +383,7 @@ function SearchResultImage({
       (entries) => {
         if (!entries.some((entry) => entry.isIntersecting)) return;
         observer.disconnect();
-        timer = window.setTimeout(() => setStatus("loading"), 100);
+        timer = window.setTimeout(() => setVisible(true), 100);
       },
       { rootMargin: "200px" },
     );
@@ -408,36 +395,25 @@ function SearchResultImage({
     };
   }, []);
 
-  useEffect(() => {
-    if (status !== "loading") return;
+  const imageQuery = useQuery({
+    queryKey: queryKeys.primaryImage(opusId, profileId),
+    queryFn: async () => {
+      const image = await api.profile.primaryImage(opusId, profileId);
+      return resolveMediaUrl(image?.thumbnailUrl) ?? null;
+    },
+    enabled: visible,
+    staleTime: STALE.primaryImage,
+  });
 
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const image = await api.profile.primaryImage(opusId, profileId);
-        if (cancelled) return;
-        setSrc(resolveMediaUrl(image?.thumbnailUrl));
-      } catch {
-        if (!cancelled) setSrc(undefined);
-      } finally {
-        if (!cancelled) setStatus("done");
-      }
-    }
-
-    load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [status, opusId, profileId]);
+  const src = broken ? undefined : imageQuery.data || undefined;
+  const settled = imageQuery.isSuccess || imageQuery.isError;
 
   return (
     <div ref={frameRef} className={styles.thumbFrame}>
       <Link to={to} className={styles.thumb} aria-label={name}>
         {src ? (
-          <img src={src} alt="" onError={() => setSrc(undefined)} />
-        ) : status === "done" ? (
+          <img src={src} alt="" onError={() => setBroken(true)} />
+        ) : settled ? (
           <FontAwesomeIcon icon={faImage} />
         ) : (
           <Placeholder animation="glow" className={styles.thumbSkeleton}>

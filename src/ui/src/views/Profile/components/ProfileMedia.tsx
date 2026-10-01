@@ -1,4 +1,5 @@
 import Col from "react-bootstrap/Col";
+import Placeholder from "react-bootstrap/Placeholder";
 import Row from "react-bootstrap/Row";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -12,10 +13,12 @@ export function ProfileMedia({
   mapSnapshot,
   primaryImage,
   imageAlt,
+  imageLoading = false,
 }: {
   mapSnapshot?: string | null;
   primaryImage: ProfileImage | null;
   imageAlt: string;
+  imageLoading?: boolean;
 }) {
   const intl = useIntl();
   const mapSnapshotUrl = resolveMediaUrl(mapSnapshot);
@@ -23,7 +26,7 @@ export function ProfileMedia({
     primaryImage?.largeImageUrl || primaryImage?.thumbnailUrl,
   );
 
-  if (!mapSnapshotUrl && !imageUrl) return null;
+  if (!mapSnapshotUrl && !imageUrl && !imageLoading) return null;
 
   return (
     <Row className="g-4">
@@ -39,6 +42,21 @@ export function ProfileMedia({
               <FormattedMessage id="view.profile.map.caption" />
             </figcaption>
           </figure>
+        </Col>
+      )}
+      {imageLoading && !imageUrl && (
+        <Col xs={12} md={6}>
+          <div
+            className={styles.mediaPlaceholder}
+            role="status"
+            aria-label={intl.formatMessage({
+              id: "component.pageLoader.ariaLabel",
+            })}
+          >
+            <Placeholder animation="glow" className={styles.mediaSkeleton}>
+              <Placeholder className={styles.mediaSkeletonBlock} />
+            </Placeholder>
+          </div>
         </Col>
       )}
       {imageUrl && (

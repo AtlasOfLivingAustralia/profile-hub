@@ -1,20 +1,18 @@
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type ReactNode, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useOutletContext, useParams } from "react-router";
 
 import api from "#/api";
-import type {
-  CollectionStatistic,
-  OpusAboutAdministrator,
-  OpusAboutResponse,
-} from "#/api/types";
+import type { OpusAboutAdministrator } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
 import PageMessage from "#/components/PageMessage";
 import { RichText } from "#/components/RichText";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";
 import styles from "./index.module.css";
@@ -46,42 +44,24 @@ export function Component() {
   const intl = useIntl();
   const { slug } = useParams<{ slug: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
-  const [about, setAbout] = useState<OpusAboutResponse | null>(null);
-  const [statistics, setStatistics] = useState<CollectionStatistic[] | null>(
-    null,
-  );
-  const [error, setError] = useState(false);
+  const aboutQuery = useQuery({
+    queryKey: queryKeys.about(slug ?? ""),
+    queryFn: () => api.opus.about(slug!),
+    enabled: Boolean(slug),
+    staleTime: STALE.reference,
+  });
+  const statisticsQuery = useQuery({
+    queryKey: queryKeys.statistics(slug ?? ""),
+    queryFn: () => api.opus.statistics(slug!),
+    enabled: Boolean(slug),
+    staleTime: STALE.reference,
+  });
 
-  useEffect(() => {
-    if (!slug) return;
-
-    const opusSlug = slug;
-    let cancelled = false;
-
-    async function load() {
-      setError(false);
-      try {
-        const [aboutData, statsData] = await Promise.all([
-          api.opus.about(opusSlug),
-          api.opus.statistics(opusSlug),
-        ]);
-        if (cancelled) return;
-        setAbout(aboutData);
-        setStatistics(statsData);
-      } catch (_) {
-        if (!cancelled) {
-          setAbout(null);
-          setStatistics(null);
-          setError(true);
-        }
-      }
-    }
-
-    load();
-    return () => {
-      cancelled = true;
-    };
-  }, [slug]);
+  const about =
+    aboutQuery.isError || statisticsQuery.isError ? null : aboutQuery.data;
+  const statistics =
+    aboutQuery.isError || statisticsQuery.isError ? null : statisticsQuery.data;
+  const error = aboutQuery.isError || statisticsQuery.isError;
 
   const documentTitle = intl.formatMessage(
     { id: "view.about.documentTitle" },

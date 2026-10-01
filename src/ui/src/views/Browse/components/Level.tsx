@@ -1,13 +1,14 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { type FormEvent, useEffect, useRef, useState } from "react";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { type FormEvent, useEffect, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import api from "#/api";
-import type { TaxonCounts } from "#/api/types";
 import PageMessage from "#/components/PageMessage";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
 import styles from "./Level.module.css";
@@ -33,16 +34,27 @@ type SelectedTaxon = {
 
 export function Level({ slug, level, label, totalCount }: LevelProps) {
   const intl = useIntl();
-  const [taxa, setTaxa] = useState<TaxonCounts>({});
   const [filter, setFilter] = useState("");
   const [appliedFilter, setAppliedFilter] = useState("");
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [selected, setSelected] = useState<SelectedTaxon | null>(null);
-  const [pageIsFull, setPageIsFull] = useState(false);
-  const requestId = useRef(0);
 
+  const taxaQuery = useQuery({
+    queryKey: queryKeys.taxonLevel(slug, level, appliedFilter, page),
+    queryFn: () =>
+      api.search.taxonLevel(slug, level, {
+        filter: appliedFilter || undefined,
+        max: PAGE_SIZE,
+        offset: (page - 1) * PAGE_SIZE,
+      }),
+    placeholderData: keepPreviousData,
+    staleTime: STALE.reference,
+  });
+
+  const taxa = taxaQuery.isError ? {} : (taxaQuery.data ?? {});
+  const loading = taxaQuery.isPending || taxaQuery.isFetching;
+  const error = taxaQuery.isError;
+  const pageIsFull = Object.keys(taxa).length === PAGE_SIZE;
   const filtered = appliedFilter.length > 0;
   const totalPages = filtered
     ? Math.max(1, pageIsFull ? page + 1 : page)
@@ -51,43 +63,6 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     ? PAGE_SIZE
     : estimatePageItemCount(totalCount, page, PAGE_SIZE);
 
-  useEffect(() => {
-    let cancelled = false;
-    const currentRequest = ++requestId.current;
-    const offset = (page - 1) * PAGE_SIZE;
-
-    setLoading(true);
-    setError(false);
-
-    async function load() {
-      try {
-        const data = await api.search.taxonLevel(slug, level, {
-          filter: appliedFilter || undefined,
-          max: PAGE_SIZE,
-          offset,
-        });
-        if (cancelled || currentRequest !== requestId.current) return;
-        setTaxa(data);
-        setPageIsFull(Object.keys(data).length === PAGE_SIZE);
-      } catch (_) {
-        if (cancelled || currentRequest !== requestId.current) return;
-        setError(true);
-        setTaxa({});
-        setPageIsFull(false);
-      } finally {
-        if (!cancelled && currentRequest === requestId.current) {
-          setLoading(false);
-        }
-      }
-    }
-
-    load();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [slug, level, page, appliedFilter]);
-
   // Reset list state when switching taxonomic level or collection.
   // biome-ignore lint/correctness/useExhaustiveDependencies: slug/level are intentional reset triggers
   useEffect(() => {
@@ -95,7 +70,6 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     setAppliedFilter("");
     setPage(1);
     setSelected(null);
-    setPageIsFull(false);
   }, [slug, level]);
 
   // Apply the taxon filter as the user types. The list request already

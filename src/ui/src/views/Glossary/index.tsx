@@ -1,5 +1,5 @@
 import { faBook } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Col from "react-bootstrap/Col";
 import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
@@ -8,10 +8,10 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Navigate, NavLink, useParams } from "react-router";
 
 import api from "#/api";
-import type { Glossary } from "#/api/types";
 import PageLoader from "#/components/PageLoader";
 import PageMessage from "#/components/PageMessage";
 import { RichText } from "#/components/RichText";
+import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import styles from "./index.module.css";
 
@@ -24,37 +24,15 @@ export function Component() {
     letter?: string;
   }>();
   const letter = letterParam?.toLowerCase();
-  const [glossary, setGlossary] = useState<Glossary | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!slug || !letter) return;
-
-    const opusSlug = slug;
-    const prefix = letter;
-    let cancelled = false;
-
-    async function fetchGlossary() {
-      setLoading(true);
-      try {
-        const data = await api.opus.glossary(opusSlug, prefix);
-
-        if (!cancelled) {
-          setGlossary(data);
-        }
-      } catch (_) {
-        if (!cancelled) setGlossary(null);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    fetchGlossary();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [slug, letter]);
+  const letterIsValid = Boolean(letter && LETTERS.includes(letter));
+  const glossaryQuery = useQuery({
+    queryKey: queryKeys.glossary(slug ?? "", letter ?? ""),
+    queryFn: () => api.opus.glossary(slug!, letter!),
+    enabled: Boolean(slug) && letterIsValid,
+    staleTime: STALE.reference,
+  });
+  const glossary = glossaryQuery.isError ? null : glossaryQuery.data;
+  const loading = glossaryQuery.isPending;
 
   if (!slug || !letter || !LETTERS.includes(letter)) {
     return <Navigate to={`/opus/${slug}/glossary/a`} replace />;
