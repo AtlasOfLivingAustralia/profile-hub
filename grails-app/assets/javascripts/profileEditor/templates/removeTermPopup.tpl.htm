@@ -17,7 +17,7 @@
 
     <div class="form-horizontal">
         <div class="form-group">
-            <label for="editTerm" class="col-sm-3 control-label">Replacement Term:</label>
+            <label for="editTerm" class="col-sm-3 col-form-label">Replacement Term:</label>
 
             <div class="col-sm-8">
                 <select ng-options="term as term.name for term in removeTermCtrl.terms"
@@ -30,5 +30,5 @@
 
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="removeTermCtrl.ok()">OK</button>
-    <button class="btn btn-default" ng-click="removeTermCtrl.cancel()">Cancel</button>
+    <button class="btn btn-outline-secondary" ng-click="removeTermCtrl.cancel()">Cancel</button>
 </div>

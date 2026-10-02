@@ -15,11 +15,11 @@
 
     <div class="container">
         <div class="row">
-            <div class="col-md-1 col-sm-1 col-xs-1 min-col">
+            <div class="col-md-1 col-sm-1 col-1 min-col">
                 <profile-side-bar></profile-side-bar>
             </div>
 
-            <div class="col-md-11 col-sm-11 col-xs-11">
+            <div class="col-md-11 col-sm-11 col-11">
                 <ol class="breadcrumb" ng-cloak ng-show="profileCtrl.opus">
                     <li><a class="fa fa-home"
                            href="${request.contextPath}/opus/{{profileCtrl.opus.shortName ? profileCtrl.opus.shortName : profileCtrl.opus.uuid}}" title="{{profileCtrl.opus.title}}"></a>

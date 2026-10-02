@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="OpusDetailsForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="OpusDetailsForm" ng-cloak>
+    <div class="card-header">
         <a name="overview">
             <h4 class="section-panel-heading">Site overview</h4>
             <p:help help-id="opus.edit.siteOverview"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -65,7 +65,7 @@
 
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <save-button ng-click="opusCtrl.saveOpus(OpusDetailsForm)" disabled="!opusCtrl.dataResource.uid" form="OpusDetailsForm"></save-button>

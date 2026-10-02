@@ -1,18 +1,18 @@
-<div class="panel panel-default" ng-form="opusCtrl.StyleForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="opusCtrl.StyleForm" ng-cloak>
+    <div class="card-header">
         <a name="branding">
             <h4 class="section-panel-heading">Branding</h4>
             <p:help help-id="opus.edit.branding"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     <label>Banner image for collection pages</label>
                     <input type="text" class="form-control" name="bannerUrl" ng-model="opusCtrl.opus.brandingConfig.opusBannerUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.opusBanner" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.opusBanner" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.opusBanner" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.opusBannerUploaded"
                                 url="{{opusCtrl.imageUploadUrl + 'opusBanner'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label>Banner image for profile pages</label>
                     <input type="text" class="form-control" name="bannerUrl" ng-model="opusCtrl.opus.brandingConfig.profileBannerUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.profileBanner" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.profileBanner" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.profileBanner" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.profileBannerUploaded"
                                       url="{{opusCtrl.imageUploadUrl + 'profileBanner'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label>Banner image for export cover</label>
                     <input type="text" class="form-control" name="pdfBannerUrl" ng-model="opusCtrl.opus.brandingConfig.pdfBannerUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.pdfBanner" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.pdfBanner" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.pdfBanner" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.pdfBannerUploaded"
                                       url="{{opusCtrl.imageUploadUrl + 'pdfBanner'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -53,7 +53,7 @@
                 <div class="form-group">
                     <label>Banner image for export back cover</label>
                     <input type="text" class="form-control" name="pdfBackBannerUrl" ng-model="opusCtrl.opus.brandingConfig.pdfBackBannerUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.pdfBackBanner" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.pdfBackBanner" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.pdfBackBanner" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.pdfBackBannerUploaded"
                                       url="{{opusCtrl.imageUploadUrl + 'pdfBackBanner'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -77,11 +77,11 @@
                                         <img class="img-thumbnail" ng-src="{{logo.logoUrl}}">
                                     </div>
                                     <div class="input-group margin-bottom-1">
-                                        <span class="input-group-addon">Logo URL</span>
+                                        <span class="input-group-text">Logo URL</span>
                                         <input type="text" class="form-control" name="logoUrl" ng-model="logo.logoUrl"/>
                                     </div>
                                     <div class="input-group">
-                                        <span class="input-group-addon">Link</span>
+                                        <span class="input-group-text">Link</span>
                                         <input type="text" class="form-control" name="hyperlink" ng-model="logo.hyperlink"/>
                                     </div>
                                     <div class="small">e.g. https://www.ala.org.au. The logo will link to the URL entered here. If left blank, no link will be added.</div>
@@ -96,8 +96,8 @@
                         <tfoot>
                         <tr>
                             <td colspan="2">
-                                <button class="btn btn-sm btn-default margin-top-1 margin-bottom-1" ng-click="opusCtrl.addAnEmptyLogo()" ><i class="fa fa-plus"></i> Add a logo from link</button>
-                                <button class="btn btn-sm btn-default margin-top-1 margin-bottom-1 ignore-save-warning" ng-model="opusCtrl.showUpload.logo" btn-checkbox >Upload a file</button>
+                                <button class="btn btn-sm btn-outline-secondary margin-top-1 margin-bottom-1" ng-click="opusCtrl.addAnEmptyLogo()" ><i class="fa fa-plus"></i> Add a logo from link</button>
+                                <button class="btn btn-sm btn-outline-secondary margin-top-1 margin-bottom-1 ignore-save-warning" ng-model="opusCtrl.showUpload.logo" btn-checkbox >Upload a file</button>
                                 <div ng-if="opusCtrl.showUpload.logo" class="clearfix">
                                     <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.logoUploaded"
                                                   url-generator="opusCtrl.generateFileUploadUrl" show-metadata="false" disable-source="true"></image-upload>
@@ -112,7 +112,7 @@
                 <div class="form-group">
                     <label>Thumbnail</label>
                     <input type="text" class="form-control" name="thumbnailUrl" ng-model="opusCtrl.opus.brandingConfig.thumbnailUrl"/>
-                    <button class="btn btn-sm btn-default margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.thumbnail" btn-checkbox >Upload a file</button>
+                    <button class="btn btn-sm btn-outline-secondary margin-top-1 ignore-save-warning" ng-model="opusCtrl.showUpload.thumbnail" btn-checkbox >Upload a file</button>
                     <div ng-if="opusCtrl.showUpload.thumbnail" class="clearfix">
                         <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.thumbnailUploaded"
                                       url="{{opusCtrl.imageUploadUrl + 'thumbnail'}}" show-metadata="false" disable-source="true"></image-upload>
@@ -124,7 +124,7 @@
                     <label>Short Name</label>
                     <input type="text" class="form-control" name="shortName" ng-model="opusCtrl.opus.shortName" ng-change="opusCtrl.showShortNameTip()"/> <br/>
                     <span class="small">The URL for your collection will be http://${request.serverName}/opus/{{opusCtrl.opus.shortName ? opusCtrl.opus.shortName : opusCtrl.opus.uuid | lowercase}}</span>
-                    <div class="well small" ng-show="opusCtrl.shortNameTipVisible">
+                    <div class="card card-body small" ng-show="opusCtrl.shortNameTipVisible">
                         <i class="fa fa-info-circle color--medium-blue margin-bottom-1"></i>
                         <p/>
                         NOTE: Changing the Short Name of your collection will change the URL used to access it. This will affect any existing bookmarks, and may affect some of the collection statistics.
@@ -155,7 +155,7 @@
                     <label for="copyright">Copyright statement</label>
 
                     <div class="input-group">
-                        <span class="input-group-addon">&copy;</span>
+                        <span class="input-group-text">&copy;</span>
                         <input id="copyright" type="text" class="form-control" name="copyright" ng-model="opusCtrl.opus.copyrightText"/> <br/>
                     </div>
                     <span class="small">e.g. &copy; {{opusCtrl.opus.title}}, 2015. To be displayed at the bottom of each profile page</span>
@@ -195,7 +195,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <save-button ng-click="opusCtrl.saveOpus(opusCtrl.StyleForm)" form="opusCtrl.StyleForm"></save-button>

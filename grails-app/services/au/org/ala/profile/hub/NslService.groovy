@@ -1,15 +1,13 @@
 package au.org.ala.profile.hub
 
-import au.org.ala.ws.service.WebService
-import org.apache.http.entity.ContentType
-
 class NslService {
-    WebService webService
     def grailsApplication
+    DownstreamGetCacheService downstreamGetCacheService
 
     def getNameDetails(String nslNameIdentifier) {
         if (nslNameIdentifier && nslNameIdentifier != "null") {
-            webService.get("${grailsApplication.config.getProperty('nsl.service.url.prefix')}${nslNameIdentifier}.json", [:], ContentType.APPLICATION_JSON, false, false)
+            String url = "${grailsApplication.config.getProperty('nsl.service.url.prefix')}${nslNameIdentifier}.json"
+            return DownstreamGetCacheService.unwrap { downstreamGetCacheService.nslName(url) }
         }
     }
 
@@ -17,7 +15,8 @@ class NslService {
         List<Map> formattedConcepts = []
 
         if (nslNameIdentifier && nslNameIdentifier != "null") {
-            def concepts = webService.get("${grailsApplication.config.getProperty('nsl.service.url.prefix')}${nslNameIdentifier}${grailsApplication.config.getProperty('nsl.service.apni.concept.suffix')}", [:], ContentType.APPLICATION_JSON, false, false)
+            String url = "${grailsApplication.config.getProperty('nsl.service.url.prefix')}${nslNameIdentifier}${grailsApplication.config.getProperty('nsl.service.apni.concept.suffix')}"
+            def concepts = DownstreamGetCacheService.unwrap { downstreamGetCacheService.nslConcepts(url) }
             formattedConcepts = concepts?.resp?.references?.collect { formatReference(it) }
         }
 

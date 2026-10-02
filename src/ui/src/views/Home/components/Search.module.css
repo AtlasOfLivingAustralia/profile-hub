@@ -1,0 +1,67 @@
+/* Softer than a solid secondary button, in both light and dark themes.
+   !important beats Bootstrap's .btn-secondary variable block. */
+.typeToggle {
+  --bs-btn-color: var(--bs-secondary-color) !important;
+  --bs-btn-bg: color-mix(
+    in srgb,
+    var(--bs-secondary) 28%,
+    var(--bs-body-bg)
+  ) !important;
+  --bs-btn-border-color: var(--bs-border-color) !important;
+  --bs-btn-hover-color: var(--bs-body-color) !important;
+  --bs-btn-hover-bg: color-mix(
+    in srgb,
+    var(--bs-secondary) 42%,
+    var(--bs-body-bg)
+  ) !important;
+  --bs-btn-hover-border-color: var(--bs-border-color) !important;
+  --bs-btn-focus-shadow-rgb: var(--bs-secondary-rgb);
+  --bs-btn-active-color: var(--bs-body-color) !important;
+  --bs-btn-active-bg: color-mix(
+    in srgb,
+    var(--bs-secondary) 42%,
+    var(--bs-body-bg)
+  ) !important;
+  --bs-btn-active-border-color: var(--bs-border-color) !important;
+  --bs-btn-disabled-color: var(--bs-secondary-color) !important;
+  --bs-btn-disabled-bg: color-mix(
+    in srgb,
+    var(--bs-secondary) 28%,
+    var(--bs-body-bg)
+  ) !important;
+  --bs-btn-disabled-border-color: var(--bs-border-color) !important;
+  font-weight: 500;
+}
+
+/* Collection themes set button text from callToActionTextColour, which is
+   dark on some hubs (for example foa). The search icon should stay white. */
+.searchButton {
+  --bs-btn-color: #fff !important;
+  --bs-btn-hover-color: #fff !important;
+  --bs-btn-active-color: #fff !important;
+  --bs-btn-disabled-color: #fff !important;
+  color: #fff !important;
+}
+
+.searchButton :global(svg) {
+  color: #fff !important;
+}
+
+:global(::view-transition-group(.search-field-share)) {
+  animation-duration: 450ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:global(::view-transition-old(.search-field-share)),
+:global(::view-transition-new(.search-field-share)) {
+  animation-duration: 450ms;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(::view-transition-group(.search-field-share)),
+  :global(::view-transition-old(.search-field-share)),
+  :global(::view-transition-new(.search-field-share)) {
+    animation: none !important;
+  }
+}

@@ -16,6 +16,7 @@ class CollectoryServiceSpec extends Specification implements ServiceUnitTest<Col
         WebService webService = Mock(WebService)
         webService.get(_) >> null
         service.webService = webService
+        service.downstreamGetCacheService = new DownstreamGetCacheService(webService: webService)
 
         when:
         Map<String, String> result = service.getDataResources()
@@ -37,6 +38,7 @@ class CollectoryServiceSpec extends Specification implements ServiceUnitTest<Col
                                                      "uri": "uri2",
                                                      "uid": "dr2"}]}""")
         service.webService = webService
+        service.downstreamGetCacheService = new DownstreamGetCacheService(webService: webService)
 
         when:
         Map<String, String> result = service.getDataResources()

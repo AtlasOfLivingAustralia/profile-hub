@@ -1,0 +1,45 @@
+.taxa {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0.8rem 1rem;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius-xl);
+}
+
+.placeholders {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Match body text line box (font-size × line-height). */
+.name {
+  height: calc(var(--bs-body-font-size) * var(--bs-body-line-height));
+}
+
+/*
+ * Match Bootstrap .badge: font-size 0.75em, line-height 1,
+ * padding-y 0.35em → 0.75em × (1 + 2 × 0.35).
+ */
+.badge {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: calc(0.75em * (1 + 2 * 0.35));
+}
+
+@media (min-width: 992px) {
+  .taxa {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

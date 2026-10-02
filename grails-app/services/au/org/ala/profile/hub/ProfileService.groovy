@@ -5,6 +5,7 @@ import au.org.ala.web.AuthService
 import au.org.ala.ws.service.WebService
 import org.apache.commons.lang.BooleanUtils
 import org.apache.http.entity.ContentType
+import org.grails.web.util.WebUtils
 import org.springframework.web.multipart.support.AbstractMultipartHttpServletRequest
 
 import jakarta.servlet.http.HttpServletResponse
@@ -21,6 +22,8 @@ class ProfileService {
     WebServiceWrapperService webServiceWrapperService
     AuthService authService
     UtilService utilService
+    PublishedProfileService publishedProfileService
+    FlorulaCookieService florulaCookieService
 
     def getCustomHeaderWithUserId() {
         def userId
@@ -120,11 +123,19 @@ class ProfileService {
     }
 
     def updateProfile(String opusId, String profileId, json, boolean latest = false) {
-        webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encPath(profileId)}?latest=${latest}", json, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encPath(profileId)}?latest=${latest}", json, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        if (!latest) {
+            publishedProfileService?.evictPublishedProfile(opusId, profileId)
+        }
+        response
     }
 
     def toggleDraftMode(String opusId, String profileId, boolean publish = false) {
-        webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/toggleDraftMode?publish=${publish}", null, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/toggleDraftMode?publish=${publish}", null, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        if (publish) {
+            publishedProfileService?.evictPublishedProfile(opusId, profileId)
+        }
+        response
     }
 
     def discardDraftChanges(String opusId, String profileId) {
@@ -145,9 +156,56 @@ class ProfileService {
         webServiceWrapperService.get("${grailsApplication.config.getProperty('profile.service.url')}/publication/${encPath(pubId)}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())?.resp
     }
 
+    /**
+     * True when a published public profile can be shared across visitors.
+     * Draft requests, private collections, and florula-filtered sessions are excluded.
+     */
+    boolean canServePublishedProfile(String opusId) {
+        if (!opusId || florulaCookieInPlay()) {
+            return false
+        }
+        Map opus = getOpus(opusId)
+        return opus && !opus.privateCollection
+    }
+
     def getProfile(String opusId, String profileId, boolean latest = false, Boolean fullClassification = false) {
         log.debug("Loading profile " + profileId)
 
+        if (!latest && !florulaCookieInPlay()) {
+            Map opus = getOpus(opusId)
+            if (opus && !opus.privateCollection) {
+                return DownstreamGetCacheService.unwrap {
+                    publishedProfileService.getPublishedProfile(opusId, profileId, fullClassification as boolean)
+                } as Map
+            }
+            if (opus?.privateCollection) {
+                return fetchProfile(opusId, profileId, latest, fullClassification, opus)
+            }
+        }
+
+        fetchProfile(opusId, profileId, latest, fullClassification, null)
+    }
+
+    /**
+     * Florula params are applied only for anonymous visitors. A logged-in user, or a call
+     * with no request, does not receive a florula-filtered profile.
+     */
+    private boolean florulaCookieInPlay() {
+        try {
+            if (authService?.getUserId()) {
+                return false
+            }
+            def request = WebUtils.retrieveGrailsWebRequest()?.request
+            if (!request || !florulaCookieService) {
+                return false
+            }
+            return florulaCookieService.getCookieValue(request) as boolean
+        } catch (Exception ignored) {
+            return false
+        }
+    }
+
+    private Map fetchProfile(String opusId, String profileId, boolean latest, Boolean fullClassification, Map knownOpus) {
         Map result
 
         try {
@@ -160,15 +218,9 @@ class ProfileService {
 
             injectThumbnailUrls(profile)
 
-            def opus = getOpus(opusId)
+            def opus = knownOpus != null ? knownOpus : getOpus(opusId)
 
-            result = [
-                    opus         : opus,
-                    profile      : profile,
-                    logos      : opus.brandingConfig?.logos ?: DEFAULT_OPUS_LOGOS,
-                    bannerUrl    : opus.brandingConfig?.profileBannerUrl ?: DEFAULT_OPUS_BANNER_URL,
-                    pageTitle    : opus.title ?: DEFAULT_OPUS_TITLE
-            ]
+            result = PublishedProfileService.toModel(opus, profile)
 
         } catch (FileNotFoundException e) {
             log.error("Profile ${profileId} not found")
@@ -184,24 +236,32 @@ class ProfileService {
     def renameProfile(String opusId, String profileId, Map json) {
         log.debug("Renaming profile ${profileId}")
 
-        webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/rename", json, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encPath(profileId)}/rename", json, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        publishedProfileService?.evictPublishedProfile(opusId, profileId)
+        response
     }
 
     def deleteProfile(String opusId, String profileId) {
         log.debug("Deleting profile ${profileId}")
-        webService.delete("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encPath(profileId)}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        def response = webService.delete("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encPath(profileId)}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        publishedProfileService?.evictPublishedProfile(opusId, profileId)
+        response
     }
 
     def archiveProfile(String opusId, String profileId, String archiveComment) {
         log.debug("Archiving profile ${profileId}")
 
-        webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/archive/${encPath(profileId)}", [archiveComment: archiveComment], [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/archive/${encPath(profileId)}", [archiveComment: archiveComment], [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        publishedProfileService?.evictPublishedProfile(opusId, profileId)
+        response
     }
 
     def restoreArchivedProfile(String opusId, String profileId, String newName = null) {
         log.debug("Restoring archived profile ${profileId}")
 
-        webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/restore/${encPath(profileId)}", [newName: newName], [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        def response = webService.post("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/restore/${encPath(profileId)}", [newName: newName], [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        publishedProfileService?.evictPublishedProfile(opusId, profileId)
+        response
     }
 
     def saveAttachment(String opusId, String profileId, Map metadata, AbstractMultipartHttpServletRequest request) {
@@ -249,13 +309,17 @@ class ProfileService {
     }
 
     void injectThumbnailUrls(profile) {
+        injectBhlThumbnails(profile, grailsApplication.config.getProperty('biodiv.library.thumb.url') as String)
+    }
+
+    static void injectBhlThumbnails(profile, String thumbPrefix) {
         profile.bhl.each {
             if (it) {
                 String pageId = it.url.split("/").last()
                 if (pageId =~ /\?#/) {
                     pageId = pageId.split(/\?#/).first()
                 }
-                it.thumbnailUrl = "${grailsApplication.config.getProperty('biodiv.library.thumb.url')}${pageId}"
+                it.thumbnailUrl = "${thumbPrefix}${pageId}"
             }
         }
 
