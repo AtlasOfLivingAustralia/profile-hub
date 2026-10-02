@@ -25,7 +25,7 @@ import { NavLink, useNavigate, useParams } from "react-router";
 import handleSignout from "#/helpers/auth/handleSignout";
 import { useLocale } from "#/helpers/context/useLocale";
 import { APP_LOCALES, type AppLocale, LOCALE_LABELS } from "#/helpers/locale";
-import { searchPath, SearchTypes } from "#/helpers/searchOptions";
+import { SearchTypes, searchPath } from "#/helpers/searchOptions";
 import type { ThemePreference } from "#/helpers/theme";
 import { useColorMode } from "#/helpers/useColorMode";
 
