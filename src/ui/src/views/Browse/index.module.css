@@ -7,6 +7,32 @@
   box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 6%);
 }
 
+.panelFill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .panelFill {
+    align-self: stretch;
+    height: 100%;
+  }
+}
+
+.emptyIcon {
+  display: inline-flex;
+  width: 3.25rem;
+  height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  color: var(--bs-primary);
+  background: rgba(var(--bs-primary-rgb), 0.12);
+  border-radius: var(--bs-border-radius-lg);
+}
+
 .placeholder {
   height: 100%;
   display: flex;

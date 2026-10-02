@@ -133,6 +133,7 @@
   "view.about.section.statistics": "컬렉션 통계",
   "view.about.title": "{name} 소개",
   "view.browse.categories.ariaLabel": "분류 범주",
+  "view.browse.categories.empty": "사용 가능한 범주가 없습니다.",
   "view.browse.empty.description": "분류 계급을 선택하면 이 컬렉션에서 사용 가능한 이름을 볼 수 있습니다.",
   "view.browse.empty.title": "범주 선택",
   "view.browse.error.categoriesLoadFailed": "분류 범주를 불러올 수 없습니다.",

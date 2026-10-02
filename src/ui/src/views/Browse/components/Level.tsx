@@ -36,6 +36,8 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
   const intl = useIntl();
   const [filter, setFilter] = useState("");
   const [appliedFilter, setAppliedFilter] = useState("");
+  const [childFilter, setChildFilter] = useState("");
+  const [appliedChildFilter, setAppliedChildFilter] = useState("");
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<SelectedTaxon | null>(null);
 
@@ -68,6 +70,8 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
   useEffect(() => {
     setFilter("");
     setAppliedFilter("");
+    setChildFilter("");
+    setAppliedChildFilter("");
     setPage(1);
     setSelected(null);
   }, [slug, level]);
@@ -98,6 +102,32 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     setAppliedFilter(nextFilter);
   }
 
+  // A new taxon should start with an empty profile search.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: selected name is the reset trigger
+  useEffect(() => {
+    setChildFilter("");
+    setAppliedChildFilter("");
+  }, [selected?.name]);
+
+  // Search the profiles under the open taxon without clearing that selection.
+  useEffect(() => {
+    if (!selected) return;
+
+    const nextFilter = childFilter.trim();
+    if (nextFilter === appliedChildFilter) return;
+
+    const timer = window.setTimeout(() => {
+      setAppliedChildFilter(nextFilter);
+    }, FILTER_DEBOUNCE_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [childFilter, appliedChildFilter, selected]);
+
+  function applyChildFilter(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setAppliedChildFilter(childFilter.trim());
+  }
+
   const taxaEntries = Object.entries(taxa);
   const showingChildren = selected !== null;
 
@@ -116,7 +146,11 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
                 <button
                   type="button"
                   className={styles.breadcrumbLink}
-                  onClick={() => setSelected(null)}
+                  onClick={() => {
+                    setSelected(null);
+                    setChildFilter("");
+                    setAppliedChildFilter("");
+                  }}
                 >
                   {label}
                 </button>
@@ -141,7 +175,30 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
           </p>
         </div>
 
-        {!showingChildren && (
+        {showingChildren ? (
+          <Form
+            className={styles.filter}
+            role="search"
+            onSubmit={applyChildFilter}
+          >
+            <Form.Label htmlFor={`taxon-child-filter-${level}`} visuallyHidden>
+              <FormattedMessage id="view.browse.level.filter.label" />
+            </Form.Label>
+            <Form.Control
+              id={`taxon-child-filter-${level}`}
+              type="search"
+              value={childFilter}
+              placeholder={intl.formatMessage({
+                id: "view.browse.level.filter.placeholder",
+              })}
+              autoComplete="off"
+              onChange={(event) => setChildFilter(event.target.value)}
+            />
+            <Button type="submit" variant="primary">
+              <FormattedMessage id="view.browse.level.filter.submit" />
+            </Button>
+          </Form>
+        ) : (
           <Form className={styles.filter} role="search" onSubmit={applyFilter}>
             <Form.Label htmlFor={`taxon-filter-${level}`} visuallyHidden>
               <FormattedMessage id="view.browse.level.filter.label" />
@@ -176,6 +233,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
           level={level}
           scientificName={selected.name}
           totalCount={selected.count}
+          filter={appliedChildFilter}
         />
       ) : loading && taxaEntries.length === 0 ? (
         <TaxaSkeleton count={skeletonCount} />

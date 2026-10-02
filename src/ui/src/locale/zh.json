@@ -133,6 +133,7 @@
   "view.about.section.statistics": "收藏集统计",
   "view.about.title": "关于 {name}",
   "view.browse.categories.ariaLabel": "分类类目",
+  "view.browse.categories.empty": "没有可用的类目。",
   "view.browse.empty.description": "选择一个分类阶元以查看本收藏集中的名称。",
   "view.browse.empty.title": "选择类目",
   "view.browse.error.categoriesLoadFailed": "无法加载分类类目。",

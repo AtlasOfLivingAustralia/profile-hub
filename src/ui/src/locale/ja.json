@@ -133,6 +133,7 @@
   "view.about.section.statistics": "コレクション統計",
   "view.about.title": "{name}について",
   "view.browse.categories.ariaLabel": "分類カテゴリ",
+  "view.browse.categories.empty": "利用可能なカテゴリはありません。",
   "view.browse.empty.description": "分類階級を選択すると、このコレクションで利用可能な名前が表示されます。",
   "view.browse.empty.title": "カテゴリを選択",
   "view.browse.error.categoriesLoadFailed": "分類カテゴリを読み込めませんでした。",

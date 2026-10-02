@@ -478,6 +478,9 @@ export interface ProfileSearchResult {
 export interface ProfileSearchAutocompleteItem {
   scientificName: string;
   uuid?: string;
+  profileId?: string;
+  guid?: string;
+  rank?: string;
   nameAuthor?: string | null;
   fullName?: string | null;
 }

@@ -1,3 +1,5 @@
+import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Badge from "react-bootstrap/Badge";
@@ -55,6 +57,11 @@ export function Component() {
 
   const levels = levelsQuery.isError ? {} : levelsQuery.data;
   const error = levelsQuery.isError;
+  const availableLevels = levels
+    ? TAXON_LEVELS.filter(({ key }) => (levels[key] ?? 0) > 0)
+    : [];
+  const noCategories =
+    Boolean(levels) && !error && availableLevels.length === 0;
 
   const selected = TAXON_LEVELS.find(({ key }) => key === selectedLevel);
 
@@ -76,9 +83,14 @@ export function Component() {
       )}
 
       <Row className="g-4">
-        <Col xs={12} md={4} lg={3}>
+        <Col
+          xs={12}
+          md={4}
+          lg={3}
+          className={noCategories ? "d-flex" : undefined}
+        >
           <nav
-            className={styles.panel}
+            className={`${styles.panel}${noCategories ? ` ${styles.panelFill}` : ""}`}
             aria-label={intl.formatMessage({
               id: "view.browse.categories.ariaLabel",
             })}
@@ -101,37 +113,52 @@ export function Component() {
                   </div>
                 ))}
               </div>
+            ) : noCategories ? (
+              <div className={styles.emptyIcon} aria-hidden="true">
+                <FontAwesomeIcon icon={faFolderOpen} />
+              </div>
             ) : (
               <div className={styles.levels}>
-                {TAXON_LEVELS.filter(({ key }) => (levels[key] ?? 0) > 0).map(
-                  ({ key, labelId, helpId }) => (
-                    <button
-                      key={key}
-                      type="button"
-                      className={styles.levelButton}
-                      data-active={selectedLevel === key}
-                      aria-pressed={selectedLevel === key}
-                      title={
-                        helpId ? intl.formatMessage({ id: helpId }) : undefined
-                      }
-                      onClick={() => setSelectedLevel(key)}
-                    >
-                      <span>
-                        <FormattedMessage id={labelId} />
-                      </span>
-                      <Badge bg="secondary" pill>
-                        {numberFormatter.format(levels[key])}
-                      </Badge>
-                    </button>
-                  ),
-                )}
+                {availableLevels.map(({ key, labelId, helpId }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    className={styles.levelButton}
+                    data-active={selectedLevel === key}
+                    aria-pressed={selectedLevel === key}
+                    title={
+                      helpId ? intl.formatMessage({ id: helpId }) : undefined
+                    }
+                    onClick={() => setSelectedLevel(key)}
+                  >
+                    <span>
+                      <FormattedMessage id={labelId} />
+                    </span>
+                    <Badge bg="secondary" pill>
+                      {numberFormatter.format(levels[key])}
+                    </Badge>
+                  </button>
+                ))}
               </div>
             )}
           </nav>
         </Col>
 
-        <Col xs={12} md={8} lg={9}>
-          {!selectedLevel || !selected || !slug ? (
+        <Col
+          xs={12}
+          md={8}
+          lg={9}
+          className={noCategories ? "d-flex" : undefined}
+        >
+          {noCategories ? (
+            <section className={`${styles.placeholder} w-100`}>
+              <div className={styles.emptyState}>
+                <p className="text-body-secondary mb-0">
+                  <FormattedMessage id="view.browse.categories.empty" />
+                </p>
+              </div>
+            </section>
+          ) : !selectedLevel || !selected || !slug ? (
             <section className={styles.placeholder}>
               <div className={styles.emptyState}>
                 <h3>

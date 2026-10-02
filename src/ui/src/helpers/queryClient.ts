@@ -49,7 +49,8 @@ export const queryKeys = {
     taxon: string,
     scientificName: string,
     page: number,
-  ) => ["taxon", opusId, "name", taxon, scientificName, page] as const,
+    filter = "",
+  ) => ["taxon", opusId, "name", taxon, scientificName, page, filter] as const,
   dataResources: ["dataResources"] as const,
   tags: ["tags"] as const,
 };

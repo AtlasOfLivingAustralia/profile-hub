@@ -1,4 +1,7 @@
-import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFolderOpen,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import Badge from "react-bootstrap/Badge";
@@ -15,12 +18,26 @@ import styles from "./SubLevel.module.css";
 import { TaxaSkeleton } from "./TaxaSkeleton";
 
 const PAGE_SIZE = 25;
+const SEARCH_LIMIT = 100;
 
 type SubLevelProps = {
   slug: string;
   level: string;
   scientificName: string;
   totalCount: number;
+  filter?: string;
+};
+
+type BrowseProfile = {
+  key: string;
+  name: string;
+  rank?: string;
+  profileId?: string | null;
+};
+
+type BrowsePage = {
+  items: BrowseProfile[];
+  total: number;
 };
 
 export function SubLevel({
@@ -28,27 +45,68 @@ export function SubLevel({
   level,
   scientificName,
   totalCount,
+  filter = "",
 }: SubLevelProps) {
   const [page, setPage] = useState(1);
+  const [trackedFilter, setTrackedFilter] = useState(filter);
+  if (filter !== trackedFilter) {
+    setTrackedFilter(filter);
+    setPage(1);
+  }
+
+  const searching = filter.length > 0;
 
   const itemsQuery = useQuery({
-    queryKey: queryKeys.taxonName(slug, level, scientificName, page),
-    queryFn: () =>
-      api.search.taxonName(slug, {
+    queryKey: queryKeys.taxonName(slug, level, scientificName, page, filter),
+    queryFn: async (): Promise<BrowsePage> => {
+      if (searching) {
+        const matches = await api.search.scientificNameAutocomplete(filter, {
+          opusId: slug,
+          max: SEARCH_LIMIT,
+        });
+        return {
+          total: matches.length,
+          items: matches
+            .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+            .map((item) => ({
+              key: item.profileId || item.uuid || item.scientificName,
+              name: item.scientificName,
+              rank: item.rank,
+              profileId: item.profileId || item.uuid,
+            })),
+        };
+      }
+
+      const profiles = await api.search.taxonName(slug, {
         scientificName,
         taxon: level,
         max: PAGE_SIZE,
         offset: (page - 1) * PAGE_SIZE,
-      }),
+      });
+      return {
+        total: totalCount,
+        items: profiles.map((item) => ({
+          key: item.profileId || item.guid || item.name,
+          name: item.scientificName || item.name,
+          rank: item.rank,
+          profileId: item.profileId,
+        })),
+      };
+    },
     placeholderData: keepPreviousData,
     staleTime: STALE.reference,
   });
 
-  const items = itemsQuery.isError ? [] : (itemsQuery.data ?? []);
+  const pageResult = itemsQuery.isError
+    ? { items: [], total: 0 }
+    : (itemsQuery.data ?? { items: [], total: 0 });
+  const items = pageResult.items;
   const loading = itemsQuery.isPending || itemsQuery.isFetching;
   const error = itemsQuery.isError;
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-  const skeletonCount = estimatePageItemCount(totalCount, page, PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(pageResult.total / PAGE_SIZE));
+  const skeletonCount = searching
+    ? PAGE_SIZE
+    : estimatePageItemCount(totalCount, page, PAGE_SIZE);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: reset page when the selected taxon changes
   useEffect(() => {
@@ -69,8 +127,14 @@ export function SubLevel({
 
   if (items.length === 0) {
     return (
-      <PageMessage icon={faFolderOpen}>
-        <FormattedMessage id="view.browse.level.children.empty" />
+      <PageMessage icon={searching ? faMagnifyingGlass : faFolderOpen}>
+        <FormattedMessage
+          id={
+            searching
+              ? "view.browse.level.empty"
+              : "view.browse.level.children.empty"
+          }
+        />
       </PageMessage>
     );
   }
@@ -79,17 +143,14 @@ export function SubLevel({
     <>
       <div className={styles.taxa} aria-busy={loading}>
         {items.map((item) => {
-          const profileTarget =
-            item.profileId || item.scientificName || item.name;
+          const profileTarget = item.profileId || item.name;
           return (
             <Link
-              key={item.profileId || item.guid || item.name}
+              key={item.key}
               to={`/opus/${slug}/profile/${encodeURIComponent(profileTarget)}`}
               className={styles.taxonResult}
             >
-              <span className={styles.taxonResultName}>
-                {item.scientificName || item.name}
-              </span>
+              <span className={styles.taxonResultName}>{item.name}</span>
               {item.rank && (
                 <Badge bg="secondary" pill>
                   {item.rank}
