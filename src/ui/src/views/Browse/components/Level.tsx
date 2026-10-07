@@ -1,12 +1,12 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { type FormEvent, useEffect, useState } from "react";
+import { type SubmitEvent, useEffect, useState } from "react";
 import { Badge, Button, Form } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import api from "#/api";
 import { PageMessage, PaginationBar } from "#/components";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
 import styles from "./Level.module.css";
@@ -38,8 +38,13 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<SelectedTaxon | null>(null);
 
-  const taxaQuery = useQuery({
-    queryKey: queryKeys.taxonLevel(slug, level, appliedFilter, page),
+  const {
+    data: taxaData,
+    isError: error,
+    isPending,
+    isFetching,
+  } = useQuery({
+    queryKey: QUERY_KEYS.taxonLevel(slug, level, appliedFilter, page),
     queryFn: () =>
       api.search.taxonLevel(slug, level, {
         filter: appliedFilter || undefined,
@@ -47,12 +52,11 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
         offset: (page - 1) * PAGE_SIZE,
       }),
     placeholderData: keepPreviousData,
-    staleTime: STALE.reference,
+    staleTime: EXPIRY.reference,
   });
 
-  const taxa = taxaQuery.isError ? {} : (taxaQuery.data ?? {});
-  const loading = taxaQuery.isPending || taxaQuery.isFetching;
-  const error = taxaQuery.isError;
+  const taxa = error ? {} : (taxaData ?? {});
+  const loading = isPending || isFetching;
   const pageIsFull = Object.keys(taxa).length === PAGE_SIZE;
   const filtered = appliedFilter.length > 0;
 
@@ -93,7 +97,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     return () => window.clearTimeout(timer);
   }, [filter, appliedFilter, selected]);
 
-  function applyFilter(event: FormEvent<HTMLFormElement>) {
+  function applyFilter(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextFilter = filter.trim();
     setSelected(null);
@@ -122,7 +126,7 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     return () => window.clearTimeout(timer);
   }, [childFilter, appliedChildFilter, selected]);
 
-  function applyChildFilter(event: FormEvent<HTMLFormElement>) {
+  function applyChildFilter(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setAppliedChildFilter(childFilter.trim());
   }

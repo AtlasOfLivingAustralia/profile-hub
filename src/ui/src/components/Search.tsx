@@ -1,6 +1,6 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type FormEvent, useState, ViewTransition } from "react";
+import { type SubmitEvent, useState, ViewTransition } from "react";
 import { Button, Dropdown, Form, InputGroup } from "react-bootstrap";
 import { useIntl } from "react-intl";
 import { useNavigate, useParams } from "react-router";
@@ -73,7 +73,7 @@ export function Search({
     setTerm(initialTerm);
   }
 
-  function submit(event?: FormEvent) {
+  function submit(event?: SubmitEvent<HTMLFormElement>) {
     event?.preventDefault();
     const trimmed = term.trim();
     if (!trimmed) return;

@@ -7,7 +7,7 @@ const MINUTE = 60 * 1000;
 const DAY = 24 * 60 * MINUTE;
 
 /** In-memory only. Do not persist profile JSON to localStorage. */
-export const STALE = {
+export const EXPIRY = {
   // Opus list, glossary, statistics, documents, about, taxon browse.
   reference: DAY,
   collection: DAY,
@@ -18,7 +18,7 @@ export const STALE = {
   meta: DAY,
 } as const;
 
-export const queryKeys = {
+export const QUERY_KEYS = {
   opusList: ["opus", "list"] as const,
   collection: (slug: string) => ["opus", "collection", slug] as const,
   glossary: (slug: string, letter: string) =>
@@ -77,9 +77,9 @@ export const queryClient = new QueryClient({
 /** Shared by the collection loader and child-route revalidation. */
 export function collectionQuery(slug: string) {
   return queryOptions({
-    queryKey: queryKeys.collection(slug),
+    queryKey: QUERY_KEYS.collection(slug),
     queryFn: () => api.opus.get(slug),
-    staleTime: STALE.collection,
-    gcTime: STALE.collection,
+    staleTime: EXPIRY.collection,
+    gcTime: EXPIRY.collection,
   });
 }

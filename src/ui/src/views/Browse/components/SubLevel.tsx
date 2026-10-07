@@ -11,7 +11,7 @@ import { Link } from "react-router";
 
 import api from "#/api";
 import { PageMessage, PaginationBar } from "#/components";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
 import styles from "./SubLevel.module.css";
@@ -56,8 +56,13 @@ export function SubLevel({
 
   const searching = filter.length > 0;
 
-  const itemsQuery = useQuery({
-    queryKey: queryKeys.taxonName(slug, level, scientificName, page, filter),
+  const {
+    data: itemsData,
+    isError: error,
+    isPending,
+    isFetching,
+  } = useQuery({
+    queryKey: QUERY_KEYS.taxonName(slug, level, scientificName, page, filter),
     queryFn: async (): Promise<BrowsePage> => {
       if (searching) {
         const matches = await api.search.scientificNameAutocomplete(filter, {
@@ -94,15 +99,14 @@ export function SubLevel({
       };
     },
     placeholderData: keepPreviousData,
-    staleTime: STALE.reference,
+    staleTime: EXPIRY.reference,
   });
 
-  const pageResult = itemsQuery.isError
+  const pageResult = error
     ? { items: [], total: 0 }
-    : (itemsQuery.data ?? { items: [], total: 0 });
+    : (itemsData ?? { items: [], total: 0 });
   const items = pageResult.items;
-  const loading = itemsQuery.isPending || itemsQuery.isFetching;
-  const error = itemsQuery.isError;
+  const loading = isPending || isFetching;
   const totalPages = Math.max(1, Math.ceil(pageResult.total / PAGE_SIZE));
   const skeletonCount = searching
     ? PAGE_SIZE

@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { type FormEvent, useMemo, useState } from "react";
+import { type SubmitEvent, useMemo, useState } from "react";
 
 import {
   Alert,
@@ -20,7 +20,7 @@ import api, { type Tag } from "#/api";
 import { PageLoader } from "#/components";
 import { getErrorMessage } from "#/helpers";
 import { useALA } from "#/helpers/context/useALA";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 
 import styles from "./index.module.css";
 
@@ -47,8 +47,12 @@ export function Component() {
   const [error, setError] = useState<unknown>(null);
   const queryClient = useQueryClient();
 
-  const resourcesQuery = useQuery({
-    queryKey: queryKeys.dataResources,
+  const {
+    data: resourcesData,
+    error: resourcesError,
+    isPending: resourcesPending,
+  } = useQuery({
+    queryKey: QUERY_KEYS.dataResources,
     queryFn: async () => {
       const resourceMap = await api.opus.dataResources();
       const options = Object.entries(resourceMap ?? {}).map(([id, name]) => ({
@@ -58,24 +62,27 @@ export function Component() {
       options.sort((a, b) => a.name.localeCompare(b.name));
       return options;
     },
-    staleTime: STALE.meta,
-    gcTime: STALE.meta,
+    staleTime: EXPIRY.meta,
+    gcTime: EXPIRY.meta,
   });
-  const tagsQuery = useQuery({
-    queryKey: queryKeys.tags,
+  const {
+    data: tagsData,
+    error: tagsError,
+    isPending: tagsPending,
+  } = useQuery({
+    queryKey: QUERY_KEYS.tags,
     queryFn: async () => {
       const tagsResponse = await api.opus.tags();
       return tagsResponse?.tags ?? [];
     },
-    staleTime: STALE.meta,
-    gcTime: STALE.meta,
+    staleTime: EXPIRY.meta,
+    gcTime: EXPIRY.meta,
   });
 
-  const resources = resourcesQuery.data ?? null;
-  const availableTags = tagsQuery.data ?? [];
-  const metaError = resourcesQuery.error ?? tagsQuery.error;
-  const loadingMeta =
-    !metaError && (resourcesQuery.isPending || tagsQuery.isPending);
+  const resources = resourcesData ?? null;
+  const availableTags = tagsData ?? [];
+  const metaError = resourcesError ?? tagsError;
+  const loadingMeta = !metaError && (resourcesPending || tagsPending);
 
   const filteredResources = useMemo(() => {
     if (!resources) return [];
@@ -102,7 +109,7 @@ export function Component() {
     return <Navigate to="/" replace />;
   }
 
-  async function onSubmit(event: FormEvent) {
+  async function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selectedResource || !title.trim()) return;
 
@@ -115,7 +122,7 @@ export function Component() {
         description: description.trim() || undefined,
         tags: selectedTags,
       });
-      await queryClient.invalidateQueries({ queryKey: queryKeys.opusList });
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEYS.opusList });
       const slug = created.shortName || created.uuid;
       navigate(`/opus/${encodeURIComponent(slug)}`);
     } catch (err) {

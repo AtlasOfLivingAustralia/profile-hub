@@ -6,7 +6,7 @@ import { Navigate, NavLink, useParams } from "react-router";
 
 import api from "#/api";
 import { PageLoader, PageMessage, RichText } from "#/components";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 
 import styles from "./index.module.css";
 
@@ -21,15 +21,18 @@ export function Component() {
   const letter = letterParam?.toLowerCase();
   const letterIsValid = Boolean(letter && LETTERS.includes(letter));
 
-  const glossaryQuery = useQuery({
-    queryKey: queryKeys.glossary(slug ?? "", letter ?? ""),
+  const {
+    data: glossaryData,
+    isError: glossaryFailed,
+    isPending: loading,
+  } = useQuery({
+    queryKey: QUERY_KEYS.glossary(slug ?? "", letter ?? ""),
     queryFn: () => api.opus.glossary(slug!, letter!),
     enabled: Boolean(slug) && letterIsValid,
-    staleTime: STALE.reference,
+    staleTime: EXPIRY.reference,
   });
-  
-  const glossary = glossaryQuery.isError ? null : glossaryQuery.data;
-  const loading = glossaryQuery.isPending;
+
+  const glossary = glossaryFailed ? null : glossaryData;
 
   if (!slug || !letter || !LETTERS.includes(letter)) {
     return <Navigate to={`/opus/${slug}/glossary/a`} replace />;

@@ -7,7 +7,7 @@ import { useOutletContext, useParams } from "react-router";
 
 import api, { type Attachment } from "#/api";
 import { PageLoader, PageMessage } from "#/components";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";
 import { DocumentItem } from "./components/DocumentItem";
@@ -39,21 +39,21 @@ export function Component() {
   const intl = useIntl();
   const { slug } = useParams<{ slug: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
-  const attachmentsQuery = useQuery({
-    queryKey: queryKeys.documents(slug ?? ""),
+  const {
+    data: attachmentData,
+    isError: error,
+    isPending: loading,
+  } = useQuery({
+    queryKey: QUERY_KEYS.documents(slug ?? ""),
     queryFn: async () => {
       const data = await api.opus.attachments(slug!);
       return Array.isArray(data) ? data : [];
     },
     enabled: Boolean(slug),
-    staleTime: STALE.reference,
+    staleTime: EXPIRY.reference,
   });
 
-  const attachments = attachmentsQuery.isError
-    ? null
-    : (attachmentsQuery.data ?? null);
-  const loading = attachmentsQuery.isPending;
-  const error = attachmentsQuery.isError;
+  const attachments = error ? null : (attachmentData ?? null);
 
   const groups = useMemo(
     () => groupByCategory(attachments ?? []),

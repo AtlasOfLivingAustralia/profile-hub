@@ -7,7 +7,7 @@ import api from "#/api";
 import { Search } from "#/components";
 import { getErrorMessage } from "#/helpers";
 import { useALA } from "#/helpers/context/useALA";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 
 import { CollectionCard } from "./components/CollectionCard";
 import styles from "./index.module.css";
@@ -15,17 +15,16 @@ import styles from "./index.module.css";
 function Home() {
   const intl = useIntl();
   const { isAdmin } = useALA();
-  const collectionsQuery = useQuery({
-    queryKey: queryKeys.opusList,
+
+  const { data: collections, error } = useQuery({
+    queryKey: QUERY_KEYS.opusList,
     queryFn: async () => {
       const data = await api.opus.list();
       return Array.isArray(data) ? data : [];
     },
-    staleTime: STALE.reference,
+    staleTime: EXPIRY.reference,
   });
 
-  const collections = collectionsQuery.data;
-  const error = collectionsQuery.error;
   const collectionCount = collections?.length;
 
   return (

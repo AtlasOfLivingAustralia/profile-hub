@@ -7,7 +7,7 @@ import { Link, useOutletContext, useParams } from "react-router";
 import api from "#/api";
 import { ApiError } from "#/api/query";
 import { PageLoader } from "#/components";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";
 
@@ -33,23 +33,32 @@ export function Component() {
   const { slug, nameOrId } = useParams<{ slug: string; nameOrId: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
 
-  const profileQuery = useQuery({
-    queryKey: queryKeys.profile(slug ?? "", nameOrId ?? ""),
+  const {
+    data: profileData,
+    isPending: loading,
+    isError: profileFailed,
+    error: profileError,
+  } = useQuery({
+    queryKey: QUERY_KEYS.profile(slug ?? "", nameOrId ?? ""),
     queryFn: () =>
       api.profile.get(slug!, nameOrId!, { fullClassification: true }),
     enabled: Boolean(slug && nameOrId),
-    staleTime: STALE.profile,
-    gcTime: STALE.profile,
+    staleTime: EXPIRY.profile,
+    gcTime: EXPIRY.profile,
   });
 
-  const profile = profileQuery.data?.profile;
+  const profile = profileData?.profile;
   const imageEnabled = Boolean(
     slug && profile?.uuid && profile.guid && !profile.archivedDate,
   );
   const searchIdentifier = profile?.guid ? `lsid:${profile.guid}` : "";
 
-  const imageQuery = useQuery({
-    queryKey: queryKeys.profileImages(
+  const {
+    data: imageData,
+    isPending: imageIsPending,
+    isError: imageFailed,
+  } = useQuery({
+    queryKey: QUERY_KEYS.profileImages(
       slug ?? "",
       profile?.uuid ?? "",
       searchIdentifier,
@@ -63,19 +72,18 @@ export function Component() {
       return images.primaryImage ?? images.images?.[0] ?? null;
     },
     enabled: imageEnabled,
-    staleTime: STALE.primaryImage,
+    staleTime: EXPIRY.primaryImage,
   });
 
-  const loading = profileQuery.isPending;
-  const imageLoading = imageEnabled && imageQuery.isPending;
-  const error = profileQuery.isError
-    ? profileQuery.error instanceof ApiError &&
-      (profileQuery.error.status === 404 || profileQuery.error.status === 400)
+  const imageLoading = imageEnabled && imageIsPending;
+  const error = profileFailed
+    ? profileError instanceof ApiError &&
+      (profileError.status === 404 || profileError.status === 400)
       ? "notFound"
       : "generic"
     : null;
   const primaryImage =
-    !imageEnabled || imageQuery.isError ? null : (imageQuery.data ?? null);
+    !imageEnabled || imageFailed ? null : (imageData ?? null);
 
   const otherNames = useMemo(
     () => otherNamesFromAttributes(profile?.attributes),

@@ -13,7 +13,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { type FormEvent, useState } from "react";
+import { type SubmitEvent, useState } from "react";
 import { Container, Form, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAuth } from "react-oidc-context";
@@ -165,7 +165,7 @@ function HeaderSearch({ slug }: { slug?: string }) {
   const navigate = useNavigate();
   const [term, setTerm] = useState("");
 
-  function onSubmit(event: FormEvent) {
+  function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const trimmed = term.trim();
     if (!trimmed) return;

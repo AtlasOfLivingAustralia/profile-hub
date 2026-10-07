@@ -10,7 +10,7 @@ import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 import api, { type ProfileSearchItem } from "#/api";
 import { PageMessage, PaginationBar, Search } from "#/components";
 import { getErrorMessage } from "#/helpers";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 import {
   isSearchType,
   profilePath,
@@ -54,8 +54,12 @@ export function Component() {
     [type, matchAll, hideStubs, page],
   );
 
-  const searchQuery = useQuery({
-    queryKey: queryKeys.searchProfiles(slug ?? null, term, options),
+  const {
+    data: searchData,
+    error,
+    isPending: loading,
+  } = useQuery({
+    queryKey: QUERY_KEYS.searchProfiles(slug ?? null, term, options),
     queryFn: async () => {
       const data = await api.search.profiles(term, {
         ...options,
@@ -66,12 +70,10 @@ export function Component() {
         items: Array.isArray(data?.items) ? data.items : [],
       };
     },
-    staleTime: STALE.search,
+    staleTime: EXPIRY.search,
   });
 
-  const result = searchQuery.data ?? null;
-  const error = searchQuery.error;
-  const loading = searchQuery.isPending;
+  const result = searchData ?? null;
 
   function navigateSearch(next: {
     term: string;
@@ -391,18 +393,22 @@ function SearchResultImage({
     };
   }, []);
 
-  const imageQuery = useQuery({
-    queryKey: queryKeys.primaryImage(opusId, profileId),
+  const {
+    data: imageUrl,
+    isSuccess,
+    isError,
+  } = useQuery({
+    queryKey: QUERY_KEYS.primaryImage(opusId, profileId),
     queryFn: async () => {
       const image = await api.profile.primaryImage(opusId, profileId);
       return resolveMediaUrl(image?.thumbnailUrl) ?? null;
     },
     enabled: visible,
-    staleTime: STALE.primaryImage,
+    staleTime: EXPIRY.primaryImage,
   });
 
-  const src = broken ? undefined : imageQuery.data || undefined;
-  const settled = imageQuery.isSuccess || imageQuery.isError;
+  const src = broken ? undefined : imageUrl || undefined;
+  const settled = isSuccess || isError;
 
   return (
     <div ref={frameRef} className={styles.thumbFrame}>

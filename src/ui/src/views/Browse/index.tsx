@@ -8,7 +8,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { useParams } from "react-router";
 
 import api from "#/api";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 
 import { Level } from "./components/Level";
 import styles from "./index.module.css";
@@ -46,15 +46,14 @@ export function Component() {
     setSelectedLevel(null);
   }
 
-  const levelsQuery = useQuery({
-    queryKey: queryKeys.taxonLevels(slug ?? ""),
+  const { data: levelCounts, isError: error } = useQuery({
+    queryKey: QUERY_KEYS.taxonLevels(slug ?? ""),
     queryFn: () => api.search.taxonLevels(slug!),
     enabled: Boolean(slug),
-    staleTime: STALE.reference,
+    staleTime: EXPIRY.reference,
   });
 
-  const levels = levelsQuery.isError ? {} : levelsQuery.data;
-  const error = levelsQuery.isError;
+  const levels = error ? {} : levelCounts;
   const availableLevels = levels
     ? TAXON_LEVELS.filter(({ key }) => (levels[key] ?? 0) > 0)
     : [];

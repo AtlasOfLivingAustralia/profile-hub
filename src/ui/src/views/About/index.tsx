@@ -11,7 +11,7 @@ import { useOutletContext, useParams } from "react-router";
 
 import api, { type OpusAboutAdministrator } from "#/api";
 import { PageLoader, PageMessage, RichText } from "#/components";
-import { queryKeys, STALE } from "#/helpers/queryClient";
+import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";
 import styles from "./index.module.css";
@@ -43,24 +43,22 @@ export function Component() {
   const intl = useIntl();
   const { slug } = useParams<{ slug: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
-  const aboutQuery = useQuery({
-    queryKey: queryKeys.about(slug ?? ""),
+  const { data: aboutData, isError: aboutFailed } = useQuery({
+    queryKey: QUERY_KEYS.about(slug ?? ""),
     queryFn: () => api.opus.about(slug!),
     enabled: Boolean(slug),
-    staleTime: STALE.reference,
+    staleTime: EXPIRY.reference,
   });
-  const statisticsQuery = useQuery({
-    queryKey: queryKeys.statistics(slug ?? ""),
+  const { data: statisticsData, isError: statisticsFailed } = useQuery({
+    queryKey: QUERY_KEYS.statistics(slug ?? ""),
     queryFn: () => api.opus.statistics(slug!),
     enabled: Boolean(slug),
-    staleTime: STALE.reference,
+    staleTime: EXPIRY.reference,
   });
 
-  const about =
-    aboutQuery.isError || statisticsQuery.isError ? null : aboutQuery.data;
-  const statistics =
-    aboutQuery.isError || statisticsQuery.isError ? null : statisticsQuery.data;
-  const error = aboutQuery.isError || statisticsQuery.isError;
+  const error = aboutFailed || statisticsFailed;
+  const about = error ? null : aboutData;
+  const statistics = error ? null : statisticsData;
 
   const documentTitle = intl.formatMessage(
     { id: "view.about.documentTitle" },
