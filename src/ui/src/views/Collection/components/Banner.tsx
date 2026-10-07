@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import Carousel from "react-bootstrap/Carousel";
-import Container from "react-bootstrap/Container";
+import { Carousel, Container } from "react-bootstrap";
 
-import { RichText } from "#/components/RichText";
+import { RichText } from "#/components";
 
 import styles from "./Banner.module.css";
 

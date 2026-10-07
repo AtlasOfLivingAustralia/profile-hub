@@ -1,11 +1,9 @@
 import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import Badge from "react-bootstrap/Badge";
-import Col from "react-bootstrap/Col";
-import Placeholder from "react-bootstrap/Placeholder";
-import Row from "react-bootstrap/Row";
+import { Badge, Col, Placeholder, Row } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useParams } from "react-router";
 

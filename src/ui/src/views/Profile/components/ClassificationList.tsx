@@ -1,7 +1,7 @@
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router";
 
-import type { ClassificationNode } from "#/api/types";
+import type { ClassificationNode } from "#/api";
 import styles from "./ClassificationList.module.css";
 import { Section } from "./Section";
 

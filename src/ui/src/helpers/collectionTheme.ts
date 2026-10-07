@@ -1,4 +1,4 @@
-import type { Theme } from "#/api/types";
+import type { Theme } from "#/api";
 
 const THEME_CACHE_PREFIX = "opus-theme:";
 

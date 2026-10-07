@@ -1,9 +1,9 @@
-import Badge from "react-bootstrap/Badge";
+import { Badge } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router";
 
-import type { ClassificationNode, Profile } from "#/api/types";
-import { RichText } from "#/components/RichText";
+import type { ClassificationNode, Profile } from "#/api";
+import { RichText } from "#/components";
 
 import styles from "./ProfileHeader.module.css";
 

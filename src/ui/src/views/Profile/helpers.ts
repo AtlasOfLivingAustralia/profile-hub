@@ -1,4 +1,4 @@
-import type { Profile, ProfileAttribute } from "#/api/types";
+import type { Profile, ProfileAttribute } from "#/api";
 
 export function formatProfileName(profile: Profile): string {
   const formatted = profile.profileSettings?.formattedNameText?.trim();

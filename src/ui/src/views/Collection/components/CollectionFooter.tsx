@@ -1,17 +1,12 @@
-import {
-  faFacebook,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
+import { faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+import { Col, Container, Row } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router";
 
-import type { Collection } from "#/api/types";
-import { RichText } from "#/components/RichText";
+import type { Collection } from "#/api";
+import { RichText } from "#/components";
 import { resolveMediaUrl } from "#/helpers/utils/resolveMediaUrl";
 
 import styles from "./CollectionFooter.module.css";

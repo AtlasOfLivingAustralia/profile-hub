@@ -14,11 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type FormEvent, useState } from "react";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
+import { Container, Form, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAuth } from "react-oidc-context";
 import { NavLink, useNavigate, useParams } from "react-router";

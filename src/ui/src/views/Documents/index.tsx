@@ -1,14 +1,12 @@
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import Alert from "react-bootstrap/Alert";
+import { Alert } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useOutletContext, useParams } from "react-router";
 
-import api from "#/api";
-import type { Attachment } from "#/api/types";
-import PageLoader from "#/components/PageLoader";
-import PageMessage from "#/components/PageMessage";
+import api, { type Attachment } from "#/api";
+import { PageLoader, PageMessage } from "#/components";
 import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";

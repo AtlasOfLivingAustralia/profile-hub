@@ -1,4 +1,4 @@
-import type { ProfileSearchOptions } from "#/api/types";
+import type { ProfileSearchOptions } from "#/api";
 
 export const SearchTypes = {
   scientificName: "scientificName",
@@ -10,7 +10,9 @@ export type SearchType = (typeof SearchTypes)[keyof typeof SearchTypes];
 
 const SEARCH_TYPE_VALUES = Object.values(SearchTypes);
 
-export function isSearchType(value: string | null | undefined): value is SearchType {
+export function isSearchType(
+  value: string | null | undefined,
+): value is SearchType {
   return SEARCH_TYPE_VALUES.includes(value as SearchType);
 }
 

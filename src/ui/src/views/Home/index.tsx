@@ -1,18 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import Alert from "react-bootstrap/Alert";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+import { Alert, Col, Container, Row } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router";
 
 import api from "#/api";
+import { Search } from "#/components";
 import { getErrorMessage } from "#/helpers";
 import { useALA } from "#/helpers/context/useALA";
 import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import { CollectionCard } from "./components/CollectionCard";
-import { Search } from "./components/Search";
 import styles from "./index.module.css";
 
 function Home() {

@@ -1,18 +1,15 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { type FormEvent, useEffect, useState } from "react";
-import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { Badge, Button, Form } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import api from "#/api";
-import PageMessage from "#/components/PageMessage";
+import { PageMessage, PaginationBar } from "#/components";
 import { queryKeys, STALE } from "#/helpers/queryClient";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
 import styles from "./Level.module.css";
-import { PaginationBar } from "./PaginationBar";
 import { SubLevel } from "./SubLevel";
 import { TaxaSkeleton } from "./TaxaSkeleton";
 
@@ -58,9 +55,11 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
   const error = taxaQuery.isError;
   const pageIsFull = Object.keys(taxa).length === PAGE_SIZE;
   const filtered = appliedFilter.length > 0;
+
   const totalPages = filtered
     ? Math.max(1, pageIsFull ? page + 1 : page)
     : Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+
   const skeletonCount = filtered
     ? PAGE_SIZE
     : estimatePageItemCount(totalCount, page, PAGE_SIZE);

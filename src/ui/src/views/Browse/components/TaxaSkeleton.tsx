@@ -1,4 +1,4 @@
-import Placeholder from "react-bootstrap/Placeholder";
+import { Placeholder } from "react-bootstrap";
 
 import styles from "./TaxaSkeleton.module.css";
 

@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
-import Alert from "react-bootstrap/Alert";
+import { Alert } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, useOutletContext, useParams } from "react-router";
 
 import api from "#/api";
 import { ApiError } from "#/api/query";
-import PageLoader from "#/components/PageLoader";
+import { PageLoader } from "#/components";
 import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";
@@ -29,6 +29,7 @@ import {
 
 export function Component() {
   const intl = useIntl();
+  
   const { slug, nameOrId } = useParams<{ slug: string; nameOrId: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
 

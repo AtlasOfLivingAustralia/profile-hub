@@ -3,17 +3,17 @@ import {
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+
 import { useEffect, useState } from "react";
-import Badge from "react-bootstrap/Badge";
+import { Badge } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router";
 
 import api from "#/api";
-import PageMessage from "#/components/PageMessage";
+import { PageMessage, PaginationBar } from "#/components";
 import { queryKeys, STALE } from "#/helpers/queryClient";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
 
-import { PaginationBar } from "./PaginationBar";
 import styles from "./SubLevel.module.css";
 import { TaxaSkeleton } from "./TaxaSkeleton";
 

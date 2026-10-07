@@ -1,10 +1,7 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { type FormEvent, useState, ViewTransition } from "react";
-import Button from "react-bootstrap/Button";
-import Dropdown from "react-bootstrap/Dropdown";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
+import { Button, Dropdown, Form, InputGroup } from "react-bootstrap";
 import { useIntl } from "react-intl";
 import { useNavigate, useParams } from "react-router";
 

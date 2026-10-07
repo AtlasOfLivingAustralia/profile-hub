@@ -1,4 +1,4 @@
-import Container from "react-bootstrap/Container";
+import { Container } from "react-bootstrap";
 import { useIntl } from "react-intl";
 import {
   type LoaderFunctionArgs,
@@ -7,9 +7,9 @@ import {
   useParams,
 } from "react-router";
 
+import type { Collection } from "#/api";
 import { ApiError } from "#/api/query";
-import type { Collection } from "#/api/types";
-import PageLoader from "#/components/PageLoader";
+import { PageLoader } from "#/components";
 import {
   cacheCollectionTheme,
   readCachedCollectionTheme,

@@ -1,8 +1,7 @@
 import { QueryClient, queryOptions } from "@tanstack/react-query";
 
-import api from "#/api";
+import api, { type ProfileSearchOptions } from "#/api";
 import { ApiError } from "#/api/query";
-import type { ProfileSearchOptions } from "#/api/types";
 
 const MINUTE = 60 * 1000;
 const DAY = 24 * 60 * MINUTE;

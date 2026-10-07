@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
-// Page loader & error components
-import PageError from "./components/PageError";
-// Views
+
+import { PageError } from "#/components";
+
 import Dashboard from "./views/Dashboard";
 import Home from "./views/Home";
 

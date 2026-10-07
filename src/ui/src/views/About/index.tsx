@@ -1,17 +1,16 @@
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
+
 import type { ReactNode } from "react";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+
+import { Col, Row } from "react-bootstrap";
+
 import { FormattedMessage, useIntl } from "react-intl";
 import { useOutletContext, useParams } from "react-router";
 
-import api from "#/api";
-import type { OpusAboutAdministrator } from "#/api/types";
-import PageLoader from "#/components/PageLoader";
-import PageMessage from "#/components/PageMessage";
-import { RichText } from "#/components/RichText";
+import api, { type OpusAboutAdministrator } from "#/api";
+import { PageLoader, PageMessage, RichText } from "#/components";
 import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import type { CollectionOutletContext } from "../Collection";

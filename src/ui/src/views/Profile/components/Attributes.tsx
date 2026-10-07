@@ -1,7 +1,7 @@
 import { FormattedMessage } from "react-intl";
 
-import type { ProfileAttribute } from "#/api/types";
-import { RichText } from "#/components/RichText";
+import type { ProfileAttribute } from "#/api";
+import { RichText } from "#/components";
 
 import styles from "./Attributes.module.css";
 import { Section } from "./Section";

@@ -1,4 +1,4 @@
-import Pagination from "react-bootstrap/Pagination";
+import { Pagination } from "react-bootstrap";
 import { useIntl } from "react-intl";
 
 import { getPageNumbers } from "#/helpers/utils/getPageNumbers";
@@ -29,7 +29,7 @@ export function PaginationBar({
     <nav
       className={styles.pagination}
       aria-label={intl.formatMessage({
-        id: "view.browse.level.pagination.ariaLabel",
+        id: "component.pagination.ariaLabel",
       })}
     >
       <Pagination className="mb-0">
@@ -37,14 +37,14 @@ export function PaginationBar({
           disabled={loading || page <= 1}
           onClick={() => onPageChange(1)}
           aria-label={intl.formatMessage({
-            id: "view.browse.level.pagination.first",
+            id: "component.pagination.first",
           })}
         />
         <Pagination.Prev
           disabled={loading || page <= 1}
           onClick={() => onPageChange(Math.max(1, page - 1))}
           aria-label={intl.formatMessage({
-            id: "view.browse.level.pagination.previous",
+            id: "component.pagination.previous",
           })}
         />
         {pageNumbers[0] > 1 && <Pagination.Ellipsis disabled />}
@@ -65,14 +65,14 @@ export function PaginationBar({
           disabled={loading || page >= totalPages}
           onClick={() => onPageChange(Math.min(totalPages, page + 1))}
           aria-label={intl.formatMessage({
-            id: "view.browse.level.pagination.next",
+            id: "component.pagination.next",
           })}
         />
         <Pagination.Last
           disabled={loading || disableLast || page >= totalPages}
           onClick={() => onPageChange(totalPages)}
           aria-label={intl.formatMessage({
-            id: "view.browse.level.pagination.last",
+            id: "component.pagination.last",
           })}
         />
       </Pagination>

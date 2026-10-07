@@ -4,8 +4,7 @@ import { useAuth } from "react-oidc-context";
 // Routing
 import { RouterProvider } from "react-router/dom";
 
-// Local components
-import PageLoader from "./components/PageLoader";
+import { PageLoader } from "#/components";
 import handleRefresh from "./helpers/auth/handleRefresh";
 import routes from "./Router";
 

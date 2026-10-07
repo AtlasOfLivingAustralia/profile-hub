@@ -6,7 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormattedMessage, useIntl } from "react-intl";
 
-import type { Attachment } from "#/api/types";
+import type { Attachment } from "#/api";
 import { resolveMediaUrl } from "#/helpers/utils/resolveMediaUrl";
 
 import styles from "./DocumentItem.module.css";

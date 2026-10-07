@@ -1,16 +1,11 @@
 import { faBook } from "@fortawesome/free-solid-svg-icons";
 import { useQuery } from "@tanstack/react-query";
-import Col from "react-bootstrap/Col";
-import Nav from "react-bootstrap/Nav";
-import Row from "react-bootstrap/Row";
-import Table from "react-bootstrap/Table";
+import { Col, Nav, Row, Table } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Navigate, NavLink, useParams } from "react-router";
 
 import api from "#/api";
-import PageLoader from "#/components/PageLoader";
-import PageMessage from "#/components/PageMessage";
-import { RichText } from "#/components/RichText";
+import { PageLoader, PageMessage, RichText } from "#/components";
 import { queryKeys, STALE } from "#/helpers/queryClient";
 
 import styles from "./index.module.css";
@@ -25,12 +20,14 @@ export function Component() {
   }>();
   const letter = letterParam?.toLowerCase();
   const letterIsValid = Boolean(letter && LETTERS.includes(letter));
+
   const glossaryQuery = useQuery({
     queryKey: queryKeys.glossary(slug ?? "", letter ?? ""),
     queryFn: () => api.opus.glossary(slug!, letter!),
     enabled: Boolean(slug) && letterIsValid,
     staleTime: STALE.reference,
   });
+  
   const glossary = glossaryQuery.isError ? null : glossaryQuery.data;
   const loading = glossaryQuery.isPending;
 

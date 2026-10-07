@@ -5,9 +5,9 @@ import {
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
+import { Button, Container } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
+
 import {
   isRouteErrorResponse,
   Link,

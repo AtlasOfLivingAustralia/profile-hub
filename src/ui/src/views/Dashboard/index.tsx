@@ -1,5 +1,5 @@
-// Routing
 import { Outlet, ScrollRestoration, useParams } from "react-router";
+
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import styles from "./index.module.css";

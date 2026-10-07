@@ -1,7 +1,7 @@
 import { FormattedMessage } from "react-intl";
 
-import type { BibliographyEntry } from "#/api/types";
-import { RichText } from "#/components/RichText";
+import type { BibliographyEntry } from "#/api";
+import { RichText } from "#/components";
 
 import styles from "./Bibliography.module.css";
 import { Section } from "./Section";

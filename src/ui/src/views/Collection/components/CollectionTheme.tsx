@@ -1,4 +1,4 @@
-import type { Theme } from "#/api/types";
+import type { Theme } from "#/api";
 import { buildCollectionThemeCss } from "#/helpers/collectionTheme";
 
 type CollectionThemeProps = {

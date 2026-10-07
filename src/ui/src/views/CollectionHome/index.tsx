@@ -3,17 +3,17 @@ import {
   faBookOpen,
   faChevronRight,
   faFilter,
-  faFingerprint,
+  // faFingerprint,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useMemo } from "react";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
+import { Col, Row } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import { Link, useOutletContext, useParams } from "react-router";
 
-import { RichText } from "#/components/RichText";
+import { RichText } from "#/components";
 
 import type { CollectionOutletContext } from "../Collection";
 
@@ -37,16 +37,16 @@ export function Component() {
         helpText: collection.opusLayoutConfig.helpTextBrowse,
         to: `/opus/${slug}/browse`,
       },
-      ...(collection.keybaseProjectId
-        ? [
-            {
-              messageId: "view.collectionHome.action.identify",
-              icon: faFingerprint,
-              helpText: collection.opusLayoutConfig.helpTextIdentify,
-              to: `/opus/${slug}/identify`,
-            },
-          ]
-        : []),
+      // ...(collection.keybaseProjectId
+      //   ? [
+      //       {
+      //         messageId: "view.collectionHome.action.identify",
+      //         icon: faFingerprint,
+      //         helpText: collection.opusLayoutConfig.helpTextIdentify,
+      //         to: `/opus/${slug}/identify`,
+      //       },
+      //     ]
+      //   : []),
       {
         messageId: "view.collectionHome.action.filter",
         icon: faFilter,

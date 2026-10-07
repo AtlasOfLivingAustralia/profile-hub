@@ -1,7 +1,7 @@
 import { FormattedMessage } from "react-intl";
 
-import type { BhlLink } from "#/api/types";
-import { RichText } from "#/components/RichText";
+import type { BhlLink } from "#/api";
+import { RichText } from "#/components";
 import { resolveMediaUrl } from "#/helpers/utils/resolveMediaUrl";
 
 import styles from "./BhlList.module.css";

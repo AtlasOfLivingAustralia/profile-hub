@@ -1,19 +1,23 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type FormEvent, useMemo, useState } from "react";
-import Alert from "react-bootstrap/Alert";
-import Badge from "react-bootstrap/Badge";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import ListGroup from "react-bootstrap/ListGroup";
-import Row from "react-bootstrap/Row";
+
+import {
+  Alert,
+  Badge,
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  ListGroup,
+  Row,
+} from "react-bootstrap";
+
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, Navigate, useNavigate } from "react-router";
-import api from "#/api";
-import type { Tag } from "#/api/types";
-import PageLoader from "#/components/PageLoader";
+
+import api, { type Tag } from "#/api";
+import { PageLoader } from "#/components";
 import { getErrorMessage } from "#/helpers";
 import { useALA } from "#/helpers/context/useALA";
 import { queryKeys, STALE } from "#/helpers/queryClient";

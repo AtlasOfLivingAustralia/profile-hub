@@ -1,6 +1,6 @@
 import { FormattedMessage } from "react-intl";
 
-import type { Authorship, Profile } from "#/api/types";
+import type { Authorship, Profile } from "#/api";
 
 import { formatDate } from "../helpers";
 import styles from "./ProfileFooter.module.css";

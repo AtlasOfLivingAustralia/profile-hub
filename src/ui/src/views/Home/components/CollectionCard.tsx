@@ -1,9 +1,8 @@
-import Card from "react-bootstrap/Card";
-import Placeholder from "react-bootstrap/Placeholder";
+import { Card, Placeholder } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router";
 
-import type { Collection } from "#/api/types";
+import type { Collection } from "#/api";
 import styles from "./CollectionCard.module.css";
 
 export function CollectionCard({

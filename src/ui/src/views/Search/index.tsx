@@ -1,16 +1,14 @@
 import { faImage, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
+
 import { useEffect, useMemo, useRef, useState } from "react";
-import Alert from "react-bootstrap/Alert";
-import Container from "react-bootstrap/Container";
-import Placeholder from "react-bootstrap/Placeholder";
+import { Alert, Container, Placeholder } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router";
 
-import api from "#/api";
-import type { ProfileSearchItem } from "#/api/types";
-import PageMessage from "#/components/PageMessage";
+import api, { type ProfileSearchItem } from "#/api";
+import { PageMessage, PaginationBar, Search } from "#/components";
 import { getErrorMessage } from "#/helpers";
 import { queryKeys, STALE } from "#/helpers/queryClient";
 import {
@@ -22,8 +20,6 @@ import {
   searchPath,
 } from "#/helpers/searchOptions";
 import { resolveMediaUrl } from "#/helpers/utils/resolveMediaUrl";
-import { PaginationBar } from "#/views/Browse/components/PaginationBar";
-import { Search } from "#/views/Home/components/Search";
 
 import styles from "./index.module.css";
 

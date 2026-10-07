@@ -1,10 +1,8 @@
-import Col from "react-bootstrap/Col";
-import Placeholder from "react-bootstrap/Placeholder";
-import Row from "react-bootstrap/Row";
+import { Col, Placeholder, Row } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 
-import type { ProfileImage } from "#/api/types";
-import { RichText } from "#/components/RichText";
+import type { ProfileImage } from "#/api";
+import { RichText } from "#/components";
 import { resolveMediaUrl } from "#/helpers/utils/resolveMediaUrl";
 
 import styles from "./ProfileMedia.module.css";
