@@ -98,6 +98,7 @@ export default {
       countChildren?: boolean;
       immediateChildrenOnly?: boolean;
       sortBy?: string;
+      filter?: string;
     },
   ): Promise<TaxonNameResult[]> =>
     request(
@@ -110,6 +111,7 @@ export default {
         countChildren: options.countChildren ?? false,
         immediateChildrenOnly: options.immediateChildrenOnly ?? false,
         sortBy: options.sortBy ?? "taxonomy",
+        filter: options.filter,
       })}`,
       "GET",
       null,

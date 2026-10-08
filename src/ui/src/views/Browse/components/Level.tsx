@@ -105,14 +105,14 @@ export function Level({ slug, level, label, totalCount }: LevelProps) {
     setAppliedFilter(nextFilter);
   }
 
-  // A new taxon should start with an empty profile search.
+  // A new taxon should start with an empty level filter.
   // biome-ignore lint/correctness/useExhaustiveDependencies: selected name is the reset trigger
   useEffect(() => {
     setChildFilter("");
     setAppliedChildFilter("");
   }, [selected?.name]);
 
-  // Search the profiles under the open taxon without clearing that selection.
+  // Filter every taxon under the open classification without clearing it.
   useEffect(() => {
     if (!selected) return;
 

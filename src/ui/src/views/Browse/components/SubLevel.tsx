@@ -9,7 +9,7 @@ import { Badge } from "react-bootstrap";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router";
 
-import api from "#/api";
+import api, { type TaxonNameResult } from "#/api";
 import { PageMessage, PaginationBar } from "#/components";
 import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
 import { estimatePageItemCount } from "#/helpers/utils/estimatePageItemCount";
@@ -18,7 +18,6 @@ import styles from "./SubLevel.module.css";
 import { TaxaSkeleton } from "./TaxaSkeleton";
 
 const PAGE_SIZE = 25;
-const SEARCH_LIMIT = 100;
 
 type SubLevelProps = {
   slug: string;
@@ -34,6 +33,15 @@ type BrowseProfile = {
   rank?: string;
   profileId?: string | null;
 };
+
+function toBrowseProfile(item: TaxonNameResult): BrowseProfile {
+  return {
+    key: item.profileId || item.guid || item.name,
+    name: item.scientificName || item.name,
+    rank: item.rank,
+    profileId: item.profileId,
+  };
+}
 
 type BrowsePage = {
   items: BrowseProfile[];
@@ -64,38 +72,17 @@ export function SubLevel({
   } = useQuery({
     queryKey: QUERY_KEYS.taxonName(slug, level, scientificName, page, filter),
     queryFn: async (): Promise<BrowsePage> => {
-      if (searching) {
-        const matches = await api.search.scientificNameAutocomplete(filter, {
-          opusId: slug,
-          max: SEARCH_LIMIT,
-        });
-        return {
-          total: matches.length,
-          items: matches
-            .slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
-            .map((item) => ({
-              key: item.profileId || item.uuid || item.scientificName,
-              name: item.scientificName,
-              rank: item.rank,
-              profileId: item.profileId || item.uuid,
-            })),
-        };
-      }
-
       const profiles = await api.search.taxonName(slug, {
         scientificName,
         taxon: level,
+        immediateChildrenOnly: false,
         max: PAGE_SIZE,
         offset: (page - 1) * PAGE_SIZE,
+        filter: searching ? filter : undefined,
       });
       return {
-        total: totalCount,
-        items: profiles.map((item) => ({
-          key: item.profileId || item.guid || item.name,
-          name: item.scientificName || item.name,
-          rank: item.rank,
-          profileId: item.profileId,
-        })),
+        total: searching ? profiles.length : totalCount,
+        items: profiles.map(toBrowseProfile),
       };
     },
     placeholderData: keepPreviousData,
@@ -107,7 +94,10 @@ export function SubLevel({
     : (itemsData ?? { items: [], total: 0 });
   const items = pageResult.items;
   const loading = isPending || isFetching;
-  const totalPages = Math.max(1, Math.ceil(pageResult.total / PAGE_SIZE));
+  const pageIsFull = items.length === PAGE_SIZE;
+  const totalPages = searching
+    ? Math.max(1, pageIsFull ? page + 1 : page)
+    : Math.max(1, Math.ceil(pageResult.total / PAGE_SIZE));
   const skeletonCount = searching
     ? PAGE_SIZE
     : estimatePageItemCount(totalCount, page, PAGE_SIZE);
@@ -169,6 +159,7 @@ export function SubLevel({
         page={page}
         totalPages={totalPages}
         loading={loading}
+        disableLast={searching}
         onPageChange={setPage}
       />
     </>

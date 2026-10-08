@@ -376,10 +376,10 @@ class ProfileService {
         webServiceWrapperService.get("${grailsApplication.config.getProperty('profile.service.url')}/profile/search/scientificName?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&max=${max ?: ""}&sortBy=${sortBy}&useWildcard=${useWildcard}&autoCompleteScientificName=${autoCompleteScientificName}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
     }
 
-    def findByNameAndTaxonLevel(String opusId, String taxon, String scientificName, String max, String offset, String sortBy, boolean countChildren = false, boolean immediateChildrenOnly = false, boolean includeTaxon = false) {
+    def findByNameAndTaxonLevel(String opusId, String taxon, String scientificName, String max, String offset, String sortBy, boolean countChildren = false, boolean immediateChildrenOnly = false, boolean includeTaxon = false, String nameFilter = null) {
         log.debug("Searching for '${scientificName}' in taxon ${taxon}")
-
-        webServiceWrapperService.get("${grailsApplication.config.getProperty('profile.service.url')}/profile/search/taxon/name?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&taxon=${enc(taxon)}&max=${max}&offset=${offset}&sortBy=${sortBy}&countChildren=${countChildren}&immediateChildrenOnly=${immediateChildrenOnly}&includeTaxon=${includeTaxon}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+        String nameFilterQuery = nameFilter ? "&filter=${enc(nameFilter)}" : ""
+        webServiceWrapperService.get("${grailsApplication.config.getProperty('profile.service.url')}/profile/search/taxon/name?opusId=${enc(opusId)}&scientificName=${enc(scientificName)}&taxon=${enc(taxon)}&max=${max}&offset=${offset}&sortBy=${sortBy}&countChildren=${countChildren}&immediateChildrenOnly=${immediateChildrenOnly}&includeTaxon=${includeTaxon}${nameFilterQuery}", [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
     }
 
     def findByNameAndTaxonLevelAndGetTotalProfilesCount(String opusId, String taxon, String scientificName, String max, String offset, String sortBy, boolean immediateChildrenOnly = false, boolean includeTaxon = false, String rankFilter) {
