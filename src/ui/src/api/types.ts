@@ -498,3 +498,8 @@ export type DataResourceMap = Record<string, string>;
 export interface TagsResponse {
   tags: Tag[];
 }
+
+export interface SpeciesListSummary {
+  dataResourceUid: string;
+  title: string;
+}

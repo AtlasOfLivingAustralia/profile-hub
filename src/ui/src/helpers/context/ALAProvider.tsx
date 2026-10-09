@@ -1,5 +1,8 @@
-import type { PropsWithChildren } from "react";
+import { type PropsWithChildren, useEffect } from "react";
 import { useAuth } from "react-oidc-context";
+
+import { invalidateFilteredReads } from "#/helpers/queryClient";
+import { syncSpeciesListFilterUser } from "#/helpers/speciesListFilter";
 
 import ALAContext from "./ALAContext";
 
@@ -10,9 +13,19 @@ const JWT_EDITOR_ROLE = import.meta.env.VITE_AUTH_JWT_EDITOR_ROLE;
 
 export const ALAProvider = ({ children }: PropsWithChildren) => {
   const auth = useAuth();
-
-  // Extract the user
   const userid = (auth.user?.profile[JWT_USERID] || "") as string;
+
+  useEffect(() => {
+    syncSpeciesListFilterUser(
+      {
+        isLoading: auth.isLoading,
+        isAuthenticated: auth.isAuthenticated,
+        userId: userid,
+      },
+      invalidateFilteredReads,
+    );
+  }, [auth.isAuthenticated, auth.isLoading, userid]);
+
   const rawRoles = auth.user?.profile[JWT_ROLES] ?? [];
   const roles = (Array.isArray(rawRoles) ? rawRoles : [rawRoles]) as string[];
   const isAdmin = auth.isAuthenticated && roles.includes(JWT_ADMIN_ROLE);

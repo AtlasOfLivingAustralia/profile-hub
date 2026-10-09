@@ -23,7 +23,6 @@ class ProfileService {
     AuthService authService
     UtilService utilService
     PublishedProfileService publishedProfileService
-    FlorulaCookieService florulaCookieService
 
     def getCustomHeaderWithUserId() {
         def userId
@@ -158,27 +157,27 @@ class ProfileService {
 
     /**
      * True when a published public profile can be shared across visitors.
-     * Draft requests, private collections, and florula-filtered sessions are excluded.
+     * Draft requests, private collections, and an explicit florula list on the request are excluded.
      */
     boolean canServePublishedProfile(String opusId) {
-        if (!opusId || florulaCookieInPlay()) {
+        if (!opusId || explicitFlorulaRequested()) {
             return false
         }
         Map opus = getOpus(opusId)
-        return opus && !opus.privateCollection
+        return opus && !opus.privateCollection && !opus.florulaListId
     }
 
     def getProfile(String opusId, String profileId, boolean latest = false, Boolean fullClassification = false) {
         log.debug("Loading profile " + profileId)
 
-        if (!latest && !florulaCookieInPlay()) {
+        if (!latest && !explicitFlorulaRequested()) {
             Map opus = getOpus(opusId)
-            if (opus && !opus.privateCollection) {
+            if (opus && !opus.privateCollection && !opus.florulaListId) {
                 return DownstreamGetCacheService.unwrap {
                     publishedProfileService.getPublishedProfile(opusId, profileId, fullClassification as boolean)
                 } as Map
             }
-            if (opus?.privateCollection) {
+            if (opus?.privateCollection || opus?.florulaListId) {
                 return fetchProfile(opusId, profileId, latest, fullClassification, opus)
             }
         }
@@ -187,19 +186,22 @@ class ProfileService {
     }
 
     /**
-     * Florula params are applied only for anonymous visitors. A logged-in user, or a call
-     * with no request, does not receive a florula-filtered profile.
+     * True when the request names a florula list, so the shared published profile
+     * must not be served. The anonymous phf cookie does not affect this.
      */
-    private boolean florulaCookieInPlay() {
+    private boolean explicitFlorulaRequested() {
         try {
-            if (authService?.getUserId()) {
-                return false
-            }
             def request = WebUtils.retrieveGrailsWebRequest()?.request
-            if (!request || !florulaCookieService) {
+            if (!request) {
                 return false
             }
-            return florulaCookieService.getCookieValue(request) as boolean
+            if (request.getParameter(WebServiceWrapperService.FLORULA_LIST_PARAM)) {
+                return true
+            }
+            return request.parameterMap.keySet().any { key ->
+                key?.toString()?.startsWith(WebServiceWrapperService.FLORULA_OVERRIDE_PARAM + '-') &&
+                        request.getParameter(key.toString())
+            }
         } catch (Exception ignored) {
             return false
         }

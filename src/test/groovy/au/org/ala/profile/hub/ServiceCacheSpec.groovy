@@ -272,6 +272,20 @@ class ServiceCacheSpec extends Specification {
         context.getBean(CacheManager).getCache("publicImagePages").get("opus1|p1|lsid:other|1|0") == null
     }
 
+    def "a collection florula list skips the published profile cache"() {
+        given:
+        ProfileService profiles = profiles()
+        wrapper.opus = wrapper.opus + [florulaListId: "dr1"]
+
+        when:
+        profiles.getProfile("opus1", "p1", false, false)
+        profiles.getProfile("opus1", "p1", false, false)
+
+        then:
+        publishedCache().nativeCache.isEmpty()
+        wrapper.calls.count { it.url.contains("/profile/") } == 2
+    }
+
     def "published profile sharing follows the public collection and ignores private collections"() {
         given:
         ProfileService profiles = profiles()

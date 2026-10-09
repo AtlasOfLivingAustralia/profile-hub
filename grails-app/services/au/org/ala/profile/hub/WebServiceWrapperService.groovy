@@ -3,12 +3,17 @@ package au.org.ala.profile.hub
 import org.apache.http.entity.ContentType
 import org.grails.web.util.WebUtils
 /**
- * XXX Used to add florulaOverrideId to all GET requests if the cookie exists
+ * Adds florulaOverrideId to downstream GETs.
+ * Anonymous Grails sessions contribute the phf cookie. A request that names a list
+ * (florulaListId + florulaOpusUuid, or florulaOverrideId-<uuid>) contributes that
+ * list for both anonymous and signed-in callers.
  */
 class WebServiceWrapperService {
 
     static transactional = false
     static final FLORULA_OVERRIDE_PARAM = 'florulaOverrideId'
+    static final FLORULA_LIST_PARAM = 'florulaListId'
+    static final FLORULA_OPUS_PARAM = 'florulaOpusUuid'
     static final FLORULA_COOKIE = 'phf'
 
     def webService
@@ -16,7 +21,6 @@ class WebServiceWrapperService {
     FlorulaCookieService florulaCookieService
 
     Map get(String url, Map params = [:], ContentType contentType = ContentType.APPLICATION_JSON, boolean includeApiKey = true, boolean includeUser = true, Map customHeaders = [:]) {
-        // only add it if there is no current user
         try {
             if (!authService.userId) {
                 def florulaIds = extractFlorulaIds()
@@ -32,7 +36,36 @@ class WebServiceWrapperService {
             // these methods
             log.trace("Couldn't get florula ids from request", e)
         }
+        try {
+            params = withExplicitFlorulaOverrides(params)
+        } catch (Exception e) {
+            log.trace("Couldn't read explicit florula override", e)
+        }
         return webService.get(url, params, contentType, includeApiKey, includeUser, customHeaders)
+    }
+
+    private Map withExplicitFlorulaOverrides(Map params) {
+        def webRequest = WebUtils.retrieveGrailsWebRequest()
+        def request = webRequest?.request
+        if (!request) {
+            return params
+        }
+
+        String listId = request.getParameter(FLORULA_LIST_PARAM)
+        String opusUuid = request.getParameter(FLORULA_OPUS_PARAM)
+        if (listId && opusUuid) {
+            params += [(FLORULA_OVERRIDE_PARAM + '-' + opusUuid): listId]
+        }
+
+        request.parameterMap.each { key, values ->
+            if (key?.toString()?.startsWith(FLORULA_OVERRIDE_PARAM + '-') && values) {
+                String value = values[0]?.toString()
+                if (value) {
+                    params += [(key.toString()): value]
+                }
+            }
+        }
+        return params
     }
 
     Map<String, String> extractFlorulaIds() {

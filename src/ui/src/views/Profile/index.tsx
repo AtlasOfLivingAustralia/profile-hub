@@ -29,7 +29,7 @@ import {
 
 export function Component() {
   const intl = useIntl();
-  
+
   const { slug, nameOrId } = useParams<{ slug: string; nameOrId: string }>();
   const { collection } = useOutletContext<CollectionOutletContext>();
 

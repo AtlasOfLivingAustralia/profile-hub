@@ -26,6 +26,7 @@ interface ImportMetaEnv {
   readonly VITE_ALA_COLLECTORY: string;
   readonly VITE_ALA_MESSAGES: string;
   readonly VITE_ALA_GLOBAL_ADMIN: string;
+  readonly VITE_LISTS_BASE: string;
 
   readonly VITE_LOCALE: string;
   readonly VITE_APP_FRESHWIDGET_ID?: string;

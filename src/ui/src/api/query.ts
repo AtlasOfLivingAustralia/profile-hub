@@ -1,4 +1,5 @@
 import { userManager } from "#/helpers/auth";
+import { readSpeciesListFilter } from "#/helpers/speciesListFilter";
 import { ensureAccessToken } from "#/helpers/utils/getAccessToken";
 // CSRF is not required for Bearer JWT API calls; left disabled.
 
@@ -10,6 +11,22 @@ export class ApiError extends Error {
     this.name = "ApiError";
     this.status = status;
   }
+}
+
+function withSpeciesListFilter(input: RequestInfo | URL): string {
+  const path =
+    typeof input === "string"
+      ? input
+      : input instanceof URL
+        ? `${input.pathname}${input.search}`
+        : input.url;
+  const filter = readSpeciesListFilter();
+  if (!filter) return path;
+
+  const url = new URL(path, "http://profile-hub.local");
+  url.searchParams.set("florulaListId", filter.listId);
+  url.searchParams.set("florulaOpusUuid", filter.opusUuid);
+  return `${url.pathname}${url.search}`;
 }
 
 async function redirectToSpaLogin(): Promise<void> {
@@ -45,16 +62,19 @@ export const request = async <T>(
 
   // credentials:include is not required for JWT; kept for any cookie-based
   // ancillary behavior. Hub no longer forces interactive OIDC from cookies.
-  const resp = await fetch(import.meta.env.VITE_API_BASE + input, {
-    method,
-    body:
-      body && !isFormData && typeof body === "object"
-        ? JSON.stringify(body)
-        : body,
-    headers: headerMap as HeadersInit,
-    credentials: "include",
-    signal: AbortSignal.timeout(1000 * 60 * 10),
-  });
+  const resp = await fetch(
+    import.meta.env.VITE_API_BASE + withSpeciesListFilter(input),
+    {
+      method,
+      body:
+        body && !isFormData && typeof body === "object"
+          ? JSON.stringify(body)
+          : body,
+      headers: headerMap as HeadersInit,
+      credentials: "include",
+      signal: AbortSignal.timeout(1000 * 60 * 10),
+    },
+  );
 
   const text = await resp.text();
   if (resp.ok) {

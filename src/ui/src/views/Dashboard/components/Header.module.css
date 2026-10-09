@@ -20,6 +20,16 @@
   color: var(--bs-primary) !important;
 }
 
+.filterIndicator {
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-inline-start: 0.35rem;
+  border-radius: 50%;
+  background: var(--bs-primary);
+  vertical-align: 0.05rem;
+}
+
 .slugBadge {
   align-self: flex-start;
   margin: 0.45rem 0 0.1rem 0.75rem;

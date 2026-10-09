@@ -52,7 +52,15 @@ export const QUERY_KEYS = {
   ) => ["taxon", opusId, "name", taxon, scientificName, page, filter] as const,
   dataResources: ["dataResources"] as const,
   tags: ["tags"] as const,
+  profileLists: ["speciesList", "profile"] as const,
 };
+
+/** Drop cached search, browse, and profile reads after the selected list changes. */
+export function invalidateFilteredReads() {
+  void queryClient.invalidateQueries({ queryKey: ["search"] });
+  void queryClient.invalidateQueries({ queryKey: ["taxon"] });
+  void queryClient.invalidateQueries({ queryKey: ["profile"] });
+}
 
 function retryQuery(failureCount: number, error: unknown): boolean {
   // No retry on 4xx. Retry a network failure or 5xx once (failureCount is 0

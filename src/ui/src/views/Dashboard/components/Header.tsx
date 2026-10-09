@@ -18,10 +18,13 @@ import { Container, Form, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useAuth } from "react-oidc-context";
 import { NavLink, useNavigate, useParams } from "react-router";
+
+// Helpers
 import handleSignout from "#/helpers/auth/handleSignout";
 import { useLocale } from "#/helpers/context/useLocale";
 import { APP_LOCALES, type AppLocale, LOCALE_LABELS } from "#/helpers/locale";
 import { SearchTypes, searchPath } from "#/helpers/searchOptions";
+import { useSpeciesListFilter } from "#/helpers/speciesListFilter";
 import type { ThemePreference } from "#/helpers/theme";
 import { useColorMode } from "#/helpers/useColorMode";
 
@@ -198,6 +201,7 @@ export function Header() {
   const auth = useAuth();
   const intl = useIntl();
   const { slug } = useParams<{ slug?: string }>();
+  const hasFilter = Boolean(useSpeciesListFilter());
   const { theme, setTheme } = useColorMode();
   const { locale, setLocale } = useLocale();
 
@@ -256,6 +260,18 @@ export function Header() {
                   end={"end" in item ? item.end : false}
                 >
                   <FormattedMessage id={item.messageId} />
+                  {item.path === "/filter" && hasFilter && (
+                    <span
+                      className={styles.filterIndicator}
+                      title={intl.formatMessage({
+                        id: "nav.collection.filterApplied",
+                      })}
+                    >
+                      <span className="visually-hidden">
+                        <FormattedMessage id="nav.collection.filterApplied" />
+                      </span>
+                    </span>
+                  )}
                 </Nav.Link>
               ))}
             </Nav>
