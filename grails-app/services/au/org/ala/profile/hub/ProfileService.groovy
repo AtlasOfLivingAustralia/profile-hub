@@ -744,6 +744,11 @@ class ProfileService {
         return webServiceWrapperService.get(url, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
     }
 
+    def checkFlorulaList(String listId) {
+        def url = "${grailsApplication.config.getProperty('profile.service.url')}/speciesList/${encPath(listId)}/check"
+        return webService.get(url, [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())
+    }
+
     def updateFlorulaList(String opusId, String florulaListId) {
         def url = "${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/florulaList"
         return webService.post(url, [florulaListId: florulaListId], [:], ContentType.APPLICATION_JSON, true, false, getCustomHeaderWithUserId())

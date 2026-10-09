@@ -1,6 +1,6 @@
 import { ensureAccessToken } from "#/helpers/utils/getAccessToken";
 
-import { ApiError } from "./query";
+import { ApiError, request } from "./query";
 import type { SpeciesListSummary } from "./types";
 
 const PAGE_SIZE = 1000;
@@ -52,6 +52,15 @@ async function fetchProfileListsPage(
   return { lists, listCount: body.listCount ?? lists.length };
 }
 
+/** 204 when the list can be used as a filter. */
+export async function checkFlorulaList(listId: string): Promise<void> {
+  await request(
+    `/speciesList/${encodeURIComponent(listId)}/check`,
+    "GET",
+    null,
+  );
+}
+
 /** Public PROFILE lists, plus private lists the signed-in user is allowed to see. */
 export async function profileLists(): Promise<SpeciesListSummary[]> {
   let token = await ensureAccessToken();
@@ -80,4 +89,4 @@ export async function profileLists(): Promise<SpeciesListSummary[]> {
   return collected;
 }
 
-export default { profileLists };
+export default { checkFlorulaList, profileLists };

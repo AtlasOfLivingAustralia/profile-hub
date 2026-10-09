@@ -551,6 +551,22 @@ class OpusController extends OpusBaseController {
         }
     }
 
+    def checkFlorulaList() {
+        if (!params.listId) {
+            badRequest "listId is mandatory"
+            return
+        }
+        def resp = profileService.checkFlorulaList(params.listId as String)
+        int code = (resp?.statusCode ?: SC_BAD_GATEWAY) as int
+        if (code in 200..299) {
+            render status: SC_NO_CONTENT
+        } else if (code == SC_NOT_FOUND) {
+            notFound "Species list ${params.listId} is not available"
+        } else {
+            response.sendError(SC_BAD_GATEWAY, "lists service unavailable")
+        }
+    }
+
     def updateFlorulaList() {
         def opusId = params.opusId
         def json = request.JSON

@@ -67,13 +67,14 @@ export function Component() {
     return source.slice(0, 10);
   }, [editing, lists, query]);
 
-  function persist(listId: string) {
+  async function persist(listId: string) {
     if (!slug) return;
     setSaving(true);
     setSaveError(null);
     setSaved(false);
     try {
       if (listId) {
+        await api.lists.checkFlorulaList(listId);
         writeSpeciesListFilter({
           listId,
           opusUuid: collection.uuid,
@@ -94,7 +95,7 @@ export function Component() {
   function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!draftId) return;
-    persist(draftId);
+    void persist(draftId);
   }
 
   function selectList(list: SpeciesListSummary) {
@@ -134,7 +135,7 @@ export function Component() {
               variant="outline-secondary"
               disabled={saving}
               onClick={() => {
-                persist("");
+                void persist("");
               }}
             >
               <FormattedMessage id="view.filter.clear" />
@@ -218,7 +219,7 @@ export function Component() {
                 setDraftId("");
                 setQuery("");
                 setEditing(false);
-                persist("");
+                void persist("");
               }}
             >
               <FormattedMessage id="view.filter.clear" />
