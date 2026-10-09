@@ -1,8 +1,8 @@
 <div class="">
-<label class="control-label">Show updates from:</label>
+<label class="col-form-label">Show updates from:</label>
 
 <div class="btn-group" role="group" aria-label="List the most recent changes with the following options.">
-    <button type="button" class="btn btn-default btn-sm" ng-repeat="period in reportCtrl.periods"
+    <button type="button" class="btn btn-outline-secondary btn-sm" ng-repeat="period in reportCtrl.periods"
             ng-click="reportCtrl.setPeriod(period)"
             ng-class="{active: reportCtrl.selectedPeriod.id == period.id}">{{ period.name }}</button>
 </div>
@@ -11,24 +11,24 @@
 <div class="margin-top-1" ng-show="reportCtrl.selectedPeriod.id == 'custom'">
     <div class="row">
         <div class="col-md-12">
-            <div class="form-inline">
+            <div class="d-flex align-items-center gap-2">
                 <div class="form-group">
-                    <label class="control-label" for="inputFromDate">Find profiles updated between</label>
+                    <label class="col-form-label" for="inputFromDate">Find profiles updated between</label>
 
                     <fallback-date-picker field-id="inputFromDate" ng-required="true" ng-model="reportCtrl.dates.from" format="dd-MMMM-yyyy" fallback-options="reportCtrl.datePickerOptions" size="small" ></fallback-date-picker>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="inputToDate">and</label>
+                    <label class="col-form-label" for="inputToDate">and</label>
 
                     <fallback-date-picker field-id="inputToDate" ng-required="true" ng-model="reportCtrl.dates.to" format="dd-MMMM-yyyy" fallback-options="reportCtrl.datePickerOptions" size="small" ></fallback-date-picker>
                 </div>
 
                 <div class="form-group">
-                    <button type="button" class="btn btn-default btn-sm"
+                    <button type="button" class="btn btn-outline-secondary btn-sm"
                             ng-disabled="!reportCtrl.checkFormValid()"
                             ng-click="reportCtrl.loadCustomDateReport()">
-                        <i class="glyphicon glyphicon-search"></i> Run report
+                        <i class="fa fa-search"></i> Run report
                     </button>
                 </div>
             </div>

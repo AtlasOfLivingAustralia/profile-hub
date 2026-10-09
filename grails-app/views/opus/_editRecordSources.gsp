@@ -1,12 +1,12 @@
-<div class="panel panel-default dirty-check-container" ng-form="RecordForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card dirty-check-container" ng-form="RecordForm" ng-cloak>
+    <div class="card-header">
         <a name="recordSources">
             <h4 class="section-panel-heading">Approved Specimen/Observation sources</h4>
             <p:help help-id="opus.edit.records"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <h5 class="section-panel-heading padding-bottom-1">Record visibility</h5>
         <div class="row">
             <div class="col-sm-12">
@@ -89,11 +89,11 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="opusCtrl.resetRecordSources()">Reset</button>
+                    <button class="btn btn-outline-secondary" ng-click="opusCtrl.resetRecordSources()">Reset</button>
                 </div>
                 <save-button ng-click="opusCtrl.saveOpus(RecordForm)" disabled="!opusCtrl.isRecordSourceSelectionValid()" form="RecordForm"></save-button>
             </div>

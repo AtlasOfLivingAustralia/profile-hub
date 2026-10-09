@@ -1,0 +1,21 @@
+.classification {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.classification li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+}
+
+.rank {
+  min-width: 5.5rem;
+  color: var(--bs-secondary-color);
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}

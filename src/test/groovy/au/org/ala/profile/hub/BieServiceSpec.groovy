@@ -15,7 +15,7 @@ class BieServiceSpec extends Specification implements ServiceUnitTest<BieService
         service = new BieService()
         service.grailsApplication = grailsApplication
 
-        service.webService = webService
+        service.downstreamGetCacheService = new DownstreamGetCacheService(webService: webService)
 
     }
 

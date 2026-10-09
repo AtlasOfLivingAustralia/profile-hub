@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="FeatureForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="FeatureForm" ng-cloak>
+    <div class="card-header">
         <a name="featureLists">
             <h4 class="section-panel-heading">Feature Lists</h4>
             <p:help help-id="opus.edit.featureLists"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <p>Configure the list(s) to be used to retrieve additional features for your profiles from the Atlas of Living Australia's List Tool. These lists can include such information as naturalised status, pest status, characters, traits, and so on.</p>
@@ -38,7 +38,7 @@
                     </li>
 
                     <li ng-repeat="feature in opusCtrl.newFeatureLists">
-                        <div class="form-inline">
+                        <div class="d-flex align-items-center gap-2">
                             <div class="form-group">
                                 <input placeholder="List name..."
                                        ng-model="feature.list"
@@ -59,11 +59,11 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="opusCtrl.addFeatureList()"><i
+                    <button class="btn btn-outline-secondary" ng-click="opusCtrl.addFeatureList()"><i
                             class="fa fa-plus"></i>  Add list</button>
                 </div>
                 <save-button ng-click="opusCtrl.saveFeatureLists(FeatureForm)" form="FeatureForm"></save-button>

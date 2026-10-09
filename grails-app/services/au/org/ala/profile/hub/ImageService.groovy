@@ -5,6 +5,8 @@ import au.org.ala.images.thumb.ThumbDefinition
 import au.org.ala.images.tiling.ImageTiler
 import au.org.ala.images.tiling.ImageTilerConfig
 import au.org.ala.ws.service.WebService
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import groovy.json.JsonSlurper
 import org.apache.commons.io.FileUtils
 import org.apache.commons.logging.Log
@@ -39,6 +41,9 @@ import static org.apache.http.HttpStatus.SC_OK
 
 class ImageService {
     ProfileService profileService
+    @Autowired
+    @Lazy
+    PublicImagePageService publicImagePageService
     BiocacheService biocacheService
     WebService webService
     def grailsApplication
@@ -278,7 +283,13 @@ class ImageService {
         deleteDirectoryAndContents(dir)
     }
 
-    def retrieveImagesPaged(String opusId, String profileId, boolean latest, String searchIdentifier, boolean useInternalPaths = false, boolean readonlyView = true, int pageSize, int startIndex) {
+    def retrieveImagesPaged(String opusId, String profileId, boolean latest, String searchIdentifier, boolean useInternalPaths = false, boolean readonlyView = true, int pageSize, int startIndex, boolean bypassCache = false) {
+        if (!bypassCache && publicImagePageEligible(latest, readonlyView, opusId)) {
+            return DownstreamGetCacheService.unwrap {
+                publicImagePageService.page(opusId, profileId, searchIdentifier ?: "", pageSize, startIndex)
+            }
+        }
+
         Map response = [:]
         List combinedImages = []
         Integer numberOfLocalImages = 0
@@ -388,6 +399,14 @@ class ImageService {
             response.resp.primaryImage = getPrimaryImageMetaData(opus, profile, combinedImages)
         }
         response
+    }
+
+    /**
+     * Public readonly pages are the same for every visitor. Draft, private, and florula
+     * views stay live because they depend on the caller.
+     */
+    private boolean publicImagePageEligible(boolean latest, boolean readonlyView, String opusId) {
+        publicImagePageService && !latest && readonlyView && profileService?.canServePublishedProfile(opusId)
     }
 
     List pageImages(List privateImages, Integer offset, Integer pageSize) {

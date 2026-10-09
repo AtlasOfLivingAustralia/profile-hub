@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="col-md-3 text-right" ng-cloak>
+    <div class="col-md-3 text-end" ng-cloak>
         <g:render template="optionsMenu"/>
     </div>
 
