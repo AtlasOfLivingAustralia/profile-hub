@@ -1,7 +1,7 @@
 import { ensureAccessToken } from "#/helpers/utils/getAccessToken";
 
-import { ApiError, request } from "./query";
-import type { SpeciesListSummary } from "./types";
+import { ApiError } from "./query";
+import type { SpeciesListDetail, SpeciesListSummary } from "./types";
 
 const PAGE_SIZE = 1000;
 
@@ -52,15 +52,6 @@ async function fetchProfileListsPage(
   return { lists, listCount: body.listCount ?? lists.length };
 }
 
-/** 204 when the list can be used as a filter. */
-export async function checkFlorulaList(listId: string): Promise<void> {
-  await request(
-    `/speciesList/${encodeURIComponent(listId)}/check`,
-    "GET",
-    null,
-  );
-}
-
 /** Public PROFILE lists, plus private lists the signed-in user is allowed to see. */
 export async function profileLists(): Promise<SpeciesListSummary[]> {
   let token = await ensureAccessToken();
@@ -89,4 +80,61 @@ export async function profileLists(): Promise<SpeciesListSummary[]> {
   return collected;
 }
 
-export default { checkFlorulaList, profileLists };
+type SpeciesListRecord = {
+  dataResourceUid?: string;
+  title?: string;
+  owner?: string;
+  ownerName?: string;
+  lastUpdated?: string;
+  lastUploaded?: string;
+};
+
+async function fetchSpeciesList(
+  speciesListId: string,
+  token: string | undefined,
+): Promise<SpeciesListDetail> {
+  const headers: Record<string, string> = { Accept: "application/json" };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const resp = await fetch(
+    `${listsBase()}/v2/speciesList/${encodeURIComponent(speciesListId)}`,
+    { headers },
+  );
+  const text = await resp.text();
+  if (!resp.ok) {
+    throw new ApiError(
+      text || resp.statusText || `Request failed with status ${resp.status}`,
+      resp.status,
+    );
+  }
+  const list = JSON.parse(text) as SpeciesListRecord;
+  return {
+    dataResourceUid: list.dataResourceUid || speciesListId,
+    title: list.title ?? "",
+    author: list.ownerName || list.owner || "",
+    lastUpdated: list.lastUpdated || list.lastUploaded || "",
+  };
+}
+
+/** List metadata used by the filter card. */
+export async function speciesList(
+  speciesListId: string,
+): Promise<SpeciesListDetail> {
+  const token = await ensureAccessToken();
+  try {
+    return await fetchSpeciesList(speciesListId, token);
+  } catch (error) {
+    if (token && error instanceof ApiError && error.status === 401) {
+      return fetchSpeciesList(speciesListId, undefined);
+    }
+    throw error;
+  }
+}
+
+/** Public page for a species list on the lists site. */
+export function speciesListPageUrl(listId: string): string {
+  const apiBase = import.meta.env.VITE_LISTS_BASE.replace(/\/$/, "");
+  const uiBase = apiBase.replace("://lists-ws.", "://lists.");
+  return `${uiBase}/list/${encodeURIComponent(listId)}`;
+}
+
+export default { profileLists, speciesList };

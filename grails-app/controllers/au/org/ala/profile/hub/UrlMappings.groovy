@@ -10,7 +10,6 @@ class UrlMappings {
 
         "/tags" controller: "opus", action: "getTags"
 
-        "/speciesList/$listId/check" controller: "opus", action: [GET: "checkFlorulaList"]
         "/speciesList/" controller: "speciesList", action: [GET: "getAllLists"]
 
         "/user/search" controller: "user", action: [GET: "findUser"]

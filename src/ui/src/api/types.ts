@@ -503,3 +503,11 @@ export interface SpeciesListSummary {
   dataResourceUid: string;
   title: string;
 }
+
+/** Metadata from GET /v2/speciesList/{speciesListID}. */
+export interface SpeciesListDetail {
+  dataResourceUid: string;
+  title: string;
+  author: string;
+  lastUpdated: string;
+}

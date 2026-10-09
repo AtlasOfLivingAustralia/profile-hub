@@ -9,7 +9,6 @@ import {
   Col,
   Container,
   Form,
-  ListGroup,
   Row,
 } from "react-bootstrap";
 
@@ -17,7 +16,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { Link, Navigate, useNavigate } from "react-router";
 
 import api, { type Tag } from "#/api";
-import { PageLoader } from "#/components";
+import { PageLoader, SearchableDropdown } from "#/components";
 import { getErrorMessage } from "#/helpers";
 import { useALA } from "#/helpers/context/useALA";
 import { EXPIRY, QUERY_KEYS } from "#/helpers/queryClient";
@@ -38,7 +37,6 @@ export function Component() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [dataResourceQuery, setDataResourceQuery] = useState("");
   const [selectedResource, setSelectedResource] =
     useState<DataResourceOption | null>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -83,19 +81,6 @@ export function Component() {
   const availableTags = tagsData ?? [];
   const metaError = resourcesError ?? tagsError;
   const loadingMeta = !metaError && (resourcesPending || tagsPending);
-
-  const filteredResources = useMemo(() => {
-    if (!resources) return [];
-    const query = dataResourceQuery.trim().toLowerCase();
-    if (!query) return resources.slice(0, 10);
-    return resources
-      .filter(
-        (resource) =>
-          resource.name.toLowerCase().includes(query) ||
-          resource.id.toLowerCase().includes(query),
-      )
-      .slice(0, 10);
-  }, [resources, dataResourceQuery]);
 
   const unusedTags = useMemo(
     () =>
@@ -178,50 +163,33 @@ export function Component() {
                     <Form.Label>
                       <FormattedMessage id="view.collectionCreate.field.dataResource" />
                     </Form.Label>
-                    <Form.Control
-                      value={
-                        selectedResource
-                          ? selectedResource.name
-                          : dataResourceQuery
-                      }
-                      onChange={(event) => {
-                        setSelectedResource(null);
-                        setDataResourceQuery(event.target.value);
-                      }}
+                    <SearchableDropdown
+                      id="collection-data-resource"
+                      options={resources ?? []}
+                      value={selectedResource}
+                      onChange={setSelectedResource}
+                      getOptionKey={(resource) => resource.id}
+                      getOptionLabel={(resource) => resource.name}
+                      getOptionDescription={(resource) => resource.id}
+                      renderOption={(resource) => (
+                        <>
+                          {resource.name}{" "}
+                          <span className="text-body-secondary">
+                            ({resource.id})
+                          </span>
+                        </>
+                      )}
                       placeholder={intl.formatMessage({
                         id: "view.collectionCreate.field.dataResourcePlaceholder",
                       })}
-                      autoComplete="off"
-                      required={!selectedResource}
+                      emptyMessage={
+                        <FormattedMessage id="view.collectionCreate.noDataResources" />
+                      }
+                      disabled={submitting}
                     />
                     <Form.Text>
                       <FormattedMessage id="view.collectionCreate.field.dataResourceHelp" />
                     </Form.Text>
-                    {!selectedResource && dataResourceQuery.trim() && (
-                      <ListGroup className="mt-2">
-                        {filteredResources.length === 0 ? (
-                          <ListGroup.Item disabled>
-                            <FormattedMessage id="view.collectionCreate.noDataResources" />
-                          </ListGroup.Item>
-                        ) : (
-                          filteredResources.map((resource) => (
-                            <ListGroup.Item
-                              key={resource.id}
-                              action
-                              onClick={() => {
-                                setSelectedResource(resource);
-                                setDataResourceQuery(resource.name);
-                              }}
-                            >
-                              {resource.name}{" "}
-                              <span className="text-body-secondary">
-                                ({resource.id})
-                              </span>
-                            </ListGroup.Item>
-                          ))
-                        )}
-                      </ListGroup>
-                    )}
                     {!selectedResource && (
                       <Alert variant="danger" className="mt-2 mb-0 py-2">
                         <FormattedMessage id="view.collectionCreate.dataResourceRequired" />

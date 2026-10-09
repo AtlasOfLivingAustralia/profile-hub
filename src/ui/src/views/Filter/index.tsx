@@ -1,11 +1,19 @@
+import {
+  faArrowUpRightFromSquare,
+  faCheck,
+  faList,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useQuery } from "@tanstack/react-query";
-import { type SubmitEvent, useMemo, useState } from "react";
-import { Alert, Button, Form, ListGroup } from "react-bootstrap";
+import { useState } from "react";
+import { Alert, Button, Col, Form, Placeholder, Row } from "react-bootstrap";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useOutletContext, useParams } from "react-router";
 
 import api, { type SpeciesListSummary } from "#/api";
-import { PageLoader } from "#/components";
+import { speciesListPageUrl } from "#/api/lists";
+import { PageLoader, SearchableDropdown } from "#/components";
 import { useALA } from "#/helpers/context/useALA";
 import { invalidateFilteredReads, QUERY_KEYS } from "#/helpers/queryClient";
 import {
@@ -15,6 +23,7 @@ import {
 } from "#/helpers/speciesListFilter";
 
 import type { CollectionOutletContext } from "../Collection";
+import styles from "./index.module.css";
 
 const LIST_STALE_TIME = 5 * 60 * 1000;
 
@@ -27,18 +36,11 @@ export function Component() {
   const savedId = savedFilter?.listId ?? "";
 
   const [draftId, setDraftId] = useState(savedId);
-  const [query, setQuery] = useState("");
-  const [editing, setEditing] = useState(false);
   const [syncedSavedId, setSyncedSavedId] = useState(savedId);
-  const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [saveError, setSaveError] = useState<unknown>(null);
 
   if (savedId !== syncedSavedId) {
     setSyncedSavedId(savedId);
     setDraftId(savedId);
-    setQuery("");
-    setEditing(false);
   }
 
   const {
@@ -51,59 +53,44 @@ export function Component() {
     staleTime: LIST_STALE_TIME,
   });
 
-  const draft = lists.find((list) => list.dataResourceUid === draftId);
-  const draftLabel = draft?.title ?? draftId;
-  const inputValue = editing ? query : draftLabel;
+  const selected =
+    lists.find((list) => list.dataResourceUid === draftId) ??
+    (draftId ? { dataResourceUid: draftId, title: draftId } : null);
 
-  const matches = useMemo(() => {
-    const needle = (editing ? query : "").trim().toLowerCase();
-    const source = needle
-      ? lists.filter(
-          (list) =>
-            list.title.toLowerCase().includes(needle) ||
-            list.dataResourceUid.toLowerCase().includes(needle),
-        )
-      : lists;
-    return source.slice(0, 10);
-  }, [editing, lists, query]);
+  const { data: detail, isPending: detailPending } = useQuery({
+    queryKey: QUERY_KEYS.speciesList(draftId),
+    queryFn: () => api.lists.speciesList(draftId),
+    enabled: Boolean(draftId),
+    staleTime: LIST_STALE_TIME,
+  });
 
-  async function persist(listId: string) {
+  function persist(listId: string) {
     if (!slug) return;
-    setSaving(true);
-    setSaveError(null);
-    setSaved(false);
-    try {
-      if (listId) {
-        await api.lists.checkFlorulaList(listId);
-        writeSpeciesListFilter({
-          listId,
-          opusUuid: collection.uuid,
-          userId: isAuthenticated ? userid : "",
-        });
-      } else {
-        clearSpeciesListFilter();
-      }
-      invalidateFilteredReads();
-      setSaved(true);
-    } catch (error) {
-      setSaveError(error);
-    } finally {
-      setSaving(false);
+    if (listId) {
+      writeSpeciesListFilter({
+        listId,
+        opusUuid: collection.uuid,
+        userId: isAuthenticated ? userid : "",
+      });
+    } else {
+      clearSpeciesListFilter();
     }
+    invalidateFilteredReads();
   }
 
-  function onSubmit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!draftId) return;
-    void persist(draftId);
+  function chooseList(list: SpeciesListSummary | null) {
+    if (!list || list.dataResourceUid === draftId) return;
+    const listId = list.dataResourceUid;
+    setDraftId(listId);
+    if (listId !== savedId) persist(listId);
   }
 
-  function selectList(list: SpeciesListSummary) {
-    setDraftId(list.dataResourceUid);
-    setQuery("");
-    setEditing(false);
-    setSaved(false);
-  }
+  const updated = detail?.lastUpdated ? new Date(detail.lastUpdated) : null;
+  const updatedLabel =
+    updated && !Number.isNaN(updated.getTime())
+      ? intl.formatDate(updated, { dateStyle: "medium" })
+      : detail?.lastUpdated;
+  const cardTitle = detail?.title || selected?.title;
 
   return (
     <div className="vstack gap-4">
@@ -127,105 +114,148 @@ export function Component() {
 
       {listsPending ? (
         <PageLoader />
-      ) : listsError ? (
-        savedId && (
-          <div>
-            <Button
-              type="button"
-              variant="outline-secondary"
-              disabled={saving}
-              onClick={() => {
-                void persist("");
-              }}
-            >
-              <FormattedMessage id="view.filter.clear" />
-            </Button>
-          </div>
-        )
       ) : (
-        <Form onSubmit={onSubmit}>
-          <Form.Group controlId="florulaListId">
-            <Form.Label>
-              <FormattedMessage id="view.filter.field.label" />
-            </Form.Label>
-            <Form.Control
-              value={inputValue}
-              autoComplete="off"
-              placeholder={intl.formatMessage({
-                id: "view.filter.field.placeholder",
-              })}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                setEditing(true);
-                setDraftId("");
-                setSaved(false);
-              }}
-              onFocus={() => {
-                if (!editing) {
-                  setQuery(draftLabel);
-                  setEditing(true);
-                }
-              }}
-            />
-            <Form.Text>
-              <FormattedMessage id="view.filter.field.help" />
-            </Form.Text>
-            {editing && (
-              <ListGroup className="mt-2">
-                {matches.length === 0 ? (
-                  <ListGroup.Item disabled>
-                    <FormattedMessage id="view.filter.noMatches" />
-                  </ListGroup.Item>
-                ) : (
-                  matches.map((list) => (
-                    <ListGroup.Item
-                      key={list.dataResourceUid}
-                      action
-                      active={list.dataResourceUid === draftId}
-                      onClick={() => selectList(list)}
-                    >
-                      {list.title}
-                    </ListGroup.Item>
-                  ))
-                )}
-              </ListGroup>
+        <Row className="g-4">
+          <Col xs={12} lg={6}>
+            {listsError ? (
+              savedId && (
+                <Button
+                  type="button"
+                  variant="outline-secondary"
+                  className={styles.clear}
+                  onClick={() => {
+                    persist("");
+                  }}
+                >
+                  <FontAwesomeIcon icon={faXmark} />
+                  <FormattedMessage id="view.filter.clear" />
+                </Button>
+              )
+            ) : (
+              <div>
+                <Form.Group controlId="florulaListId">
+                  <Form.Label>
+                    <FormattedMessage id="view.filter.field.label" />
+                  </Form.Label>
+                  <div className={styles.picker}>
+                    <SearchableDropdown
+                      id="florulaListId"
+                      options={lists}
+                      value={selected}
+                      onChange={chooseList}
+                      getOptionKey={(list: SpeciesListSummary) =>
+                        list.dataResourceUid
+                      }
+                      getOptionLabel={(list: SpeciesListSummary) =>
+                        list.title || list.dataResourceUid
+                      }
+                      getOptionDescription={(list: SpeciesListSummary) =>
+                        list.dataResourceUid
+                      }
+                      placeholder={intl.formatMessage({
+                        id: "view.filter.field.placeholder",
+                      })}
+                      emptyMessage={
+                        <FormattedMessage id="view.filter.noMatches" />
+                      }
+                    />
+                    {selected && (
+                      <Button
+                        type="button"
+                        variant="outline-secondary"
+                        className={styles.clear}
+                        onClick={() => {
+                          setDraftId("");
+                          persist("");
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faXmark} />
+                        <FormattedMessage id="view.filter.clear" />
+                      </Button>
+                    )}
+                  </div>
+                  <Form.Text className="d-block mt-2">
+                    <FormattedMessage id="view.filter.field.help" />
+                  </Form.Text>
+                </Form.Group>
+              </div>
             )}
-          </Form.Group>
-
-          {saveError != null && (
-            <Alert variant="danger" className="mt-3 mb-0">
-              <FormattedMessage id="view.filter.error.saveFailed" />
-            </Alert>
-          )}
-          {saved && (
-            <Alert variant="success" className="mt-3 mb-0">
-              <FormattedMessage id="view.filter.saved" />
-            </Alert>
-          )}
-
-          <div className="d-flex gap-2 mt-3">
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={saving || !draftId}
-            >
-              <FormattedMessage id="view.filter.submit" />
-            </Button>
-            <Button
-              type="button"
-              variant="outline-secondary"
-              disabled={saving || !savedId}
-              onClick={() => {
-                setDraftId("");
-                setQuery("");
-                setEditing(false);
-                void persist("");
-              }}
-            >
-              <FormattedMessage id="view.filter.clear" />
-            </Button>
-          </div>
-        </Form>
+          </Col>
+          <Col xs={12} lg={6} className="d-flex">
+            {selected ? (
+              <article className={styles.card}>
+                <p className={styles.status}>
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className={styles.tick}
+                    aria-hidden="true"
+                  />
+                  <FormattedMessage id="view.filter.status.selected" />
+                </p>
+                <h3 className={styles.title}>{cardTitle}</h3>
+                <dl className={styles.meta}>
+                  <div>
+                    <dt>
+                      <FormattedMessage id="view.filter.detail.author" />
+                    </dt>
+                    <dd>
+                      {detailPending && !detail ? (
+                        <Placeholder
+                          animation="glow"
+                          className={styles.skeleton}
+                        >
+                          <Placeholder xs={6} />
+                        </Placeholder>
+                      ) : (
+                        detail?.author || "—"
+                      )}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>
+                      <FormattedMessage id="view.filter.detail.updated" />
+                    </dt>
+                    <dd>
+                      {detailPending && !detail ? (
+                        <Placeholder
+                          animation="glow"
+                          className={styles.skeleton}
+                        >
+                          <Placeholder xs={4} />
+                        </Placeholder>
+                      ) : (
+                        updatedLabel || "—"
+                      )}
+                    </dd>
+                  </div>
+                </dl>
+                <div className={styles.footer}>
+                  <a
+                    className={styles.link}
+                    href={speciesListPageUrl(selected.dataResourceUid)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FormattedMessage id="view.filter.detail.open" />{" "}
+                    <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                  </a>
+                </div>
+              </article>
+            ) : (
+              <section className={styles.stage}>
+                <div className={styles.emptyIcon} aria-hidden="true">
+                  <FontAwesomeIcon icon={faList} />
+                </div>
+                <h3 className="h5">
+                  <FormattedMessage id="view.filter.empty.title" />
+                </h3>
+                <p className="text-body-secondary mb-0">
+                  <FormattedMessage id="view.filter.empty.description" />
+                </p>
+              </section>
+            )}
+          </Col>
+        </Row>
       )}
     </div>
   );

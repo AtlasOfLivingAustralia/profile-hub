@@ -53,6 +53,8 @@ export const QUERY_KEYS = {
   dataResources: ["dataResources"] as const,
   tags: ["tags"] as const,
   profileLists: ["speciesList", "profile"] as const,
+  speciesList: (speciesListId: string) =>
+    ["speciesList", speciesListId] as const,
 };
 
 /** Drop cached search, browse, and profile reads after the selected list changes. */

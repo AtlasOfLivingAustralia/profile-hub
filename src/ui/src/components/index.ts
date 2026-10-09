@@ -4,3 +4,4 @@ export { default as PageMessage } from "./PageMessage";
 export { PaginationBar } from "./PaginationBar";
 export { RichText } from "./RichText";
 export { Search } from "./Search";
+export { SearchableDropdown } from "./SearchableDropdown";
