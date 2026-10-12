@@ -1,17 +1,17 @@
 <div  ng-show="profileCtrl.showNameEditControls" class="padding-top-1" ng-cloak>
     <div class="row">
-        <div class="pull-left padding-left-1">
+        <div class="float-start padding-left-1">
             <span class="status small" ng-class="profileCtrl.profile.matchedName ? 'green' : 'red'" title="The name has{{ profileCtrl.profile.matchedName ? '' : ' not' }} been matched against the ALA">ALA</span>
             <span class="status small" ng-class="profileCtrl.profile.nslNameIdentifier ? 'green' : 'red'"title="The name has{{ profileCtrl.profile.nslNameIdentifier ? '' : ' not' }} been matched against the NSL">NSL</span>
         </div>
-        <div class="pull-right">
+        <div class="float-end">
             <a href="" class="close-edit-name" ng-click="profileCtrl.editName()"
                     ng-show="!profileCtrl.readonly()"><span class="fa fa-close">&nbsp;</span>Close</a>
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
                     <p>
@@ -34,11 +34,11 @@
             </div>
         </div>
 
-        <div class="panel-footer">
+        <div class="card-footer">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="pull-right">
-                        <button class="btn btn-default" ng-show="profileCtrl.profile.matchedName" ng-click="profileCtrl.clearNameMatch()">Remove matched name</button>
+                    <div class="float-end">
+                        <button class="btn btn-outline-secondary" ng-show="profileCtrl.profile.matchedName" ng-click="profileCtrl.clearNameMatch()">Remove matched name</button>
                         <button class="btn btn-primary" ng-disabled="!profileCtrl.nameIsValid" ng-click="profileCtrl.saveNameChange()">Update name</button>
                     </div>
                 </div>

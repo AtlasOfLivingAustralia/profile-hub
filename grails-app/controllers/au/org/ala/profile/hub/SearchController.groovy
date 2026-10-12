@@ -34,7 +34,7 @@ class SearchController extends BaseController {
         } else {
             boolean countChildren = params.boolean('countChildren', false)
             boolean immediateChildrenOnly = params.boolean('immediateChildrenOnly', false)
-            def response = profileService.findByNameAndTaxonLevel(params.opusId, params.taxon, params.scientificName, params.max, params.offset, params.sortBy, countChildren, immediateChildrenOnly)
+            def response = profileService.findByNameAndTaxonLevel(params.opusId, params.taxon, params.scientificName, params.max, params.offset, params.sortBy, countChildren, immediateChildrenOnly, false, params.filter)
 
             handle response
         }

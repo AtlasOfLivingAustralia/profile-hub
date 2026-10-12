@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="ListForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="ListForm" ng-cloak>
+    <div class="card-header">
         <a name="lists">
             <h4 class="section-panel-heading">Approved Lists</h4>
             <p:help help-id="opus.edit.lists"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <p>Configure the species lists to be included in your profile pages.</p>
@@ -21,7 +21,7 @@
                     </li>
 
                     <li ng-repeat="approvedList in opusCtrl.newApprovedLists">
-                        <div class="form-inline">
+                        <div class="d-flex align-items-center gap-2">
                             <div class="form-group">
                                 <input placeholder="List name..."
                                        ng-model="approvedList.list"
@@ -42,11 +42,11 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default" ng-click="opusCtrl.addApprovedList()"><i
+                    <button class="btn btn-outline-secondary" ng-click="opusCtrl.addApprovedList()"><i
                             class="fa fa-plus"></i>  Add list</button>
                 </div>
                 <save-button ng-click="opusCtrl.saveApprovedLists(ListForm)" form="ListForm"></save-button>

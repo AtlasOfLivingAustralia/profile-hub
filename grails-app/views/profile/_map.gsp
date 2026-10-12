@@ -8,14 +8,14 @@
             <g:if test="${edit}">
                 <div class="col-md-12">
                     <div ng-show="!mapCtrl.editingMap">
-                        <div class="pull-left">
+                        <div class="float-start">
                             <div ng-show="mapCtrl.showStaticImage && mapCtrl.profile.mapSnapshot && ${allowStaticImage} && mapCtrl.opus.mapConfig.allowSnapshots">
                                 <g:render template="mapSnapshot" model="[size: 'small']"/>
                             </div>
                             <div ng-hide="mapCtrl.showStaticImage && mapCtrl.profile.mapSnapshot && ${allowStaticImage} && mapCtrl.opus.mapConfig.allowSnapshots" class="thumbnail">
                                 <m:map id="occurrenceMap" height="${height ?: '300px'}" width="${width ?: '450px'}"/>
                             </div>
-                            <a class="small pull-right" ng-show="mapCtrl.profile.mapSnapshot && ${allowStaticImage} && mapCtrl.opus.mapConfig.allowSnapshots" ng-click="mapCtrl.toggleStaticImage()">Show {{ mapCtrl.showStaticImage ? 'live map' : 'static map' }}</a>
+                            <a class="small float-end" ng-show="mapCtrl.profile.mapSnapshot && ${allowStaticImage} && mapCtrl.opus.mapConfig.allowSnapshots" ng-click="mapCtrl.toggleStaticImage()">Show {{ mapCtrl.showStaticImage ? 'live map' : 'static map' }}</a>
                             <div class="clearfix"></div>
                         </div>
                     </div>
@@ -26,20 +26,20 @@
 
                         <div class="row">
                             <div class="col-md-12 padding-top-1">
-                                <div class="pull-right">
-                                    <button class="btn btn-default" ng-show="mapCtrl.opus.mapConfig.allowSnapshots"
+                                <div class="float-end">
+                                    <button class="btn btn-outline-secondary" ng-show="mapCtrl.opus.mapConfig.allowSnapshots"
                                             ng-click="mapCtrl.createMapSnapshot()">{{ mapCtrl.profile.mapSnapshot ? 'Update': 'Create' }} snapshot image</button>
                                     <button class="btn btn-danger" ng-show="mapCtrl.profile.mapSnapshot && mapCtrl.opus.mapConfig.allowSnapshots"
                                             ng-click="mapCtrl.deleteMapSnapshot()">Delete snapshot image</button>
                                     <save-button ng-click="mapCtrl.saveMapConfiguration(MapForm)"
                                                  disabled="!mapCtrl.MapForm.$dirty"
                                                  dirty="mapCtrl.MapForm.$dirty"
-                                                 btn-class="btn btn-default"
+                                                 btn-class="btn btn-outline-secondary"
                                                  form="mapCtrl.MapForm">
                                     </save-button>
                                 </div>
 
-                                <button class="btn btn-default"
+                                <button class="btn btn-outline-secondary"
                                         ng-click="mapCtrl.toggleEditingMap()">Cancel edit</button>
                                 <button class="btn btn-danger"
                                         ng-click="mapCtrl.resetToDefaultMapConfig()">Reset to default</button>
@@ -52,7 +52,7 @@
             </g:if>
             <g:else>
                 <div class="col-md-12">
-                    <div class="pull-left ${fullWidth ? 'full-width' : ''}">
+                    <div class="float-start ${fullWidth ? 'full-width' : ''}">
                         <div ng-show="mapCtrl.showStaticImage && mapCtrl.profile.mapSnapshot && ${allowStaticImage} && mapCtrl.opus.mapConfig.allowSnapshots">
                             <g:render template="mapSnapshot" model="[size: 'small']"/>
                         </div>
@@ -61,7 +61,7 @@
                                 <m:map id="occurrenceMap" height="${height ?: '300px'}" width="${width ?: '450px'}"/>
                             </div>
                         </div>
-                        <a class="small pull-right" ng-show="mapCtrl.profile.mapSnapshot && ${allowStaticImage} && mapCtrl.opus.mapConfig.allowSnapshots" ng-click="mapCtrl.toggleStaticImage()">Show {{ mapCtrl.showStaticImage ? 'live map' : 'static map' }}</a>
+                        <a class="small float-end" ng-show="mapCtrl.profile.mapSnapshot && ${allowStaticImage} && mapCtrl.opus.mapConfig.allowSnapshots" ng-click="mapCtrl.toggleStaticImage()">Show {{ mapCtrl.showStaticImage ? 'live map' : 'static map' }}</a>
                         <div class="clearfix"></div>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                        class="margin-top-1 inline-block">Explore in the Atlas of Living Australia</a>
                 </div>
                 <g:if test="${edit}">
-                    <button class="btn btn-default btn-sm margin-top-1"
+                    <button class="btn btn-outline-secondary btn-sm margin-top-1"
                             ng-click="mapCtrl.toggleEditingMap()">Edit map configuration</button>
                 </g:if>
             </div>

@@ -6,12 +6,15 @@ class CollectoryService {
 
     def grailsApplication
     WebService webService
+    DownstreamGetCacheService downstreamGetCacheService
 
     Map<String, String> getDataResources() {
         Map dataResources = [:]
 
         try {
-            Map resources = webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataResource")
+            Map resources = DownstreamGetCacheService.unwrap {
+                downstreamGetCacheService.collectoryResources("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataResource")
+            } as Map
             resources?.resp?.each {
                 dataResources.put(it.uid, it.name)
             }
@@ -26,7 +29,9 @@ class CollectoryService {
         Map dataHubs = [:]
 
         try {
-            Map hubs = webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataHub")
+            Map hubs = DownstreamGetCacheService.unwrap {
+                downstreamGetCacheService.collectoryHubs("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataHub")
+            } as Map
             hubs?.resp?.each {
                 dataHubs.put(it.uid, it.name)
             }
@@ -46,6 +51,8 @@ class CollectoryService {
     }
 
     def getLicences() {
-        webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/licence")
+        DownstreamGetCacheService.unwrap {
+            downstreamGetCacheService.collectoryLicences("${grailsApplication.config.getProperty('collectory.base.url')}/ws/licence")
+        }
     }
 }

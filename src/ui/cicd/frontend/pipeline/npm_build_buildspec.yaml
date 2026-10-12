@@ -1,0 +1,33 @@
+version: 0.2
+###
+# This build project builds the Profiles UI files ready for upload to s3
+
+env:
+  shell: bash
+
+phases:
+  install:
+    on-failure: ABORT
+    runtime-versions:
+      nodejs: $NODE_VERSION
+    commands:
+      - echo Running on $(lsb_release -d | cut -f2)
+      - echo aws-cli version $(aws --version)
+      - echo loading all exported vars..
+      - set -a ; source "$CODEBUILD_SRC_DIR_ExportConfigArtifact/env.txt" ; set +a
+      - echo updating corepack...
+      - npm install --global corepack@latest
+      - echo installing pnpm...
+      - corepack enable pnpm
+      - pnpm --version
+      - echo installing dependencies with pnpm...
+      - cd $CODEBUILD_SRC_DIR/src/ui && pnpm install
+  build:
+    commands:
+      - echo building...
+      - cd $CODEBUILD_SRC_DIR/src/ui && pnpm build:$ENVIRONMENT
+
+artifacts:
+  base-directory: src/ui/dist
+  files:
+    - "**/*"

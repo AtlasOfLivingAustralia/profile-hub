@@ -1,6 +1,6 @@
 <!-- Template for the editable view of a single attribute -->
-<div class="panel panel-default" id="browse_attributes_edit">
-    <div class="panel-body">
+<div class="card mb-3" id="browse_attributes_edit">
+    <div class="card-body">
         <label for="attributeTitle" class="screen-reader-label">Title</label>
         <select id="attributeTitle" ng-show="attrCtrl.vocabularyStrict" ng-change="attrCtrl.attributeChanged(attribute)"
                 ng-model="attribute.title" class="form-control attribute-header-input margin-bottom-1">
@@ -24,18 +24,18 @@
         <div ng-show="attribute.matchedAsName" class="small padding-bottom-1"><i class="fa fa-info-circle">&nbsp;</i>This attribute will be displayed below the profile name. Any formatting, images, links, etc will be ignored.</div>
         <textarea id="attributeContent" ng-if="!attribute.titleTerm.dataType || attribute.titleTerm.dataType == 'text'" ng-model="attribute.text" name="attribute" ckeditor="richTextFullToolbar"></textarea>
         <div ng-if="attribute.titleTerm.dataType == 'number'">
-            <div class="form-inline margin-bottom-1" ng-repeat="number in attribute.numbers track by $index">
+            <div class="d-flex align-items-center gap-2 margin-bottom-1" ng-repeat="number in attribute.numbers track by $index">
                 <div class="form-group">
                     <input class="form-control" type="number" ng-model="attribute.numbers[$index]">
                     <button class="btn btn-danger" ng-click="attrCtrl.removeNumber(attribute, AttributeForm, $index)">Remove</button>
                 </div>
             </div>
-            <button class="btn btn-default" ng-click="attrCtrl.addNumber(attribute)">Add number</button>
+            <button class="btn btn-outline-secondary" ng-click="attrCtrl.addNumber(attribute)">Add number</button>
         </div>
         <div ng-if="attribute.titleTerm.dataType == 'range'">
             <div class="form-horizontal" ng-if="attribute.numberRange">
                 <div class="form-group">
-                    <label class="col-sm-2 control-label" for="fromRange">From</label>
+                    <label class="col-sm-2 col-form-label" for="fromRange">From</label>
                     <div class="col-sm-10">
                         <input type="number" class="form-control" id="fromRange" placeholder="enter a number" ng-model="attribute.numberRange.from" ng-change="attrCtrl.isValid(attribute, AttributeForm)">
                     </div>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label" for="toRange">To</label>
+                    <label class="col-sm-2 col-form-label" for="toRange">To</label>
                     <div class="col-sm-10">
                         <input type="number" class="form-control" id="toRange" placeholder="enter a number"  ng-model="attribute.numberRange.to" ng-change="attrCtrl.isValid(attribute, AttributeForm)">
                     </div>
@@ -63,7 +63,7 @@
             </div>
             <div class="form-group">
                 <div class="col-12">
-                    <button ng-if="!attribute.numberRange" ng-click="attrCtrl.addNumberRange(attribute, AttributeForm)" class="btn btn-default">Add range</button>
+                    <button ng-if="!attribute.numberRange" ng-click="attrCtrl.addNumberRange(attribute, AttributeForm)" class="btn btn-outline-secondary">Add range</button>
                     <button ng-if="attribute.numberRange" ng-click="attrCtrl.removeNumberRange(attribute, AttributeForm)" class="btn btn-danger">Remove range</button>
                 </div>
             </div>
@@ -103,8 +103,8 @@
             </div>
 
             <div class="col-md-9" ng-if="attribute.significantEdit">
-                <div class="form-inline">
-                    <div class="form-group pull-right">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="form-group float-end">
                         <label for="attributeTo" class="inline-label">Attribute To:</label>
                         <input id="attributeTo" type="text"
                                autocomplete="off" size="50"
@@ -117,7 +117,7 @@
 
         <div class="row padding-top-1">
             <div class="col-md-12">
-                <div class="form-inline">
+                <div class="d-flex align-items-center gap-2">
                     <div class="form-group">
                         <label for="source" class="inline-label">Source:</label>
                         <input id="source" type="text"
@@ -142,7 +142,7 @@
             </span>
         </div>
 
-        <div ng-show="attribute.auditShowing" class="attribute-audit" class="row">
+        <div ng-show="attribute.auditShowing" class="attribute-audit row">
             <span class="col-md-12"
                   ng-show="!attribute.audit || attribute.audit.length == 0">There have been no changes to this attribute.</span>
 
@@ -166,7 +166,7 @@
                         </td>
                         <td>{{ auditItem.userDisplayName }}</td>
                         <td>{{ auditItem.date | date:'dd/MM/yyyy h:mm a' }}</td>
-                        <td><button class="btn btn-default" title="Revert to this version"
+                        <td><button class="btn btn-outline-secondary" title="Revert to this version"
                                     ng-click="attrCtrl.revertAttribute($parent.$index, $index, AttributeForm)">Revert</button>
                         </td>
                     </tr>
@@ -177,7 +177,7 @@
 
         <div class="row-fluid vertical-pad" ng-show="attribute.source">
             <span class="col-md-12">
-                <span class="pull-right">
+                <span class="float-end">
                     <span class="blockquote small">
                         Source: {{attribute.source}}
                     </span>
@@ -186,10 +186,10 @@
         </div>
     </div>
 
-    <div class="panel-footer" ng-show="!attrCtrl.readonly">
+    <div class="card-footer" ng-show="!attrCtrl.readonly">
         <div class="row">
             <span class="col-md-12">
-                <button class="btn btn-default" ng-click="attrCtrl.deleteAttribute($index)">Delete attribute</button>
+                <button class="btn btn-outline-secondary" ng-click="attrCtrl.deleteAttribute($index)">Delete attribute</button>
                 <save-button ng-click="attrCtrl.saveAttribute($index, AttributeForm)"
                              disabled="!AttributeForm.$dirty || !attrCtrl.isValid(attribute.title) || !attrCtrl.isContentValid(attribute, AttributeForm)"
                              dirty="AttributeForm.$dirty || !attribute.uuid"

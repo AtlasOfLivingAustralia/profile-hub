@@ -1,8 +1,8 @@
-<div class="panel panel-default" ng-controller="LinksEditor as linkCtrl" ng-init="linkCtrl.init('${edit}')" ng-cloak
+<div class="card" ng-controller="LinksEditor as linkCtrl" ng-init="linkCtrl.init('${edit}')" ng-cloak
      ng-show="!linkCtrl.readonly || linkCtrl.links.length > 0" ng-form="LinkForm">
     <navigation-anchor anchor-name="{{profileCtrl.readonly() ? 'view_' : 'edit_'}}links" title="Links" condition="!linkCtrl.readonly || linkCtrl.links.length > 0"></navigation-anchor>
 
-    <div class="panel-heading">
+    <div class="card-header">
         <div class="row">
             <div class="col-sm-12">
                 <h4 class="section-panel-heading">Links</h4>
@@ -11,7 +11,7 @@
         </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <ul>
@@ -40,7 +40,7 @@
                             <label>Description</label>
                             <textarea ng-model="link.description" ckeditor="richTextSimpleToolbar"></textarea>
                         </div>
-                        <button class="btn btn-danger pull-right"
+                        <button class="btn btn-danger float-end"
                                 ng-click="linkCtrl.deleteLink($index, LinkForm)">Delete</button>
                     </div>
                 </div>
@@ -48,10 +48,10 @@
         </div>
     </div>
 
-    <div class="panel-footer" ng-show="!linkCtrl.readonly">
+    <div class="card-footer" ng-show="!linkCtrl.readonly">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" ng-click="linkCtrl.addLink(LinkForm)"><i
+                <button class="btn btn-outline-secondary" ng-click="linkCtrl.addLink(LinkForm)"><i
                         class="fa fa-plus"></i> Add new link
                 </button>
                 <save-button ng-click="linkCtrl.saveLinks(LinkForm)" form="LinkForm"></save-button>

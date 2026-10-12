@@ -1,7 +1,6 @@
 package au.org.ala.profile.hub
 
 import au.org.ala.ws.service.WebService
-import org.apache.http.entity.ContentType
 
 /**
  * Service for interacting with the Biodiversity Library
@@ -12,6 +11,7 @@ class BiodiversityLibraryService {
 
     def grailsApplication
     WebService webService
+    DownstreamGetCacheService downstreamGetCacheService
 
     def lookupItem(Integer itemId) {
         lookup("Item", itemId, true)
@@ -32,10 +32,13 @@ class BiodiversityLibraryService {
 
         try {
             if (json) {
-                webService.get(url, [:], ContentType.APPLICATION_JSON, false, false).resp
+                downstreamGetCacheService.bhlMetadata(url)?.resp
             } else {
                 new URL(url).text
             }
+        }
+        catch (UncacheableResultException ignored) {
+            null
         }
         catch (Exception e) {
             log.warn("Failed to retrieve data from " + url, e)

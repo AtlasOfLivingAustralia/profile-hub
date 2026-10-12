@@ -1,0 +1,80 @@
+.page {
+  display: flex;
+  min-height: calc(100dvh - 4.5rem);
+  align-items: center;
+  padding: 3rem 0;
+  background:
+    radial-gradient(
+      circle at 50% 20%,
+      rgba(var(--bs-primary-rgb), 0.1),
+      transparent 22rem
+    ),
+    var(--bs-body-bg);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  display: inline-flex;
+  width: 4.5rem;
+  height: 4.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  border-radius: var(--bs-border-radius-xl);
+}
+
+.notFoundIcon {
+  color: var(--bs-primary);
+  background: rgba(var(--bs-primary-rgb), 0.12);
+}
+
+.errorIcon {
+  color: var(--bs-danger);
+  background: rgba(var(--bs-danger-rgb), 0.12);
+}
+
+.eyebrow {
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--bs-secondary-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.title {
+  margin-bottom: 1rem;
+  font-weight: 650;
+}
+
+.description {
+  max-width: 30rem;
+  margin: 0 auto 1.5rem;
+  color: var(--bs-secondary-color);
+  line-height: 1.65;
+}
+
+.path {
+  display: block;
+  max-width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  color: var(--bs-body-color);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--bs-tertiary-bg);
+  border-radius: var(--bs-border-radius-lg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}

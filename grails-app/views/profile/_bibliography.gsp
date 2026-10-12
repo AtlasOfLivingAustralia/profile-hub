@@ -1,9 +1,9 @@
-<div class="panel panel-default ${edit?'':'panel-override'}""  ng-controller="ProfileController as profileCtrl" ng-cloak ng-form="BiblioForm"
+<div class="card ${edit?'':'panel-override'}"  ng-controller="ProfileController as profileCtrl" ng-cloak ng-form="BiblioForm"
      ng-init="profileCtrl.loadProfile()"
      ng-show="profileCtrl.profile.bibliography.length > 0 || !profileCtrl.readonly()">
     <navigation-anchor anchor-name="{{profileCtrl.readonly() ? 'view_' : 'edit_'}}bibliography" title="Bibliography" condition="profileCtrl.profile.bibliography && profileCtrl.profile.bibliography.length > 0 || !profileCtrl.readonly()"></navigation-anchor>
 
-    <div class="panel-heading">
+    <div class="card-header">
         <div class="row">
             <div class="col-sm-12">
                 <h4 class="section-panel-heading">Bibliography</h4>
@@ -12,7 +12,7 @@
         </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
 
         <div class="row" ng-repeat="bibliography in profileCtrl.profile.bibliography">
             <div class="col-sm-9">
@@ -44,10 +44,10 @@
         </div>
     </div>
 
-    <div class="panel-footer" ng-if="!profileCtrl.readonly()">
+    <div class="card-footer" ng-if="!profileCtrl.readonly()">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-default" ng-click="profileCtrl.addBibliography(BiblioForm)"><i
+                <button class="btn btn-outline-secondary" ng-click="profileCtrl.addBibliography(BiblioForm)"><i
                         class="fa fa-plus"></i> Add bibliography</button>
                 <save-button ng-click="profileCtrl.saveProfile()" dirty="profileCtrl.isDirty()"></save-button>
             </div>

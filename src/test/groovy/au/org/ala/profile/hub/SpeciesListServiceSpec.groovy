@@ -15,7 +15,7 @@ class SpeciesListServiceSpec extends Specification implements ServiceUnitTest<Sp
         service = new SpeciesListService()
         service.grailsApplication = grailsApplication
 
-        service.webService = webService
+        service.downstreamGetCacheService = new DownstreamGetCacheService(webService: webService)
 
     }
 

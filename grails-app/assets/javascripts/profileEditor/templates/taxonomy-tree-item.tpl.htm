@@ -12,7 +12,7 @@
      ng-if="!taxon.showingCurrentProfileOnly && (taxon.children.length >= taxonomyCtrl.pageSize || taxon.filter) && taxon.expanded">
     <label for="filter" class="screen-reader-label">Filter by name containing...</label>
     <input id="filter" type="text"
-           class="form-control input-sm ignore-save-warning tree-input"
+           class="form-control form-control-sm ignore-save-warning tree-input"
            placeholder="Name containing..."
            ng-enter="taxonomyCtrl.loadSubordinateTaxa(taxon.offset, taxon, false)"
            ng-change="taxonomyCtrl.filterChanged(taxon)"

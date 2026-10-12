@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="opusCtrl.LandingPage" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="opusCtrl.LandingPage" ng-cloak>
+    <div class="card-header">
         <a name="landingpage">
             <h4 class="section-panel-heading">Home Page</h4>
             <p:help help-id="opus.edit.landingpage"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
 
@@ -32,11 +32,11 @@
                                     <img class="img-thumbnail" ng-src="{{image.imageUrl}}">
                                 </div>
                                 <div class="input-group margin-bottom-1">
-                                    <span class="input-group-addon">Image URL</span>
+                                    <span class="input-group-text">Image URL</span>
                                     <input type="text" class="form-control" name="imageUrl" ng-model="image.imageUrl"/>
                                 </div>
                                 <div class="input-group">
-                                    <span class="input-group-addon">Credit</span>
+                                    <span class="input-group-text">Credit</span>
                                     <input type="text" class="form-control" name="credit" ng-model="image.credit"/>
                                 </div>
                             </td>
@@ -50,8 +50,8 @@
                         <tfoot>
                         <tr>
                             <td colspan="2">
-                                <button class="btn btn-sm btn-default margin-top-1 margin-bottom-1" ng-click="opusCtrl.addAnEmptyImage()" ><i class="fa fa-plus"></i> Add an external image</button>
-                                <button class="btn btn-sm btn-default margin-top-1 margin-bottom-1 ignore-save-warning" ng-model="opusCtrl.showUpload.imageSlider" btn-checkbox >Upload a file</button>
+                                <button class="btn btn-sm btn-outline-secondary margin-top-1 margin-bottom-1" ng-click="opusCtrl.addAnEmptyImage()" ><i class="fa fa-plus"></i> Add an external image</button>
+                                <button class="btn btn-sm btn-outline-secondary margin-top-1 margin-bottom-1 ignore-save-warning" ng-model="opusCtrl.showUpload.imageSlider" btn-checkbox >Upload a file</button>
                                 <div ng-if="opusCtrl.showUpload.imageSlider" class="clearfix">
                                     <image-upload opus="opusCtrl.opus" on-upload-complete="opusCtrl.imageUploaded"
                                                   url-generator="opusCtrl.generateFileUploadUrl" show-metadata="false" disable-source="true"></image-upload>
@@ -67,9 +67,9 @@
                     <div>
                         <label for="duration">Time duration</label>
                         <div class="input-group">
-                            <span class="input-group-addon">Duration</span>
+                            <span class="input-group-text">Duration</span>
                             <input id="duration" type="number" class="form-control"  name="duration" ng-model="opusCtrl.opus.opusLayoutConfig.duration" min="1"/>
-                            <span class="input-group-addon">ms</span>
+                            <span class="input-group-text">ms</span>
                         </div>
                         <div class="small">
                             The time duration spent by the image slider on an image in milli-seconds.
@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <save-button ng-click="opusCtrl.saveOpus(opusCtrl.LandingPage)" form="opusCtrl.LandingPage"></save-button>

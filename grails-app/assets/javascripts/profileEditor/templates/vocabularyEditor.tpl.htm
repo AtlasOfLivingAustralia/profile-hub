@@ -1,14 +1,14 @@
-<div class="panel panel-default" ng-form="VocabForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="VocabForm" ng-cloak>
+    <div class="card-header">
         <h4 class="section-panel-heading">{{ vocabName }}</h4>
-        <div class="pull-right text-right padding-left-1" ng-show="helpUrl">
+        <div class="float-end text-right padding-left-1" ng-show="helpUrl">
             <a ng-href="{{helpUrl}}" class="help-icon" title="Click to view help content" target="_blank">
                 <span class="fa fa-question-circle"></span>
             </a>
         </div>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <p>{{ vocabName }} settings</p>
@@ -36,10 +36,10 @@
                 <label for="newTerm_{{$id}}">Enter a new term</label>
 
                 <div class="input-group">
-                    <input id="newTerm_{{$id}}" type="text" class="form-control input-lg" ng-model="newVocabTerm"
+                    <input id="newTerm_{{$id}}" type="text" class="form-control form-control-lg" ng-model="newVocabTerm"
                            ng-enter="addVocabTerm(VocabForm)">
                     <span class="input-group-btn">
-                        <button class="btn btn-default btn-lg" type="button" ng-click="addVocabTerm(VocabForm)"><i
+                        <button class="btn btn-outline-secondary btn-lg" type="button" ng-click="addVocabTerm(VocabForm)"><i
                                 class="fa fa-plus"></i> Add term
                         </button>
                     </span>
@@ -128,17 +128,17 @@
                                     </td>
                                     <td>
                                         <div class="inline-block">
-                                            <button class="btn btn-link btn-xs fa fa-edit"
+                                            <button class="btn btn-link btn-sm fa fa-edit"
                                                     title="Edit the {{ term.name }} term"
                                                     ng-click="editVocabTerm($index, VocabForm)"></button>
-                                            <button class="btn btn-link btn-xs fa fa-trash-o color--red"
+                                            <button class="btn btn-link btn-sm fa fa-trash-o color--red"
                                                     title="Delete the {{ term.name }} term"
                                                     ng-click="removeVocabTerm($index, VocabForm)"></button>
-                                            <button class="btn btn-link btn-xs fa fa-arrow-down"
+                                            <button class="btn btn-link btn-sm fa fa-arrow-down"
                                                     ng-if="!$last && allowReordering"
                                                     ng-click="moveTermDown($index, VocabForm)"
                                                     title="Move this term down"></button>
-                                            <button class="btn btn-link btn-xs fa fa-arrow-up"
+                                            <button class="btn btn-link btn-sm fa fa-arrow-up"
                                                     ng-if="!$first && allowReordering"
                                                     ng-click="moveTermUp($index, VocabForm)"
                                                     title="Move this term up"></button>
@@ -151,7 +151,7 @@
 
                         <div class="row" ng-if="allowReordering">
                             <div class="col-md-12">
-                                <button class="btn btn-link pull-right small"
+                                <button class="btn btn-link float-end small"
                                         ng-click="sortAlphabetically(VocabForm)">Sort alphabetically
                                 </button>
                             </div>
@@ -162,11 +162,11 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <div class="btn-group">
-                    <button class="btn btn-default"
+                    <button class="btn btn-outline-secondary"
                             ng-click="loadVocabulary(VocabForm)">
                         Reset
                     </button>

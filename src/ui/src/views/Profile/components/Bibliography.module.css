@@ -1,0 +1,8 @@
+.bibliography {
+  padding-left: 1.15rem;
+  margin: 0;
+}
+
+.bibliography li + li {
+  margin-top: 0.65rem;
+}

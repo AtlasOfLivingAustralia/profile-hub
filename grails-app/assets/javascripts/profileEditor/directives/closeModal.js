@@ -5,6 +5,6 @@ profileEditor.directive('closeModal', function () {
         scope: {
             close: '&'
         },
-        template: '<a href="" class="pull-right" ng-click="close()"><span class="fa fa-close"></span></a>'
+        template: '<button type="button" class="btn-close" aria-label="Close" ng-click="close()"></button>'
     };
 });

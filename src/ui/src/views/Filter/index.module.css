@@ -1,0 +1,123 @@
+.card,
+.stage {
+  width: 100%;
+  min-height: 16rem;
+  background: var(--bs-body-bg);
+  border-radius: var(--bs-border-radius-xl);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid var(--bs-border-color-translucent);
+  box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 6%);
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border: 1px dashed var(--bs-border-color-translucent);
+}
+
+.emptyIcon {
+  display: inline-flex;
+  width: 3.25rem;
+  height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  font-size: 1.35rem;
+  color: var(--bs-primary);
+  background: rgba(var(--bs-primary-rgb), 0.12);
+  border-radius: var(--bs-border-radius-lg);
+}
+
+.picker {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.picker > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bs-secondary-color);
+}
+
+.tick {
+  color: var(--bs-success);
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-weight: 650;
+}
+
+.meta {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+}
+
+.meta div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.meta dt {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bs-secondary-color);
+}
+
+.meta dd {
+  margin: 0;
+}
+
+.skeleton :global(.placeholder) {
+  border-radius: 999px;
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bs-border-color-translucent);
+}
+
+.link {
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="MapForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="MapForm" ng-cloak>
+    <div class="card-header">
         <a name="map">
             <h4 class="section-panel-heading">Map configuration</h4>
             <p:help help-id="opus.edit.map"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
@@ -33,34 +33,34 @@
                     <div class="input-group">
                         <input id="pointColour" type="text" class="form-control" colorpicker colorpicker-close-on-select
                                ng-model="opusCtrl.opus.mapConfig.mapPointColour">
-                        <span class="input-group-addon" ng-style="{background: opusCtrl.opus.mapConfig.mapPointColour}"></span>
+                        <span class="input-group-text" ng-style="{background: opusCtrl.opus.mapConfig.mapPointColour}"></span>
                     </div>
                 </div>
 
                 <h4 class="heading-underlined">Map centre &amp; zoom options</h4>
 
-                <div class="form-inline padding-bottom-1">
+                <div class="d-flex flex-wrap align-items-center gap-2 padding-bottom-1">
                     <div class="form-group">
-                        <label class="control-label" for="mapDefaultLatitude">Default latitude</label>
+                        <label class="col-form-label" for="mapDefaultLatitude">Default latitude</label>
                         <input id="mapDefaultLatitude" type="text" class="form-control" maxlength="7" size="5"
                                name="mapDefaultLatitude" ng-model="opusCtrl.opus.mapConfig.mapDefaultLatitude">
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="mapDefaultLongitude">Default longitude</label>
+                        <label class="col-form-label" for="mapDefaultLongitude">Default longitude</label>
                         <input id="mapDefaultLongitude" type="text" class="form-control" maxlength="7" size="5"
                                name="mapDefaultLongitude" ng-model="opusCtrl.opus.mapConfig.mapDefaultLongitude">
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="mapZoom">Zoom level</label>
-                        <input id="mapZoom" type="number" class="form-control input-xs" min="1" max="25" name="mapZoom"
+                        <label class="col-form-label" for="mapZoom">Zoom level</label>
+                        <input id="mapZoom" type="number" class="form-control form-control-sm" min="1" max="25" name="mapZoom"
                                ng-model="opusCtrl.opus.mapConfig.mapZoom">
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="maxAutoZoom">Maximum auto zoom</label>
-                        <input id="maxAutoZoom" type="number" class="form-control input-xs"
+                        <label class="col-form-label" for="maxAutoZoom">Maximum auto zoom</label>
+                        <input id="maxAutoZoom" type="number" class="form-control form-control-sm"
                                name="maxAutoZoom" min="1" max="25" ng-disabled="!opusCtrl.opus.mapConfig.autoZoom"
                                ng-model="opusCtrl.opus.mapConfig.maxAutoZoom">
                     </div>
@@ -72,7 +72,7 @@
                     The maximum auto zoom controls how far the map will be automatically zoomed in if the "Automatically zoom..." option below is selected.
                 </div>
 
-                <div class="form-inline">
+                <div>
                     <div class="checkbox padding-bottom-1">
                         <label for="autoZoom" class="inline-label">
                             <input id="autoZoom" type="checkbox" name="autoZoom"
@@ -83,7 +83,7 @@
                 </div>
 
                 <h4 class="heading-underlined">Snapshot images</h4>
-                <div class="form-inline">
+                <div>
                     <div class="checkbox padding-bottom-1">
                         <label for="allowSnapshots" class="inline-label">
                             <input id="allowSnapshots" type="checkbox" name="allowSnapshots"
@@ -96,7 +96,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <save-button ng-click="opusCtrl.saveOpus(MapForm)" form="MapForm"></save-button>

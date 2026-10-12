@@ -1,12 +1,12 @@
-<div class="panel panel-default" ng-form="ProfileEditForm" ng-cloak>
-    <div class="panel-heading">
+<div class="card" ng-form="ProfileEditForm" ng-cloak>
+    <div class="card-header">
         <a name="profileEditing">
             <h4 class="section-panel-heading">Profile editing options</h4>
             <p:help help-id="opus.edit.profileEditingOptions"/>
         </a>
     </div>
 
-    <div class="panel-body">
+    <div class="card-body">
         <div class="row">
             <div class="col-sm-12">
                 <div class="checkbox">
@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    <div class="panel-footer">
+    <div class="card-footer">
         <div class="row">
             <div class="col-md-12">
                 <save-button ng-click="opusCtrl.saveOpus(ProfileEditForm)" form="ProfileEditForm"></save-button>

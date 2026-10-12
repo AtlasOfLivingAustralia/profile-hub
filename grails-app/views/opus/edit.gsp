@@ -19,24 +19,24 @@
     <a name="top"></a>
 
     <div class="row" ng-cloak>
-        <div class="col-md-6">
+        <div class="col-md-3"></div>
+
+        <div class="col-lg-9 col-md-8 col-12 d-flex justify-content-between align-items-start">
             <p class="lead">
                 Configure your profile collection
             </p>
-        </div>
-
-        <div class="col-md-6">
-            <div class="padding-bottom-1 pull-right">
-                    <a href="${request.contextPath}/opus/{{opusCtrl.opus.shortName ? opusCtrl.opus.shortName : opusCtrl.opus.uuid}}"
-                       class="btn btn-default" target="_self" ng-show="opusCtrl.opus.uuid"><i
-                            class="fa fa-eye"></i> Public View</a>
-            </div>
+            <a href="${request.contextPath}/opus/{{opusCtrl.opus.shortName ? opusCtrl.opus.shortName : opusCtrl.opus.uuid}}"
+               class="btn btn-outline-secondary"
+               target="_self"
+               ng-show="opusCtrl.opus.uuid">
+                <i class="fa fa-eye"></i> Public Views
+            </a>
         </div>
     </div>
 
     <div class="row" ng-cloak>
         <div class="col-md-3 margin-bottom-1 stay-on-screen">
-            <ul class="nav nav-stacked" id="sidebar">
+            <ul class="nav flex-column" id="sidebar">
                 <h4 class="font-xxsmall heading-underlined"><strong>Page index</strong></h4>
                 <g:if test="${!params.opusId}">
                     <li><a href="#overview" du-smooth-scroll target="_self" class="font-xxsmall">Site overview</a></li>
@@ -72,7 +72,7 @@
             </ul>
         </div>
 
-        <div class="col-lg-9 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-md-8 col-12">
             <g:include controller="opus" action="editOpusDetailsPanel" params="[opusId: params.opusId]"/>
 
             <g:if test="${params.opusId}">

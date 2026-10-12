@@ -2,19 +2,19 @@
     <div ng-controller="ImagesController as imageCtrl">
         <div class="row">
             <div class="col-md-12 padding-bottom-1" ng-cloak>
-                <button ng-show="!attrCtrl.readonly" ng-click="attrCtrl.addAttribute()" class="btn btn-default"><i
+                <button ng-show="!attrCtrl.readonly" ng-click="attrCtrl.addAttribute()" class="btn btn-outline-secondary"><i
                         class="fa fa-plus"></i>&nbsp;Add attribute
                 </button>
                 <p:help help-id="profile.edit.attribute" show="${edit}" collection-override="${opus?.help?.attributeLink}"/>
 
-                <div class="small pull-right"
+                <div class="small float-end"
                      ng-form="ShowSupportingAttributesForm" ng-show="(!attrCtrl.readonly && (attrCtrl.opus.showLinkedOpusAttributes || attrCtrl.opus.allowCopyFromLinkedOpus))">
                     Show information from supporting collections:
                     <div class="btn-group">
-                        <label class="btn btn-xs" ng-class="attrCtrl.showSupportingData ? 'btn-success' : 'btn-default'"
+                        <label class="btn btn-xs" ng-class="attrCtrl.showSupportingData ? 'btn-success' : 'btn-outline-secondary'"
                                ng-model="attrCtrl.showSupportingData" ng-change="attrCtrl.toggleShowSupportingData(ShowSupportingAttributesForm)"
                                btn-radio="true">On</label>
-                        <label class="btn btn-xs" ng-class="attrCtrl.showSupportingData ? 'btn-default' : 'btn-danger'"
+                        <label class="btn btn-xs" ng-class="attrCtrl.showSupportingData ? 'btn-outline-secondary' : 'btn-danger'"
                                ng-model="attrCtrl.showSupportingData" ng-change="attrCtrl.toggleShowSupportingData(ShowSupportingAttributesForm)"
                                btn-radio="false">Off</label>
                     </div>

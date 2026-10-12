@@ -1,13 +1,12 @@
 package au.org.ala.profile.hub
 
-import au.org.ala.ws.service.WebService
-
 class BieService {
 
     def grailsApplication
-    WebService webService
+    DownstreamGetCacheService downstreamGetCacheService
 
     def getSpeciesProfile(String guid) {
-        webService.get("${grailsApplication.config.getProperty('bie.ws.url')}/ws/species/${guid}")
+        String url = "${grailsApplication.config.getProperty('bie.ws.url')}/ws/species/${guid}"
+        DownstreamGetCacheService.unwrap { downstreamGetCacheService.bieSpecies(url) }
     }
 }

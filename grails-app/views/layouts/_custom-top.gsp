@@ -40,42 +40,49 @@
 
 
 <!-- Navbar -->
-<nav class="navbar navbar-default" id="primary-nav">
+<nav class="navbar navbar-expand-md navbar-light bg-light" id="primary-nav">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse"
+                data-bs-target="#bs-example-navbar-collapse-1"
+                aria-controls="bs-example-navbar-collapse-1"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav bold">
-            <g:if test="${opusUrl}">
-                <li class="${pageName=='opus'?'active':''}"><a href="${opusUrl}">Home</a></li>
-            </g:if>
-            <g:if test="${browseUrl}">
-                <li class="${pageName=='browse'?'active':''}"><a href="${browseUrl}">Browse</a></li>
-            </g:if>
-            <g:if test="${filterUrl}">
-                <li class="${pageName=='filter'?'active':''}"><a href="${filterUrl}">Filter<g:if test="${hasFilter}"> <span class="filter-indicator" title="You currently have a filter applied to ${opus.shortName ?: opus.uuid}">◉</span></g:if></a></li>
-            </g:if>
-            <g:if test="${glossaryUrl}">
-                <li class="${pageName=='glossary'?'active':''}"><a href="${glossaryUrl}" target="glossary">Glossary</a></li>
-            </g:if>
-            <g:if test="${glossaryUrl}">
-                <li class="${pageName=='about'?'active':''}"><a href="${aboutPageUrl}">About&nbsp;&nbsp;</a></li>
-            </g:if>
-        </ul>
+            <ul class="navbar-nav me-auto bold">
+                <g:if test="${opusUrl}">
+                    <li class="nav-item ${pageName=='opus'?'active':''}">
+                        <a class="nav-link" href="${opusUrl}">Home</a>
+                    </li>
+                </g:if>
+                <g:if test="${browseUrl}">
+                    <li class="nav-item ${pageName=='browse'?'active':''}">
+                        <a class="nav-link" href="${browseUrl}">Browse</a>
+                    </li>
+                </g:if>
+                <g:if test="${filterUrl}">
+                    <li class="nav-item ${pageName=='filter'?'active':''}">
+                        <a class="nav-link" href="${filterUrl}">Filter<g:if test="${hasFilter}"> <span class="filter-indicator" title="You currently have a filter applied to ${opus.shortName ?: opus.uuid}">◉</span></g:if></a>
+                    </li>
+                </g:if>
+                <g:if test="${glossaryUrl}">
+                    <li class="nav-item ${pageName=='glossary'?'active':''}">
+                        <a class="nav-link" href="${glossaryUrl}" target="glossary">Glossary</a>
+                    </li>
+                </g:if>
+                <g:if test="${glossaryUrl}">
+                    <li class="nav-item ${pageName=='about'?'active':''}">
+                        <a class="nav-link" href="${aboutPageUrl}">About&nbsp;&nbsp;</a>
+                    </li>
+                </g:if>
+            </ul>
 
-        <ul class="nav navbar-nav navbar-right">
-                <li><delegated-search></delegated-search></li>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><delegated-search></delegated-search></li>
                 <g:render template="/layouts/login"/>
-                <li><p:help help-id="main" collection-override="${helpLink}"/></li>
+                <li class="nav-item"><p:help help-id="main" collection-override="${helpLink}"/></li>
             </ul>
         </div>
     </div>

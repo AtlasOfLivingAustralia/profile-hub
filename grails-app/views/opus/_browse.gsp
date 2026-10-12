@@ -1,28 +1,28 @@
 <div class="row">
-    <div class="col-lg-12 col-md-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-12">
         <h3 class="heading-medium">Browse by category</h3>
     </div>
 </div>
 <div class="padding-top-1 row" ng-controller="BrowseController as browseCtrl" ng-init="browseCtrl.getTaxonLevels()" ng-cloak>
     <a name="browseTop"></a>
-    <div class="col-lg-3 col-md-4 col-xs-12">
+    <div class="col-lg-3 col-md-4 col-12">
         <!-- Side menu -->
         <div class="side-menu">
-            <nav class="navbar navbar-default" role="navigation">
+            <nav class="navbar navbar-light bg-light" role="navigation">
                 <accordion close-others="true">
                     <accordion-group ng-repeat="taxon in browseCtrl.orderedTaxonLevels | orderBy:order" ng-if="browseCtrl.taxonLevels[taxon.key] > 0">
                         <accordion-heading>
                             <i class="fa fa-circle-thin"></i>
-                        &emsp;<a ng-href="#" title="{{ taxon.help }}"
+                        &emsp;<span class="accordion-heading-link" title="{{ taxon.help }}"
                                  ng-click="browseCtrl.searchByTaxonLevel(taxon.key)">{{taxon.name}} ({{browseCtrl.taxonLevels[taxon.key] ? browseCtrl.taxonLevels[taxon.key] : '0'}})
                             <span ng-if="taxon.help" class="fa fa-question-circle small superscript"></span>
-                            <span class="caret pull-right"></span></a>
+                            <span class="caret float-end"></span></span>
                         </accordion-heading>
 
                         <div class="form-group">
                             <label for="filter" class="screen-reader-label">Filter by name starting with...</label>
                             <input id="filter" type="text"
-                                   class="form-control input-sm ignore-save-warning"
+                                   class="form-control form-control-sm ignore-save-warning"
                                    placeholder="Name starting with..."
                                    ng-change="browseCtrl.searchByTaxonLevel(taxon.key)"
                                    name="filter"
@@ -43,7 +43,7 @@
                 </accordion>
             </nav>
 
-            <nav class="navbar navbar-default" role="navigation">
+            <nav class="navbar navbar-light bg-light" role="navigation">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <div class="brand-wrapper">
@@ -54,17 +54,17 @@
                         </div>
 
                         <!-- Search body -->
-                        <div id="search" class="panel">
-                            <div class="panel-body">
-                                <form class="navbar-form" role="search">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control ignore-save-warning" placeholder="e.g. Acacia binervata"
-                                               ng-change="browseCtrl.searchByScientificName()"
-                                               name="searchTerm"
-                                               autocomplete="off"
-                                               ng-enter="browseCtrl.selectSingleResult()"
-                                               ng-model="browseCtrl.searchTerm"></div>
-                                    <button type="submit" class="btn btn-default ">
+                        <div id="search">
+                            <div class="quick-browse-body">
+                                <form class="quick-browse-form" role="search">
+                                    <input type="text" class="form-control ignore-save-warning" placeholder="e.g. Acacia binervata"
+                                           ng-change="browseCtrl.searchByScientificName()"
+                                           name="searchTerm"
+                                           autocomplete="off"
+                                           ng-enter="browseCtrl.selectSingleResult()"
+                                           ng-model="browseCtrl.searchTerm">
+
+                                    <button type="submit" class="btn btn-outline-secondary">
                                         <span class="fa fa-search"></span>
                                     </button>
                                 </form>
@@ -77,10 +77,10 @@
     </div>
 
 
-    <div class="col-lg-9 col-md-8 col-xs-12" ng-cloak>
+    <div class="col-lg-9 col-md-8 col-12" ng-cloak>
         <div ng-show="!browseCtrl.selectedTaxon.name && !browseCtrl.searchTerm">
             <p>
-                Browse the taxonomic hierarchy using the navigation pane <span class="hidden-xs hidden-sm">to the left</span><span class="hidden-md hidden-lg">above</span>. You can also jump to a particular taxon in the hierarchy by typing the beginning of the name into the ‘Quick browse’ option at the bottom of the pane.
+                Browse the taxonomic hierarchy using the navigation pane <span class="d-none d-md-inline">to the left</span><span class="d-inline d-md-none">above</span>. You can also jump to a particular taxon in the hierarchy by typing the beginning of the name into the ‘Quick browse’ option at the bottom of the pane.
             </p>
             <p>
                 Alternatively, you can select the ‘Search’ navigator at the top of this page and perform a text or name-based search.
@@ -114,7 +114,7 @@
                 </h4>
             </div>
             <div class="col-md-6">
-                <div class="pull-right padding-top-1">
+                <div class="float-end padding-top-1">
                     <label for="sort" class="compact-label small">Sort by</label>
                     <select id="sort" ng-options="sort for sort in browseCtrl.sortOptions" ng-change="browseCtrl.changeSortOrder()"
                             ng-model="browseCtrl.sortOption" class="ignore-save-warning">

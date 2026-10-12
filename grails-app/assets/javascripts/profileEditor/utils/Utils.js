@@ -298,7 +298,7 @@ profileEditor.factory('util', ['$location', '$log', '$q', 'config', '$modal', '$
 
             '<div class="modal-footer">' +
             '<button class="btn btn-primary" ng-click="confirmCtrl.ok()">' + ok + '</button>' +
-            '<button class="btn btn-default" ng-click="confirmCtrl.cancel()">' + cancel + '</button>' +
+            '<button class="btn btn-outline-secondary" ng-click="confirmCtrl.cancel()">' + cancel + '</button>' +
             '</div>';
 
         var popup = $modal.open({

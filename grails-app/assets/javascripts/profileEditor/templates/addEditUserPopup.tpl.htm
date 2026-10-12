@@ -20,7 +20,7 @@
                            ng-model="addUserCtrl.searchTerm"
                            name="searchTerm" ng-enter="addUserCtrl.userSearch()">
                     <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"
+                            <button class="btn btn-outline-secondary" type="button"
                                     ng-click="addUserCtrl.userSearch()">Search for user</button>
                         </span>
                 </div>
@@ -36,7 +36,7 @@
             <div class="row margin-top-1">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="role" class="col-sm-3 control-label">Role</label>
+                        <label for="role" class="col-sm-3 col-form-label">Role</label>
 
                         <div class="col-sm-8">
                             <select id="role" ng-model="addUserCtrl.user.role" required ng-required
@@ -50,7 +50,7 @@
 
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="notes" class="col-sm-3 control-label">Notes:</label>
+                        <label for="notes" class="col-sm-3 col-form-label">Notes:</label>
 
                         <div class="col-sm-8">
                                 <textarea id="notes" ng-model="addUserCtrl.user.notes" rows="4"
@@ -66,5 +66,5 @@
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="addUserCtrl.ok()"
             ng-disabled="!addUserCtrl.user.userId || !addUserCtrl.user.role">OK</button>
-    <button class="btn btn-default" ng-click="addUserCtrl.cancel()">Cancel</button>
+    <button class="btn btn-outline-secondary" ng-click="addUserCtrl.cancel()">Cancel</button>
 </div>

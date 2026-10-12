@@ -6,16 +6,16 @@
 
     <div class="modal-body">
         <div class="btn-group-sm padding-bottom-1">
-            <label class="btn btn-default ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'select'">Use
+            <label class="btn btn-outline-secondary ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'select'">Use
                 existing image</label>
-            <label class="btn btn-default ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'upload'">Upload a
+            <label class="btn btn-outline-secondary ignore-save-warning" ng-model="attrImgCtrl.mode" btn-radio="'upload'">Upload a
                 new image</label>
         </div>
 
         <div class="row" ng-show="attrImgCtrl.mode == 'select'">
             <div class="col-md-12">
                 <p>To select an existing image from the profile's gallery, scroll through the list below until you find the correct image, then select the size and position, and click OK. Alternatively, you can upload a new image by clicking the 'Upload a new image' button above.</p>
-                <div class="checkbox pull-right small">
+                <div class="checkbox float-end small">
                     <label for="showExcluded" class="inline-label">
                         <input id="showExcluded" type="checkbox" name="showExcluded" class="ignore-save-warning"
                                ng-model="attrImgCtrl.showExcluded" ng-false-value="false">
@@ -48,7 +48,7 @@
 
         <div class="row form-horizontal">
             <div class="form-group">
-                <label for="small" class="col-sm-3 control-label">Size</label>
+                <label for="small" class="col-sm-3 col-form-label">Size</label>
 
                 <div class="col-sm-9">
                     <div class="radio">
@@ -74,17 +74,17 @@
 
         <div class="row form-horizontal">
             <div class="form-group">
-                <label for="left" class="col-sm-3 control-label">Position</label>
+                <label for="left" class="col-sm-3 col-form-label">Position</label>
 
                 <div class="col-sm-9">
                     <div class="radio">
                         <label for="right" class="padding-right-1">
-                            <input id="right" type="radio" name="position" ng-value="'pull-right'"
+                            <input id="right" type="radio" name="position" ng-value="'float-end'"
                                    ng-model="attrImgCtrl.position">
                             Right aligned
                         </label>
                         <label for="left" class="padding-right-1">
-                            <input id="left" type="radio" name="position" ng-value="'pull-left'"
+                            <input id="left" type="radio" name="position" ng-value="'float-start'"
                                    ng-model="attrImgCtrl.position">
                             Left aligned
                         </label>
@@ -100,6 +100,6 @@
                 ng-disabled="(attrImgCtrl.mode == 'select' && attrImgCtrl.images.length == 0) || (attrImgCtrl.mode == 'upload' && InsertImageForm.$invalid)">
             OK
         </button>
-        <button class="btn btn-default" ng-click="attrImgCtrl.cancel()">Cancel</button>
+        <button class="btn btn-outline-secondary" ng-click="attrImgCtrl.cancel()">Cancel</button>
     </div>
 </div>
