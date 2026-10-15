@@ -27,12 +27,43 @@
         };
 
         self.clearPrimaryAudio = function() {
-            self.profile.primaryAudio = null;
-            self.MultimediaForm.$setDirty();
+            if (self.profile.primaryAudio) {
+                var previousPrimaryAudio = self.profile.primaryAudio;
+
+                self.profile.primaryAudio = null;
+
+                profileService.setPrimaryMultimedia(
+                    self.profile,
+                    null,
+                    self.profile.primaryVideo
+                ).then(function() {
+                    messageService.info("Primary audio unset");
+                    self.MultimediaForm.$setPristine();
+                }, function() {
+                    self.profile.primaryAudio = previousPrimaryAudio;
+                    messageService.alert("Failed to unset primary audio");
+                });
+            }
         };
+
         self.clearPrimaryVideo = function() {
-            self.profile.primaryVideo = null;
-            self.MultimediaForm.$setDirty();
+            if (self.profile.primaryVideo) {
+                var previousPrimaryVideo = self.profile.primaryVideo;
+
+                self.profile.primaryVideo = null;
+
+                profileService.setPrimaryMultimedia(
+                    self.profile,
+                    self.profile.primaryAudio,
+                    null
+                ).then(function() {
+                    messageService.info("Primary video unset");
+                    self.MultimediaForm.$setPristine();
+                }, function() {
+                    self.profile.primaryVideo = previousPrimaryVideo;
+                    messageService.alert("Failed to unset primary video");
+                });
+            }
         };
 
         self.savePrimaryMultimedia = function() {
