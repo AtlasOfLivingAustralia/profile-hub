@@ -47,8 +47,21 @@
 
         self.clearPrimarySound = function() {
             if (self.hasPrimarySound()) {
+                var previousPrimaryAudio = self.profile.primaryAudio;
+
                 self.profile.primaryAudio = null;
-                self.SoundForm.$setDirty();
+
+                profileService.setPrimaryMultimedia(
+                    self.profile,
+                    null,
+                    self.profile.primaryVideo
+                ).then(function() {
+                    messageService.info("Primary sound unset");
+                    self.SoundForm.$setPristine();
+                }, function() {
+                    self.profile.primaryAudio = previousPrimaryAudio;
+                    messageService.alert("Failed to unset the primary sound");
+                });
             }
         };
 
