@@ -31,6 +31,12 @@ class AccessControlInterceptor {
     boolean  before () {
         params.currentUserId = authService.userId
         params.currentUser = authService.getDisplayName()
+        // Never trust collection role flags supplied as request parameters.
+        params.isOpusAdmin = false
+        params.isOpusAuthor = false
+        params.isOpusEditor = false
+        params.isOpusReviewer = false
+        params.isOpusUser = false
         List<String> usersRoles = delegateService?.getUserRoles()?.asList()
         params.isALAAdmin = usersRoles.contains(Role.ROLE_ADMIN.toString())
 

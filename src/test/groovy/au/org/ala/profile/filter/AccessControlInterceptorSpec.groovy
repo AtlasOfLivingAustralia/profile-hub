@@ -96,6 +96,54 @@ class AccessControlInterceptorSpec extends Specification implements InterceptorU
         "profileReviewerAction" | 200
     }
 
+    void "forged opus role flags are cleared when the collection cannot be found"() {
+        setup:
+        grailsApplication.addArtefact("Controller", SecuredController)
+
+        def pService = Mock(ProfileService)
+
+        defineBeans {
+            authService(MockAuthService)
+            profileService(InstanceFactoryBean, pService, ProfileService)
+            delegateService(MockDelegateService)
+        }
+
+        mockInterceptor(AccessControlInterceptor)
+
+        // Simulate a request containing forged role parameters.
+        params.opusId = "nonexistent-opus"
+        params.isOpusAdmin = "true"
+        params.isOpusEditor = "true"
+        params.isOpusAuthor = "true"
+        params.isOpusReviewer = "true"
+        params.isOpusUser = "true"
+
+        request.userPrincipal = users["NOT_LOGGED_IN_USER"]
+        request.setAttribute(
+            GrailsApplicationAttributes.CONTROLLER_NAME_ATTRIBUTE,
+            "secured"
+        )
+        request.setAttribute(
+            GrailsApplicationAttributes.ACTION_NAME_ATTRIBUTE,
+            "publicAction"
+        )
+
+        pService.getOpus("nonexistent-opus") >> null
+
+        when:
+        withInterceptors(controller: "secured", action: "publicAction") {
+            controller.publicAction()
+        }
+
+        then:
+        response.status == 200
+        params.isOpusAdmin == false
+        params.isOpusEditor == false
+        params.isOpusAuthor == false
+        params.isOpusReviewer == false
+        params.isOpusUser == false
+    }
+
     void "public users are only allowed to access unsecured actions"() {
         setup:
         // need to do this because grailsApplication.controllerClasses is empty in the filter when run from the unit test
