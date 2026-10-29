@@ -21,8 +21,25 @@
         </div>
 
         <div class="form-group" ng-if="soundUploadCtrl.metadata.uuid">
-            <label class="col-sm-3 control-label">Sound</label>
-            <div class="col-sm-9"><p class="form-control-static">{{soundUploadCtrl.metadata.filename}}</p></div>
+            <label class="col-sm-3 control-label">Current recording</label>
+            <div class="col-sm-9">
+                <p class="form-control-static">{{soundUploadCtrl.metadata.filename}}</p>
+            </div>
+        </div>
+
+        <div class="form-group" ng-if="soundUploadCtrl.metadata.uuid">
+            <label for="replacementSoundFile" class="col-sm-3 control-label">Replace recording</label>
+            <div class="col-sm-9">
+                <span class="btn btn-default btn-file">
+                    Choose file
+                    <input id="replacementSoundFile" type="file" ngf-select ng-model="soundUploadCtrl.file" accept=".mp3,.wav,audio/mpeg,audio/wav,audio/x-wav">
+                </span>
+                <span class="font-xsmall">{{soundUploadCtrl.file[0].name || soundUploadCtrl.file.name}}</span>
+                <p class="help-block">
+                    Optional. MP3 or WAV, up to {{soundUploadCtrl.maxFileSizeMb}} MB.
+                    Leave empty to update metadata only.
+                </p>
+            </div>
         </div>
 
         <div class="form-group">

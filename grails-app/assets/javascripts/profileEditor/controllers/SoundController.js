@@ -142,7 +142,7 @@
         self.ok = function() {
             var file = angular.isArray(self.file) ? self.file[0] : self.file;
 
-            if (!self.metadata.uuid && (!file || file.size > self.maxFileSize)) {
+            if ((!self.metadata.uuid && !file) || (file && file.size > self.maxFileSize)) {
                 self.error = !file ? 'Choose an MP3 or WAV file.' :
                     'The sound file exceeds the maximum size of ' + self.maxFileSizeMb + ' MB.';
                 return;
@@ -150,7 +150,7 @@
 
             Upload.upload({
                 url: util.contextRoot() + '/opus/' + self.opusId + '/profile/' + self.profileId + '/attachment',
-                file: self.metadata.uuid ? null : file,
+                file: file,
                 data: self.metadata
             }).success(function() {
                 $cacheFactory.get('$http').removeAll();
