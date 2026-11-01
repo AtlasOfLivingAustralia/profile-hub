@@ -16,12 +16,17 @@ describe("SoundUploadController tests", function () {
         );
 
         upload = {
-            upload: jasmine.createSpy("upload").and.returnValue({
-                success: function() {
-                    return {
-                        error: function() {}
-                    };
-                }
+            errorCallback: null,
+            upload: jasmine.createSpy("upload").and.callFake(function() {
+                return {
+                    success: function() {
+                        return {
+                            error: function(callback) {
+                                upload.errorCallback = callback;
+                            }
+                        };
+                    }
+                };
             })
         };
 
@@ -127,5 +132,31 @@ describe("SoundUploadController tests", function () {
         );
 
         expect(upload.upload).not.toHaveBeenCalled();
+    });
+
+    it("should explain that a published sound requires a draft before replacement", function () {
+        controller.metadata.uuid = "existing-sound-uuid";
+        controller.metadata.filename = "original.mp3";
+        controller.file = [{
+            name: "replacement.wav",
+            size: 265000,
+            type: "audio/wav"
+        }];
+
+        controller.ok();
+
+        expect(upload.upload).toHaveBeenCalled();
+        expect(upload.errorCallback).toEqual(jasmine.any(Function));
+
+        upload.errorCallback(
+            "Sound replacement requires the profile to be in draft mode",
+            400
+        );
+
+        expect(controller.error).toBe(
+            "This profile is already published. Create a draft revision before replacing the sound recording."
+        );
+
+        expect(modalInstance.close).not.toHaveBeenCalled();
     });
 });
