@@ -156,16 +156,15 @@
                 $cacheFactory.get('$http').removeAll();
                 $modalInstance.close();
             }).error(function(data, status) {
+                var errorMessage = typeof data === 'string' ? data :
+                    (data && data.error ? data.error : null);
+
                 if (status === 400 &&
-                    typeof data === 'string' &&
-                    data.indexOf('Sound replacement requires the profile to be in draft mode') !== -1) {
+                    errorMessage &&
+                    errorMessage.indexOf('Sound replacement requires the profile to be in draft mode') !== -1) {
                     self.error = 'This profile is already published. Create a draft revision before replacing the sound recording.';
-                } else if (typeof data === 'string' && data.trim()) {
-                    self.error = data;
-                } else if (data && data.error) {
-                    self.error = data.error;
                 } else {
-                    self.error = 'An error occurred while uploading the sound.';
+                    self.error = errorMessage || 'An error occurred while uploading the sound.';
                 }
             });
         };
