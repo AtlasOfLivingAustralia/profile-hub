@@ -84,6 +84,76 @@ class ProfileControllerSpec extends Specification implements ControllerUnitTest<
         response.contentAsByteArray[0..3] == ([0x89, 0x50, 0x4e, 0x47] as byte[])
     }
 
+    def "soundReplacementRequiresDraft should reject replacing a published sound without a draft"() {
+        given:
+        params.opusId = "opus"
+        params.profileId = "profile"
+
+        def file = Mock(org.springframework.web.multipart.MultipartFile)
+        def attachment = [type: "sound", uuid: "sound123"]
+
+        when:
+        boolean requiresDraft = controller.soundReplacementRequiresDraft(attachment, file)
+
+        then:
+        1 * profileService.getProfile("opus", "profile", false) >> [
+            profile: [
+                hasDraft: false,
+                lastPublished: new Date()
+            ]
+        ]
+
+        requiresDraft == true
+    }
+
+    def "soundReplacementRequiresDraft should allow replacement when a draft exists"() {
+        given:
+        params.opusId = "opus"
+        params.profileId = "profile"
+
+        def file = Mock(org.springframework.web.multipart.MultipartFile)
+        def attachment = [type: "sound", uuid: "sound123"]
+
+        when:
+        boolean requiresDraft = controller.soundReplacementRequiresDraft(attachment, file)
+
+        then:
+        1 * profileService.getProfile("opus", "profile", false) >> [
+            profile: [
+                hasDraft: true,
+                lastPublished: new Date()
+            ]
+        ]
+
+        requiresDraft == false
+    }
+
+    def "soundReplacementRequiresDraft should skip validation for new uploads and metadata only updates"() {
+        given:
+        params.opusId = "opus"
+        params.profileId = "profile"
+
+        def file = Mock(org.springframework.web.multipart.MultipartFile)
+
+        when:
+        def newUpload = controller.soundReplacementRequiresDraft(
+            [type: "sound"], file
+        )
+        def metadataOnly = controller.soundReplacementRequiresDraft(
+            [type: "sound", uuid: "sound123"], null
+        )
+        def documentUpload = controller.soundReplacementRequiresDraft(
+            [type: "document", uuid: "doc123"], file
+        )
+
+        then:
+        !newUpload
+        !metadataOnly
+        !documentUpload
+
+        0 * profileService.getProfile(_, _, _)
+    }
+
     def "edit should return a 400 (BAD REQUEST) if a profile id is not provided"() {
         when:
         controller.edit()
