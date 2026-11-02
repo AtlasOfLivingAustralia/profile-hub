@@ -149,7 +149,9 @@ describe("SoundUploadController tests", function () {
         expect(upload.errorCallback).toEqual(jasmine.any(Function));
 
         upload.errorCallback(
-            "Sound replacement requires the profile to be in draft mode",
+            {
+                error: "Sound replacement requires the profile to be in draft mode"
+            },
             400
         );
 
