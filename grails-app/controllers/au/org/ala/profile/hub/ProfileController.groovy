@@ -626,13 +626,44 @@ class ProfileController extends BaseController {
                     attachment.filename = file.originalFilename
                 }
 
-                def result = profileService.saveAttachment(params.opusId, params.profileId, attachment, request)
+                if (soundReplacementRequiresDraft(attachment, file)) {
+                    response.status = 400
+                    render([
+                        error: 'Sound replacement requires the profile to be in draft mode'
+                    ] as JSON)
+                    return
+                }
+
+                def result = profileService.saveAttachment(
+                    params.opusId,
+                    params.profileId,
+                    attachment,
+                    request
+                )
 
                 handle result
             }
         } else {
             badRequest "Request is not multipart"
         }
+    }
+
+    protected boolean soundReplacementRequiresDraft(Map attachment, MultipartFile file) {
+        if (attachment.type != 'sound' || !attachment.uuid || !file) {
+            return false
+        }
+
+        def profileResult = profileService.getProfile(
+            params.opusId,
+            params.profileId,
+            false
+        )
+
+        def profile = profileResult?.profile
+
+        return profile != null &&
+            profile.hasDraft == false &&
+            profile.lastPublished != null
     }
 
     @Secured(role = ROLE_PROFILE_EDITOR)
