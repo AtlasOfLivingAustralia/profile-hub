@@ -25,3 +25,20 @@
         </g:if>
     </div>
 </div>
+
+
+<g:if test="${profileQrCodeBase64}">
+    <div class="row margin-top-1" ng-cloak>
+        <div class="col-xs-12">
+            <div class="profile-qr-code">
+                <img src="data:image/png;base64,${profileQrCodeBase64}"
+                     alt="QR code linking to this profile"
+                     width="180"
+                     height="180"/>
+                <p class="small">
+                    Scan this QR code to view this profile.
+                </p>
+            </div>
+        </div>
+    </div>
+</g:if>
