@@ -22,6 +22,22 @@
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <div class="checkbox">
+                <label for="showQRCode" class="inline-label">
+                    <input id="showQRCode"
+                           type="checkbox"
+                           name="showQRCode"
+                           ng-model="opusCtrl.opus.profileLayoutConfig.showQRCode"
+                           ng-false-value="false">
+                    Show QR code on profile pages
+                </label>
+            </div>
+            <p class="help-block">
+                Display a QR code linking to the permanent profile URL
+                at the bottom of each profile page.
+            </p>
+        </div>
     </div>
 
     <div class="panel-footer">

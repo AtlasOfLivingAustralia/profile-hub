@@ -64,13 +64,31 @@ class ProfileController extends BaseController {
             } else {
                 profileAndOpus.profile.mapSnapshot = mapService.getSnapshotImageUrlWithUUIDs(request.contextPath, profileAndOpus.opus.uuid, profileAndOpus.profile.uuid)
                 String profileUrl = getProfileUrl(profileAndOpus.opus, profileAndOpus.profile)
+                String profileQrCodeBase64 = null
+
+                if (profileAndOpus.opus?.profileLayoutConfig?.showQRCode == true) {
+                    String permanentUrl = g.createLink(
+                        uri: "/opus/${profileAndOpus.opus.uuid}/profile/${profileAndOpus.profile.uuid}",
+                        absolute: true
+                    )
+
+                    byte[] png = QRCode.from(permanentUrl)
+                        .to(net.glxn.qrgen.image.ImageType.PNG)
+                        .withSize(180, 180)
+                        .stream()
+                        .toByteArray()
+
+                    profileQrCodeBase64 = png.encodeBase64().toString()
+                }
+
                 Map model = profileAndOpus
                 model << commonModelEntries(profileAndOpus.opus, profileAndOpus.profile, false)
                 model << [
-                          usePrivateRecordData: profileAndOpus.opus.usePrivateRecordData,
-                          displayMap          : profileService.hasMatchedName(model.profile),
-                          citation            : profileService.getCitation(profileAndOpus.opus, profileAndOpus.profile, profileUrl),
-                          helpLink            : profileAndOpus.opus?.help?.profileViewLink
+                    usePrivateRecordData: profileAndOpus.opus.usePrivateRecordData,
+                    displayMap          : profileService.hasMatchedName(model.profile),
+                    citation            : profileService.getCitation(profileAndOpus.opus, profileAndOpus.profile, profileUrl),
+                    helpLink            : profileAndOpus.opus?.help?.profileViewLink,
+                    profileQrCodeBase64 : profileQrCodeBase64
                 ]
                 render view: "show", model: model
             }
