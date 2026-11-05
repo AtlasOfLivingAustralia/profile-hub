@@ -9,7 +9,7 @@ class NslService {
 
     def getNameDetails(String nslNameIdentifier) {
         if (nslNameIdentifier && nslNameIdentifier != "null") {
-            webService.get("${grailsApplication.config.nsl.service.url.prefix}${nslNameIdentifier}.json", [:], ContentType.APPLICATION_JSON, false, false)
+            webService.get("${grailsApplication.config.getProperty('nsl.service.url.prefix')}${nslNameIdentifier}.json", [:], ContentType.APPLICATION_JSON, false, false)
         }
     }
 
@@ -17,7 +17,7 @@ class NslService {
         List<Map> formattedConcepts = []
 
         if (nslNameIdentifier && nslNameIdentifier != "null") {
-            def concepts = webService.get("${grailsApplication.config.nsl.service.url.prefix}${nslNameIdentifier}${grailsApplication.config.nsl.service.apni.concept.suffix}", [:], ContentType.APPLICATION_JSON, false, false)
+            def concepts = webService.get("${grailsApplication.config.getProperty('nsl.service.url.prefix')}${nslNameIdentifier}${grailsApplication.config.getProperty('nsl.service.apni.concept.suffix')}", [:], ContentType.APPLICATION_JSON, false, false)
             formattedConcepts = concepts?.resp?.references?.collect { formatReference(it) }
         }
 

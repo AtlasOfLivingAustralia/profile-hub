@@ -47,7 +47,7 @@ class ImageService {
     static final Integer THUMBNAIL_MAX_SIZE = 300
 
     private getMetadataFromAlaImageService(String imageId) {
-        webService.get("${grailsApplication.config.images.service.url}/ws/image/${imageId}", [:], ContentType.APPLICATION_JSON, false, true)
+        webService.get("${grailsApplication.config.getProperty('images.service.url')}/ws/image/${imageId}", [:], ContentType.APPLICATION_JSON, false, true)
     }
 
     String constructImageUrl(String contextPath, String opusId, String profileId, String imageId, String extension, String imageType, ImageUrlType urlType) {
@@ -86,7 +86,7 @@ class ImageService {
             Map<String, String> imageProperties = response.resp as Map
 
             if (localImage) {
-                String dir = imageProperties.type as ImageType == ImageType.PRIVATE ? "${grailsApplication.config.image.private.dir}" : "${grailsApplication.config.image.staging.dir}"
+                String dir = imageProperties.type as ImageType == ImageType.PRIVATE ? "${grailsApplication.config.getProperty('image.private.dir')}" : "${grailsApplication.config.getProperty('image.staging.dir')}"
                 String extension = getExtension(imageProperties.originalFileName)
                 String imageUrl
                 String thumbnailUrl
@@ -151,7 +151,7 @@ class ImageService {
     }
 
     File getTile(String collectionId, String profileId, String imageId, String type, int zoom, int x, int y) {
-        String baseDir = type as ImageType == ImageType.PRIVATE ? "${grailsApplication.config.image.private.dir}" : "${grailsApplication.config.image.staging.dir}"
+        String baseDir = type as ImageType == ImageType.PRIVATE ? "${grailsApplication.config.getProperty('image.private.dir')}" : "${grailsApplication.config.getProperty('image.staging.dir')}"
         String fileLocation = buildFilePath(baseDir, collectionId, profileId, imageId)
         new File(fileLocation + "/${imageId}_tiles/${zoom}/${x}/${y}.png")
     }
@@ -170,7 +170,7 @@ class ImageService {
             // if the collection is public and the profile is in draft mode, then stage the image: it will be
             // uploaded to the biocache when the profile's draft is released
             try {
-                storeLocalImage(profileAndOpus.opus, profileAndOpus.profile, metadata, file, "${grailsApplication.config.image.staging.dir}")
+                storeLocalImage(profileAndOpus.opus, profileAndOpus.profile, metadata, file, "${grailsApplication.config.getProperty('image.staging.dir')}")
             } catch (IOException exception) {
                 log.error("Error saving local staged image ", exception)
             }
@@ -179,7 +179,7 @@ class ImageService {
         } else if (profileAndOpus.opus.keepImagesPrivate) {
             // if the admin has elected not to publish images, then store the image in the local image dir
             try {
-                storeLocalImage(profileAndOpus.opus, profileAndOpus.profile, metadata, file, "${grailsApplication.config.image.private.dir}")
+                storeLocalImage(profileAndOpus.opus, profileAndOpus.profile, metadata, file, "${grailsApplication.config.getProperty('image.private.dir')}")
             } catch (IOException exception) {
                 log.error("Error saving local private image ", exception)
             }
@@ -243,7 +243,7 @@ class ImageService {
         def profile = profileService.getProfile(opusId, profileId, true)
 
         if (profile && profile.profile.stagedImages) {
-            deleted = deleteLocalImage(profile.profile.stagedImages, opusId, profile.profile.uuid, imageId, "${grailsApplication.config.image.staging.dir}")
+            deleted = deleteLocalImage(profile.profile.stagedImages, opusId, profile.profile.uuid, imageId, "${grailsApplication.config.getProperty('image.staging.dir')}")
 
             if (deleted) {
                 profileService.recordStagedImage(opusId, profileId, [imageId: imageId, action: "delete"])
@@ -261,7 +261,7 @@ class ImageService {
         def profile = profileService.getProfile(opusId, profileId, true) //profileId is its name, not its uuid
 
         if (profile && profile.profile.privateImages) {
-            deleted = deleteLocalImage(profile.profile.privateImages, opusId, profile.profile.uuid, imageId, "${grailsApplication.config.image.private.dir}")
+            deleted = deleteLocalImage(profile.profile.privateImages, opusId, profile.profile.uuid, imageId, "${grailsApplication.config.getProperty('image.private.dir')}")
             if (deleted) {
                 profileService.recordPrivateImage(opusId, profileId, [imageId: imageId, action: "delete"])
             } else {
@@ -449,9 +449,9 @@ class ImageService {
 
             def imageId = profile.primaryImage
 
-            Map imageData = webService.get("${grailsApplication.config.images.service.url}/ws/getImageInfo", [id: imageId, includeMetadata:true], ContentType.APPLICATION_JSON, false, false)
+            Map imageData = webService.get("${grailsApplication.config.getProperty('images.service.url')}/ws/getImageInfo", [id: imageId, includeMetadata:true], ContentType.APPLICATION_JSON, false, false)
 
-            log.debug ("Obtained imageData map from " + "${grailsApplication.config.images.service.url}/ws/getImageInfo?id=${imageId}&includeMetadata=true ")
+            log.debug ("Obtained imageData map from " + "${grailsApplication.config.getProperty('images.service.url')}/ws/getImageInfo?id=${imageId}&includeMetadata=true ")
 
             boolean excluded = isExcluded(opus.approvedImageOption, profile.imageSettings ?: null, imageId)
 
@@ -461,17 +461,17 @@ class ImageService {
                 def occurrenceId = imageData.resp.metadata?.find { it.key == 'occurrenceId' }?.getAt("value")
                 def dataResourceId = imageData.resp.dataResourceUid
 
-                Map dataResource = webService.get("${grailsApplication.config.collectory.base.url}/ws/dataResource/${dataResourceId}", [:], ContentType.APPLICATION_JSON, false, false)
-                        //getJSON("${grailsApplication.config.collectory.base.url}/ws/dataResource/${dataResourceId}")
+                Map dataResource = webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataResource/${dataResourceId}", [:], ContentType.APPLICATION_JSON, false, false)
+                        //getJSON("${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataResource/${dataResourceId}")
 
-                log.debug ("Obtained dataResource map from " + "${grailsApplication.config.collectory.base.url}/ws/dataResource/${dataResourceId}")
+                log.debug ("Obtained dataResource map from " + "${grailsApplication.config.getProperty('collectory.base.url')}/ws/dataResource/${dataResourceId}")
                 log.debug (toJson(dataResource))
 
                 image = [
                         imageId         : imageId,
                         occurrenceId    : occurrenceId,
-                        largeImageUrl   : "${grailsApplication.config.images.service.url}/image/proxyImageThumbnailLarge?imageId=${imageId}", //"largeImageUrl" -> "http://images.ala.org.au/image/proxyImageThumbnailLarge?imageId=e896221a-537f-4b36-95a4-ef29909053d1"
-                        thumbnailUrl    : "${grailsApplication.config.images.service.url}/image/proxyImageThumbnail?imageId=${imageId}", //"thumbnailUrl" -> "http://images.ala.org.au/image/proxyImageThumbnail?imageId=e896221a-537f-4b36-95a4-ef29909053d1"
+                        largeImageUrl   : "${grailsApplication.config.getProperty('images.service.url')}/image/proxyImageThumbnailLarge?imageId=${imageId}", //"largeImageUrl" -> "http://images.ala.org.au/image/proxyImageThumbnailLarge?imageId=e896221a-537f-4b36-95a4-ef29909053d1"
+                        thumbnailUrl    : "${grailsApplication.config.getProperty('images.service.url')}/image/proxyImageThumbnail?imageId=${imageId}", //"thumbnailUrl" -> "http://images.ala.org.au/image/proxyImageThumbnail?imageId=e896221a-537f-4b36-95a4-ef29909053d1"
                         dataResourceName: dataResource?.resp?.name,
                         excluded        : excluded,
                         displayOption   : excluded ? ImageOption.EXCLUDE.name() : ImageOption.INCLUDE.name(),
@@ -481,9 +481,9 @@ class ImageService {
                         primary         : imageId == profile.primaryImage,
                         metadata        : [creator      : imageData.resp.creator, description: imageData.resp.description, fileSize: imageData.resp.sizeInBytes,
                                            height       : imageData.resp.height, imageId: imageId, imageUrl: imageData.resp.imageUrl,
-                                           largeThumbUrl: "${grailsApplication.config.images.service.url}/image/proxyImageThumbnailLarge?imageId=${imageId}",
+                                           largeThumbUrl: "${grailsApplication.config.getProperty('images.service.url')}/image/proxyImageThumbnailLarge?imageId=${imageId}",
                                            license      : imageData.resp.license, mimetype: imageData.resp.mimeType, squareThumbUrl: '', thumbHeight: '',
-                                           thumbUrl     : "${grailsApplication.config.images.service.url}/image/proxyImageThumbnail?imageId=${imageId}",
+                                           thumbUrl     : "${grailsApplication.config.getProperty('images.service.url')}/image/proxyImageThumbnail?imageId=${imageId}",
                                            thumbWidth   : '', titleZoomLevels: imageData.resp.titleZoomLevels,
                                            title        : imageData.resp.title, created: imageData.resp.created,
                                            rights       : imageData.resp.rights, rightsHolder: imageData.resp.rightsHolder, width: imageData.resp.width], //imageData.imageMetadata && !imageData.imageMetadata.isEmpty() ? imageData.imageMetadata[0] : [:],
@@ -699,7 +699,7 @@ class ImageService {
         List<File> imageDirectories = []
         List<File> imageFiles = []
         List<File> imagesToPublish = []
-        String localDirPath = staged ? grailsApplication.config.image.staging.dir : grailsApplication.config.image.private.dir
+        String localDirPath = staged ? grailsApplication.config.getProperty('image.staging.dir') : grailsApplication.config.getProperty('image.private.dir')
         //Check in old file directory structure
         File localDir = new File("${localDirPath}/${profile.uuid}")
         if (localDir.exists()) {
@@ -799,7 +799,7 @@ class ImageService {
     //Changed directory structure, supporting existing files stored in old structure, use updated method - same name
     @Deprecated
     File getTile(String profileId, String imageId, String type, int zoom, int x, int y) {
-        String baseDir = type as ImageType == ImageType.PRIVATE ? "${grailsApplication.config.image.private.dir}" : "${grailsApplication.config.image.staging.dir}"
+        String baseDir = type as ImageType == ImageType.PRIVATE ? "${grailsApplication.config.getProperty('image.private.dir')}" : "${grailsApplication.config.getProperty('image.staging.dir')}"
         new File("${baseDir}/${profileId}/${imageId}_tiles/${zoom}/${x}/${y}.png")
     }
 

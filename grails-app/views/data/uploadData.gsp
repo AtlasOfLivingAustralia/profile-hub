@@ -2,7 +2,7 @@
 <html>
 <head>
     <g:set var="excludeBugherd" value="true" scope="request"/>
-    <meta name="layout" content="${grailsApplication.config.layout}"/>
+    <meta name="layout" content="${grailsApplication.config.getProperty('layout')}"/>
     <title>Upload data</title>
     <asset:javascript src="webcomponentsjs/webcomponents-0.7.24.js"/>
 </head>
@@ -64,7 +64,7 @@
                     <g:else>
                         <h2>1. Uploaded file</h2>
                         <web-component
-                                url="${grailsApplication.config.sandbox.base.url}${grailsApplication.config.sandbox.context.path}/upload/preview/${params.id}?fn=${params.fn}"
+                                url="${grailsApplication.config.getProperty('sandbox.base.url')}${grailsApplication.config.getProperty('sandbox.context.path')}/upload/preview/${params.id}?fn=${params.fn}"
                                 content-selectors="#uploadedFileDetails,#recognisedDataDiv,#processSample"
                                 exclude-selectors="#optionsAfterDownload,link[href*='bootstrap'],link[href*='jquery'],link[href*='ala-styles']"
                                 onload-callback="dataCtrl.fixSandboxUploadUrls">
@@ -76,7 +76,7 @@
         <g:else>
             <div class="row embedded-sandbox">
                 <div class="col-md-12">
-                    <web-component url="${grailsApplication.config.sandbox.base.url}${grailsApplication.config.sandbox.context.path}"
+                    <web-component url="${grailsApplication.config.getProperty('sandbox.base.url')}${grailsApplication.config.getProperty('sandbox.context.path')}"
                                    content-selectors="#initialPaste,#recognisedDataDiv,#processSample,#processedData,#jsonBlob"
                                    exclude-selectors="#optionsAfterDownload,link[href*='bootstrap'],link[href*='jquery'],link[href*='ala-styles']"
                                    onload-callback="dataCtrl.fixSandboxUploadUrls">

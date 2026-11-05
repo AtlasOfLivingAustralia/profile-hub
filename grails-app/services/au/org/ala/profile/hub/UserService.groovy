@@ -25,9 +25,9 @@ class UserService {
     }
 
     def userIsSiteAdmin() {
-        (authService.userInRole(grailsApplication.config.security.cas.officerRole)
-                || authService.userInRole(grailsApplication.config.security.cas.adminRole)
-                || authService.userInRole(grailsApplication.config.security.cas.alaAdminRole))
+        (authService.userInRole(grailsApplication.config.getProperty('security.cas.officerRole'))
+                || authService.userInRole(grailsApplication.config.getProperty('security.cas.adminRole'))
+                || authService.userInRole(grailsApplication.config.getProperty('security.cas.alaAdminRole')))
     }
 
     def checkEmailExists(String email) {

@@ -11,7 +11,7 @@ class NoCacheInterceptor {
 
     boolean before () {
 
-        if (grailsApplication.config.app.view.nocache) {
+        if (grailsApplication.config.getProperty('app.view.nocache')) {
 
             response.setHeader(HEADER_PRAGMA, "no-cache");
             response.setDateHeader(HEADER_EXPIRES, 1L);

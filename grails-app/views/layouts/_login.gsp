@@ -32,7 +32,7 @@
         <li role="presentation">
             <a role="menuitem"
                tabindex="-1"
-               href="${grailsApplication.config.security.cas.casServerName}/userdetails/myprofile"><span class="fa fa-user">&nbsp;&nbsp;</span>My Profile</a>
+               href="${grailsApplication.config.getProperty('security.cas.casServerName')}/userdetails/myprofile"><span class="fa fa-user">&nbsp;&nbsp;</span>My Profile</a>
         </li>
         <g:if test="${params.isALAAdmin}">
             <li role="presentation">
@@ -45,7 +45,7 @@
             <a role="menuitem"
                tabindex="-1"
                target="_self"
-               href="${request.contextPath}/logout/logout?appUrl=${grailsApplication.config.serverURL}${request.forwardURI}">
+               href="${request.contextPath}/logout/logout?appUrl=${grailsApplication.config.getProperty('serverURL')}${request.forwardURI}">
                 <span class="fa fa-sign-out">&nbsp;&nbsp;</span>Logout</a>
         </li>
     </ul>

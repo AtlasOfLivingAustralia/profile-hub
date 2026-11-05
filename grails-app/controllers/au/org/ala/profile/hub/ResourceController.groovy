@@ -8,8 +8,8 @@ class ResourceController {
 
     def facets() {
         if (!facets) {
-            if (grailsApplication.config.facets) {
-                facets = new File(grailsApplication.config.facets).text
+            if (grailsApplication.config.getProperty('facets')) {
+                facets = new File(grailsApplication.config.getProperty('facets')).text
             } else {
                 facets = Resources.getResource('grouped_facets_ala.json').text
             }

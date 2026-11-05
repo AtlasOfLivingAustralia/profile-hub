@@ -41,18 +41,18 @@
                 </div>
 
                 <div ng-if="specimen.institutionName"><span class="minor-heading">Institution Name:&nbsp;</span><a
-                        href="${grailsApplication.config.collectory.base.url}/public/show/{{specimen.institutionUid}}"
+                        href="${grailsApplication.config.getProperty('collectory.base.url')}/public/show/{{specimen.institutionUid}}"
                         target="_blank">{{specimen.institutionName}}</a></div>
 
                 <div ng-if="specimen.collectionName"><span class="minor-heading">Collection:&nbsp;</span><a
-                        href="${grailsApplication.config.collectory.base.url}/public/show/{{specimen.collectionUid}}"
+                        href="${grailsApplication.config.getProperty('collectory.base.url')}/public/show/{{specimen.collectionUid}}"
                         target="_blank">{{specimen.collectionName}}</a></div>
 
                 <div ng-if="specimen.catalogNumber"><span class="minor-heading">Catalog Number:&nbsp;</span>{{specimen.catalogNumber}}
                 </div>
 
                 <div ng-if="specimen.id"><a
-                        href="${grailsApplication.config.biocache.base.url}/occurrences/{{specimen.id}}"
+                        href="${grailsApplication.config.getProperty('biocache.base.url')}/occurrences/{{specimen.id}}"
                         target="_blank">View specimen record</a></div>
             </div>
             <div class="col-sm-2 text-right" ng-if="!specCtrl.readonly()">

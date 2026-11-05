@@ -17,7 +17,7 @@ class SandboxService {
         List dataResources = []
 
         dataResourceUids?.each {
-            Map result = webService.get("${grailsApplication.config.collectory.base.url}/ws/tempDataResource?uid=${it}")
+            Map result = webService.get("${grailsApplication.config.getProperty('collectory.base.url')}/ws/tempDataResource?uid=${it}")
             if (isHttpSuccess(result.statusCode as int) && result.resp.alaId) {
                 result.resp.uploadedBy = authService.getUserForUserId(result.resp.alaId).displayName
                 dataResources << result.resp
@@ -28,7 +28,7 @@ class SandboxService {
     }
 
     Map deleteDataSet(String opusId, String dataResourceUid) {
-        webService.delete("${grailsApplication.config.sandbox.biocache.service.url}/upload/${dataResourceUid}", [:], ContentType.APPLICATION_JSON, true, true)
+        webService.delete("${grailsApplication.config.getProperty('sandbox.biocache.service.url')}/upload/${dataResourceUid}", [:], ContentType.APPLICATION_JSON, true, true)
 
         Map opus = profileService.getOpus(opusId)
         opus.dataResourceConfig.privateRecordSources.remove(dataResourceUid)

@@ -11,7 +11,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                         <label>
-                            Select the <a href="${grailsApplication.config.keybase.web.url}">Keybase</a> Project for this collection:
+                            Select the <a href="${grailsApplication.config.getProperty('keybase.web.url')}">Keybase</a> Project for this collection:
                         </label>
                         <select ng-options="project.project_name for project in opusCtrl.keybaseProjects | orderBy:'project_name'"
                                 ng-model="opusCtrl.selectedKeybaseProject" class="form-control">

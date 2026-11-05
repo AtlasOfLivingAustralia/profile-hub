@@ -1,7 +1,7 @@
 <div id="primaryImage"  class="primary-image" ng-show="imageCtrl.primaryImage" ng-cloak>
         <div class="thumbnail pull-left">
             <a href="" ng-click="imageCtrl.showMetadata(imageCtrl.primaryImage)" target="_blank">
-                <ala-link href="${grailsApplication.config.biocache.base.url}${grailsApplication.config.biocache.occurrence.record.path}{{imageCtrl.primaryImage.occurrenceId}}"
+                <ala-link href="${grailsApplication.config.getProperty('biocache.base.url')}${grailsApplication.config.getProperty('biocache.occurrence.record.path')}{{imageCtrl.primaryImage.occurrenceId}}"
                    target="_blank" ng-show="imageCtrl.primaryImage.largeImageUrl" disable="{{imageCtrl.primaryImage.type.name != OPEN}}" ng-cloak>
                     <img ng-src="${request.contextPath}{{imageCtrl.primaryImage.thumbnailUrl}}"
                          ng-if="imageCtrl.primaryImage.thumbnailUrl && imageCtrl.primaryImage.type.name != 'OPEN'"/>

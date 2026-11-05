@@ -20,7 +20,7 @@ class BHLController extends BaseController {
 
                 if (titleId) {
                     titleMetadata = biodiversityLibraryService.lookupTitle(titleId)
-                    titleMetadata.thumbnailUrl = "${grailsApplication.config.biodiv.library.thumb.url}${params.pageId}"
+                    titleMetadata.thumbnailUrl = "${grailsApplication.config.getProperty('biodiv.library.thumb.url')}${params.pageId}"
                 }
             }
         }

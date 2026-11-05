@@ -272,10 +272,14 @@ class ApiController extends BaseController {
             String rankFilter = params.rankFilter ?: ""
 
             def result = apiService.getProfiles(params.opusId, startIndex, pageSize, sort, order, taxonName, taxonRank, rankFilter)
-            def profiles = result?.resp.profiles
-            def count = result?.resp.count
-            response.addIntHeader('X-Total-Count', count)
-            render profiles as JSON
+            if (!result?.resp) {
+                notFound()
+            } else {
+                def profiles = result.resp.profiles
+                def count = result.resp.count
+                response.addIntHeader('X-Total-Count', count ?: 0)
+                render profiles as JSON
+            }
         }
     }
 
@@ -385,7 +389,7 @@ class ApiController extends BaseController {
                 notFound()
             } else {
                 if (!onlyContent) {
-                    String fullURL = grailsApplication.config.grails.serverURL +  (request.contextPath ? "/${request.contextPath}" : "")
+                    String fullURL = grailsApplication.config.getProperty('grails.serverURL') +  (request.contextPath ? "/${request.contextPath}" : "")
                     profileAndOpus.profile.mapSnapshot = mapService.getSnapshotImageUrlWithUUIDs(fullURL, profileAndOpus.opus.uuid, profileAndOpus.profile.uuid)
                     apiService.supplementProfileData(profileAndOpus, 20, includeImages)
                 }
@@ -470,7 +474,7 @@ class ApiController extends BaseController {
             if (!profileAndOpus || !profileAndOpus.profile?.privateMode) {
                 notFound()
             } else {
-                String fullURL = grailsApplication.config.grails.serverURL +  (request.contextPath ? "/${request.contextPath}" : "")
+                String fullURL = grailsApplication.config.getProperty('grails.serverURL') +  (request.contextPath ? "/${request.contextPath}" : "")
                 profileAndOpus.profile.mapSnapshot = mapService.getSnapshotImageUrlWithUUIDs(fullURL, profileAndOpus.opus.uuid, profileAndOpus.profile.uuid)
                 apiService.supplementProfileData(profileAndOpus, 20, includeImages)
                 render profileAndOpus.profile as JSON

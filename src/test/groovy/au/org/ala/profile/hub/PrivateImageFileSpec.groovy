@@ -56,10 +56,10 @@ class PrivateImageFileSpec extends Specification implements ControllerUnitTest<P
             path += "/"
         }
         grailsApplication.config.image.private.dir = "${path}${testId}"
-        Boolean isProfileDirectory = new File("${grailsApplication.config.image.private.dir}/collection1/profile1").mkdirs()
-         Boolean isTempDir = new File("${grailsApplication.config.temp.file.location}").mkdirs()
-        profileDir = new File("${grailsApplication.config.image.private.dir}/collection1/profile1/")
-        tempDir = new File("${grailsApplication.config.temp.file.location}")
+        Boolean isProfileDirectory = new File("${grailsApplication.config.getProperty('image.private.dir')}/collection1/profile1").mkdirs()
+         Boolean isTempDir = new File("${grailsApplication.config.getProperty('temp.file.location')}").mkdirs()
+        profileDir = new File("${grailsApplication.config.getProperty('image.private.dir')}/collection1/profile1/")
+        tempDir = new File("${grailsApplication.config.getProperty('temp.file.location')}")
         imageFile = loadFileWIthContent('src/test/data/puffinswim.jpg', 'puffinswim.jpg', 'originalpuffin.jpg', 'image/jpg')
 
         imageService = new ImageService()
@@ -78,7 +78,7 @@ class PrivateImageFileSpec extends Specification implements ControllerUnitTest<P
     }
 
     def cleanupSpec() {
-        File directoryToDelete = new File("${grailsApplication.config.image.private.dir}")
+        File directoryToDelete = new File("${grailsApplication.config.getProperty('image.private.dir')}")
         boolean deleted = directoryToDelete.deleteDir()
         println "Temporary directory has been successfully removed: ${deleted}"
     }

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="${grailsApplication.config.layout}"/>
+    <meta name="layout" content="${grailsApplication.config.getProperty('layout')}"/>
     <title>Profile collections</title>
     <asset:script type="text/javascript"
             src="http://markusslima.github.io/bootstrap-filestyle/1.0.6/js/bootstrap-filestyle.min.js"></asset:script>

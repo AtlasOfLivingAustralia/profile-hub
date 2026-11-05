@@ -12,18 +12,12 @@ class GlossaryControllerSpec extends Specification implements ControllerUnitTest
 
     ProfileService profileService
     AuthService authService
-//    GlossaryController controller
-
-    Set<String> getIncludePlugins() {
-        ["core", "eventBus", "csv"].toSet()
-    }
 
     def setup() {
         profileService = Mock(ProfileService)
         authService = Mock(AuthService)
         authService.getUserId() >> "123"
         authService.getDisplayName() >> "xyz"
-//        controller = new GlossaryController()
 
         controller.profileService = profileService
         controller.authService = authService
@@ -83,10 +77,7 @@ class GlossaryControllerSpec extends Specification implements ControllerUnitTest
 
     def "upload should read each line of the csv file and pass a list of terms to the service"() {
         setup:
-        File mockFile = Mock(File)
         controller.request.addFile(new GrailsMockMultipartFile("file", "file", "text/csv", "term1,description1\nterm2,description2\nterm3,description3".getBytes()))
-
-        controller.request.getFile(_) >> mockFile
         List expectedList = [[term: "term1", description: "description1"], [term: "term2", description: "description2"], [term: "term3", description: "description3"]]
 
         when:

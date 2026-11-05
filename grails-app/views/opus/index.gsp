@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="${grailsApplication.config.layout}"/>
+    <meta name="layout" content="${grailsApplication.config.getProperty('layout')}"/>
     <title>Profile collections | Atlas of Living Australia</title>
 
 </head>

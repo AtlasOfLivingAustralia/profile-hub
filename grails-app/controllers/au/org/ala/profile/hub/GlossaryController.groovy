@@ -3,6 +3,7 @@ package au.org.ala.profile.hub
 import au.org.ala.profile.security.Role
 import au.org.ala.profile.security.Secured
 import au.org.ala.web.AuthService
+import com.opencsv.CSVReaderBuilder
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
 
@@ -45,8 +46,12 @@ class GlossaryController extends OpusBaseController {
             if (!file) {
                 badRequest()
             } else {
-                file.inputStream.eachCsvLine { tokens ->
-                    items << [term: tokens[0], description: tokens[1]]
+                file.inputStream.withReader { reader ->
+                    new CSVReaderBuilder(reader).build().withCloseable { csv ->
+                        csv.each { String[] tokens ->
+                            items << [term: tokens[0], description: tokens[1]]
+                        }
+                    }
                 }
 
                 def response = profileService.uploadGlossary(params.opusId, params.glossaryId, items)

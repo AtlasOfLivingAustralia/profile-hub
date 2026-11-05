@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="${grailsApplication.config.layout}"/>
+    <meta name="layout" content="${grailsApplication.config.getProperty('layout')}"/>
     <title>${profile.scientificName}</title>
 </head>
 
@@ -50,7 +50,7 @@
             <span class="fa fa-star color--green" ng-show="pub.uuid == doiCtrl.pubId" title="You are viewing this version"></span>
         </div>
         <div class="col-md-11">
-            <publication data="pub" opus-id="doiCtrl.opusId" profile-id="doiCtrl.profileId" prefix="${grailsApplication.config.doi.resolver.prefix}"></publication>
+            <publication data="pub" opus-id="doiCtrl.opusId" profile-id="doiCtrl.profileId" prefix="${grailsApplication.config.getProperty('doi.resolver.prefix')}"></publication>
         </div>
     </div>
 </div>

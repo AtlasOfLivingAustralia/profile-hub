@@ -67,13 +67,13 @@ class ApiService {
                 ]
             }
 
-            profile.nslUrl = "${grailsApplication.config.nsl.base.url}services/apni-format/display/${profile.nslNameIdentifier}"
+            profile.nslUrl = "${grailsApplication.config.getProperty('nsl.base.url')}services/apni-format/display/${profile.nslNameIdentifier}"
         }
 
         if (profile.occurrenceQuery) {
             profile.map = [
-                    wmsUrl: "${grailsApplication.config.biocache.ws.url}${grailsApplication.config.biocache.wms.path}${profile.occurrenceQuery}",
-                    layers: grailsApplication.config.biocache.wms.layer,
+                    wmsUrl: "${grailsApplication.config.getProperty('biocache.ws.url')}${grailsApplication.config.getProperty('biocache.wms.path')}${profile.occurrenceQuery}",
+                    layers: grailsApplication.config.getProperty('biocache.wms.layer'),
                     color : opus.mapConfig.mapPointColour,
                     env   : "color:${opus.mapConfig.mapPointColour};name:circle;size:4;opacity:1"
             ]
@@ -111,13 +111,13 @@ class ApiService {
 
     String getPublicationURL(Map publication) {
         if (publication.uuid) {
-            return "${grailsApplication.config.grails.serverURL}${getContext()}/publication/${publication.uuid}"
+            return "${grailsApplication.config.getProperty('grails.serverURL')}${getContext()}/publication/${publication.uuid}"
         }
     }
 
     String getPublicationFileURL(Map publication, Map profile) {
         if (publication.uuid) {
-            return "${grailsApplication.config.grails.serverURL}${getContext()}/opus/${profile.opusId}/profile/${profile.uuid}/publication/${publication.uuid}/file"
+            return "${grailsApplication.config.getProperty('grails.serverURL')}${getContext()}/opus/${profile.opusId}/profile/${profile.uuid}/publication/${publication.uuid}/file"
         }
     }
 
@@ -127,14 +127,14 @@ class ApiService {
 
     String getBIEURL(Map profile) {
         if (profile.guid) {
-            return "${grailsApplication.config.bie.base.url}/species/${profile.guid}"
+            return "${grailsApplication.config.getProperty('bie.base.url')}/species/${profile.guid}"
         }
     }
 
     String getProfileURL(Map profile) {
         String opusName = profile.opusShortName ?: profile.opusId
         String profileName = profile.scientificName ?: profile.uuid
-        "${grailsApplication.config.grails.serverURL}${getContext()}/opus/${opusName}/profile/${encPath(profileName)}"
+        "${grailsApplication.config.getProperty('grails.serverURL')}${getContext()}/opus/${opusName}/profile/${encPath(profileName)}"
     }
 
     List getAttributes (Map profile, List attributes = []) {
@@ -153,7 +153,7 @@ class ApiService {
 
         try {
             String encodedProfileId = encPath(profileId)
-            def profile = webServiceWrapperService.get("${grailsApplication.config.profile.service.url}/opus/${encPath(opusId)}/profile/${encodedProfileId}?latest=${latest}&fullClassification=${fullClassification}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())?.resp
+            def profile = webServiceWrapperService.get("${grailsApplication.config.getProperty('profile.service.url')}/opus/${encPath(opusId)}/profile/${encodedProfileId}?latest=${latest}&fullClassification=${fullClassification}", [:], ContentType.APPLICATION_JSON, true, false, profileService.getCustomHeaderWithUserId())?.resp
 
             if (!profile) {
                 return null
