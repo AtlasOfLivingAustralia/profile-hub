@@ -1,5 +1,5 @@
 package au.org.ala.profile.hub
-
+import jakarta.servlet.http.HttpServletResponse
 import au.org.ala.web.AuthService
 import au.org.ala.ws.service.WebService
 import grails.testing.services.ServiceUnitTest
@@ -41,7 +41,7 @@ class ProfileServiceSpec extends Specification implements ServiceUnitTest<Profil
 
     def "proxySound should request the published sound by default"() {
         given:
-        def response = Mock(javax.servlet.http.HttpServletResponse)
+        HttpServletResponse response = Mock(HttpServletResponse)
 
         when:
         service.proxySound(response, "opus", "profile", "sound")
@@ -53,7 +53,7 @@ class ProfileServiceSpec extends Specification implements ServiceUnitTest<Profil
 
     def "proxySound should request the draft sound for an authorised editor"() {
         given:
-        def response = Mock(javax.servlet.http.HttpServletResponse)
+        HttpServletResponse response = Mock(HttpServletResponse)
 
         when:
         service.proxySound(response, "opus", "profile", "sound", true)
