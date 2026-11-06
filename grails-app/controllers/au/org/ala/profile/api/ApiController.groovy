@@ -272,9 +272,25 @@ class ApiController extends BaseController {
             String rankFilter = params.rankFilter ?: ""
 
             def result = apiService.getProfiles(params.opusId, startIndex, pageSize, sort, order, taxonName, taxonRank, rankFilter)
-            def profiles = result?.resp.profiles
-            def count = result?.resp.count
-            response.addIntHeader('X-Total-Count', count)
+
+            if (!result || result.statusCode == 404) {
+                render status: 404
+                return
+            }
+
+            if (result.statusCode && result.statusCode != 200) {
+                render status: result.statusCode as int
+                return
+            }
+
+            if (!result.resp) {
+                render status: 404
+                return
+            }
+
+            def profiles = result.resp.profiles
+            def count = result.resp.count ?: 0
+            response.addIntHeader('X-Total-Count', count as int)
             render profiles as JSON
         }
     }
