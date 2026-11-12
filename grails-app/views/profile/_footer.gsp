@@ -30,7 +30,7 @@
 <g:if test="${profileQrCodeBase64}">
     <div class="row margin-top-1" ng-cloak>
         <div class="col-xs-12">
-            <div class="profile-qr-code">
+            <div class="profile-qr-code text-center">
                 <img src="data:image/png;base64,${profileQrCodeBase64}"
                      alt="QR code linking to this profile"
                      width="180"
