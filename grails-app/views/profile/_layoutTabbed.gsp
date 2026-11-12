@@ -46,6 +46,7 @@
 <g:if test="${!profile.privateMode || (params.currentUser && params.isOpusReviewer)}">
     <div class="row">
         <div class="col-md-12" ng-cloak>
+            <sounds ng-if="profileCtrl.profile" profile="profileCtrl.profile" readonly="profileCtrl.readonly"></sounds>
             <tabset>
                 <tab heading="Profile" class="font-xxsmall" ng-show="managedTabCtrl.hasContent()" managed-tab>
                     <div class="row" ng-controller="ImagesController as imageCtrl" ng-init="imageCtrl.init('${edit}')">
@@ -121,7 +122,6 @@
                     </div>
                 </tab>
             </tabset>
-            <sounds ng-if="profileCtrl.profile" profile="profileCtrl.profile" readonly="profileCtrl.readonly"></sounds>
         </div>
     </div>
 </g:if>
