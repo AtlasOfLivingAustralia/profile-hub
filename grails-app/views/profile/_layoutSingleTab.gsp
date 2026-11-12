@@ -61,6 +61,7 @@
 <g:if test="${!profile.privateMode || (params.currentUser && params.isOpusReviewer)}">
     <div class="row">
         <div class="col-md-12" ng-cloak>
+            <sounds ng-if="profileCtrl.profile" profile="profileCtrl.profile" readonly="profileCtrl.readonly"></sounds>
             <tabset ng-class="!profileCtrl.readonly() || (profileCtrl.opus.keybaseProjectId && profileCtrl.hasKeybaseKey) || (profileCtrl.profile.attachments.length > 0) ? '' : 'single-tabbed-panel'">
                 <tab heading="Details" class="font-xxsmall" managed-tab>
                     <div class="row">
@@ -115,7 +116,6 @@
                     <g:render template="/common/attachments" model="[hideHeading: true]"/>
                 </tab>
             </tabset>
-            <sounds ng-if="profileCtrl.profile" profile="profileCtrl.profile" readonly="profileCtrl.readonly"></sounds>
         </div>
     </div>
 </g:if>
