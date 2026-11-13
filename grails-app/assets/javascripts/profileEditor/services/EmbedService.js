@@ -1,14 +1,12 @@
 /**
  * Angular service for embedding external content that supports the oEmbed standard
  */
-profileEditor.factory('embedService', ['$http', '$q', '$sce', function ($http, $q, $sce) {
+profileEditor.factory('embedService', ['$http', '$q', '$sce', 'util', function ($http, $q, $sce, util) {
 
   var services = [
     {
       "type": "video",
       "name": "YouTube",
-      // "api": "https://www.youtube.com/oembed", // no CORS, FFS Google :(
-      "api": "https://noembed.com/embed",
       "patterns": [
         /https?:\/\/(?:[^\.]+\.)?youtube\.com\/watch\/?\?(?:.+&)?v=([^&]+)/i,
         /https?:\/\/(?:[^\.]+\.)?(?:youtu\.be|youtube\.com\/embed)\/([a-zA-Z0-9_-]+)/i
@@ -17,8 +15,6 @@ profileEditor.factory('embedService', ['$http', '$q', '$sce', function ($http, $
     {
       "type": "video",
       "name": "TED Talks",
-      "api": "https://www.ted.com/services/v1/oembed.json",
-      //"api": "https://www.ted.com/talks/oembed.json",
       "patterns": [
         /https?:\/\/ted\.com\/talks\/.*/i,
         /https?:\/\/((?:www|embed)\.)?ted\.com\/talks\/.*/i
@@ -27,7 +23,6 @@ profileEditor.factory('embedService', ['$http', '$q', '$sce', function ($http, $
     {
       "type": "audio",
       "name": "SoundCloud",
-      "api": "http://soundcloud.com/oembed",
       "patterns": [
         /https?:\/\/soundcloud\.com\/.*/i,
         /https?:\/\/soundcloud\.com\/.*\/.*/i
@@ -36,7 +31,6 @@ profileEditor.factory('embedService', ['$http', '$q', '$sce', function ($http, $
     {
       "type": "video",
       "name": "Wistia",
-      "api": "http://fast.wistia.com/oembed",
       "patterns": [
         /https?:\/\/(.+)?(wistia.com|wi.st)\/.*/i
       ]
@@ -44,7 +38,6 @@ profileEditor.factory('embedService', ['$http', '$q', '$sce', function ($http, $
     {
       "type": "video",
       "name": "Vimeo",
-      "api": "https://vimeo.com/api/oembed.json",
       "patterns": [
         /https?:\/\/(?:www\.)?vimeo\.com\/.+/i,
         /https?:\/\/vimeo\.com\/.*/i,
@@ -61,14 +54,12 @@ profileEditor.factory('embedService', ['$http', '$q', '$sce', function ($http, $
 
   return {
     describe: function(url) {
-      var service = this.findService(url);
-
-      if (service) {
-        return $http.get(service.api, {params: { url: url } }).then(function (response) {
-          if (response.data.html) {
-            response.data.html = $sce.trustAsHtml(response.data.html);
+      if (url) {
+        return $http.get(util.contextRoot() + '/multimedia/describe', {params: { url: url } }).then(function (response) {
+          if (response.data.embed && response.data.embed.html) {
+            response.data.embed.html = $sce.trustAsHtml(response.data.embed.html);
           }
-          return { service: service, embed: response.data};
+          return response.data;
         });
       } else {
         return $q.reject({error: "No matching service"});
